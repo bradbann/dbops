@@ -1,10 +1,10 @@
-﻿一、概述  
+一、概述  
 
    数据库自动化运维平台基本python3.6开发，使用tornado后端框架，前端采用bootstrap框架。  
    
    说明：该平台依赖dbapi平台接口服务，需要在部署后再部署dbapi服务。  
    
-   项目：https://github.com/mafeicnnui/dbapi.git
+   项目：http://git.hopson.io:9999/hopsonone/data-sync/dbops.git
    
    
    平台功能：  
@@ -57,6 +57,8 @@
  2.3 安装pymssql  
    
     wget ftp://ftp.freetds.org/pub/freetds/stable/freetds-1.1.24.tar.gz
+    或
+    wget http://www.zhitbar.com/downloads/python3/freetds-1.1.24.tar.gz
     
     tar -zxvf freetds-1.1.24.tar.gz
     
