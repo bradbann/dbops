@@ -1,4 +1,4 @@
-一、概述  
+﻿一、概述  
 
    数据库自动化运维平台基本python3.6开发，使用tornado后端框架，前端采用bootstrap框架。  
    
@@ -25,8 +25,8 @@
 二、安装部署  
 
 
-2.1 安装python3环境  
-
+2.1 安装python3环境 
+   
     wget http://www.zhitbar.com/downloads/python3/python3.6.tar.gz  
     
     tar xf python3.6.tar.gz  
@@ -43,23 +43,37 @@
     
     source ~/.bash_profile
     
-
-2.2 安装依赖
-
-    pip install tornado  
+    说明：以上二进制包已安装好依赖
     
-    pip install pymysql  
+
+2.2 安装python3及依赖  
+
+    pip3 intall python3
+
+    pip3 install tornado  
     
-    pip install pymssql  
+    pip3 install pymysql  
+    
+ 2.3 安装pymssql  
+   
+    wget ftp://ftp.freetds.org/pub/freetds/stable/freetds-1.1.24.tar.gz
+    
+    tar -zxvf freetds-patched.tar.gz
+    
+    cd freetds-1.1.24  
+
+    make && make install./configure --prefix=/usr/local/freetds --enable-msdblib --with-tdsver=7.3
+
+    pip3 install pymssql  
 
 
-2.3 安装PIL  
+2.4 安装PIL  
 
     yum install zlib zlib-devel libjpeg libjpeg-devel freetype freetype-devel –y 
     
     pip install pillow
 
-2.4 安装验证码字体  
+2.5 安装验证码字体  
 
     wget http://www.zhitbar.com/downloads/times/TIMES.zip  
     
@@ -67,7 +81,7 @@
     
     mv times/* /usr/share/fonts/times  
 
-2.5 应用字体  
+2.6 应用字体  
 
     sudo mkfontscale  
     
@@ -78,7 +92,7 @@
     sudo fc-list :lang=zh  
 
   
-2.6  数据库连接配置
+2.7  数据库连接配置
 
     编辑：web/utils/common.py 文件：
     
@@ -98,7 +112,7 @@
     
     return d_db  
     
-2.7 执行数据库脚本
+2.8 执行数据库脚本
     
       结构：devops.sql  
       
