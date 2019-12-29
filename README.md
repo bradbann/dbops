@@ -23,106 +23,149 @@
        
 二、安装部署  
 
-2.1 安装依赖
 
-pip install tornado  
+2.1 安装python3环境  
 
-pip install pymysql  
+    wget http://www.zhitbar.com/downloads/python3/python3.6.tar.gz  
+    
+    tar xf python3.6.tar.gz  
+    
+    mv python3.6 /usr/local  
+       
+    vi ~/.bash_profile  
+    
+    export PYTHON3_HOME=/usr/local/python3.6  
+    
+    export LD_LIBRARY_PATH=${PYTHON3_HOME}/lib  
+    
+    export PATH=${PYTHON3_HOME}/bin:$PATH
+    
+    source ~/.bash_profile
+    
 
-pip install pymssql  
+2.2 安装依赖
+
+    pip install tornado  
+    
+    pip install pymysql  
+    
+    pip install pymssql  
 
 
-2.2 安装PIL  
+2.3 安装PIL  
 
-yum install zlib zlib-devel libjpeg libjpeg-devel freetype freetype-devel –y 
+    yum install zlib zlib-devel libjpeg libjpeg-devel freetype freetype-devel –y 
+    
+    pip install pillow
 
-pip install pillow
+2.4 安装验证码字体  
 
-2.3 安装验证码字体  
+    wget http://www.zhitbar.com/downloads/times/TIMES.zip  
+    
+    unzip TIMES.zip  
+    
+    mv times/* /usr/share/fonts/times  
 
-wget http://www.zhitbar.com/downloads/times/TIMES.zip  
+2.5 应用字体  
 
-unzip TIMES.zip  
+    sudo mkfontscale  
+    
+    sudo mkfontdir  
+    
+    sudo fc-cache -fv  
+    
+    sudo fc-list :lang=zh  
 
-mv times/* /usr/share/fonts/times  
+  
+2.6  数据库连接配置
 
-2.4 应用字体  
-
-sudo mkfontscale  
-
-sudo mkfontdir  
-
-sudo fc-cache -fv  
-
-sudo fc-list :lang=zh  
-
-2.5 执行数据库脚本  
-
-  devops.sql  
-  devops_init.sql
+    编辑：web/utils/common.py 文件：
+    
+    def get_db_conf():
+    
+        d_db={}
+        
+        d_db['ip']       = '10.2.39.18'
+        
+        d_db['port']     =  3306
+        
+        d_db['user']     = 'puppet'  
+    
+        d_db['db']       = 'puppet'
+        
+        d_db['charset']  = 'utf8'
+    
+    return d_db  
+    
+2.7 执行数据库脚本
+    
+      结构：devops.sql  
+      
+      数据：devops_init.sql
+    
 
 三、停启服务
 
 3.1 启动服务  
 
-more startup.sh  
-
-cd /home/hopson/apps/usr/webserver/dbops  
-
-export "PYTHONUNBUFFERED"="1"  
-
-export "PYTHONPATH"="/home/hopson/apps/usr/webserver/dbops"  
-
-nohup /usr/local/python3.6/bin/python3 -u /home/hopson/apps/usr/webserver/dbops/web/controller/server.py $1 &  
+    more startup.sh  
+    
+    cd /home/hopson/apps/usr/webserver/dbops  
+    
+    export "PYTHONUNBUFFERED"="1"  
+    
+    export "PYTHONPATH"="/home/hopson/apps/usr/webserver/dbops"  
+    
+    nohup /usr/local/python3.6/bin/python3 -u /home/hopson/apps/usr/webserver/dbops/web/controller/server.py $1 &  
 
 
 3.2 重启服务  
 
-more restart.sh  
-
-/home/hopson/apps/usr/webserver/dbops/stop.sh  
-
-/home/hopson/apps/usr/webserver/dbops/start.sh 8201  
-
-/home/hopson/apps/usr/webserver/dbops/start.sh 8202  
-
-/home/hopson/apps/usr/webserver/dbops/start.sh 8203  
-
-/home/hopson/apps/usr/webserver/dbops/start.sh 8204  
-
-/home/hopson/apps/usr/webserver/dbops/start.sh 8205  
-
-/home/hopson/apps/usr/webserver/dbops/start.sh 8206  
-
-/home/hopson/apps/usr/webserver/dbops/start.sh 8207  
-
-/home/hopson/apps/usr/webserver/dbops/start.sh 8208  
+    more restart.sh  
+    
+    /home/hopson/apps/usr/webserver/dbops/stop.sh  
+    
+    /home/hopson/apps/usr/webserver/dbops/start.sh 8201  
+    
+    /home/hopson/apps/usr/webserver/dbops/start.sh 8202  
+    
+    /home/hopson/apps/usr/webserver/dbops/start.sh 8203  
+    
+    /home/hopson/apps/usr/webserver/dbops/start.sh 8204  
+    
+    /home/hopson/apps/usr/webserver/dbops/start.sh 8205  
+    
+    /home/hopson/apps/usr/webserver/dbops/start.sh 8206  
+    
+    /home/hopson/apps/usr/webserver/dbops/start.sh 8207  
+    
+    /home/hopson/apps/usr/webserver/dbops/start.sh 8208  
 
 
 3.3 停止服务  
 
-more stop.sh  
-
-ps -ef |grep dbops |awk '{print $2}' | xargs kill -9  
+    more stop.sh  
+    
+    ps -ef |grep dbops |awk '{print $2}' | xargs kill -9  
 
 
 3.4 配置nginx
 
-详见：http://www.zhitbar.com/4177.html
-
-devops:81端口  
+    详见：http://www.zhitbar.com/4177.html
+    
+    devops:81端口  
 
 3.5 启动nginx  
 
- 启动：/usr/sbin/nginx/nginx  
- 
- 关闭：/usr/sbin/nginx/nginx -s 
- 
- 重启：/usr/sbin/nginx/nginx -s  reload 
+     启动：/usr/sbin/nginx/nginx  
+     
+     关闭：/usr/sbin/nginx/nginx -s 
+     
+     重启：/usr/sbin/nginx/nginx -s  reload 
  
 
 3.6 访问devops  
-
-http://localhost:81
-
-登陆:admin/mf#1234@abcd
+    
+    http://localhost:81
+    
+    登陆:admin/mf#1234@abcd
