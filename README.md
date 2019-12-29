@@ -4,7 +4,7 @@
    
    说明：该平台依赖dbapi平台接口服务，需要在部署后再部署dbapi服务。  
    
-   项目：ssh://git@git.hopson.io:65508/hopsonone/data-sync/dbapi.git
+   项目：https://github.com/mafeicnnui/dbapi.git
    
    
    平台功能：  
