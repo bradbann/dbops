@@ -58,7 +58,7 @@
    
     wget ftp://ftp.freetds.org/pub/freetds/stable/freetds-1.1.24.tar.gz
     
-    tar -zxvf freetds-patched.tar.gz
+    tar -zxvf freetds-1.1.24.tar.gz
     
     cd freetds-1.1.24  
 
