@@ -1,0 +1,165 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>数据库发布</title>
+    <!-- DataTables -->
+    <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/fixedColumns.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+    <style>
+        #example{
+            width: 100% !important;
+        }
+    </style>
+</head>
+
+<body>
+ <p></p>
+   <div class="col-md-12">
+       <form class="form-horizontal" role="form">
+
+           <div class="form-group">
+                <div class="col-md-1">
+                    <label class="control-label">&nbsp;数据源：</label>
+                </div>
+                <div class="col-md-10">
+                    <select class="form-control select" id="db_source">
+                        <option value='' selected = "selected">请选择...</option>
+                        {% for var in dss %}
+                             {% if var[0]=="0" %}
+                                  <option value={{var[0]}}>{{var[1]}} selected = "selected"</option>
+                             {% else %}
+                                  <option value={{var[0]}}>{{var[1]}}</option>
+                             {% end %}
+                        {% end %}
+                    </select>
+               </div>
+               <div id="query" class="col-md-1">
+                    <input class="btn btn-custom waves-effect waves-light btn-md" type='button' value="发布" id='query_btn'/>
+               </div>
+            </div>
+
+
+            <div class="form-group">
+                <div id="div-sql" class="col-md-12">
+                    <textarea class="form-control" rows="5" id='statement' placeholder="请输入DDL,DML语句！"></textarea>
+                </div>
+            </div>
+
+           <div class="form-group">
+                <div id="div-tab" class="col-md-12">
+                   <table id="example" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                </div>
+           </div>
+       </form>
+    </div>
+
+    <div id="message_mysql">
+        一、DDL验证</br>
+        1、不允许发布DML操作（人工审核）</br>
+        2、一次是只允许发布的一个DDL语句</br>
+        3、普通用户禁止使用触发器，DBA允许创建触发器</br>
+		4、对象名长度不超过30个字符</br>
+		5、对象名只能以字母开头</br>
+		6、对象名只允许包含字母、数字下划线，不允许使用其他符号</br>
+		7、对象命名全部大写</br>
+		8、对象命以“_”分隔中间词组或缩写</br>
+        9、对象名格式需要满足（表：对象类型前缀_实际对象名字、视图：V_业务模块名、  函数：F_业务模块或功能名、过程:PROC_业务模块名）</br>
+        10、索引命名规范：唯一索引：UIX_开头，复合索引：CIX_开头，非唯一索引：IX_开头</br>
+	    11、表结构语句不允许有drop操作（drop table ,alter table ,drop column)</br>
+        12、每张表必须有主键</br>
+        13、验证DDL对象[表、视图、函数、过程、触发器]语法</br>
+        14、验证对象是否已存在（分别验证表、视图、函数、过程）</br>
+        15、列不允许Null值，列应设置默认值</br>
+        16、表的单行全部定长列大小总长度不得超过8000字节设置</br>
+        17、不允许使用虚拟列</br>
+        18、禁止以bak、backup、temp、tmp等后缀或前缀命名数据库中任何正式业务对象</br>
+        19、禁止以连续2位或2位以上数字作为表名后缀名</br>
+        20、禁止以sys前缀作为表名</br>
+        21、禁止在存储过程中包含DDL语法。允许：TRUNCATE,CREATE INDEX, DROP INDEX除外， 禁止：建表、备份表、修改字段</br>
+    </div>
+
+    <div id="message_mssql">
+        一、DDL验证</br>
+        1、不允许发布DML操作（人工审核）</br>
+        2、一次是只允许发布的一个DDL语句</br>
+        3、普通用户禁止使用触发器，DBA允许创建触发器</br>
+		4、对象名长度不超过30个字符</br>
+		5、对象名只能以字母开头</br>
+		6、对象名只允许包含字母、数字下划线，不允许使用其他符号</br>
+		7、对象命名全部大写</br>
+		8、对象命以“_”分隔中间词组或缩写</br>
+        9、对象名格式需要满足（表：对象类型前缀_实际对象名字、视图：V_业务模块名、  函数：F_业务模块或功能名、过程:PROC_业务模块名）</br>
+        10、索引命名规范：唯一索引：UIX_开头，复合索引：CIX_开头，非唯一索引：IX_开头</br>
+	    11、表结构语句不允许有drop操作（drop table ,alter table ,drop column)</br>
+        12、每张表必须有主键</br>
+        13、验证DDL对象[表、视图、函数、过程、触发器]语法</br>
+        14、验证对象是否已存在（分别验证表、视图、函数、过程）</br>
+        15、列不允许Null值，列应设置默认值</br>
+        16、表的单行全部定长列大小总长度不得超过8000字节设置</br>
+        17、不允许使用虚拟列</br>
+        18、禁止以bak、backup、temp、tmp等后缀或前缀命名数据库中任何正式业务对象</br>
+        19、禁止以连续2位或2位以上数字作为表名后缀名</br>
+        20、禁止以sys前缀作为表名</br>
+        21、禁止在存储过程中包含DDL语法。允许：TRUNCATE,CREATE INDEX, DROP INDEX除外， 禁止：建表、备份表、修改字段</br>
+        22、全部字符字段使用nvarchar/nchar</br>
+    </div>
+
+</form>
+<!-- Sweet-Alert  -->
+<script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
+<script type="text/javascript">
+
+        $(document).ready(function() {
+              $('#message_mssql').hide();
+              $('#message_mysql').hide();
+
+              $("#statement").focus(function() {
+                  if(this.value=='请输入DDL语句！') {this.value=''}
+              }).blur(function() {
+                  if(this.value=='') {this.value='请输入DDL语句！'}
+              });
+
+              $('#db_source').change(function(){
+                 var val=$(this).find("option:selected").text();
+                 var pos=val.indexOf(':');
+                 var db_type=val.substring(0,pos)
+                 var db_id=$(this).val()
+                 if (db_type=="MySQL") {
+                      $('#message_mssql').hide();
+                      $('#message_mysql').show();
+                 }
+                 if (db_type=="SQLServer") {
+                      $('#message_mysql').hide();
+                      $('#message_mssql').show();
+                 }
+              });
+
+              $("#query_btn").click(function()
+              {
+                 console.log("sql:"+$('#statement').val())
+                 $.ajax({
+                    url: "/sql/_release",
+                    type: "post",
+
+                    datatype: "json",
+                    data: {
+                        dbid  :  $('#db_source').val(),
+                        sql   :  $('#statement').val()
+                    },
+                    success: function (dataSet) {
+                        console.log(dataSet.code, dataSet.message);
+                         if (dataSet.code=='0') {
+                            swal("发布成功", "", "success")
+                         } else {
+                            swal(dataSet.message, "", "error")
+                         }
+                    }
+                 });
+             });
+        });
+ </script>
+</body>
+</html>

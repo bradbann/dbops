@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>新增数据源</title>
+    <!-- Sweet Alert -->
+    <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
+</head>
+<body>
+   <p></p>
+   <div class="col-md-6">
+       <form class="form-horizontal" role="form">
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">项目编码名</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="market_id" >
+                        <option value='' selected = "selected">......</option>
+                         {% for var in dm_proj_type %}
+                           <option value={{var[0]}} >{{var[1]}}</option>
+                         {% end %}
+                    </select>
+               </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">数据库实例</label>
+                </div>
+                <div class="col-md-10">
+                    <select class="form-control select" id="inst_type" >
+                          <option value='' selected = "selected">......</option>
+                          {% for var in dm_inst_type %}
+                             <option value={{var[0]}} >{{var[1]}}</option>
+                          {% end %}
+                    </select>
+               </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">数据库类型</label>
+                </div>
+                <div class="col-md-10">
+                    <select class="form-control select" id="db_type" >
+                          <option value='' selected = "selected">......</option>
+                           {% for var in dm_db_type %}
+                             <option value={{var[0]}} >{{var[1]}}</option>
+                           {% end %}
+                    </select>
+               </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">数据库环境</label>
+                </div>
+                <div class="col-md-10">
+                    <select class="form-control select" id="db_env" >
+                          <option value='' selected = "selected">......</option>
+                          {% for var in dm_env_type %}
+                             <option value={{var[0]}} >{{var[1]}}</option>
+                           {% end %}
+                    </select>
+               </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">数据源描述</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="db_desc" type="text" class="form-control" placeholder="请输入数据源描述">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">数据源地址</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="ip" type="text" class="form-control" placeholder="请输入数据源地址">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">数据源端口</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="port" type="text" class="form-control" placeholder="请输入数据源端口">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">数据源服务名</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="service" type="text" class="form-control" placeholder="请输入数据源服务名">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">数据源用户</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="user" type="text" class="form-control" placeholder="请输入数据源用户">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">数据源口令</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="pass" name="pass" type="password" class="form-control" placeholder="请输入数据源口令">
+                </div>
+           </div>
+
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">数据源状态</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="status" name="status">
+                        <option value="1">启用</option>
+                        <option value="0">禁用</option>
+                    </select>
+               </div>
+           </div>
+           <br>
+           <div class="form-group m-b-0">
+                <div class="col-sm-offset-6 col-sm-9">
+                  <button id="add" type="button" class="btn btn-custom waves-effect waves-light btn-md">保存</button>
+                </div>
+           </div>
+       </form>
+    </div>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
+
+    <script>
+        $(document).ready(function() {
+
+          $("#add").click(function () {
+            $.ajax({
+                url: "/ds/add/save",
+                type: "post",
+                datatype: "json",
+                data: {
+                        market_id     :$('#market_id').val(),
+                        inst_type     :$('#inst_type').val(),
+                        db_type       :$('#db_type').val(),
+                        db_env        :$('#db_env').val(),
+                        db_desc       :$('#db_desc').val(),
+                        ip            :$('#ip').val(),
+                        port          :$('#port').val(),
+                        service       :$('#service').val(),
+                        user          :$('#user').val(),
+                        pass          :$('#pass').val(),
+                        status        :$('#status').val(),
+                },
+                success: function (dataSet) {
+                    console.log(dataSet.code, dataSet.message);
+                    if (dataSet.code==0) {
+                       swal("保存成功", "", "success")
+                    } else {
+                       swal(dataSet.message, "", "error")
+                    }
+                }
+             });
+          });
+
+        });
+
+   </script>
+</body>
+
+</html>

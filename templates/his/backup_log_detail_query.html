@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>备份查询</title>
+    <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/fixedColumns.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+    <style>
+        #example{
+            width: 100% !important;
+        }
+        table.datatable tr th, table.datatable tr td {
+            white-space: nowrap;
+        }
+
+    </style>
+</head>
+<body>
+    <p></p>
+    <div class="col-md-12">
+       <div class="col-md-3 input-group">
+            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+            <input type="text" id="tagname" name="username" class="form-control" placeholder="请输入标签名">
+            <span class="input-group-btn">
+               <button type="button"  id='query_btn' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
+            </span>
+      </div>
+      <p></p>
+      <div id="div-tab">
+           <table id="example" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+      </div>
+    </div>
+
+   <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+   <script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
+   <script src="{{static_url('plugins/datatables/dataTables.buttons.min.js')}}"></script>
+   <script src="{{static_url('plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+   <script src="{{static_url('plugins/datatables/dataTables.responsive.min.js')}}"></script>
+   <script src="{{static_url('plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+   <script src="{{static_url('plugins/datatables/dataTables.scroller.min.js')}}"></script>
+   <script>
+        $(document).keydown(function(event){
+            if (event.keyCode == 13) { //判断为Enter键
+                $("#query_btn").click();
+            }
+         });
+
+        $("#username").bind("input propertychange",function(){
+           $("#query_btn").click();
+        });
+
+        $(document).ready(function() {
+            $("#query_btn").click(function() {
+              $.ajax({
+                  url: "/backup/_query",
+                  type: "post",
+                  datatype: "json",
+                  data:{
+                      qname: $('#tagname').val()
+                  },
+                  success: function (dataSet) {
+                      $('#example').DataTable( {
+                      "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                      "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                      destroy    :true,
+                      async      :true,
+                      scrollY    :false,
+                      scrollX    :false,
+                      scrollCollapse: true,
+                      paging:     true,
+                      iDisplayLength: 16,
+                      //bAutoWidth: true,
+                      data: dataSet,
+                      columns: [
+                        { "title": "标识符"},
+                        { "title": "任务描述"},
+                        { "title": "标签名" },
+                        { "title": "数据库地址" },
+                        { "title": "数据库端口" },
+                        { "title": "数据库用户" },
+                        { "title": "备份有效期" },
+                        { "title": "运行时间" },
+                        { "title": "备份服务器" },
+                        { "title": "接口服务器"},
+                      ],
+                      "language": {
+                             "search"       : "在表格中搜索:",
+                             "sProcessing"  : "处理中...",
+                             "sLengthMenu"  : "显示 _MENU_ 项结果",
+                             "sZeroRecords" : "没有匹配结果",
+                             "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                             "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                             "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                             "sInfoPostFix" : "",
+                             "sSearch"      : "搜索:",
+                             "sUrl"         : "",
+                             "sEmptyTable"  : "表中数据为空",
+                             "sLoadingRecords": "载入中...",
+                             "sInfoThousands": ",",
+                             "oPaginate": {
+                                 "sFirst"   : "首页",
+                                 "sPrevious": "上页",
+                                 "sNext"    : "下页",
+                                 "sLast"    : "末页"
+                             },
+                             "oAria": {
+                                 "sSortAscending" : ": 以升序排列此列",
+                                 "sSortDescending": ": 以降序排列此列"
+                             }
+                         }
+                     });
+                 }
+             });
+            });
+
+            $("#query_btn").click();
+
+        });
+
+   </script>
+</body>
+
+</html>

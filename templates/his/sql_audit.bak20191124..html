@@ -1,0 +1,168 @@
+<html>
+<head>
+    <title>SQL审核</title>
+    <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/fixedColumns.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+     <!-- Sweet Alert -->
+    <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+          $('#audit').attr("disabled",true);
+
+          $("#query_btn").click(function()
+          {
+                var name = $("#name").val();
+                $.post("/sql/audit/query",{qname:name}, function(dataSet,status){
+                if(status == "success")
+                {
+                   console.log(dataSet);
+                   $('#example').DataTable( {
+                      "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                      destroy    :true,
+                      async      :true,
+                      ordering   :false,
+                      scrollY    :false,
+                      scrollX    :true,
+                      scrollCollapse: true,
+                      paging:     true,
+                      iDisplayLength: 16,
+                      data: dataSet,
+                      columns: [
+                         { "title": "编号" },
+                         { "title": "状态" },
+                         { "title": "创建人" },
+                         { "title": "创建日期" },
+                         { "title": "审核人"},
+                         { "title": "审核日期"},
+                         { "title": "查看"},
+                         {
+                            "title":"选择",
+                            "width": "40px",
+                            "render": function(data,type,row,meta){
+                                return data = '<input type="checkbox" name="userid" onclick="isSelect();" >'; }
+                          }
+                       ],
+                        columnDefs: [
+                         {
+                            targets: 6,
+                            render: function(data, type, row, meta){
+                                     console.log('row[0]='+row[0]);
+                                     sql_format=row[0]
+                                     msg ='<input type="button"  value="详情" onclick="showSql(\''+escape(sql_format)+'\');"/>';
+                                     return msg;
+                            }
+                         }
+                        ],
+                      "language": {
+                             "search"       : "在表格中搜索:",
+                             "sProcessing"  : "处理中...",
+                             "sLengthMenu"  : "显示 _MENU_ 项结果",
+                             "sZeroRecords" : "没有匹配结果",
+                             "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                             "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                             "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                             "sInfoPostFix" : "",
+                             "sSearch"      : "搜索:",
+                             "sUrl"         : "",
+                             "sEmptyTable"  : "表中数据为空",
+                             "sLoadingRecords": "载入中...",
+                             "sInfoThousands": ",",
+                             "oPaginate": {
+                                 "sFirst"   : "首页",
+                                 "sPrevious": "上页",
+                                 "sNext"    : "下页",
+                                 "sLast"    : "末页"
+                             },
+                             "oAria": {
+                                 "sSortAscending" : ": 以升序排列此列",
+                                 "sSortDescending": ": 以降序排列此列"
+                             }
+                         }
+                    });
+                }
+              });
+
+          });
+
+          $('#audit').on('click', function() {
+             rec=0;
+             var sqlid='';
+             $("#example tbody tr td input:checked").each( function() {
+                  row=$(($(this).parent().parent().html()));
+                  sqlid=row[0].innerHTML;
+                  console.log("sqlid=",sqlid);
+              });
+
+             $.ajax({
+                url: "/sql_audit",
+                type: "post",
+                datatype: "json",
+                data:{sqlid: sqlid},
+                success: function (dataSet) {
+                    console.log(dataSet.code, dataSet.message);
+                    swal(dataSet.message, "", "error")
+                    $("#query_btn").click();
+                }
+            });
+        });
+
+          $("#query_btn").click();
+
+      });
+
+     function isSelect(){
+         rec=0;
+         $("#example tbody tr td input:checked").each( function() {
+              rec=rec+1;
+          });
+         if ( rec==1 ){
+              $('#audit').attr("disabled",false);
+         } else {
+              $('#audit').attr("disabled",true);}
+     }
+
+    function showSql(row){
+        swal(unescape(row), "", "info")
+    }
+
+ </script>
+</head>
+
+<body>
+
+    <p></p>
+    <div class="col-md-12">
+       <div class="col-md-3 input-group">
+            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+            <input type="text" id="name"  class="form-control" placeholder="请输入关键字">
+            <span class="input-group-btn">
+               <button type="button"  id='query_btn' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
+            </span>
+      </div>
+    </div>
+    <p></p>
+    <div class="row">
+         <div class="col-md-12">
+              <div id="div-tab">
+                   <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%"  height="100%" ></table>
+              </div>
+         </div>
+     </div>
+
+    <div class="col-md-offset-5 col-lg-offset-5col-xl-offset-5">
+           <input  id='audit' type='button' class="btn waves-effect waves-light btn-primary" value="审核"/>
+    </div>
+
+</body>
+<script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
+<script src="{{static_url('plugins/datatables/dataTables.buttons.min.js')}}"></script>
+<script src="{{static_url('plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+<script src="{{static_url('plugins/datatables/dataTables.responsive.min.js')}}"></script>
+<script src="{{static_url('plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+<script src="{{static_url('plugins/datatables/dataTables.scroller.min.js')}}"></script>
+</html>

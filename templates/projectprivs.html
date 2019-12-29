@@ -1,0 +1,211 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>项目授权</title>
+    <!-- DataTables -->
+    <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/fixedColumns.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+    <style>
+        #example{
+            width: 100% !important;
+        }
+    </style>
+</head>
+
+<body>
+    <p></p>
+    <div class="col-md-12">
+       <div class="col-md-3 input-group">
+            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+            <input type="text" id="username" name="username" class="form-control" placeholder="请输入登陆名">
+            <span class="input-group-btn">
+               <button type="button"  id='query_btn' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
+            </span>
+      </div>
+      <p></p>
+      <div id="div-tab">
+           <table id="example" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+      </div>
+    </div>
+
+    <div class="form-group">
+         <div class="col-sm-offset-5 col-sm-5">
+              <input  id='prev' class="btn btn-custom waves-effect waves-light btn-md" type='button' value="上一步"/>
+              <input  id='priv' class="btn btn-custom waves-effect waves-light btn-md" type='button' value="项目授权"/>
+         </div>
+    </div>
+
+<div id="dialog" title="提示">
+    <p id="dialog-p"></p>
+</div>
+
+</body>
+ <script type="text/javascript">
+        $(document).keydown(function(event){
+            if (event.keyCode == 13) { //判断为Enter键
+                $("#query_btn").click();
+            }
+         });
+
+        $("#username").bind("input propertychange",function(){
+           $("#query_btn").click();
+        });
+
+        $(document).ready(function() {
+          $('#priv').attr("disabled",true);
+          $("#query_btn").click(function()
+          {
+            $.ajax({
+                 url: "/project/privs/query",
+                 type: "post",
+                 datatype: "json",
+                 data:{
+                     qname:$("#username").val(),
+                     dsid :"{{dsid}}"
+                 },
+                success: function (dataSet) {
+                   console.log(dataSet);
+                   $('#example').DataTable( {
+                      "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                      "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                      destroy    :true,
+                      async      :true,
+                      scrollY    :true,
+                      scrollX    :true,
+                      scrollCollapse: true,
+                      paging:     true,
+                      iDisplayLength: 16,
+                      data: dataSet,
+                      columns: [
+                        { title: "ID" },
+                        { title: "登陆名" },
+                        { title: "姓名" },
+                        { title: "邮箱" },
+                        { title: "手机" },
+                        { title: "部门" },
+                        { "title": "query_priv" ,"visible":false},
+                        { "title": "release_priv" ,"visible":false},
+                        {
+                            "title":"权限",
+                            "width": "40px",
+                            "render": function(data,type,row,meta){
+                                         var a,b;
+                                         if (row[6]=='1') {
+                                              a='<input type="checkbox" name="proj_query" value="1" checked="checked"  onclick="isSeleQuery(this);" />查询'+'&nbsp;'
+                                         } else {
+                                              a='<input type="checkbox" name="proj_query" value="0"  onclick="isSeleQuery(this);" />查询'+'&nbsp;'
+                                         }
+
+                                        if (row[7]=='1') {
+                                              b='<input type="checkbox" name="proj_release" value="1" checked="checked"  onclick="isSeleRelease(this);" />发布'
+                                         } else {
+                                              b='<input type="checkbox" name="proj_release" value="0"  onclick="isSeleRelease(this);" />发布'
+                                         }
+                                         return data = a+b;
+                            }
+                        },
+                        {
+                            "title":"选择",
+                            "width": "40px",
+                            "render": function(data,type,row,meta){
+                                return data = '<input type="radio" name="userid" onclick="isSelect();" >'; }
+                        },
+                      ],
+                      "language": {
+                             "search"       : "在表格中搜索:",
+                             "sProcessing"  : "处理中...",
+                             "sLengthMenu"  : "显示 _MENU_ 项结果",
+                             "sZeroRecords" : "没有匹配结果",
+                             "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                             "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                             "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                             "sInfoPostFix" : "",
+                             "sSearch"      : "搜索:",
+                             "sUrl"         : "",
+                             "sEmptyTable"  : "表中数据为空",
+                             "sLoadingRecords": "载入中...",
+                             "sInfoThousands": ",",
+                             "oPaginate": {
+                                 "sFirst"   : "首页",
+                                 "sPrevious": "上页",
+                                 "sNext"    : "下页",
+                                 "sLast"    : "末页"
+                             },
+                             "oAria": {
+                                 "sSortAscending" : ": 以升序排列此列",
+                                 "sSortDescending": ": 以降序排列此列"
+                             }
+                         }
+                    });
+                }
+              });
+          });
+
+          $('#priv').on('click', function() {
+             $("#example tbody tr td input[name='userid']:checked").each( function() {
+                  var row=$(($(this).parent().parent().html()));
+                  var userid=row[0].innerHTML;
+                  var privs=$(row[6].innerHTML);
+                  var priv_query=$(privs[0]).val()
+                  var priv_release=$(privs[2]).val()
+                  $.ajax({
+                        url     : "/project/privs/save",
+                        type    : "post",
+                        datatype: "json",
+                        data: {
+                             dsid          :  "{{dsid}}",
+                             userid        :  userid,
+                             priv_query    :  priv_query,
+                             priv_release  :  priv_release,
+                        },
+                        success: function (dataSet) {
+                             if (dataSet.code=='0') {
+                                swal("保存成功", "", "success")
+                             } else {
+                                swal(dataSet.message, "", "error")
+                             }
+                         }
+                  });
+
+              });
+         });
+
+          $("#query_btn").click();
+      });
+
+    function isSeleQuery(my){
+       if ($(my).is(':checked')){
+         $(my).val("1")
+       } else {
+         $(my).val("0")
+       }
+     };
+
+    function isSeleRelease(my){
+       if ($(my).is(':checked')){
+         $(my).val("1")
+       } else {
+         $(my).val("0")
+       }
+     };
+
+    function isSelect(){
+        var rec=0;
+        $("#example tbody tr td input[name='userid']:checked").each( function() {
+              rec=rec+1;
+        });
+        if ( rec==1 ){
+              $('#priv').attr("disabled",false);
+         } else {
+              $('#priv').attr("disabled",true); }
+     };
+
+     $('#prev').on('click', function() {
+         $('#main-container-div').load('/project/query');
+     });
+
+ </script>
+</html>

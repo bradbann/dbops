@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{{ static_url('assets/images/favicon.ico')}}">
+    <!-- App title -->
+    <title>用户新增</title>
+    <link href="{{static_url('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
+    <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>
+    <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
+</head>
+<body>
+   <p></p>
+   <div class="col-md-6">
+       <form class="form-horizontal" role="form">
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">用户名</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="login"  type="text" class="form-control" placeholder="请输入用户名">
+                </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">姓名</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="user" name="user" type="text" class="form-control" placeholder="请输入姓名">
+                </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">密码</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="pass" name="pass" type="password" class="form-control" placeholder="请输入密码">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">性别</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="gender" name="gender">
+                        <option value='' selected = "selected">请选择性别</option>
+                        {% for var in gender %}
+                          <option value={{var[0]}} >{{var[1]}}</option>
+                        {% end %}
+
+                    </select>
+               </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">部门</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="dept" name="dept">
+                        <option value='' selected = "selected">请选择部门</option>
+                        {% for var in dept %}
+                          <option value={{var[0]}} >{{var[1]}}</option>
+                        {% end %}
+                    </select>
+               </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">电子邮箱</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="email" name="email" type="text" class="form-control" placeholder="请输入电子邮箱">
+                </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">联系方式</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="phone" name="phone" type="text" class="form-control" placeholder="请输入联系方式">
+                </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">过期日期</label>
+                </div>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <input  id="expire_date" name="expire_date" type="text" class="form-control datepicker" >
+                        <span class="input-group-addon bg-custom b-0"><i class="mdi mdi-calendar text-white"></i></span>
+                    </div>
+                </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">用户状态</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="status" name="status">
+                        <option value="0">启用</option>
+                        <option value="1">禁用</option>
+                    </select>
+               </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">系统角色</label>
+                </div>
+                <div class="col-md-10">
+                    <select multiple="multiple" class="form-control" id="sele_sys_priv" name="roles" >
+                        {% for var in roles %}
+                          <option value={{var[0]}} >{{var[1]}}</option>
+                        {% end %}
+                    </select>
+                </div>
+           </div>
+
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">用户角色</label>
+                </div>
+                <div class="col-md-10">
+                    <select multiple="multiple" class="form-control" id="sele_role_priv" name="roles" >
+
+                    </select>
+                </div>
+
+           </div>
+           <br>
+           <div class="form-group m-b-0">
+                <div class="col-sm-offset-6 col-sm-9">
+                  <button id="add" type="button" class="btn btn-custom waves-effect waves-light btn-md">保存</button>
+                </div>
+           </div>
+       </form>
+    </div>
+
+    <!-- jQuery  -->
+    <script src="{{static_url('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+
+    <script src="{{static_url('plugins/counterup/jquery.counterup.min.js')}}"></script>
+    <script src="{{static_url('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
+
+    <!-- Init js -->
+    <script src="{{static_url('assets/pages/jquery.form-pickers.init.js')}}"></script>
+
+    <script>
+        $(document).ready(function() {
+
+          $("#sele_sys_priv").click(function () {
+               options=$('#sele_sys_priv option:selected');
+               if(options.length>0){
+                for (var i=0;i<options.length;i++){
+                      value=$(options[i]).val();
+                      text =$(options[i]).text();
+                      $('#sele_role_priv').append("<option value='"+value+"'>"+text+"</option>");
+                }
+                $('#sele_sys_priv option:selected').remove();
+               }
+          });
+
+          $("#sele_role_priv").click(function () {
+               options=$('#sele_role_priv option:selected');
+               if(options.length>0){
+                for (var i=0;i<options.length;i++){
+                      value=$(options[i]).val();
+                      text =$(options[i]).text();
+                      $('#sele_sys_priv').append("<option value='"+value+"'>"+text+"</option>");
+                }
+                $('#sele_role_priv option:selected').remove();
+               }
+          });
+
+          function get_privs(){
+             var tmp='';
+             var val='';
+             $('#sele_role_priv option').each(function(){
+               val=$(this).val();
+               tmp=tmp+','+val;
+             });
+             return tmp.substr(1);
+          };
+
+          $('#expire_date').attr("readonly", "readonly");
+
+          $("#add").click(function () {
+            $.ajax({
+                url: "/user/add/save",
+                type: "post",
+                datatype: "json",
+                data: {
+                    login      : $('#login').val(),
+                    user       : $('#user').val(),
+                    pass       : $('#pass').val(),
+                    gender     : $('#gender').val(),
+                    email      : $('#email').val(),
+                    phone      : $('#phone').val(),
+                    dept       : $('#dept').val(),
+                    expire_date: $('#expire_date').val(),
+                    status     : $('#status').val(),
+                    privs      : get_privs()
+                },
+                success: function (dataSet) {
+                    console.log(dataSet.code, dataSet.message);
+                    if (dataSet.code==0) {
+                       swal("保存成功", "", "success")
+                    } else {
+                       swal(dataSet.message, "", "error")
+                    }
+                }
+             });
+          });
+
+        });
+
+   </script>
+</body>
+
+</html>

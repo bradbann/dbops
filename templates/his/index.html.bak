@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc.">
+        <meta name="author" content="Coderthemes">
+
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{{static_url('assets/images/favicon.ico')}}">
+        <!-- App title -->
+        <title>数据库自动化运维平台</title>
+
+        <!--Morris Chart CSS -->
+		<link rel="stylesheet" href="{{static_url('plugins/morris/morris.css')}}">
+
+        <!-- App css -->
+        <link href="{{static_url('assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{static_url('assets/css/core.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{static_url('assets/css/components.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{static_url('assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{static_url('assets/css/pages.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{static_url('assets/css/menu.css')}}"  rel="stylesheet" type="text/css" />
+        <link href="{{static_url('assets/css/responsive.css')}}" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="{{static_url('plugins/switchery/switchery.min.css')}}">
+        <link rel="stylesheet" href="{{static_url('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" >
+
+        <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+        <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>
+        <!-- Sweet Alert -->
+        <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
+    </head>
+
+    <body class="fixed-left">
+
+        <!-- Begin page -->
+        <div id="wrapper">
+
+            <!-- Top Bar Start -->
+            <div class="topbar">
+
+                <!-- LOGO -->
+                <div class="topbar-left">
+                    <a id="windows_main" href="#" class="logo"><span>HOP<span>SON</span></span><i class="mdi mdi-layers"></i></a>
+                    <!-- Image logo -->
+                    <!--<a href="index.html" class="logo">-->
+                        <!--<span>-->
+                            <!--<img src="assets/images/logo.png" alt="" height="30">-->
+                        <!--</span>-->
+                        <!--<i>-->
+                            <!--<img src="assets/images/logo_sm.png" alt="" height="28">-->
+                        <!--</i>-->
+                    <!--</a>-->
+                </div>
+
+                <!-- Button mobile view to collapse sidebar menu -->
+                <div class="navbar navbar-default" role="navigation">
+                    <div class="container">
+                        <!-- Navbar-left -->
+                        <ul class="nav navbar-nav navbar-left">
+                            <li>
+                                <button class="button-menu-mobile open-left waves-effect">
+                                    <i class="mdi mdi-menu"></i>
+                                </button>
+                            </li>
+                            <li class="hidden-xs">
+                                <form role="search" class="app-search">
+                                    <input type="text" placeholder="查询..."
+                                           class="form-control">
+                                    <a href=""><i class="fa fa-search"></i></a>
+                                </form>
+                            </li>
+                        </ul>
+
+                        <!-- Right(Notification) -->
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="#" class="right-menu-item dropdown-toggle" data-toggle="dropdown">
+                                    <i class="mdi mdi-bell"></i>
+                                    <span class="badge up bg-success">3</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right dropdown-lg user-list notify-list">
+                                    <li>
+                                        <h5>通知</h5>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="user-list-item">
+                                            <div class="icon bg-info">
+                                                <i class="mdi mdi-account"></i>
+                                            </div>
+                                            <div class="user-desc">
+                                                <span class="name">张三发布了DML操作</span>
+                                                <span class="time">1小时前</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="user-list-item">
+                                            <div class="icon bg-danger">
+                                                <i class="mdi mdi-comment"></i>
+                                            </div>
+                                            <div class="user-desc">
+                                                <span class="name">系统新增李四用户</span>
+                                                <span class="time">20分钟前</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="user-list-item">
+                                            <div class="icon bg-warning">
+                                                <i class="mdi mdi-settings"></i>
+                                            </div>
+                                            <div class="user-desc">
+                                                <span class="name">管理员新增代码</span>
+                                                <span class="time">3天前</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="all-msgs text-center">
+                                        <p class="m-0"><a href="#">查看所有通知</a></p>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a href="#" class="right-menu-item dropdown-toggle" data-toggle="dropdown">
+                                    <i class="mdi mdi-email"></i>
+                                    <span class="badge up bg-danger">4</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right dropdown-lg user-list notify-list">
+                                    <li>
+                                        <h5>邮件</h5>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="user-list-item">
+                                            <div class="avatar">
+                                                <img src="{{ static_url('assets/images/users/avatar-2.jpg')}}" alt="">
+                                            </div>
+                                            <div class="user-desc">
+                                                <span class="name">张三 Beach</span>
+                                                <span class="desc">[合生通]卡券升级会议记录</span>
+                                                <span class="time">2小时前</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="user-list-item">
+                                            <div class="avatar">
+                                                <img src="{{ static_url('assets/images/users/avatar-3.jpg')}}" alt="">
+                                            </div>
+                                            <div class="user-desc">
+                                                <span class="name">李四</span>
+                                                <span class="desc">实时车流数据同步测试</span>
+                                                <span class="time">1小时前</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="user-list-item">
+                                            <div class="avatar">
+                                                <img src="{{ static_url('assets/images/users/avatar-4.jpg')}}" alt="">
+                                            </div>
+                                            <div class="user-desc">
+                                                <span class="name">王五</span>
+                                                <span class="desc">关于预生产环境升级的通知</span>
+                                                <span class="time">3小时前</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="user-list-item">
+                                            <div class="avatar">
+                                                <img src="{{ static_url('assets/images/users/avatar-7.jpg')}}" alt="">
+                                            </div>
+                                            <div class="user-desc">
+                                                <span class="name">赵六</span>
+                                                <span class="desc">生产环境上线K8S通知</span>
+                                                <span class="time">5小时前</span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li class="all-msgs text-center">
+                                        <p class="m-0"><a href="#">查看所有邮件</a></p>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="dropdown user-box">
+                                <a href="" class="dropdown-toggle waves-effect user-link" data-toggle="dropdown" aria-expanded="true">
+                                    <img src="{{ static_url('assets/images/users/mafei.jpg')}}" alt="user-img" class="img-circle user-img">
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right arrow-dropdown-menu arrow-menu-right user-list notify-list">
+                                    <li>
+                                        <h5>你好, 马飞</h5>
+                                    </li>
+                                    <li><a href="javascript:void(0)"><i class="ti-user m-r-5"></i> 用户详情</a></li>
+                                    <li><a href="javascript:void(0)"><i class="ti-settings m-r-5"></i> 用户设置</a></li>
+                                    <li><a href="javascript:void(0)"><i class="ti-lock m-r-5"></i> 锁定系统</a></li>
+                                    <li><a href="javascript:void(0)"><i class="ti-power-off m-r-5"></i> 系统注销</a></li>
+                                </ul>
+                            </li>
+
+                        </ul> <!-- end navbar-right -->
+
+                    </div><!-- end container -->
+                </div><!-- end navbar -->
+            </div>
+            <!-- Top Bar End -->
+
+            <!-- ========== Left Sidebar Start ========== -->
+            <div class="left side-menu">
+                <div class="sidebar-inner slimscrollleft">
+
+                    <!--- Sidemenu -->
+                    <div id="sidebar-menu">
+                        <ul id="ul-menu">
+                        	<li class="menu-title">好生活数据库运维平台</li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="fa fa-user"></i><span>用户管理</span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a id="user_query"  href="#">用户查询</a></li>
+                                    <li><a id="user_add"    href="#">用户新增</a></li>
+                                    <li><a id="user_change" href="#">用户变更</a></li>
+                                    <li><a href="#">项目授权</a></li>
+                                </ul>
+                            </li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-account-switch"></i> <span>角色管理</span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a id="role_query" href="#">角色查询</a></li>
+                                    <li><a id="role_add"   href="#">角色新增</a></li>
+                                    <li><a id="role_change" href="#">角色变更</a></li>
+                                </ul>
+                            </li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-file-tree"></i> <span>菜单管理</span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a id="menu_query" href="#">菜单查询</a></li>
+                                    <li><a id="menu_add"   href="#">菜单新增</a></li>
+                                    <li><a id="menu_change"href="#">菜单变更</a></li>
+                                </ul>
+                            </li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-chemical-weapon"></i> <span>数据源管理 </span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a id="ds_query" href="#">数据源查询</a></li>
+                                    <li><a id="ds_add"href="#">数据源新增</a></li>
+                                    <li><a id="ds_change"href="#">数据源变更</a></li>
+                                </ul>
+                            </li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-database"></i> <span>数据库操作</span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a href="#">数据库查询</a></li>
+                                    <li><a href="#">数据库发布</a></li>
+                                    <li><a href="#">数据库导出</a></li>
+                                    <li><a href="#">数据库审核</a></li>
+                                    <li><a href="#">数据库执行</a></li>
+                                </ul>
+                            </li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-monitor"></i> <span>数据库监控</span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a href="#">监控查询</a></li>
+                                    <li><a href="#">监控设置</a></li>
+                                </ul>
+                            </li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-chevron-double-right"></i> <span>慢查询管理</span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a href="#">慢查询配置</a></li>
+                                    <li><a href="#">慢查询分析</a></li>
+                                    <li><a href="#">慢查询优化</a></li>
+                                </ul>
+                            </li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-lan-connect"></i> <span>数据库迁移</span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a href="#">迁移向导</a></li>
+                                    <li><a href="#">任务配置</a></li>
+                                    <li><a href="#">日志查询</a></li>
+
+                                </ul>
+                            </li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-sync"></i></i> <span>数据库同步</span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a href="#">同步向导</a></li>
+                                    <li><a href="#">同步配置</a></li>
+                                    <li><a href="#">同步查询</a></li>
+
+                                </ul>
+                            </li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-swap-horizontal"></i> <span>数据库传输</span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a href="#">传输向导</a></li>
+                                    <li><a href="#">传输配置</a></li>
+                                    <li><a href="#">传输查询</a></li>
+
+                                </ul>
+                            </li>
+                            <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-content-copy"></i> <span>数据库备份</span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a href="#">备份向导</a></li>
+                                    <li><a href="#">备份配置</a></li>
+                                    <li><a href="#">备份查询</a></li>
+
+                                </ul>
+                           </li>
+                           <li class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-backup-restore"></i> <span>数据库恢复</span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a href="#">恢复向导</a></li>
+                                    <li><a href="#">恢复配置</a></li>
+                                    <li><a href="#">恢复查询</a></li>
+
+                                </ul>
+                           </li>
+                           <li ID="msg_mgr" class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-message-text "></i> <span>消息管理</span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a href="#">新建消息</a></li>
+                                    <li><a href="#">发送消息</a></li>
+                                    <li><a href="#">消息变更</a></li>
+
+                                </ul>
+                            </li>
+                            <li id="sys_set" class="has_sub">
+                                <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-settings "></i> <span>系统设置</span> <span class="menu-arrow"></span></a>
+                                <ul class="list-unstyled">
+                                    <li><a href="#"><i class="mdi mdi-code-brackets "></i>代码管理</a></li>
+                                    <li><a href="#"><i class="mdi mdi-crop"></i>面板设置</a></li>
+                                    <li><a href="#"><i class="mdi mdi-logout"></i>登陆设置</a></li>
+                                    <li><a href="#"><i class="mdi mdi-plus-box "></i>安全设置</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Sidebar -left -->
+
+            </div>
+            <!-- Left Sidebar End -->
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="content-page">
+                <!-- Start content -->
+                <div class="content">
+                    <div id='main-container-div' class="container">
+                        <div class="row">
+
+                            <div class="col-lg-2 col-md-4 col-sm-6">
+                                <div class="card-box widget-box-one">
+                                    <i class="mdi mdi-chart-areaspline widget-one-icon"></i>
+                                    <div class="wigdet-one-content">
+                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">Statistics</p>
+                                        <h2>34578 <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
+                                        <p class="text-muted m-0"><b>Last:</b> 30.4k</p>
+                                    </div>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-lg-2 col-md-4 col-sm-6">
+                                <div class="card-box widget-box-one">
+                                    <i class="mdi mdi-account-convert widget-one-icon"></i>
+                                    <div class="wigdet-one-content">
+                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User Today">User Today</p>
+                                        <h2>895 <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
+                                        <p class="text-muted m-0"><b>Last:</b> 1250</p>
+                                    </div>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-lg-2 col-md-4 col-sm-6">
+                                <div class="card-box widget-box-one">
+                                    <i class="mdi mdi-layers widget-one-icon"></i>
+                                    <div class="wigdet-one-content">
+                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">User This Month</p>
+                                        <h2>52410 <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
+                                        <p class="text-muted m-0"><b>Last:</b> 40.33k</p>
+                                    </div>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-lg-2 col-md-4 col-sm-6">
+                                <div class="card-box widget-box-one">
+                                    <i class="mdi mdi-av-timer widget-one-icon"></i>
+                                    <div class="wigdet-one-content">
+                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Request Per Minute">Request Per Minute</p>
+                                        <h2>652 <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
+                                        <p class="text-muted m-0"><b>Last:</b> 956</p>
+                                    </div>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-lg-2 col-md-4 col-sm-6">
+                                <div class="card-box widget-box-one">
+                                    <i class="mdi mdi-account-multiple widget-one-icon"></i>
+                                    <div class="wigdet-one-content">
+                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Total Users">Total Users</p>
+                                        <h2>3245 <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
+                                        <p class="text-muted m-0"><b>Last:</b> 20k</p>
+                                    </div>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-lg-2 col-md-4 col-sm-6">
+                                <div class="card-box widget-box-one">
+                                    <i class="mdi mdi-download widget-one-icon"></i>
+                                    <div class="wigdet-one-content">
+                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="New Downloads">New Downloads</p>
+                                        <h2>78541 <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
+                                        <p class="text-muted m-0"><b>Last:</b> 50k</p>
+                                    </div>
+                                </div>
+                            </div><!-- end col -->
+
+                        </div>
+                        <!-- end row -->
+
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="card-box">
+                                    <h4 class="header-title m-t-0">Daily Sales</h4>
+                                    <div class="widget-chart text-center">
+                                        <div id="morris-donut-example"style="height: 245px;"></div>
+                                        <ul class="list-inline chart-detail-list m-b-0">
+                                            <li>
+                                                <h5 class="text-danger"><i class="fa fa-circle m-r-5"></i>Series A</h5>
+                                            </li>
+                                            <li>
+                                                <h5 class="text-success"><i class="fa fa-circle m-r-5"></i>Series B</h5>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-lg-4">
+                                <div class="card-box">
+                                    <h4 class="header-title m-t-0">Statistics</h4>
+                                    <div id="morris-bar-example" style="height: 280px;"></div>
+                                </div>
+                            </div><!-- end col -->
+
+                            <div class="col-lg-4">
+                                <div class="card-box">
+                                    <h4 class="header-title m-t-0">Total Revenue</h4>
+                                    <div id="morris-line-example" style="height: 280px;"></div>
+                                </div>
+                            </div><!-- end col -->
+
+                        </div>
+                        <!-- end row -->
+
+                        <div class="row">
+        <div class="col-lg-6">
+            <div class="card-box">
+                <h4 class="header-title m-t-0 m-b-30">Recent Users</h4>
+
+                <div class="table-responsive">
+                    <table class="table table table-hover m-0">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>User Name</th>
+                                <th>Phone</th>
+                                <th>Location</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <img src="{{ static_url('assets/images/users/avatar-1.jpg')}}" alt="user" class="thumb-sm img-circle" />
+                                </th>
+                                <td>
+                                    <h5 class="m-0">Louis Hansen</h5>
+                                    <p class="m-0 text-muted font-13"><small>Web designer</small></p>
+                                </td>
+                                <td>+12 3456 789</td>
+                                <td>USA</td>
+                                <td>07/08/2016</td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <img src="{{ static_url('assets/images/users/avatar-2.jpg')}}" alt="user" class="thumb-sm img-circle" />
+                                </th>
+                                <td>
+                                    <h5 class="m-0">Craig Hause</h5>
+                                    <p class="m-0 text-muted font-13"><small>Programmer</small></p>
+                                </td>
+                                <td>+89 345 6789</td>
+                                <td>Canada</td>
+                                <td>29/07/2016</td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <img src="{{ static_url('assets/images/users/avatar-3.jpg')}}" alt="user" class="thumb-sm img-circle" />
+                                </th>
+                                <td>
+                                    <h5 class="m-0">Edward Grimes</h5>
+                                    <p class="m-0 text-muted font-13"><small>Founder</small></p>
+                                </td>
+                                <td>+12 29856 256</td>
+                                <td>Brazil</td>
+                                <td>22/07/2016</td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <img src="{{ static_url('assets/images/users/avatar-4.jpg')}}" alt="user" class="thumb-sm img-circle" />
+                                </th>
+                                <td>
+                                    <h5 class="m-0">Bret Weaver</h5>
+                                    <p class="m-0 text-muted font-13"><small>Web designer</small></p>
+                                </td>
+                                <td>+00 567 890</td>
+                                <td>USA</td>
+                                <td>20/07/2016</td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <img src="{{ static_url('assets/images/users/avatar-5.jpg')}}" alt="user" class="thumb-sm img-circle" />
+                                </th>
+                                <td>
+                                    <h5 class="m-0">Mark</h5>
+                                    <p class="m-0 text-muted font-13"><small>Web design</small></p>
+                                </td>
+                                <td>+91 123 456</td>
+                                <td>India</td>
+                                <td>07/07/2016</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div> <!-- table-responsive -->
+            </div> <!-- end card -->
+        </div>
+        <!-- end col -->
+
+        <div class="col-lg-6">
+            <div class="card-box">
+                <h4 class="header-title m-t-0 m-b-30">Recent Users</h4>
+
+                <div class="table-responsive">
+                    <table class="table table table-hover m-0">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>User Name</th>
+                                <th>Phone</th>
+                                <th>Location</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <span class="avatar-sm-box bg-success">L</span>
+                                </th>
+                                <td>
+                                    <h5 class="m-0">Louis Hansen</h5>
+                                    <p class="m-0 text-muted font-13"><small>Web designer</small></p>
+                                </td>
+                                <td>+12 3456 789</td>
+                                <td>USA</td>
+                                <td>07/08/2016</td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <span class="avatar-sm-box bg-primary">C</span>
+                                </th>
+                                <td>
+                                    <h5 class="m-0">Craig Hause</h5>
+                                    <p class="m-0 text-muted font-13"><small>Programmer</small></p>
+                                </td>
+                                <td>+89 345 6789</td>
+                                <td>Canada</td>
+                                <td>29/07/2016</td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <span class="avatar-sm-box bg-brown">E</span>
+                                </th>
+                                <td>
+                                    <h5 class="m-0">Edward Grimes</h5>
+                                    <p class="m-0 text-muted font-13"><small>Founder</small></p>
+                                </td>
+                                <td>+12 29856 256</td>
+                                <td>Brazil</td>
+                                <td>22/07/2016</td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <span class="avatar-sm-box bg-pink">B</span>
+                                </th>
+                                <td>
+                                    <h5 class="m-0">Bret Weaver</h5>
+                                    <p class="m-0 text-muted font-13"><small>Web designer</small></p>
+                                </td>
+                                <td>+00 567 890</td>
+                                <td>USA</td>
+                                <td>20/07/2016</td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    <span class="avatar-sm-box bg-orange">M</span>
+                                </th>
+                                <td>
+                                    <h5 class="m-0">Mark</h5>
+                                    <p class="m-0 text-muted font-13"><small>Web design</small></p>
+                                </td>
+                                <td>+91 123 456</td>
+                                <td>India</td>
+                                <td>07/07/2016</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div> <!-- table-responsive -->
+            </div> <!-- end card -->
+        </div>
+        <!-- end col -->
+
+    </div>
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+                <footer class="footer text-right">
+                    <div class="col-lg-3 col-md-4 col-sm-6"><span><b>作者:</b>一切随风</span></div>
+                    <div class="col-lg-3 col-md-4 col-sm-6"><span><b>版本:</b>V1.0</span></div>
+                    <div class="col-lg-3 col-md-4 col-sm-6"><span><b>博客:</b><a href="http://www.zhitbar.com" target="_blank">www.zhitbar.com</a></span></div>
+                    <div class="col-lg-3 col-md-4 col-sm-6"><span><b>邮箱:</b>zhdn_791005@163.com</span></div>
+                </footer>
+
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Right content here -->
+            <!-- ============================================================== -->
+
+
+            <!-- Right Sidebar -->
+            <div class="side-bar right-bar">
+                <a href="javascript:void(0);" class="right-bar-toggle">
+                    <i class="mdi mdi-close-circle-outline"></i>
+                </a>
+                <h4 class="">Settings</h4>
+                <div class="setting-list nicescroll">
+                    <div class="row m-t-20">
+                        <div class="col-xs-8">
+                            <h5 class="m-0">Notifications</h5>
+                            <p class="text-muted m-b-0"><small>Do you need them?</small></p>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <input type="checkbox" checked data-plugin="switchery" data-color="#7fc1fc" data-size="small"/>
+                        </div>
+                    </div>
+
+                    <div class="row m-t-20">
+                        <div class="col-xs-8">
+                            <h5 class="m-0">API Access</h5>
+                            <p class="m-b-0 text-muted"><small>Enable/Disable access</small></p>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <input type="checkbox" checked data-plugin="switchery" data-color="#7fc1fc" data-size="small"/>
+                        </div>
+                    </div>
+
+                    <div class="row m-t-20">
+                        <div class="col-xs-8">
+                            <h5 class="m-0">Auto Updates</h5>
+                            <p class="m-b-0 text-muted"><small>Keep up to date</small></p>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <input type="checkbox" checked data-plugin="switchery" data-color="#7fc1fc" data-size="small"/>
+                        </div>
+                    </div>
+
+                    <div class="row m-t-20">
+                        <div class="col-xs-8">
+                            <h5 class="m-0">Online Status</h5>
+                            <p class="m-b-0 text-muted"><small>Show your status to all</small></p>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                            <input type="checkbox" checked data-plugin="switchery" data-color="#7fc1fc" data-size="small"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Right-bar -->
+
+        </div>
+        <!-- END wrapper -->
+
+        <script>
+            var resizefunc = [];
+        </script>
+
+        <!-- jQuery  -->
+        <script src="{{static_url('assets/js/jquery.min.js')}}"></script>
+        <!-- menu link -->
+        <!--<script src="{{static_url('assets/js/menu_privs.js')}}"></script>-->
+        <script>
+          $.ajax({
+                  url: "/tree",
+                  type: "post",
+                  datatype: "json",
+                  async:false,
+                  data:{},
+                  success: function (dataSet) {
+                    //console.log(dataSet.code, dataSet.message);
+                    $("#ul-menu").append(dataSet.message);
+
+                 }
+            });
+        </script>
+
+        <script src="{{static_url('assets/js/bootstrap.min.js')}}"></script>
+        <script src="{{static_url('assets/js/detect.js')}}"></script>
+
+        <script src="{{static_url('assets/js/fastclick.js')}}"></script>
+        <script src="{{static_url('assets/js/jquery.blockUI.js')}}"></script>
+        <script src="{{static_url('assets/js/waves.js')}}"></script>
+        <script src="{{static_url('assets/js/jquery.slimscroll.js')}}"></script>
+        <script src="{{static_url('assets/js/jquery.scrollTo.min.js')}}"></script>
+        <script src="{{static_url('plugins/switchery/switchery.min.js')}}"></script>
+
+        <!-- Counter js  -->
+        <script src="{{static_url('plugins/waypoints/jquery.waypoints.min.js')}}"></script>
+        <script src="{{static_url('plugins/counterup/jquery.counterup.min.js')}}"></script>
+        <script src="{{static_url('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+
+        <!--Morris Chart-->
+		<script src="{{static_url('plugins/morris/morris.min.js')}}"></script>
+		<script src="{{static_url('plugins/raphael/raphael-min.js')}}"></script>
+
+        <!-- Dashboard init -->
+        <script src="{{static_url('assets/pages/jquery.dashboard.js')}}"></script>
+
+        <!-- Sweet-Alert  -->
+        <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
+
+        <!-- menu link -->
+        <!--<script src="{{static_url('assets/js/menu_privs.js')}}"></script> -->
+
+        <!-- App js -->
+        <script src="{{static_url('assets/js/jquery.core.js')}}"></script>
+        <script src="{{static_url('assets/js/jquery.app.js')}}"></script>
+
+        <script>
+            $(document).bind("keydown", function(e) {//文档绑定键盘按下事件
+                    e = window.event || e;//解决浏览器兼容的问题
+                    if(e.keyCode == 116) {//F5按下
+                    　　e.keyCode = 0;
+                    　　return false;
+                    }else{
+                    　　//让其刷新
+                    }
+            });
+
+            $(document).ready(function() {
+                 $('#user_add').click(function(){
+                  $('#main-container-div').load("/user/add");
+                 });
+
+                 $('#user_query').click(function(){
+                   $('#main-container-div').load("/user/query");
+                 });
+
+                 $('#user_change').click(function(){
+                   $('#main-container-div').load("/user/change");
+                 });
+
+                $('#user_add2').click(function(){
+                   $('#main-container-div').load("/user/add");
+                });
+
+                $('#windows_main').click(function(){
+                   $('#main-container-div').load("/main");
+                 });
+
+                 $('#role_query').click(function(){
+                   $('#main-container-div').load("/role/query");
+                 });
+
+                 $('#role_add').click(function(){
+                  $('#main-container-div').load("/role/add");
+                 });
+
+                 $('#role_change').click(function(){
+                   $('#main-container-div').load("/role/change");
+                 });
+
+                 $('#menu_query').click(function(){
+                   $('#main-container-div').load("/menu/query");
+                 });
+
+                 $('#menu_add').click(function(){
+                  $('#main-container-div').load("/menu/add");
+                 });
+
+                 $('#menu_change').click(function(){
+                   $('#main-container-div').load("/menu/change");
+                 });
+
+                $('#ds_query').click(function(){
+                   $('#main-container-div').load("/ds/query");
+                 });
+
+                 $('#ds_add').click(function(){
+                  $('#main-container-div').load("/ds/add");
+                 });
+
+                 $('#ds_change').click(function(){
+                   $('#main-container-div').load("/ds/change");
+                 });
+
+                //('#main-container-div').load("/main");
+
+            });
+
+        </script>
+
+    </body>
+</html>

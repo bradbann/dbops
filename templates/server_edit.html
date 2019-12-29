@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{{ static_url('assets/images/favicon.ico')}}">
+    <!-- App title -->
+    <title>服务器变更</title>
+    <link rel="stylesheet" href="{{static_url('plugins/morris/morris.css')}}">
+    <link href="{{static_url('plugins/timepicker/bootstrap-timepicker.min.css')}}" rel="stylesheet">
+    <link href="{{static_url('plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')}}" rel="stylesheet">
+    <link href="{{static_url('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
+    <link href="{{static_url('plugins/clockpicker/css/bootstrap-clockpicker.min.css')}}" rel="stylesheet">
+    <link href="{{static_url('plugins/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
+    <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>
+    <!-- Sweet Alert -->
+    <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <p></p>
+   <div class="col-md-6">
+       <form class="form-horizontal" role="form">
+           <input  id="server_id" type="hidden" name="userid" value={{server_id}} >
+            <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">服务器描述</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="server_desc"  type="text" class="form-control" value={{server_desc}}>
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">项目编码名</label>
+                </div>
+                <div class="col-md-10">
+                    <select class="form-control select" id="market_id" >
+                       {% for var in markets %}
+                           {% if market_id==var[0] %}
+                              <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
+                           {% else %}
+                              <option value={{var[0]}} >{{var[1]}}</option>
+                           {% end  %}
+                      {% end %}
+                    </select>
+               </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">服务器类型</label>
+                </div>
+                <div class="col-md-10">
+                    <select class="form-control select" id="server_type" >
+                       {% for var in dm_server_type %}
+                           {% if server_type==var[0] %}
+                              <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
+                           {% else %}
+                              <option value={{var[0]}} >{{var[1]}}</option>
+                           {% end  %}
+                      {% end %}
+                    </select>
+               </div>
+           </div>
+            <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">服务器地址</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="server_ip"  type="text" class="form-control" placeholder="请输入服务器地址" value={{server_ip}}>
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">服务器端口</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="server_port"  type="text" class="form-control" placeholder="请输入服务器端口" value={{server_port}}>
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">服务器用户</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="server_user"  type="text" class="form-control" placeholder="请输入服务器用户" value={{server_user}}>
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">服务器密码</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="server_pass"  type="password" class="form-control" placeholder="请输入服务器密码" value={{server_pass}}>
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">服务器系统</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="server_os"  type="text" class="form-control" placeholder="请输入服务器系统"  value={{server_os}}>
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">服务器CPU</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="server_cpu"  type="text" class="form-control" placeholder="请输入服务器CPU" value={{server_cpu}}>
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">服务器内存</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="server_mem"  type="text" class="form-control" placeholder="请输入服务器内存" value={{server_mem}}>
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">服务器状态</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="status" name="status" value={{status}} >
+                        {% if status=='1' %}
+                            <option value="1" selected = "selected">启用</option>
+                            <option value="0">禁用</option>
+                        {% end %}
+                        {% if status=='0' %}
+                            <option value="0" selected = "selected">禁用</option>
+                            <option value="1" >启用</option>
+                        {% end %}
+                    </select>
+               </div>
+           </div>
+           <br>
+           <div class="form-group m-b-0">
+                <div class="col-sm-offset-6 col-sm-9">
+                     <button id="save" type="button" class="btn btn-custom waves-effect waves-light btn-md">变更</button>
+                     <button id="return" type="button" class="btn btn-custom waves-effect waves-light btn-md">返回</button>
+                </div>
+           </div>
+       </form>
+    </div>
+
+    <!-- jQuery  -->
+    <script src="{{static_url('plugins/moment/moment.js')}}"></script>
+    <script src="{{static_url('plugins/timepicker/bootstrap-timepicker.js')}}"></script>
+    <script src="{{static_url('plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js')}}"></script>
+    <script src="{{static_url('plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js')}}"></script>
+    <script src="{{static_url('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+    <script src="{{static_url('plugins/clockpicker/js/bootstrap-clockpicker.min.js')}}"></script>
+    <script src="{{static_url('plugins/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
+
+    <!-- Counter js  -->
+    <script src="{{static_url('plugins/waypoints/jquery.waypoints.min.js')}}"></script>
+    <script src="{{static_url('plugins/counterup/jquery.counterup.min.js')}}"></script>
+    <script src="{{static_url('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
+
+    <!-- Init js -->
+    <script src="{{static_url('assets/pages/jquery.form-pickers.init.js')}}"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#return').on('click', function () {
+                $('#main-container-div').load('/server/change');
+            });
+
+            $("#save").click(function () {
+                $.ajax({
+                    url: "/server/edit/save",
+                    type: "post",
+                    datatype: "json",
+                    data: {
+                        server_id   : $('#server_id').val(),
+                        market_id   : $('#market_id').val(),
+                        server_desc : $('#server_desc').val(),
+                        server_type: $('#server_type').val(),
+                        server_ip  : $('#server_ip').val(),
+                        server_port: $('#server_port').val(),
+                        server_user: $('#server_user').val(),
+                        server_pass: $('#server_pass').val(),
+                        server_os  : $('#server_os').val(),
+                        server_cpu : $('#server_cpu').val(),
+                        server_mem : $('#server_mem').val(),
+                        status     : $('#status').val(),
+                    },
+                    success: function (dataSet) {
+                        console.log(dataSet.code, dataSet.message);
+                        if (dataSet.code == 0) {
+                            swal("变更成功", "", "success")
+                        } else {
+                            swal(dataSet.message, "", "error")
+                        }
+                    }
+                });
+            });
+        });
+   </script>
+</body>
+
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{{ static_url('assets/images/favicon.ico')}}">
+    <!-- App title -->
+    <title>用户变更</title>
+    <link href="{{static_url('plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')}}" rel="stylesheet">
+    <link href="{{static_url('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
+    <link href="{{static_url('plugins/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
+    <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>
+    <!-- Sweet Alert -->
+    <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
+</head>
+<body>
+   <p></p>
+   <div class="col-md-6">
+       <form class="form-horizontal" role="form">
+           <input  id="userid" type="hidden" name="userid" value={{userid}} >
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">用户名</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="login"  type="text" class="form-control" placeholder="请输入用户名" value={{loginname}}>
+                </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">姓名</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="user" name="user" type="text" class="form-control" placeholder="请输入姓名" value={{username}}>
+                </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">密码</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="pass" name="pass" type="password" class="form-control" placeholder="请输入密码" value={{password}}>
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">性别</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="gender" name="gender">
+                        {% if gender=='1' %}
+                            <option value="1" selected = "selected">男</option>
+                            <option value="2">女</option>
+                        {% end %}
+                        {% if gender=='2' %}
+                            <option value='2' selected = "selected">女</option>
+                            <option value={{gender}}>男</option>
+                        {% end %}
+                    </select>
+               </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">部门</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="dept" name="dept">
+                       {% for var in depts %}
+                           {% if dept==var[0] %}
+                              <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
+                           {% else %}
+                              <option value={{var[0]}} >{{var[1]}}</option>
+                           {% end  %}
+                      {% end %}
+                    </select>
+               </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">电子邮箱</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="email" name="email" type="text" class="form-control" placeholder="请输入电子邮箱" value={{email}}>
+                </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">联系方式</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="phone" name="phone" type="text" class="form-control" placeholder="请输入联系方式" value={{phone}}>
+                </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">过期日期</label>
+                </div>
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <input  id="expire_date" name="expire_date" type="text" class="form-control datepicker" placeholder="yyyy/mm/dd" id="datepicker" value={{expire_date}}>
+                        <span class="input-group-addon bg-custom b-0"><i class="mdi mdi-calendar text-white"></i></span>
+                    </div>
+                </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">用户状态</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="status" name="status">
+                        {% if status=='1' %}
+                            <option value="1" selected = "selected">启用</option>
+                            <option value="0">禁用</option>
+                        {% end %}
+                        {% if status=='0' %}
+                            <option value="1" >启用</option>
+                            <option value="0" selected = "selected">禁用</option>
+                        {% end %}
+                    </select>
+               </div>
+            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">系统角色</label>
+                </div>
+                <div class="col-md-10">
+                    <select multiple="multiple" class="form-control" id="sele_sys_priv" name="roles" >
+                        {% for var in sys_roles %}
+                          <option value={{var[0]}} >{{var[1]}}</option>
+                        {% end %}
+                    </select>
+                </div>
+           </div>
+
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">用户角色</label>
+                </div>
+                <div class="col-md-10">
+                    <select multiple="multiple" class="form-control" id="sele_role_priv" name="roles" >
+                      {% for var in user_roles %}
+                         <option value={{var[0]}} >{{var[1]}}</option>
+                      {% end %}
+                    </select>
+                </div>
+
+           </div>
+
+           <br>
+           <div class="form-group m-b-0">
+                <div class="col-sm-offset-6 col-sm-9">
+                  <button id="save" type="button" class="btn btn-custom waves-effect waves-light btn-md">变更</button>
+                  <button id="return" type="button" class="btn btn-custom waves-effect waves-light btn-md">返回</button>
+                </div>
+           </div>
+       </form>
+    </div>
+
+    <!-- jQuery  -->
+    <script src="{{static_url('plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js')}}"></script>
+
+    <!-- Counter js  -->
+    <script src="{{static_url('plugins/waypoints/jquery.waypoints.min.js')}}"></script>
+    <script src="{{static_url('plugins/counterup/jquery.counterup.min.js')}}"></script>
+    <script src="{{static_url('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
+
+    <!-- Init js -->
+    <script src="{{static_url('assets/pages/jquery.form-pickers.init.js')}}"></script>
+
+    <script>
+        $(document).ready(function() {
+          $('#expire_date').attr("readonly", "readonly");
+
+          $("#sele_sys_priv").click(function () {
+               var options=$('#sele_sys_priv option:selected');
+               if(options.length>0){
+                for (var i=0;i<options.length;i++){
+                      value=$(options[i]).val();
+                      text =$(options[i]).text();
+                      $('#sele_role_priv').append("<option value='"+value+"'>"+text+"</option>");
+                }
+                $('#sele_sys_priv option:selected').remove();
+               }
+          });
+
+          $("#sele_role_priv").click(function () {
+               options=$('#sele_role_priv option:selected');
+               if(options.length>0){
+                for (var i=0;i<options.length;i++){
+                      value=$(options[i]).val();
+                      text =$(options[i]).text();
+                      $('#sele_sys_priv').append("<option value='"+value+"'>"+text+"</option>");
+                }
+                $('#sele_role_priv option:selected').remove();
+               }
+          });
+        });
+
+        $('#return').on('click', function() {
+           $('#main-container-div').load('/user/change');
+        });
+
+        function get_privs(){
+             var tmp='';
+             var val='';
+             $('#sele_role_priv option').each(function(){
+               val=$(this).val();
+               tmp=tmp+','+val;
+             });
+             return tmp.substr(1);
+        };
+
+        $("#save").click(function () {
+          $.ajax({
+            url: "/user/edit/save",
+            type: "post",
+            datatype: "json",
+            data: {
+                userid     : $('#userid').val(),
+                loginname  : $('#login').val(),
+                username   : $('#user').val(),
+                password   : $('#pass').val(),
+                gender     : $('#gender').val(),
+                email      : $('#email').val(),
+                phone      : $('#phone').val(),
+                dept       : $('#dept').val(),
+                expire_date: $('#expire_date').val(),
+                status     : $('#status').val(),
+                roles      : get_privs()
+            },
+            success: function (dataSet) {
+                console.log(dataSet.code, dataSet.message);
+                if (dataSet.code==0) {
+                   swal("变更成功", "", "success")
+                } else {
+                   swal(dataSet.message, "", "error")
+                }
+            }
+         });
+      });
+
+   </script>
+</body>
+
+</html>

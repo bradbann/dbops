@@ -1,0 +1,368 @@
+  <head>
+        <meta charset="utf-8">
+        <link href="{{static_url('assets/css/core.css')}}"       rel="stylesheet" type="text/css" />
+        <link href="{{static_url('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet" >
+ </head>
+ <body>
+    <br>
+    <div class="container">
+      <div class="row">
+         <div class="col-md-2">
+             <div class="input-group">
+                 <span class="input-group-addon"><i class="ion-ios7-home"></i></span>
+                 <select class="form-control select" id="market_id" >
+                    <option value='' selected = "selected">请选择项目...</option>
+                    {% for var in dm_proj_type %}
+                         <option value={{var[0]}} >{{var[1]}}</option>
+                    {% end %}
+                </select>
+             </div>
+         </div>
+         <div class="col-md-3">
+             <div class="input-group">
+                <span class="input-group-addon"><i class="mdi mdi-chemical-weapon"></i></span>
+                <select class="form-control select" id="sync_type" >
+                        <option value='' selected = "selected">请选择业务..</option>
+                        {% for var in db_sync_ywlx %}
+                             <option value={{var[0]}} >{{var[1]}}</option>
+                        {% end %}
+                </select>
+             </div>
+         </div>
+         <div class="col-md-2">
+             <div class="input-group">
+              <span class="input-group-addon">同步日期起</span>
+              <input  id="begin_date"  type="text" class="form-control datepicker" placeholder="同步日期起" value="{{begin_date}}">
+              <span class="input-group-addon bg-custom b-0"><i class="mdi mdi-calendar text-white"></i></span>
+            </div>
+         </div>
+        <div class="col-md-2">
+             <div class="input-group">
+              <span class="input-group-addon">同步日期止</span>
+              <input  id="end_date"  type="text" class="form-control datepicker" placeholder="同步日期止" value="{{end_date}}" >
+              <span class="input-group-addon bg-custom b-0"><i class="mdi mdi-calendar text-white"></i></span>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+             <div class="input-group">
+              <span class="input-group-btn">
+                <button type="button"  id='query_btn' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+        </div>
+      </div>
+    </div>
+     <p></p>
+
+    <!-- db-backup-time row -->
+    <div id='backup-container' class="container">
+        <div class="row">
+             <div class="col-lg-12">
+                <div class="card-box">
+                    <h6 class="header-title m-t-0"><small>同步时长[秒]</small></h6>
+                    <div id="db-sync-time" style="height: 280px;" class="flot-chart"></div>
+
+                </div>
+            </div><!-- end col -->
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-box">
+                    <h6 class="header-title m-t-0"><small>同步记录[条]</small></h6>
+                    <div id="db-sync-amount" style="height: 280px;" class="flot-chart"></div>
+                </div>
+            </div><!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+
+    <script src="{{static_url('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+    <script src="{{static_url('assets/pages/jquery.form-pickers.init.js')}}"></script>
+
+    <script src="{{static_url('assets/js/fastclick.js')}}"></script>
+    <script src="{{static_url('plugins/flot-chart/jquery.flot.min.js')}}"></script>
+    <script src="{{static_url('plugins/flot-chart/jquery.flot.time.js')}}"></script>
+    <script src="{{static_url('plugins/flot-chart/jquery.flot.tooltip.min.js')}}"></script>
+    <script src="{{static_url('plugins/flot-chart/jquery.flot.resize.js')}}"></script>
+    <script src="{{static_url('plugins/flot-chart/jquery.flot.pie.js')}}"></script>
+    <script src="{{static_url('plugins/flot-chart/jquery.flot.selection.js')}}"></script>
+    <script src="{{static_url('plugins/flot-chart/jquery.flot.stack.js')}}"></script>
+    <script src="{{static_url('plugins/flot-chart/jquery.flot.orderBars.min.js')}}"></script>
+    <script src="{{static_url('plugins/flot-chart/jquery.flot.crosshair.js')}}"></script>
+
+
+    <script>
+         $(document).ready(function() {
+              function createPlotGraph(selector, data1, data2, data3, labels, colors, borderColor, bgColor) {
+                    //shows tooltip
+                    function showTooltip(x, y, contents) {
+                        $('<div id="tooltip" class="tooltipflot">' + contents + '</div>').css({
+                            position : 'absolute',
+                            top : y + 5,
+                            left : x + 5
+                        }).appendTo("body").fadeIn(200);
+                    }
+
+                    $.plot($(selector), [{
+                        data : data1,
+                        label : labels[0],
+                        color : colors[0]
+                    }, {
+                        data : data2,
+                        label : labels[1],
+                        color : colors[1]
+                    },{
+                        data : data3,
+                        label : labels[2],
+                        color : colors[2]
+                    }], {
+                        series : {
+                            lines : {
+                                show : true,
+                                fill : true,
+                                lineWidth : 2,
+                                fillColor : {
+                                    colors : [{
+                                        opacity : 0
+                                    }, {
+                                        opacity : 0.5
+                                    },{
+                                        opacity : 0.6
+                                    }]
+                                }
+                            },
+                            points : {
+                                show : false
+                            },
+                            shadowSize : 0
+                        },
+
+                        grid : {
+                            hoverable : true,
+                            clickable : true,
+                            borderColor : borderColor,
+                            tickColor : "#f9f9f9",
+                            borderWidth : 1,
+                            labelMargin : 10,
+                            backgroundColor : bgColor
+                        },
+                        legend : {
+                            position : "ne",
+                            margin : [0, -24],
+                            noColumns : 0,
+                            labelBoxBorderColor : null,
+                            labelFormatter : function(label, series) {
+                                // just add some space to labes
+                                return '' + label + '&nbsp;&nbsp;';
+                            },
+                            width : 30,
+                            height : 2
+                        },
+                        yaxis : {
+                            axisLabel: "Daily Visits",
+                            tickColor : '#f5f5f5',
+                            font : {
+                                color : '#bdbdbd'
+                            }
+                        },
+                        xaxis : {
+                            axisLabel: "Last Days",
+                            tickColor : '#f5f5f5',
+                            font : {
+                                color : '#bdbdbd'
+                            }
+                        },
+                        tooltip : true,
+                        tooltipOpts : {
+                            content : '%s: Value of %x is %y',
+                            shifts : {
+                                x : -60,
+                                y : 25
+                            },
+                            defaultTheme : false
+                        }
+                    });
+                 } ;
+              function createRealTimeGraph (selector, data, colors) {
+                    var plot = $.plot(selector, [data], {
+                        colors : colors,
+                        series : {
+                            grow : {
+                                active : false
+                            }, //disable auto grow
+                            shadowSize : 0, // drawing is faster without shadows
+                            lines : {
+                                show : true,
+                                fill : false,
+                                lineWidth : 2,
+                                steps : false
+                            }
+                        },
+                        grid : {
+                            show : true,
+                            aboveData : false,
+                            color : '#dcdcdc',
+                            labelMargin : 15,
+                            axisMargin : 0,
+                            borderWidth : 0,
+                            borderColor : null,
+                            minBorderMargin : 5,
+                            clickable : true,
+                            hoverable : true,
+                            autoHighlight : false,
+                            mouseActiveRadius : 20
+                        },
+                        tooltip : true, //activate tooltip
+                        tooltipOpts : {
+                            content : "Value is : %y.0" + "%",
+                            shifts : {
+                                x : -30,
+                                y : -50
+                            }
+                        },
+                        yaxis : {
+                            axisLabel: "Response Time (ms)",
+                            min : 0,
+                            max : 100,
+                            tickColor : '#f5f5f5',
+                            color : 'rgba(0,0,0,0.1)'
+                        },
+                        xaxis : {
+                            axisLabel: "Point Value (1000)",
+                            show : true,
+                            tickColor : '#f5f5f5'
+                        }
+                    });
+
+                    return plot;
+                };
+              function randomData()  {
+                    var totalPoints = 300;
+                    if ($realData.length > 0)
+                        $realData = $realData.slice(1);
+
+                      // Do a random walk
+                    while ($realData.length < totalPoints) {
+
+                        var prev = $realData.length > 0 ? $realData[$realData.length - 1] : 50,
+                            y = prev + Math.random() * 10 - 5;
+
+                        if (y < 0) {
+                            y = 0;
+                        } else if (y > 100) {
+                            y = 100;
+                        }
+
+                        this.$realData.push(y);
+                    }
+
+                    // Zip the generated y values with the x values
+                    var res = [];
+                    for (var i = 0; i < $realData.length; ++i) {
+                        res.push([i, $realData[i]])
+                    }
+
+                    return res;
+                }
+
+              $realData       = []
+              var uploads     = [['2019-1-1', 5], ['2019-2-1', 8], ['2019-3-1', 10], ['2019-4-1', 12], ['2019-5-1', 9], ['2019-6-1', 5], ['2019-7-1', 7],['2019-8-1', 9], ['2019-9-1', 8], ['2019-10-1', 16], ['2019-11-1', 14], ['2019-12-1', 12], ['2020-1-1', 10]];
+              var downloads   = [[0, 2], [1, 4], [2, 7], [3, 9], [4, 6], [5, 3], [6, 10],[7, 8], [8, 5], [9, 14], [10, 10], [11, 10], [12, 8]];
+              var downloads1  = [[0, 1], [1, 3], [2, 6], [3, 7], [4, 4], [5, 2], [6, 8],[7, 6], [8, 4], [9, 10], [10, 8], [11, 14], [12, 5]];
+              var plabels     = ["离线车流", "实时车流","反向寻车"];
+              var pcolors     = ['#4bd396', '#f5707a','#188ae2'];
+              var borderColor = '#f5f5f5';
+              var bgColor     = '#fff';
+              createPlotGraph("#db-sync-time", uploads, downloads, downloads1, plabels, pcolors, borderColor, bgColor);
+
+              //real time data representation
+              var plot = createRealTimeGraph('#db-sync-amount', randomData(), ['#3ac9d6']);
+              plot.draw();
+
+              function updatePlot() {
+                 plot.setData([randomData()]);
+                 plot.draw();
+                 setTimeout(updatePlot, $('html').hasClass('mobile-device') ? 500 : 500);
+              }
+              updatePlot();
+
+              $('#begin_date').attr("readonly", "readonly");
+              $('#end_date').attr("readonly", "readonly");
+
+              $("#query_btn").click(function() {
+
+                if ($('#tagname').val()==''){
+                    swal("请选择同步任务!", "", "info");
+                    return false;
+                }
+
+                if ($('#begin_date').val()==''){
+                    swal("请输入同步日期起!", "", "info");
+                    return false;
+                }
+
+                if ($('#end_date').val()==''){
+                    swal("请输入同步日期止!", "", "info");
+                    return false;
+                }
+
+                $.ajax({
+                      url: "/sync/log/_analyze2",
+                      type: "post",
+                      datatype: "json",
+                      data:{
+                          market_id  : $('#market_id').val(),
+                          sync_type  : $('#sync_type').val(),
+                          begin_date : $('#begin_date').val(),
+                          end_date   : $('#end_date').val(),
+
+                      },
+                      success: function (dataSet) {
+                         $('#db-sync-time').html('')
+                         $('#db-sync-amount').html('')
+                      }
+                 });
+
+              });
+
+              //$("#query_btn").click();
+          })
+
+         $("#tagname").bind("input propertychange",function(){
+           $("#query_btn").click();
+         });
+
+         $("#begin_date").bind("input propertychange",function(){
+           $("#query_btn").click();
+         });
+
+         $("#end_date").bind("input propertychange",function(){
+           $("#query_btn").click();
+         });
+
+         $('#market_id').change(function() {
+            console.log('market_id=',$('#market_id').val());
+            $.ajax({
+                      url: "/get/sync/ywlx",
+                      type: "post",
+                      datatype: "json",
+                      data:{
+                          market_id : $('#market_id').val(),
+                      },
+                      success: function (dataSet) {
+                         $("#tagname").empty();
+                         $("#tagname").append("<option value=''>请选择业务...</option>");
+                         for(i=0;i<dataSet['data'].length;i++){
+                             console.log('i=',i)
+                              var val  = dataSet['data'][i][0];
+                              var text = dataSet['data'][i][1];
+                              console.log('option:',"<option value='"+val+"'>"+text+"</option>")
+                              $("#tagname").append("<option value='"+val+"'>"+text+"</option>");
+                         }
+                      }
+                 });
+         });
+    </script>
+
+ </body>
