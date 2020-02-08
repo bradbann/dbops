@@ -95,6 +95,7 @@
 
     <script>
          $(document).ready(function() {
+              $('#backup-container').hide();
               function createBarChart (element, data, xkey, ykeys, labels, lineColors,postUnits) {
                 Morris.Bar({
                     element: element,
@@ -165,6 +166,7 @@
                       success: function (dataSet) {
                          $('#db-backup-size').html('')
                          $('#db-backup-time').html('')
+                         $('#backup-container').show()
                          var $barData_db_backup_size = new Array(dataSet['data1'].length);
                          var $barData_db_backup_time = new Array(dataSet['data2'].length);
 

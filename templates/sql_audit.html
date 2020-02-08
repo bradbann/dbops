@@ -71,10 +71,10 @@
                          { "title": "工单状态" },
                          { "title": "工单类型" },
                          { "title": "数据库环境" },
-                         { "title": "创建人" },
-                         { "title": "创建日期" },
+                         { "title": "发布人" },
+                         { "title": "发布时间" },
                          { "title": "审核人"},
-                         { "title": "审核日期"},
+                         { "title": "审核时间"},
                          { "title": "操作"},
                        ],
                         columnDefs: [
@@ -241,6 +241,7 @@
          </div>
      </div>
 
+     <!--发布语句详情 -->
      <div id="con-close-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
       <div class="modal-dialog modal-lg-detail">
         <div class="modal-content">
@@ -261,6 +262,7 @@
     </div>
    </div><!-- /.modal -->
 
+    <!--执行语句窗口 -->
      <div id="con-close-modal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
        <div class="modal-dialog modal-lg-run">
         <div class="modal-content">
@@ -317,6 +319,7 @@
     </div>
    </div><!-- /.modal -->
  </div>
+
 </body>
 
 <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>

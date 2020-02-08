@@ -1,41 +1,45 @@
  <head>
-        <meta charset="utf-8">
-        <!--Morris Chart CSS -->
-		<link rel="stylesheet" href="{{static_url('plugins/morris/morris.css')}}">
+    <meta charset="utf-8">
 
-        <!-- App css -->
-        <link href="{{static_url('assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-        <link href="{{static_url('assets/css/core.css')}}" rel="stylesheet" type="text/css" />
-        <link href="{{static_url('assets/css/components.css')}}" rel="stylesheet" type="text/css" />
-        <link href="{{static_url('assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
-        <link href="{{static_url('assets/css/pages.css')}}" rel="stylesheet" type="text/css" />
-        <link href="{{static_url('assets/css/menu.css')}}"  rel="stylesheet" type="text/css" />
-        <link href="{{static_url('assets/css/responsive.css')}}" rel="stylesheet" type="text/css" />
-		<link rel="stylesheet" href="{{static_url('plugins/switchery/switchery.min.css')}}">
-        <link rel="stylesheet" href="{{static_url('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" >
+    <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <!--<link href="{{static_url('plugins/datatables/fixedColumns.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>-->
 
-        <!-- HTML5 Shiv and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-        <![endif]-->
+    <!--Morris Chart CSS -->
+	<link href="{{static_url('plugins/morris/morris.css')}}" rel="stylesheet" >
 
-        <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>
+    <link href="{{static_url('assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{static_url('assets/css/core.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{static_url('assets/css/components.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{static_url('assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{static_url('assets/css/pages.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{static_url('assets/css/menu.css')}}"  rel="stylesheet" type="text/css" />
+    <!--<link href="{{static_url('assets/css/responsive.css')}}" rel="stylesheet" type="text/css" />-->
+    <!--<link href="{{static_url('plugins/switchery/switchery.min.css')}}" rel="stylesheet" >-->
+    <!--<link href="{{static_url('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet"  >-->
 
+    <style>
+        #db-backup-prod,#db-backup-pre,#db-backup-dev,#db-backup-uat,
+        #db-sync-park,#db-sync-park-real-time,#db-sync-flow,#db-sync-flow-real-time,
+        #db-sync-flow-device,#db-sync-park-charge,#db-sync-bi{
+            width: 100% !important;
+        }
 
+    </style>
 
-</head>
+ </head>
  <body>
+    <br>
     <div class="row">
-
         <div class="col-lg-2 col-md-4 col-sm-6">
             <div class="card-box widget-box-one">
                 <i class="mdi mdi-chart-areaspline widget-one-icon"></i>
                 <div class="wigdet-one-content">
-                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">Statistics</p>
-                    <h2>345780 <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
-                    <p class="text-muted m-0"><b>Last:</b> 30.4k</p>
+                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow">今日用户数</p>
+                    <h2>22人 <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
+                    <p class="text-muted m-0"><b>开发:</b> 66&nbsp;<b>测试:</b>6&nbsp;<b>平台:</b>6</p>
                 </div>
             </div>
         </div><!-- end col -->
@@ -44,9 +48,9 @@
             <div class="card-box widget-box-one">
                 <i class="mdi mdi-account-convert widget-one-icon"></i>
                 <div class="wigdet-one-content">
-                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User Today">User Today</p>
-                    <h2>895 <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
-                    <p class="text-muted m-0"><b>Last:</b> 1250</p>
+                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow" >数据源数</p>
+                    <h2>89个 <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
+                    <p class="text-muted m-0"><b>生产:</b> 66&nbsp;<b>开发:</b>6&nbsp;<b>测试:</b>6</p>
                 </div>
             </div>
         </div><!-- end col -->
@@ -55,9 +59,9 @@
             <div class="card-box widget-box-one">
                 <i class="mdi mdi-layers widget-one-icon"></i>
                 <div class="wigdet-one-content">
-                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="User This Month">User This Month</p>
-                    <h2>52410 <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
-                    <p class="text-muted m-0"><b>Last:</b> 40.33k</p>
+                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow" >服务器数</p>
+                    <h2>24台 <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
+                    <p class="text-muted m-0"><b>同步:</b> 10&nbsp;<b>备份:</b> 14</p>
                 </div>
             </div>
         </div><!-- end col -->
@@ -66,9 +70,9 @@
             <div class="card-box widget-box-one">
                 <i class="mdi mdi-av-timer widget-one-icon"></i>
                 <div class="wigdet-one-content">
-                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Request Per Minute">Request Per Minute</p>
-                    <h2>652 <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
-                    <p class="text-muted m-0"><b>Last:</b> 956</p>
+                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow" >工单数</p>
+                    <h2>54个 <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
+                    <p class="text-muted m-0"><b>DDL工单:</b> 20&nbsp;<b>DML工单:</b> 32</p>
                 </div>
             </div>
         </div><!-- end col -->
@@ -77,9 +81,9 @@
             <div class="card-box widget-box-one">
                 <i class="mdi mdi-account-multiple widget-one-icon"></i>
                 <div class="wigdet-one-content">
-                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Total Users">Total Users</p>
-                    <h2>3245 <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
-                    <p class="text-muted m-0"><b>Last:</b> 20k</p>
+                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow">备份任务数</p>
+                    <h2>35 <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
+                    <p class="text-muted m-0"><b>生产:</b> 17&nbsp;<b>开发:</b>6&nbsp;<b>测试:</b>7&nbsp;<b>预生产:</b>5</p>
                 </div>
             </div>
         </div><!-- end col -->
@@ -88,312 +92,1157 @@
             <div class="card-box widget-box-one">
                 <i class="mdi mdi-download widget-one-icon"></i>
                 <div class="wigdet-one-content">
-                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="New Downloads">New Downloads</p>
-                    <h2>78541 <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
-                    <p class="text-muted m-0"><b>Last:</b> 50k</p>
+                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow">同步任务数</p>
+                    <h2>150 <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
+                    <p class="text-muted m-0"><b>客流:</b> 51&nbsp;<b>车流:</b>81&nbsp;<b>其它:</b>18</p>
                 </div>
             </div>
         </div><!-- end col -->
 
     </div>
-    <!-- end row -->
 
-    <div class="row">
-        <div class="col-lg-4">
-            <div class="card-box">
-                <h4 class="header-title m-t-0">MySQL慢查询</h4>
-                <div class="widget-chart text-center">
-                    <div id="morris-donut-example"style="height: 245px;"></div>
-                    <ul class="list-inline chart-detail-list m-b-0">
-                        <li>
-                            <h5 class="text-danger"><i class="fa fa-circle m-r-5"></i>Series A</h5>
+    <!--数据库备份情况 -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <ul class="nav nav-pills m-b-30 pull-left">
+                <li class="active">
+                    <a href="#hopsonone-backup" data-toggle="tab" aria-expanded="true">合生通备份</a>
+                </li>
+                <li id='incr_li' class="">
+                    <a href="#easylife-backup" data-toggle="tab" aria-expanded="false">好房备份</a>
+                </li>
+            </ul>
+            <div class="tab-content br-n pn">
+                <div id="hopsonone-backup" class="tab-pane active">
+                    <ul class="nav nav-tabs tabs-bordered nav-justified">
+                        <li class="active">
+                            <a href="#hopsonone-backup-prod" data-toggle="tab">生产环境</a>
                         </li>
                         <li>
-                            <h5 class="text-success"><i class="fa fa-circle m-r-5"></i>Series B</h5>
+                            <a href="#hopsonone-backup-pre" data-toggle="tab">预生产环境</a>
                         </li>
                         <li>
-                            <h5 class="text-success"><i class="fa fa-circle m-r-5"></i>Series C</h5>
+                            <a href="#hopsonone-backup-dev" data-toggle="tab">开发环境</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-backup-uat" data-toggle="tab">测试环境</a>
                         </li>
                     </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="hopsonone-backup-prod">
+                            <table id="db-backup-prod" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-backup-pre">
+                            <table id="db-backup-pre" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-backup-dev">
+                            <table id="db-backup-dev" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-backup-uat">
+                            <table id="db-backup-uat" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                    </div>
+                    <div id='db-backup-total' class="tab-footer"></div>
+                </div>
+                <div id="easylife-backup" class="tab-pane">
+                    <div class="row">
+                        <div id='ace-editor-incr' class="col-md-12"></div>
+                    </div>
                 </div>
             </div>
-        </div><!-- end col -->
+        </div>
 
-        <div class="col-lg-4">
-            <div class="card-box">
-                <h4 class="header-title m-t-0">Statistics</h4>
-                <div id="morris-bar-example" style="height: 280px;"></div>
+    </div>
+
+    <!--数据库备份图表 -->
+    <div id="db-backup-bar">
+        <div class="text-center">
+            <ul class="list-inline chart-detail-list">
+                <li class="list-inline-item">
+                    <h5 class="text-info"><i class="mdi mdi-crop-square m-r-5"></i>备份大小[MB]</h5>
+                </li>
+                <li class="list-inline-item">
+                    <h5 class="text-orange"><i class="mdi mdi-details m-r-5"></i>备份时长[S]</h5>
+                </li>
+            </ul>
+        </div>
+        <div id="db-backup-size" style="height: 280px;"></div>
+    </div>
+    <p></p>
+
+    <!--数据库同步情况 -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <ul class="nav nav-pills m-b-30 pull-left">
+                <li class="active">
+                    <a href="#hopsonone-sync" data-toggle="tab" aria-expanded="true">合生通同步</a>
+                </li>
+                <li id='incr_li2' class="">
+                    <a href="#easylife-sync" data-toggle="tab" aria-expanded="false">好房同步</a>
+                </li>
+            </ul>
+            <div class="tab-content br-n pn">
+                <div id="hopsonone-sync" class="tab-pane active">
+                    <ul class="nav nav-tabs tabs-bordered nav-justified">
+                        <li class="active">
+                            <a href="#hopsonone-sync-park" data-toggle="tab">离线车流</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-sync-park-real-time" data-toggle="tab">实时车流</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-sync-flow" data-toggle="tab">离线客流</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-sync-flow-real-time" data-toggle="tab">实时客流</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-sync-flow-device" data-toggle="tab">客流设备</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-sync-park-charge" data-toggle="tab">收费员结算</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-sync-bi" data-toggle="tab">BI统计</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-sync-datax" data-toggle="tab">大数据</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="hopsonone-sync-park">
+                            <table id="db-sync-park" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-sync-park-real-time">
+                            <table id="db-sync-park-real-time" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-sync-flow">
+                            <table id="db-sync-flow" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-sync-flow-real-time">
+                            <table id="db-sync-flow-real-time" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-sync-flow-device">
+                            <table id="db-sync-flow-device" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-sync-park-charge">
+                            <table id="db-sync-park-charge" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-sync-bi">
+                            <table id="db-sync-bi" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-sync-datax">
+                            <table id="db-sync-datax" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                    </div>
+                    <div class="tab-footer">
+                        <span>成功:55,失败:2</span>
+                    </div>
+                </div>
+                <div id="easylife-sync" class="tab-pane">
+                    <div class="row">
+                        <div id='ace-editor-incr2' class="col-md-12"></div>
+                    </div>
+                </div>
             </div>
-        </div><!-- end col -->
+        </div>
+    </div>
 
-        <div class="col-lg-4">
-            <div class="card-box">
-                <h4 class="header-title m-t-0">Total Revenue</h4>
-                <div id="morris-line-example" style="height: 280px;"></div>
+    <!--工单情况 -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <ul class="nav nav-pills m-b-30 pull-left">
+                <li class="active">
+                    <a href="#hopsonone-order" data-toggle="tab" aria-expanded="true">合生通工单</a>
+                </li>
+                <li id='incr_li3' class="">
+                    <a href="#easylife-order" data-toggle="tab" aria-expanded="false">好房工单</a>
+                </li>
+            </ul>
+            <div class="tab-content br-n pn">
+                <div id="hopsonone-order" class="tab-pane active">
+                    <ul class="nav nav-tabs tabs-bordered nav-justified">
+                        <li class="active">
+                            <a href="#hopsonone-order-prod" data-toggle="tab">生产环境</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-order-pre" data-toggle="tab">预生产环境</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-order-dev" data-toggle="tab">开发环境</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-order-uat" data-toggle="tab">测试环境</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="hopsonone-order-prod">
+                            <table id="db-order-prod" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-order-pre">
+                            <table id="db-order-pre" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-order-dev">
+                            <table id="db-order-dev" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-order-uat">
+                            <table id="db-order-uat" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                    </div>
+                    <div class="tab-footer">
+                        <span>成功:20,失败:0</span>
+                    </div>
+                </div>
+                <div id="easylife-order" class="tab-pane">
+                    <div class="row">
+                        <div id='ace-editor-incr3' class="col-md-12"></div>
+                    </div>
+                </div>
             </div>
-        </div><!-- end col -->
+        </div>
 
     </div>
-    <!-- end row -->
 
-    <!-- db-slow-sql row -->
-    <div  class="container">
-        <h5>MySQL慢查询</h5>
-        <div class="row">
-             <div class="col-lg-4">
-                <div class="card-box">
-                    <h4 class="header-title m-t-0">MySQL[主库]</h4>
-                    <div id="morris-bar-db-slow-master" style="height: 280px;"></div>
-                </div>
-            </div><!-- end col -->
+    <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+    <script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
+    <script src="{{static_url('plugins/datatables/dataTables.buttons.min.js')}}"></script>
+    <script src="{{static_url('plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+    <script src="{{static_url('plugins/datatables/dataTables.responsive.min.js')}}"></script>
+    <script src="{{static_url('plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+    <script src="{{static_url('plugins/datatables/dataTables.scroller.min.js')}}"></script>
+    <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>
+	<script src="{{static_url('plugins/morris/morris.min.js')}}"></script>
+	<!--<script src="{{static_url('plugins/raphael/raphael-min.js')}}"></script>-->
+    <!--<script src="{{static_url('assets/pages/jquery.dashboard.js')}}"></script>-->
 
-            <div class="col-lg-4">
-                <div class="card-box">
-                    <h4 class="header-title m-t-0">MySQL[从库]</h4>
-                    <div id="morris-bar-db-slow-slave" style="height: 280px;"></div>
-                </div>
-            </div><!-- end col -->
+    <script>
+        $(document).ready(function() {
 
-            <div class="col-lg-4">
-                <div class="card-box">
-                    <h4 class="header-title m-t-0">MySQL[BI库]</h4>
-                    <div id="morris-bar-db-slow-bi" style="height: 280px;"></div>
-                </div>
-            </div><!-- end col -->
+          function createBarChart (element, data, xkey, ykeys, labels, lineColors,postUnits) {
+             Morris.Bar({
+                element: element,
+                data: data,
+                xkey: xkey,
+                ykeys: ykeys,
+                labels: labels,
+                hideHover: 'auto',
+                resize: true, //defaulted to true
+                gridLineColor: '#eeeeee',
+                barSizeRatio: 0.4,
+                barColors: lineColors,
+                postUnits: postUnits
+            });
+          }
 
-        </div>
-    </div>
-    <!-- end row -->
+          function show_bar(data){
+             $('#db-backup-bar').show();
+             $('#db-backup-size').html('');
+             createBarChart('db-backup-size',  data, 'y', ['a','b'], ['备份大小[MB]','备份时长[S]'], ['#3ac9d6', '#ff9800']);
+          }
 
-    <!-- db-backup-time row -->
-    <div  class="container">
-        <h5>MySQL备份时长</h5>
-        <div class="row">
-             <div class="col-lg-6">
-                <div class="card-box">
-                    <h4 class="header-title m-t-0">MySQL[业务库]</h4>
-                    <div id="morris-bar-db-backup-time-biz" style="height: 280px;"></div>
-                </div>
-            </div><!-- end col -->
+          //表格显示行数
+          var n_rows=5
 
-            <div class="col-lg-6">
-                <div class="card-box">
-                    <h4 class="header-title m-t-0">MySQL[BI库]</h4>
-                    <div id="morris-bar-db-backup-time-bi" style="height: 280px;"></div>
-                </div>
-            </div><!-- end col -->
+          //合生通生产数据库生产备份情况
+          $.ajax({
+              url: "/backup_case",
+              type: "post",
+              datatype: "json",
+              data:{
+                  db_env: '1'
+              },
+              success: function (dataSet) {
+                 $('#db-backup-prod').DataTable( {
+                      "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                      "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                      destroy    :true,
+                      async      :true,
+                      ordering   :false,
+                      scrollY    :true,
+                      scrollX    :true,
+                      paging     : true,
+                      data       : dataSet.data,
+                      autoFill   : true,
+                      bAutoWidth : true,
+                      iDisplayLength: n_rows,
+                      info       :true,
+                      columns: [
+                        { "title": "数据库类型","width":"10%" },
+                        { "title": "数据源描述","width":"30%" },
+                        { "title": "备份日期","width":"15%" },
+                        { "title": "备份大小","width":"15%" },
+                        { "title": "备份时长","width":"15%" },
+                        { "title": "备份状态","width":"15%" },
+                      ],
+                     "language": {
+                                 "search"       : "在表格中搜索:",
+                                 "sProcessing"  : "处理中...",
+                                 "sLengthMenu"  : "显示 _MENU_ 项结果",
+                                 "sZeroRecords" : "没有匹配结果",
+                                 "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                 "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                                 "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                 "sInfoPostFix" : "",
+                                 "sSearch"      : "搜索:",
+                                 "sUrl"         : "",
+                                 "sEmptyTable"  : "表中数据为空",
+                                 "sLoadingRecords": "载入中...",
+                                 "sInfoThousands": ",",
+                                 "oPaginate": {
+                                     "sFirst"   : "首页",
+                                     "sPrevious": "上页",
+                                     "sNext"    : "下页",
+                                     "sLast"    : "末页"
+                                 },
+                                 "oAria": {
+                                     "sSortAscending" : ": 以升序排列此列",
+                                     "sSortDescending": ": 以降序排列此列"
+                                 }
+                             }
+                 });
 
-        </div>
-        <!-- end row -->
-    </div>
+                 //统计成功失条数
+                 if (dataSet.failure>0) {
+                     $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span style="color:red">失败:'+dataSet.failure+'个</span>')
+                 } else {
+                     $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span>失败:'+dataSet.failure+'个</span>')
+                 }
 
-    <!-- db-backup-space row -->
-    <div  class="container">
-        <h5>MySQL备份空间</h5>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="card-box">
-                    <h4 class="header-title m-t-0">MySQL[业务库]</h4>
-                    <div id="morris-bar-db-backup-space-biz" style="height: 280px;"></div>
-                </div>
-            </div><!-- end col -->
+                //生成柱状图
+                 var $db_backup_data = new Array(dataSet.data.length);
+                 for (i=0;i<dataSet.data.length;i++){
+                     console.log(dataSet.data[i][1],dataSet.data[i][3],dataSet.data[i][4])
+                     $db_backup_data[i] = {'y':dataSet.data[i][1],'a':parseInt(dataSet.data[i][3]),'b':parseInt(dataSet.data[i][4])}
+                 }
+                 show_bar($db_backup_data)
+             }
+         });
 
-            <div class="col-lg-6">
-                <div class="card-box">
-                    <h4 class="header-title m-t-0">MySQL[BI库]</h4>
-                    <div id="morris-bar-db-backup-space-bi" style="height: 280px;"></div>
-                </div>
-            </div><!-- end col -->
-        </div>
-        <!-- end row -->
-      </div>
+         //合生通生产数据库离线车流同步情况
+          $.ajax({
+              url: "/get/sync/park",
+              type: "post",
+              datatype: "json",
+              success: function (dataSet) {
+                  $('#db-sync-park').DataTable( {
+                  "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                  "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                  destroy    :true,
+                  async      :true,
+                  ordering   :true,
+                  scrollY    :true,
+                  scrollX    :true,
+                  paging     : true,
+                  data       : dataSet,
+                  iDisplayLength: n_rows,
+                  autoFill   : true,
+                  bAutoWidth : true,
+                  info       : true,
+                  columns: [
+                    { "title": "项目编码","width":"10%" },
+                    { "title": "任务描述","width":"30%" },
+                    { "title": "最近同步时间","width":"15%" },
+                    { "title": "同步时长(s)","width":"15%" },
+                    { "title": "同步总记录数","width":"15%" },
+                    { "title": "同步状态","width":"15%" },
+                  ],
+                  "language": {
+                             "search"       : "在表格中搜索:",
+                             "sProcessing"  : "处理中...",
+                             "sLengthMenu"  : "显示 _MENU_ 项结果",
+                             "sZeroRecords" : "没有匹配结果",
+                             "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                             "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                             "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                             "sInfoPostFix" : "",
+                             "sSearch"      : "搜索:",
+                             "sUrl"         : "",
+                             "sEmptyTable"  : "表中数据为空",
+                             "sLoadingRecords": "载入中...",
+                             "sInfoThousands": ",",
+                             "oPaginate": {
+                                 "sFirst"   : "首页",
+                                 "sPrevious": "上页",
+                                 "sNext"    : "下页",
+                                 "sLast"    : "末页"
+                             },
+                             "oAria": {
+                                 "sSortAscending" : ": 以升序排列此列",
+                                 "sSortDescending": ": 以降序排列此列"
+                             }
+                         }
+                 });
+             }
+         });
 
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="card-box">
-                <h4 class="header-title m-t-0 m-b-30">Recent Users</h4>
+         $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+              var activeTab = $(e.target).text();
+              var previousTab = $(e.relatedTarget).text();
+              console.log(activeTab,previousTab)
 
-                <div class="table-responsive">
-                    <table class="table table table-hover m-0">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>User Name</th>
-                                <th>Phone</th>
-                                <th>Location</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th>
-                                    <img src="{{ static_url('assets/images/users/avatar-1.jpg')}}" alt="user" class="thumb-sm img-circle" />
-                                </th>
-                                <td>
-                                    <h5 class="m-0">Louis Hansen</h5>
-                                    <p class="m-0 text-muted font-13"><small>Web designer</small></p>
-                                </td>
-                                <td>+12 3456 789</td>
-                                <td>USA</td>
-                                <td>07/08/2016</td>
-                            </tr>
+              if (activeTab=='生产环境') {
+                  //合生通生产数据库备份情况
+                  $.ajax({
+                      url: "/backup_case",
+                      type: "post",
+                      datatype: "json",
+                      data:{
+                          db_env: '1'
+                      },
+                      success: function (dataSet) {
+                          $('#db-backup-prod').DataTable( {
+                              "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                              "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                              destroy    :true,
+                              async      :true,
+                              ordering   :false,
+                              scrollY    :true,
+                              scrollX    :true,
+                              paging     : true,
+                              data       : dataSet.data,
+                              autoFill   : true,
+                              bAutoWidth : true,
+                              iDisplayLength: n_rows,
+                              info       : true,
+                              columns: [
+                                { "title": "数据库类型","width":"10%" },
+                                { "title": "数据源描述","width":"30%" },
+                                { "title": "备份日期","width":"15%" },
+                                { "title": "备份大小[MB]","width":"15%" },
+                                { "title": "备份时长[S]","width":"15%" },
+                                { "title": "备份状态","width":"15%" },
+                              ],
+                             "language": {
+                                 "search"       : "在表格中搜索:",
+                                 "sProcessing"  : "处理中...",
+                                 "sLengthMenu"  : "显示 _MENU_ 项结果",
+                                 "sZeroRecords" : "没有匹配结果",
+                                 "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                 "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                                 "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                 "sInfoPostFix" : "",
+                                 "sSearch"      : "搜索:",
+                                 "sUrl"         : "",
+                                 "sEmptyTable"  : "表中数据为空",
+                                 "sLoadingRecords": "载入中...",
+                                 "sInfoThousands": ",",
+                                 "oPaginate": {
+                                     "sFirst"   : "首页",
+                                     "sPrevious": "上页",
+                                     "sNext"    : "下页",
+                                     "sLast"    : "末页"
+                                 },
+                                 "oAria": {
+                                     "sSortAscending" : ": 以升序排列此列",
+                                     "sSortDescending": ": 以降序排列此列"
+                                 }
+                             }
+                         });
 
-                            <tr>
-                                <th>
-                                    <img src="{{ static_url('assets/images/users/avatar-2.jpg')}}" alt="user" class="thumb-sm img-circle" />
-                                </th>
-                                <td>
-                                    <h5 class="m-0">Craig Hause</h5>
-                                    <p class="m-0 text-muted font-13"><small>Programmer</small></p>
-                                </td>
-                                <td>+89 345 6789</td>
-                                <td>Canada</td>
-                                <td>29/07/2016</td>
-                            </tr>
+                         //统计成功失条数
+                         if (dataSet.failure>0) {
+                             $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span style="color:red">失败:'+dataSet.failure+'个</span>')
+                         } else {
+                             $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span>失败:'+dataSet.failure+'个</span>')
+                         }
 
-                            <tr>
-                                <th>
-                                    <img src="{{ static_url('assets/images/users/avatar-3.jpg')}}" alt="user" class="thumb-sm img-circle" />
-                                </th>
-                                <td>
-                                    <h5 class="m-0">Edward Grimes</h5>
-                                    <p class="m-0 text-muted font-13"><small>Founder</small></p>
-                                </td>
-                                <td>+12 29856 256</td>
-                                <td>Brazil</td>
-                                <td>22/07/2016</td>
-                            </tr>
+                         //生成柱状图
+                         console.log('prod-backup-data=',dataSet.data)
 
-                            <tr>
-                                <th>
-                                    <img src="{{ static_url('assets/images/users/avatar-4.jpg')}}" alt="user" class="thumb-sm img-circle" />
-                                </th>
-                                <td>
-                                    <h5 class="m-0">Bret Weaver</h5>
-                                    <p class="m-0 text-muted font-13"><small>Web designer</small></p>
-                                </td>
-                                <td>+00 567 890</td>
-                                <td>USA</td>
-                                <td>20/07/2016</td>
-                            </tr>
+                         //var $db_backup_data = new Array(dataSet.data.length);
+                         var $db_backup_data = new Array(dataSet.data.length);
+                         for (i=0;i<dataSet.data.length;i++){
+                             console.log(dataSet.data[i][1],dataSet.data[i][3],dataSet.data[i][4])
+                             $db_backup_data[i] = {'y':dataSet.data[i][1],'a':parseInt(dataSet.data[i][3]),'b':parseInt(dataSet.data[i][4])}
+                         }
+                         show_bar($db_backup_data)
+                         // console.log('$db_backup_data=',$db_backup_data)
+                         //
+                         // $('#db-backup-bar').show();
+                         // $('#db-backup-size').html('');
+                         // createBarChart('db-backup-size',  $db_backup_data, 'y', ['a','b'], ['备份大小[MB]','备份时长[S]'], ['#3ac9d6', '#ff9800']);
 
-                            <tr>
-                                <th>
-                                    <img src="{{ static_url('assets/images/users/avatar-5.jpg')}}" alt="user" class="thumb-sm img-circle" />
-                                </th>
-                                <td>
-                                    <h5 class="m-0">Mark</h5>
-                                    <p class="m-0 text-muted font-13"><small>Web design</small></p>
-                                </td>
-                                <td>+91 123 456</td>
-                                <td>India</td>
-                                <td>07/07/2016</td>
-                            </tr>
+                     }
+                 });
+                  ///show_bar()
+              } else if (activeTab=='预生产环境'){
+                  //合生通预生产数据库备份情况
+                  $.ajax({
+                      url: "/backup_case",
+                      type: "post",
+                      datatype: "json",
+                      data:{
+                          db_env: '4'
+                      },
+                      success: function (dataSet) {
+                          $('#db-backup-pre').DataTable( {
+                          "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                          "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                          destroy    :true,
+                          async      :true,
+                          ordering   :true,
+                          scrollY    :true,
+                          scrollX    :true,
+                          paging     : true,
+                          data       : dataSet.data,
+                          autoFill   : true,
+                          bAutoWidth : true,
+                          iDisplayLength: n_rows,
+                          info       : true,
+                          columns: [
+                            { "title": "数据库类型","width":"10%" },
+                            { "title": "数据源描述","width":"30%" },
+                            { "title": "备份日期","width":"15%" },
+                            { "title": "备份大小","width":"15%" },
+                            { "title": "备份时长","width":"15%" },
+                            { "title": "备份状态","width":"15%" },
+                          ],
+                         "language": {
+                             "search"       : "在表格中搜索:",
+                             "sProcessing"  : "处理中...",
+                             "sLengthMenu"  : "显示 _MENU_ 项结果",
+                             "sZeroRecords" : "没有匹配结果",
+                             "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                             "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                             "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                             "sInfoPostFix" : "",
+                             "sSearch"      : "搜索:",
+                             "sUrl"         : "",
+                             "sEmptyTable"  : "表中数据为空",
+                             "sLoadingRecords": "载入中...",
+                             "sInfoThousands": ",",
+                             "oPaginate": {
+                                 "sFirst"   : "首页",
+                                 "sPrevious": "上页",
+                                 "sNext"    : "下页",
+                                 "sLast"    : "末页"
+                             },
+                             "oAria": {
+                                 "sSortAscending" : ": 以升序排列此列",
+                                 "sSortDescending": ": 以降序排列此列"
+                             }
+                         }
+                         });
 
-                        </tbody>
-                    </table>
+                         //统计成功失条数
+                         if (dataSet.failure>0) {
+                             $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span style="color:red">失败:'+dataSet.failure+'个</span>')
+                         } else {
+                             $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span>失败:'+dataSet.failure+'个</span>')
+                         }
 
-                </div> <!-- table-responsive -->
-            </div> <!-- end card -->
-        </div>
-        <!-- end col -->
+                         //生成柱状图
+                         var $db_backup_data = new Array(dataSet.data.length);
+                         for (i=0;i<dataSet.data.length;i++){
+                             console.log(dataSet.data[i][1],dataSet.data[i][3],dataSet.data[i][4])
+                             $db_backup_data[i] = {'y':dataSet.data[i][1],'a':parseInt(dataSet.data[i][3]),'b':parseInt(dataSet.data[i][4])}
+                         }
+                         show_bar($db_backup_data)
+                     }
+                 });
+                  //hide_bar();
+              } else if (activeTab=='开发环境'){
+                  //合生通开发数据库备份情况
+                  $.ajax({
+                      url: "/backup_case",
+                      type: "post",
+                      datatype: "json",
+                      data:{
+                          db_env: '3'
+                      },
+                      success: function (dataSet) {
+                          $('#db-backup-dev').DataTable( {
+                          "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                          "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                          destroy    :true,
+                          async      :true,
+                          ordering   :true,
+                          scrollY    :true,
+                          scrollX    :true,
+                          paging     : true,
+                          data       : dataSet.data,
+                          autoFill   : true,
+                          bAutoWidth : true,
+                          iDisplayLength: n_rows,
+                          info       : true,
+                          columns: [
+                            { "title": "数据库类型","width":"10%" },
+                            { "title": "数据源描述","width":"30%" },
+                            { "title": "备份日期","width":"15%" },
+                            { "title": "备份大小","width":"15%" },
+                            { "title": "备份时长","width":"15%" },
+                            { "title": "备份状态","width":"15%" },
+                          ],
+                         "language": {
+                             "search"       : "在表格中搜索:",
+                             "sProcessing"  : "处理中...",
+                             "sLengthMenu"  : "显示 _MENU_ 项结果",
+                             "sZeroRecords" : "没有匹配结果",
+                             "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                             "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                             "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                             "sInfoPostFix" : "",
+                             "sSearch"      : "搜索:",
+                             "sUrl"         : "",
+                             "sEmptyTable"  : "表中数据为空",
+                             "sLoadingRecords": "载入中...",
+                             "sInfoThousands": ",",
+                             "oPaginate": {
+                                 "sFirst"   : "首页",
+                                 "sPrevious": "上页",
+                                 "sNext"    : "下页",
+                                 "sLast"    : "末页"
+                             },
+                             "oAria": {
+                                 "sSortAscending" : ": 以升序排列此列",
+                                 "sSortDescending": ": 以降序排列此列"
+                             }
+                         }
+                         });
 
-        <div class="col-lg-6">
-            <div class="card-box">
-                <h4 class="header-title m-t-0 m-b-30">Recent Users</h4>
+                         if (dataSet.failure>0) {
+                             $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span style="color:red">失败:'+dataSet.failure+'个</span>')
+                         } else {
+                             $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span>失败:'+dataSet.failure+'个</span>')
+                         }
 
-                <div class="table-responsive">
-                    <table class="table table table-hover m-0">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>User Name</th>
-                                <th>Phone</th>
-                                <th>Location</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th>
-                                    <span class="avatar-sm-box bg-success">L</span>
-                                </th>
-                                <td>
-                                    <h5 class="m-0">Louis Hansen</h5>
-                                    <p class="m-0 text-muted font-13"><small>Web designer</small></p>
-                                </td>
-                                <td>+12 3456 789</td>
-                                <td>USA</td>
-                                <td>07/08/2016</td>
-                            </tr>
+                         //生成柱状图
+                         var $db_backup_data = new Array(dataSet.data.length);
+                         for (i=0;i<dataSet.data.length;i++){
+                             console.log(dataSet.data[i][1],dataSet.data[i][3],dataSet.data[i][4])
+                             $db_backup_data[i] = {'y':dataSet.data[i][1],'a':parseInt(dataSet.data[i][3]),'b':parseInt(dataSet.data[i][4])}
+                         }
+                         show_bar($db_backup_data)
+                     }
+                 });
+                  //hide_bar();
+              } else if (activeTab=='测试环境'){
+                  //合生通测试数据库备份情况
+                  $.ajax({
+                      url: "/backup_case",
+                      type: "post",
+                      datatype: "json",
+                      data:{
+                          db_env: '2'
+                      },
+                      success: function (dataSet) {
+                          $('#db-backup-uat').DataTable( {
+                          "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                          "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                          destroy    :true,
+                          async      :true,
+                          ordering   :true,
+                          scrollY    :true,
+                          scrollX    :true,
+                          paging     : true,
+                          data       : dataSet.data,
+                          autoFill   : true,
+                          bAutoWidth : true,
+                          iDisplayLength: n_rows,
+                          info       : true,
+                          columns: [
+                            { "title": "数据库类型","width":"10%" },
+                            { "title": "数据源描述","width":"30%" },
+                            { "title": "备份日期","width":"15%" },
+                            { "title": "备份大小","width":"15%" },
+                            { "title": "备份时长","width":"15%" },
+                            { "title": "备份状态","width":"15%" },
+                          ],
+                          "language": {
+                             "search"       : "在表格中搜索:",
+                             "sProcessing"  : "处理中...",
+                             "sLengthMenu"  : "显示 _MENU_ 项结果",
+                             "sZeroRecords" : "没有匹配结果",
+                             "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                             "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                             "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                             "sInfoPostFix" : "",
+                             "sSearch"      : "搜索:",
+                             "sUrl"         : "",
+                             "sEmptyTable"  : "表中数据为空",
+                             "sLoadingRecords": "载入中...",
+                             "sInfoThousands": ",",
+                             "oPaginate": {
+                                 "sFirst"   : "首页",
+                                 "sPrevious": "上页",
+                                 "sNext"    : "下页",
+                                 "sLast"    : "末页"
+                             },
+                             "oAria": {
+                                 "sSortAscending" : ": 以升序排列此列",
+                                 "sSortDescending": ": 以降序排列此列"
+                             }
+                         }
+                         });
 
-                            <tr>
-                                <th>
-                                    <span class="avatar-sm-box bg-primary">C</span>
-                                </th>
-                                <td>
-                                    <h5 class="m-0">Craig Hause</h5>
-                                    <p class="m-0 text-muted font-13"><small>Programmer</small></p>
-                                </td>
-                                <td>+89 345 6789</td>
-                                <td>Canada</td>
-                                <td>29/07/2016</td>
-                            </tr>
+                         if (dataSet.failure>0) {
+                             $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span style="color:red">失败:'+dataSet.failure+'个</span>')
+                         } else {
+                             $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span>失败:'+dataSet.failure+'个</span>')
+                         }
 
-                            <tr>
-                                <th>
-                                    <span class="avatar-sm-box bg-brown">E</span>
-                                </th>
-                                <td>
-                                    <h5 class="m-0">Edward Grimes</h5>
-                                    <p class="m-0 text-muted font-13"><small>Founder</small></p>
-                                </td>
-                                <td>+12 29856 256</td>
-                                <td>Brazil</td>
-                                <td>22/07/2016</td>
-                            </tr>
+                         //生成柱状图
+                         var $db_backup_data = new Array(dataSet.data.length);
+                         for (i=0;i<dataSet.data.length;i++){
+                             console.log(dataSet.data[i][1],dataSet.data[i][3],dataSet.data[i][4])
+                             $db_backup_data[i] = {'y':dataSet.data[i][1],'a':parseInt(dataSet.data[i][3]),'b':parseInt(dataSet.data[i][4])}
+                         }
+                         show_bar($db_backup_data)
+                     }
+                 });
+                  //hide_bar();
+              } else if (activeTab=='离线车流'){
+                  //合生通生产数据库离线车流同步情况
+                  $.ajax({
+                      url: "/get/sync/park",
+                      type: "post",
+                      datatype: "json",
+                      beforeSend: function () {
+                           swal({title: "正在查询中...",showConfirmButton: false});
+                      },
+                        complete: function () {
+                           swal({title: "正在查询中...",timer: 1000,showConfirmButton: false});
+                      },
+                      success: function (dataSet) {
+                          $('#db-sync-park').DataTable( {
+                          "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                          "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                          destroy    :true,
+                          async      :true,
+                          ordering   :true,
+                          scrollY    :true,
+                          scrollX    :true,
+                          paging     : true,
+                          data       : dataSet,
+                          iDisplayLength: n_rows,
+                          autoFill   : true,
+                          bAutoWidth : true,
+                          info       : true,
+                          columns: [
+                            { "title": "项目编码","width":"10%" },
+                            { "title": "任务描述","width":"30%" },
+                            { "title": "最近同步时间","width":"15%" },
+                            { "title": "同步时长(s)","width":"15%" },
+                            { "title": "同步总记录数","width":"15%" },
+                            { "title": "同步状态","width":"15%" },
+                          ],
+                          "language": {
+                                     "search"       : "在表格中搜索:",
+                                     "sProcessing"  : "处理中...",
+                                     "sLengthMenu"  : "显示 _MENU_ 项结果",
+                                     "sZeroRecords" : "没有匹配结果",
+                                     "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                     "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                                     "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                     "sInfoPostFix" : "",
+                                     "sSearch"      : "搜索:",
+                                     "sUrl"         : "",
+                                     "sEmptyTable"  : "表中数据为空",
+                                     "sLoadingRecords": "载入中...",
+                                     "sInfoThousands": ",",
+                                     "oPaginate": {
+                                         "sFirst"   : "首页",
+                                         "sPrevious": "上页",
+                                         "sNext"    : "下页",
+                                         "sLast"    : "末页"
+                                     },
+                                     "oAria": {
+                                         "sSortAscending" : ": 以升序排列此列",
+                                         "sSortDescending": ": 以降序排列此列"
+                                     }
+                                 }
+                         });
+                     }
+                 });
+              } else if (activeTab=='实时车流'){
+                  //合生通生产数据库离线车流同步情况
+                  $.ajax({
+                      url: "/get/sync/park/realtime",
+                      type: "post",
+                      datatype: "json",
+                      beforeSend: function () {
+                           swal({title: "正在查询中...",showConfirmButton: false});
+                      },
+                        complete: function () {
+                           swal({title: "正在查询中...",timer: 1000,showConfirmButton: false});
+                      },
+                      success: function (dataSet) {
+                          $('#db-sync-park-real-time').DataTable( {
+                          "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                          "dom"       : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                          destroy     :true,
+                          async       :true,
+                          ordering    :true,
+                          scrollY     :true,
+                          scrollX     :true,
+                          paging      : true,
+                          data        : dataSet,
+                          iDisplayLength: n_rows,
+                          bProcessing :true,
+                          autoFill    : true,
+                          bAutoWidth  : true,
+                          info        : true,
+                          columns: [
+                            { "title": "项目编码","width":"10%" },
+                            { "title": "任务描述","width":"30%" },
+                            { "title": "最近同步时间","width":"15%" },
+                            { "title": "同步时长(s)","width":"15%" },
+                            { "title": "同步总记录数","width":"15%" },
+                            { "title": "同步状态","width":"15%" },
+                          ],
+                          "language": {
+                                     "search"       : "在表格中搜索:",
+                                     "sProcessing"  : "处理中...",
+                                     "sLengthMenu"  : "显示 _MENU_ 项结果",
+                                     "sZeroRecords" : "没有匹配结果",
+                                     "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                     "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                                     "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                     "sInfoPostFix" : "",
+                                     "sSearch"      : "搜索:",
+                                     "sUrl"         : "",
+                                     "sEmptyTable"  : "表中数据为空",
+                                     "sLoadingRecords": "载入中...",
+                                     "sInfoThousands": ",",
+                                     "oPaginate": {
+                                         "sFirst"   : "首页",
+                                         "sPrevious": "上页",
+                                         "sNext"    : "下页",
+                                         "sLast"    : "末页"
+                                     },
+                                     "oAria": {
+                                         "sSortAscending" : ": 以升序排列此列",
+                                         "sSortDescending": ": 以降序排列此列"
+                                     }
+                                 }
+                         });
+                     }
+                 });
+              } else if (activeTab=='离线客流'){
+                  //合生通生产数据库离线车流同步情况
+                  $.ajax({
+                      url: "/get/sync/flow",
+                      type: "post",
+                      datatype: "json",
+                      beforeSend: function () {
+                           swal({title: "正在查询中...",showConfirmButton: false});
+                      },
+                        complete: function () {
+                           swal({title: "正在查询中...",timer: 1000,showConfirmButton: false});
+                      },
+                      success: function (dataSet) {
+                          $('#db-sync-flow').DataTable( {
+                          "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                          "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                          destroy    :true,
+                          async      :true,
+                          ordering   :true,
+                          scrollY    :true,
+                          scrollX    :true,
+                          paging     : true,
+                          data       : dataSet,
+                          iDisplayLength: n_rows,
+                          autoFill   : true,
+                          bAutoWidth : true,
+                          info       : true,
+                          columns: [
+                            { "title": "项目编码","width":"10%" },
+                            { "title": "任务描述","width":"30%" },
+                            { "title": "最近同步时间","width":"15%" },
+                            { "title": "同步时长(s)","width":"15%" },
+                            { "title": "同步总记录数","width":"15%" },
+                            { "title": "同步状态","width":"15%" },
+                          ],
+                          "language": {
+                                     "search"       : "在表格中搜索:",
+                                     "sProcessing"  : "处理中...",
+                                     "sLengthMenu"  : "显示 _MENU_ 项结果",
+                                     "sZeroRecords" : "没有匹配结果",
+                                     "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                     "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                                     "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                     "sInfoPostFix" : "",
+                                     "sSearch"      : "搜索:",
+                                     "sUrl"         : "",
+                                     "sEmptyTable"  : "表中数据为空",
+                                     "sLoadingRecords": "载入中...",
+                                     "sInfoThousands": ",",
+                                     "oPaginate": {
+                                         "sFirst"   : "首页",
+                                         "sPrevious": "上页",
+                                         "sNext"    : "下页",
+                                         "sLast"    : "末页"
+                                     },
+                                     "oAria": {
+                                         "sSortAscending" : ": 以升序排列此列",
+                                         "sSortDescending": ": 以降序排列此列"
+                                     }
+                                 }
+                         });
+                     }
+                 });
+              } else if (activeTab=='实时客流'){
+                  //合生通生产数据库离线车流同步情况
+                  $.ajax({
+                      url: "/get/sync/flow/realtime",
+                      type: "post",
+                      datatype: "json",
+                      beforeSend: function () {
+                           swal({title: "正在查询中...",showConfirmButton: false});
+                      },
+                        complete: function () {
+                           swal({title: "正在查询中...",timer: 1000,showConfirmButton: false});
+                      },
+                      success: function (dataSet) {
+                          $('#db-sync-flow-real-time').DataTable( {
+                          "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                          "dom"       : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                          destroy     :true,
+                          async       :true,
+                          ordering    :true,
+                          scrollY     :true,
+                          scrollX     :true,
+                          paging      : true,
+                          data        : dataSet,
+                          iDisplayLength: n_rows,
+                          bProcessing :true,
+                          autoFill    : true,
+                          bAutoWidth  : true,
+                          info        : true,
+                          columns: [
+                            { "title": "项目编码","width":"10%" },
+                            { "title": "任务描述","width":"30%" },
+                            { "title": "最近同步时间","width":"15%" },
+                            { "title": "同步时长(s)","width":"15%" },
+                            { "title": "同步总记录数","width":"15%" },
+                            { "title": "同步状态","width":"15%" },
+                          ],
+                          "language": {
+                                     "search"       : "在表格中搜索:",
+                                     "sProcessing"  : "处理中...",
+                                     "sLengthMenu"  : "显示 _MENU_ 项结果",
+                                     "sZeroRecords" : "没有匹配结果",
+                                     "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                     "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                                     "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                     "sInfoPostFix" : "",
+                                     "sSearch"      : "搜索:",
+                                     "sUrl"         : "",
+                                     "sEmptyTable"  : "表中数据为空",
+                                     "sLoadingRecords": "载入中...",
+                                     "sInfoThousands": ",",
+                                     "oPaginate": {
+                                         "sFirst"   : "首页",
+                                         "sPrevious": "上页",
+                                         "sNext"    : "下页",
+                                         "sLast"    : "末页"
+                                     },
+                                     "oAria": {
+                                         "sSortAscending" : ": 以升序排列此列",
+                                         "sSortDescending": ": 以降序排列此列"
+                                     }
+                                 }
+                         });
+                     }
+                 });
+              } else if (activeTab=='客流设备'){
+                  //合生通生产数据库离线车流同步情况
+                  $.ajax({
+                      url: "/get/sync/flow/device",
+                      type: "post",
+                      datatype: "json",
+                      beforeSend: function () {
+                           swal({title: "正在查询中...",showConfirmButton: false});
+                      },
+                        complete: function () {
+                           swal({title: "正在查询中...",timer: 1000,showConfirmButton: false});
+                      },
+                      success: function (dataSet) {
+                          $('#db-sync-flow-device').DataTable( {
+                          "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                          "dom"       : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                          destroy     :true,
+                          async       :true,
+                          ordering    :true,
+                          scrollY     :true,
+                          scrollX     :true,
+                          paging      : true,
+                          data        : dataSet,
+                          iDisplayLength: n_rows,
+                          bProcessing :true,
+                          autoFill    : true,
+                          bAutoWidth  : true,
+                          info        : true,
+                          columns: [
+                            { "title": "项目编码","width":"10%" },
+                            { "title": "任务描述","width":"30%" },
+                            { "title": "最近同步时间","width":"15%" },
+                            { "title": "同步时长(s)","width":"15%" },
+                            { "title": "同步总记录数","width":"15%" },
+                            { "title": "同步状态","width":"15%" },
+                          ],
+                          "language": {
+                                     "search"       : "在表格中搜索:",
+                                     "sProcessing"  : "处理中...",
+                                     "sLengthMenu"  : "显示 _MENU_ 项结果",
+                                     "sZeroRecords" : "没有匹配结果",
+                                     "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                     "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                                     "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                     "sInfoPostFix" : "",
+                                     "sSearch"      : "搜索:",
+                                     "sUrl"         : "",
+                                     "sEmptyTable"  : "表中数据为空",
+                                     "sLoadingRecords": "载入中...",
+                                     "sInfoThousands": ",",
+                                     "oPaginate": {
+                                         "sFirst"   : "首页",
+                                         "sPrevious": "上页",
+                                         "sNext"    : "下页",
+                                         "sLast"    : "末页"
+                                     },
+                                     "oAria": {
+                                         "sSortAscending" : ": 以升序排列此列",
+                                         "sSortDescending": ": 以降序排列此列"
+                                     }
+                                 }
+                         });
+                     }
+                 });
+              } else if (activeTab=='收费员结算'){
+                  //合生通生产数据库离线车流同步情况
+                  $.ajax({
+                      url: "/get/sync/park/charge",
+                      type: "post",
+                      datatype: "json",
+                      beforeSend: function () {
+                           swal({title: "正在查询中...",showConfirmButton: false});
+                      },
+                        complete: function () {
+                           swal({title: "正在查询中...",timer: 1000,showConfirmButton: false});
+                      },
+                      success: function (dataSet) {
+                          $('#db-sync-park-charge').DataTable( {
+                          "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                          "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                          destroy    :true,
+                          async      :true,
+                          ordering   :true,
+                          scrollY    :true,
+                          scrollX    :true,
+                          paging     : true,
+                          data       : dataSet,
+                          iDisplayLength: n_rows,
+                          autoFill   : true,
+                          bAutoWidth : true,
+                          info       : true,
+                          columns: [
+                            { "title": "项目编码","width":"10%" },
+                            { "title": "任务描述","width":"30%" },
+                            { "title": "最近同步时间","width":"15%" },
+                            { "title": "同步时长(s)","width":"15%" },
+                            { "title": "同步总记录数","width":"15%" },
+                            { "title": "同步状态","width":"15%" },
+                          ],
+                          "language": {
+                                     "search"       : "在表格中搜索:",
+                                     "sProcessing"  : "处理中...",
+                                     "sLengthMenu"  : "显示 _MENU_ 项结果",
+                                     "sZeroRecords" : "没有匹配结果",
+                                     "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                     "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                                     "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                     "sInfoPostFix" : "",
+                                     "sSearch"      : "搜索:",
+                                     "sUrl"         : "",
+                                     "sEmptyTable"  : "表中数据为空",
+                                     "sLoadingRecords": "载入中...",
+                                     "sInfoThousands": ",",
+                                     "oPaginate": {
+                                         "sFirst"   : "首页",
+                                         "sPrevious": "上页",
+                                         "sNext"    : "下页",
+                                         "sLast"    : "末页"
+                                     },
+                                     "oAria": {
+                                         "sSortAscending" : ": 以升序排列此列",
+                                         "sSortDescending": ": 以降序排列此列"
+                                     }
+                                 }
+                         });
+                     }
+                 });
+              } else if (activeTab=='BI统计'){
+                  //合生通生产数据库离线车流同步情况
+                  $.ajax({
+                      url: "/get/sync/bi",
+                      type: "post",
+                      datatype: "json",
+                      beforeSend: function () {
+                           swal({title: "正在查询中...",showConfirmButton: false});
+                      },
+                        complete: function () {
+                           swal({title: "正在查询中...",timer: 1000,showConfirmButton: false});
+                      },
+                      success: function (dataSet) {
+                          $('#db-sync-bi').DataTable( {
+                          "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                          "dom"       : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                          destroy     :true,
+                          async       :true,
+                          ordering    :true,
+                          scrollY     :true,
+                          scrollX     :true,
+                          paging      : true,
+                          data        : dataSet,
+                          iDisplayLength: n_rows,
+                          bProcessing :true,
+                          autoFill    : true,
+                          bAutoWidth  : true,
+                          info        : true,
+                          columns: [
+                            { "title": "项目编码","width":"10%" },
+                            { "title": "任务描述","width":"30%" },
+                            { "title": "最近同步时间","width":"15%" },
+                            { "title": "同步时长(s)","width":"15%" },
+                            { "title": "同步总记录数","width":"15%" },
+                            { "title": "同步状态","width":"15%" },
+                          ],
+                          "language": {
+                                     "search"       : "在表格中搜索:",
+                                     "sProcessing"  : "处理中...",
+                                     "sLengthMenu"  : "显示 _MENU_ 项结果",
+                                     "sZeroRecords" : "没有匹配结果",
+                                     "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                     "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                                     "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                     "sInfoPostFix" : "",
+                                     "sSearch"      : "搜索:",
+                                     "sUrl"         : "",
+                                     "sEmptyTable"  : "表中数据为空",
+                                     "sLoadingRecords": "载入中...",
+                                     "sInfoThousands": ",",
+                                     "oPaginate": {
+                                         "sFirst"   : "首页",
+                                         "sPrevious": "上页",
+                                         "sNext"    : "下页",
+                                         "sLast"    : "末页"
+                                     },
+                                     "oAria": {
+                                         "sSortAscending" : ": 以升序排列此列",
+                                         "sSortDescending": ": 以降序排列此列"
+                                     }
+                                 }
+                         });
+                     }
+                 });
+              }
 
-                            <tr>
-                                <th>
-                                    <span class="avatar-sm-box bg-pink">B</span>
-                                </th>
-                                <td>
-                                    <h5 class="m-0">Bret Weaver</h5>
-                                    <p class="m-0 text-muted font-13"><small>Web designer</small></p>
-                                </td>
-                                <td>+00 567 890</td>
-                                <td>USA</td>
-                                <td>20/07/2016</td>
-                            </tr>
-
-                            <tr>
-                                <th>
-                                    <span class="avatar-sm-box bg-orange">M</span>
-                                </th>
-                                <td>
-                                    <h5 class="m-0">Mark</h5>
-                                    <p class="m-0 text-muted font-13"><small>Web design</small></p>
-                                </td>
-                                <td>+91 123 456</td>
-                                <td>India</td>
-                                <td>07/07/2016</td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-
-                </div> <!-- table-responsive -->
-            </div> <!-- end card -->
-        </div>
-        <!-- end col -->
-
-    </div>
-    <!-- end row -->
-     <!--Morris Chart-->
-	 <script src="{{static_url('plugins/morris/morris.min.js')}}"></script>
-	 <script src="{{static_url('plugins/raphael/raphael-min.js')}}"></script>
+          });
 
 
-     <!-- Dashboard init -->
-     <script src="{{static_url('assets/pages/jquery.dashboard.js')}}"></script>
+
+        });
+    </script>
+
  </body>

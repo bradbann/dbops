@@ -48,9 +48,12 @@ class index(tornado.web.RequestHandler):
                        dept        = d_user['dept'],
                        expire_date = d_user['expire_date'],
                        status      = d_user['status'],
+                       file_path   = d_user['file_path'],
+                       file_name   = d_user['file_name'],
                        user_roles  = get_user_roles(userid),
                        genders     = genders,
-                       depts       = depts
+                       depts       = depts,
+                       d_user      = d_user
                        )
         else:
            self.render("page-404.html")
@@ -79,6 +82,16 @@ class lockscreen(tornado.web.RequestHandler):
         #解锁后需要返回之前正在操作的页面
         #解锁失败，提示错误 。
         self.render("page-lock-screen.html")
+
+class unlock(tornado.web.RequestHandler):
+    def post(self):
+        unlock_password = self.get_argument("unlock_password")
+        username = str(self.get_secure_cookie("username"), encoding="utf-8")
+        d_user = get_user_by_loginame(username)
+        if d_user['password']==unlock_password:
+            self.write({"code":0})
+        else:
+            self.write({"code":-1})
 
 
 class logout(tornado.web.RequestHandler):
@@ -193,8 +206,8 @@ class get_verify(tornado.web.RequestHandler):
         self.set_secure_cookie("verify_img", verify_img, expires_days=None)
 
         #删除以前生成的图片
-        static_path=self.get_template_path().replace("templates","static");
-        os.system("rm -rf  {0}".format(static_path + '/assets222/images/logon/verify*.png'))
+        static_path = self.get_template_path().replace("templates","static");
+        os.system("rm -rf  {0}".format(static_path + '/assets/images/logon/verify*.png'))
         # 把生成的图片保存为"pic.png"格式
         rand = random.randint(1000, 99999)
         file = static_path+'/assets/images/logon/verify' + str(rand) + '.png'

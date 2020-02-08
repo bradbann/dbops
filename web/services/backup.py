@@ -12,7 +12,7 @@
 
 import json
 import tornado.web
-from   web.model.t_backup import query_backup,save_backup,get_backup_by_backupid,upd_backup,del_backup,query_backup_log,query_backup_log_detail
+from   web.model.t_backup import query_backup,query_backup_case,save_backup,get_backup_by_backupid,upd_backup,del_backup,query_backup_log,query_backup_log_detail
 from   web.model.t_backup import push_backup_task,run_backup_task,stop_backup_task,update_backup_status,query_backup_log_analyze
 from   web.model.t_dmmx   import get_dmm_from_dm,get_backup_server,get_db_backup_server,get_db_backup_tags,get_db_backup_tags_by_env_type
 from   web.utils.common   import get_day_nday_ago,now
@@ -31,6 +31,14 @@ class backup_query(tornado.web.RequestHandler):
         db_env      = self.get_argument("db_env")
         db_type     = self.get_argument("db_type")
         v_list      = query_backup(tagname,db_env,db_type)
+        v_json      = json.dumps(v_list)
+        self.write(v_json)
+
+class backup_case(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        db_env = self.get_argument("db_env")
+        v_list      = query_backup_case(db_env)
         v_json      = json.dumps(v_list)
         self.write(v_json)
 

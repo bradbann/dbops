@@ -86,6 +86,7 @@
 
     <script>
          $(document).ready(function() {
+              $('#backup-container').hide()
               function createBarChart (element, data, xkey, ykeys, labels, lineColors,postUnits) {
                 Morris.Bar({
                     element: element,
@@ -161,6 +162,7 @@
                       success: function (dataSet) {
                          $('#db-sync-time').html('')
                          $('#db-sync-amount').html('')
+                         $('#backup-container').show()
 
                          var $barData_db_sync_time = new Array(dataSet['data1'].length);
                          var $barData_db_sync_amount = new Array(dataSet['data2'].length);
@@ -172,6 +174,7 @@
                          for (i=0;i<dataSet['data2'].length;i++){
                              $barData_db_sync_amount[i]={'y':dataSet['data2'][i][0],'a':dataSet['data2'][i][1]}
                          }
+
                          createLineChart('db-sync-time', $barData_db_sync_time, 'y', ['a'], ['同步时长'],['0.9'],['#ffbeba'],['#999999'], ['#ffbeba'],'s');
                          createLineChart('db-sync-amount', $barData_db_sync_amount, 'y', ['a'], ['同步记录'],['0.9'],['#ffc353'],['#999999'], ['#FFBD33'],'');
                       }

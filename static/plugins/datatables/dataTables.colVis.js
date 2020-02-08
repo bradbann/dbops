@@ -1076,7 +1076,7 @@ if ( typeof $.fn.dataTable == "function" &&
 }
 else
 {
-	alert( "Warning: ColVis requires DataTables 1.7 or greater - www.datatables.net/download");
+	alert( "Warning: ColVis requires DataTables 1.7 or greater - www.datatables.net/downloads");
 }
 
 

@@ -71,3 +71,7 @@ class sys_code_query(tornado.web.RequestHandler):
         v_json   = json.dumps(v_list)
         self.write(v_json)
 
+class sys_test(tornado.web.RequestHandler):
+   def get(self):
+       logon_name = str(self.get_secure_cookie("username"), encoding="utf-8")
+       self.render("./his/backup_log_analyze.bak.html")

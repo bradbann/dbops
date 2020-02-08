@@ -41,21 +41,24 @@ def query_audit(p_name):
         v_where = v_where + " a.sqltext like '%{0}%'\n".format(p_name)
 
     sql = """SELECT  a.id, 
-                    a.message,
-                    CASE a.status WHEN '0' THEN '已发布'
+                     a.message,
+                     CASE a.status WHEN '0' THEN '已发布'
                        WHEN '1' THEN '已审核'
                        WHEN '2' THEN '审核失败'
                        WHEN '3' THEN '已执行'
                        WHEN '4' THEN '执行失败'
-                END  STATUS,
-                c.dmmc AS 'type',
-                b.db_desc,
-                a.creator,DATE_FORMAT(a.creation_date,'%Y-%m-%d %h:%i:%s')    creation_date,
-                a.auditor,DATE_FORMAT(a.audit_date,'%y-%m-%d %h:%i:%s')   audit_date   
-            FROM t_sql_release a,t_db_source b,t_dmmx c
+                     END  STATUS,
+                     c.dmmc AS 'type',
+                     b.db_desc,
+                     d.name AS creator,
+                     DATE_FORMAT(a.creation_date,'%Y-%m-%d %h:%i:%s')  creation_date,
+                     (SELECT NAME FROM t_user e WHERE e.login_name=a.auditor) auditor,
+                     DATE_FORMAT(a.audit_date,'%y-%m-%d %h:%i:%s')   audit_date   
+            FROM t_sql_release a,t_db_source b,t_dmmx c,t_user d
             WHERE a.dbid=b.id
               AND c.dm='13'
               AND a.type=c.dmm
+              AND a.creator=d.login_name
               {0}
             order by creation_date desc
           """.format(v_where)
@@ -149,18 +152,18 @@ def check_sql(p_dbid,p_cdb,p_sql,desc,logon_user,type):
         result['message'] = '发布失败！'+e_str
         return result
 
-def save_sql(p_dbid,p_cdb,p_sql,desc,logon_user,ver,type):
+def save_sql(p_dbid,p_cdb,p_sql,desc,p_user,ver,type):
     result = {}
     try:
         db   = get_connection()
         cr   = db.cursor()
 
-        if check_validate(p_dbid,p_cdb,p_sql,desc,logon_user,type)['code']!='0':
-           return  check_validate(p_dbid,p_cdb,p_sql,desc,logon_user,ver,type)
+        if check_validate(p_dbid,p_cdb,p_sql,desc,p_user,type)['code']!='0':
+           return  check_validate(p_dbid,p_cdb,p_sql,desc,p_user,ver,type)
 
         p_ds = get_ds_by_dsid(p_dbid)
         if p_ds['db_type'] == '0':
-            val = check_mysql_ddl(p_dbid,p_cdb, p_sql,logon_user)
+            val = check_mysql_ddl(p_dbid,p_cdb, p_sql,p_user)
 
         if val == False:
             result['code'] = '1'
@@ -169,7 +172,7 @@ def save_sql(p_dbid,p_cdb,p_sql,desc,logon_user,ver,type):
 
         sql="""insert into t_sql_release(id,dbid,sqltext,status,message,creation_date,creator,last_update_date,updator,version,type) 
                 values('{0}','{1}',"{2}",'{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')
-            """.format(get_sqlid(),p_dbid,p_sql,'0',desc,current_time(),'DBA',current_time(),'DBA',ver,type);
+            """.format(get_sqlid(),p_dbid,p_sql,'0',desc,current_time(),p_user['loginname'],current_time(),p_user['loginname'],ver,type);
         print(sql)
 
         cr.execute(sql)
@@ -188,7 +191,7 @@ def save_sql(p_dbid,p_cdb,p_sql,desc,logon_user,ver,type):
     return result
 
 
-def upd_sql(p_sqlid):
+def upd_sql(p_sqlid,d_user):
     result={}
     try:
         db = get_connection()
@@ -199,7 +202,7 @@ def upd_sql(p_sqlid):
                        updator='{1}',
                        audit_date ='{2}' ,
                        auditor='{3}'
-                where id='{4}'""".format(current_time(),'DBA',current_time(),'DBA',p_sqlid)
+                where id='{4}'""".format(current_time(),d_user['loginname'],current_time(),d_user['loginname'],p_sqlid)
         print(sql)
         cr.execute(sql)
         cr.close()

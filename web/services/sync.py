@@ -14,6 +14,7 @@ import json
 import tornado.web
 from   web.model.t_sync import query_sync,save_sync,get_sync_by_syncid,upd_sync,del_sync,query_sync_log,query_sync_log_detail
 from   web.model.t_sync import push_sync_task,run_sync_task,stop_sync_task,update_sync_status,query_sync_log_analyze,query_sync_log_analyze2
+from   web.model.t_sync import query_sync_park,query_sync_park_real_time,query_sync_flow,query_sync_flow_real_time,query_sync_flow_device,query_sync_park_charge,query_sync_bi
 from   web.model.t_dmmx import get_dmm_from_dm,get_sync_server,get_sync_db_server,get_db_sync_tags,get_db_sync_tags_by_market_id,get_db_sync_ywlx,get_db_sync_ywlx_by_market_id
 from   web.utils.common import current_rq2,get_day_nday_ago,now
 
@@ -294,4 +295,54 @@ class syncedit_status(tornado.web.RequestHandler):
         v_list = update_sync_status()
         v_json = json.dumps(v_list)
         print('backupedit_status=',v_json)
+        self.write(v_json)
+
+
+class get_sync_park(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        v_list     = query_sync_park()
+        v_json     = json.dumps(v_list)
+        self.write(v_json)
+
+class get_sync_park_real_time(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        v_list     = query_sync_park_real_time()
+        v_json     = json.dumps(v_list)
+        self.write(v_json)
+
+class get_sync_flow(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        v_list     = query_sync_flow()
+        v_json     = json.dumps(v_list)
+        self.write(v_json)
+
+class get_sync_flow_real_time(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        v_list     = query_sync_flow_real_time()
+        v_json     = json.dumps(v_list)
+        self.write(v_json)
+
+class get_sync_flow_device(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        v_list     = query_sync_flow_device()
+        v_json     = json.dumps(v_list)
+        self.write(v_json)
+
+class get_sync_park_charge(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        v_list     = query_sync_park_charge()
+        v_json     = json.dumps(v_list)
+        self.write(v_json)
+
+class get_sync_bi(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        v_list     = query_sync_bi()
+        v_json     = json.dumps(v_list)
         self.write(v_json)

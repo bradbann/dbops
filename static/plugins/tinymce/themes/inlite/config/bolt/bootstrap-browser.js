@@ -296,7 +296,7 @@ kernel.modulator.globalator = def(
         };
 
         return {
-          url: id, // this just needs to be unique, no download required.
+          url: id, // this just needs to be unique, no downloads required.
           load: load,
           serial: true
         };

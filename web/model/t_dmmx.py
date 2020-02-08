@@ -203,3 +203,20 @@ def get_sync_db_server():
         v_list.append(list(r))
     cr.close()
     return v_list
+
+def get_datax_sync_db_server():
+    db = get_connection()
+    cr = db.cursor()
+    sql = """SELECT id,db_desc
+              FROM t_db_source 
+            WHERE  db_type in(0) and db_env in(1,2,3,4) 
+                and STATUS=1 
+                and user!='puppet'
+              ORDER BY db_desc,db_type"""
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list

@@ -284,7 +284,7 @@ def check_auth_str_exist(p_auth_str):
 def get_user_by_userid(p_userid):
     db = get_connection()
     cr = db.cursor()
-    sql="select cast(id as char) as id,login_name,name,password,gender,email,phone,dept,date_format(expire_date,'%Y-%m-%d') as expire_date,status " \
+    sql="select cast(id as char) as id,login_name,name,password,gender,email,phone,dept,date_format(expire_date,'%Y-%m-%d') as expire_date,status,file_path,file_name " \
         "from t_user where id={0}".format(p_userid)
     cr.execute(sql)
     rs = cr.fetchall()
@@ -301,6 +301,8 @@ def get_user_by_userid(p_userid):
     d_user['dept']       = rs[0][7]
     d_user['expire_date']= rs[0][8]
     d_user['status']     = rs[0][9]
+    d_user['image_path'] = rs[0][10] if rs[0][10] else ''
+    d_user['image_name'] = rs[0][11] if rs[0][11] else ''
     print("get_user_by_userid=",d_user,rs[0][3],rs[0][1])
     return d_user
 
@@ -330,8 +332,7 @@ def get_logon_user():
 def get_user_by_loginame(p_login_name):
     db = get_connection()
     cr = db.cursor()
-    sql= """
-           select cast(id as char) as id,
+    sql= """select cast(id as char) as id,
                 name,
                 login_name,
                 password,gender,
@@ -339,7 +340,9 @@ def get_user_by_loginame(p_login_name):
                 phone,
                 dept,
                 date_format(expire_date,'%Y-%m-%d') as expire_date,
-                status
+                status,
+                file_path,
+                file_name
          from t_user where login_name='{0}'
         """.format(p_login_name)
     cr.execute(sql)
@@ -359,6 +362,8 @@ def get_user_by_loginame(p_login_name):
     d_user['dept_cn']     = get_dmmc_from_dm('01',rs[0][7])
     d_user['expire_date'] = rs[0][8]
     d_user['status']      = rs[0][9]
+    d_user['file_path']   = rs[0][10]
+    d_user['file_name']   = rs[0][11]
     print("get_user_by_loginame=",d_user)
     return d_user
 
@@ -449,10 +454,13 @@ def save_user(p_user):
         expire_date  = p_user['expire_date']
         status       = p_user['status']
         privs        = p_user['privs']
-        print(username,password,gender,email,phone,dept,expire_date)
-        sql="""insert into t_user(id,login_name,name,password,gender,email,phone,dept,expire_date,status,creation_date,creator,last_update_date,updator) 
-                    values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}')
-            """.format(userid,loginname,username,password,gender,email,phone,dept,expire_date,status,current_rq(),'DBA',current_rq(),'DBA');
+        file_path    = p_user['file_path']
+        file_name    = p_user['file_name']
+
+        print(username,password,gender,email,phone,dept,expire_date,file_path,file_name)
+        sql="""insert into t_user(id,login_name,name,password,gender,email,phone,dept,expire_date,status,file_path,file_name,creation_date,creator,last_update_date,updator) 
+                    values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}')
+            """.format(userid,loginname,username,password,gender,email,phone,dept,expire_date,status,file_path,file_name,current_rq(),'DBA',current_rq(),'DBA');
         print(sql)
         cr.execute(sql)
 
@@ -463,7 +471,8 @@ def save_user(p_user):
         result['code']='0'
         result['message']='保存成功！'
         return result
-    except:
+    except Exception as e:
+        print(e)
         result['code'] = '-1'
         result['message'] = '保存失败！'
     return result
@@ -536,6 +545,9 @@ def upd_user(p_user):
         expire_date = p_user['expire_date']
         status      = p_user['status']
         roles       = p_user['roles']
+        file_path   = p_user['file_path']
+        file_name   = p_user['file_name']
+
         sql="""update t_user 
                   set  name     ='{0}',
                        login_name='{1}',
@@ -544,11 +556,14 @@ def upd_user(p_user):
                        email    ='{4}',
                        phone    ='{5}',
                        dept     ='{6}',
-                       expire_date    ='{7}' ,
-                       status   ='{8}' ,
+                       expire_date      ='{7}' ,
+                       status           ='{8}' ,
                        last_update_date ='{9}' ,
-                       updator='{10}'
-                where id='{11}'""".format(username,loginname,password,gender,email,phone,dept,expire_date,status,current_rq(),'DBA',userid)
+                       updator   ='{10}',
+                       file_path ='{11}',
+                       file_name = '{12}'
+                where id='{13}'""".format(username,loginname,password,gender,email,phone,dept,expire_date,status,
+                                          current_rq(),'DBA',file_path,file_name,userid)
         print("upd_user=",sql)
         cr.execute(sql)
         upd_user_role(userid,roles)

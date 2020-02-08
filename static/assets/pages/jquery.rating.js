@@ -140,7 +140,7 @@
         $('#iconRange').raty({
             iconRange: [
                 {range: 1, on: 'fa fa-cloud', off: 'fa fa-circle-o'},
-                {range: 2, on: 'fa fa-cloud-download', off: 'fa fa-circle-o'},
+                {range: 2, on: 'fa fa-cloud-downloads', off: 'fa fa-circle-o'},
                 {range: 3, on: 'fa fa-cloud-upload', off: 'fa fa-circle-o'},
                 {range: 4, on: 'fa fa-circle', off: 'fa fa-circle-o'},
                 {range: 5, on: 'fa fa-cogs', off: 'fa fa-circle-o'}

@@ -54,20 +54,29 @@
     
     pip3 install pymysql  
     
+    pip3 install pymongo  
+    
+    pip3 install sqlparse  
+    
+    pip3 install redis
+    
+    pip3 install elasticsearch
+    
+    
  2.3 安装pymssql  
    
-    wget ftp://ftp.freetds.org/pub/freetds/stable/freetds-1.1.24.tar.gz
-    或
-    wget http://www.zhitbar.com/downloads/python3/freetds-1.1.24.tar.gz
+    wget http://www.zhitbar.com/downloads/python3/freetds-patched.tar.gz
     
-    tar -zxvf freetds-1.1.24.tar.gz
+    tar -zxvf freetds-patched.tar.gz
     
-    cd freetds-1.1.24  
+    cd freetds-1.00.92  
 
     make && make install./configure --prefix=/usr/local/freetds --enable-msdblib --with-tdsver=7.3
 
-    pip3 install pymssql  
-
+    export PYMSSQL_BUILD_WITH_BUNDLED_FREETDS=1  
+    
+    pip3 install pymssql==2.1.4
+    
 
 2.4 安装PIL  
 
@@ -133,7 +142,7 @@
     
     export "PYTHONPATH"="/home/hopson/apps/usr/webserver/dbops"  
     
-    nohup /usr/local/python3.6/bin/python3 -u /home/hopson/apps/usr/webserver/dbops/web/controller/server.py $1 &  
+    nohup /usr/local/python3.6/bin/python3 -u /home/hopson/apps/usr/webserver/dbops/web/controller/server.py ${1:-8200} &  
 
 
 3.2 重启服务  

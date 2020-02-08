@@ -22,9 +22,9 @@ class Application(tornado.web.Application):
         settings = dict(
             static_path=os.path.join(os.path.dirname(__file__), "../../static"),
             template_path=os.path.join(os.path.dirname(__file__), "../../templates"),
-            debug=True,
             xsrf_cookies=False,
             cookie_secret="2379874hsdhf0234990sdhsaiuofyasop977djdj",
+            debug=True,
         )
         tornado.web.Application.__init__(self, handlers, **settings)
 
@@ -32,7 +32,6 @@ class Application(tornado.web.Application):
 if __name__ == '__main__':
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(Application())
-    #http_server.listen(options.port)
     http_server.listen(sys.argv[1])
     print('Dbops Server running {0} port ...'.format(sys.argv[1]))
     tornado.ioloop.IOLoop.instance().start()

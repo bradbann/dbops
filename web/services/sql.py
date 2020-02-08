@@ -18,8 +18,9 @@ from web.model.t_sql           import exe_query
 from web.model.t_sql_check     import query_check_result
 from web.model.t_sql_release   import upd_sql,exe_sql,save_sql,query_audit,query_audit_sql,check_sql,format_sql
 from web.model.t_ds            import get_dss_sql_query,get_dss2_sql_query,get_dss_sql_release
-from web.model.t_user          import get_user_by_loginame
-from web.model.t_xtqx          import get_tab_ddl_by_tname,get_tab_idx_by_tname,get_tree_by_dbid,alt_tab_desc,get_db_name,get_tab_name
+from web.model.t_user          import get_user_by_loginame,get_user_by_userid
+from web.model.t_xtqx          import get_tab_ddl_by_tname,get_tab_idx_by_tname,get_tree_by_dbid,alt_tab_desc
+from web.model.t_xtqx          import get_db_name,get_tab_name,get_tab_columns,get_tab_structure,get_tab_keys,get_tab_incr_col
 from web.model.t_dmmx          import get_dmm_from_dm
 
 class sqlquery(tornado.web.RequestHandler):
@@ -109,8 +110,10 @@ class sqlaudit(tornado.web.RequestHandler):
 class sql_audit(tornado.web.RequestHandler):
    def post(self):
        self.set_header("Content-Type", "application/json; charset=UTF-8")
+       userid = str(self.get_secure_cookie("userid"), encoding="utf-8")
+       d_user = get_user_by_userid(userid)
        sqlid  = self.get_argument("sqlid")
-       result = upd_sql(sqlid);
+       result = upd_sql(sqlid,d_user)
        self.write({"code": result['code'], "message": result['message']})
 
 class sql_run(tornado.web.RequestHandler):
@@ -136,7 +139,7 @@ class sql_audit_query(tornado.web.RequestHandler):
 class sql_audit_detail(tornado.web.RequestHandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        id = self.get_argument("id")
+        id     = self.get_argument("id")
         v_list = query_audit_sql(id)
         v_json = json.dumps(v_list)
         self.write(v_json)
@@ -187,3 +190,44 @@ class get_tables(tornado.web.RequestHandler):
         result = get_tab_name(dbid,db_name)
         self.write({"code": result['code'], "message": result['message']})
 
+class get_columns(tornado.web.RequestHandler):
+    def post(self):
+        dbid     = self.get_argument("dbid")
+        db_name  = self.get_argument("db_name")
+        tab_name = self.get_argument("tab_name")
+        print('get_columns=',dbid,db_name,tab_name)
+        result = get_tab_columns(dbid,db_name,tab_name)
+        self.write({"code": result['code'], "message": result['message']})
+
+class get_keys(tornado.web.RequestHandler):
+    def post(self):
+        dbid     = self.get_argument("dbid")
+        db_name  = self.get_argument("db_name")
+        tab_name = self.get_argument("tab_name")
+        print('get_keys=',dbid,db_name,tab_name)
+        result = get_tab_keys(dbid,db_name,tab_name)
+        self.write({"code": result['code'], "message": result['message']})
+
+class get_incr_col(tornado.web.RequestHandler):
+    def post(self):
+        dbid     = self.get_argument("dbid")
+        db_name  = self.get_argument("db_name")
+        tab_name = self.get_argument("tab_name")
+        print('get_incr_col=',dbid,db_name,tab_name)
+        result = get_tab_incr_col(dbid,db_name,tab_name)
+        self.write({"code": result['code'], "message": result['message']})
+
+
+
+
+class get_tab_stru(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        dbid     = self.get_argument("dbid")
+        db_name  = self.get_argument("db_name")
+        tab_name = self.get_argument("tab_name")
+        print('get_tab_stru=',dbid,db_name,tab_name)
+        v_list = get_tab_structure(dbid,db_name,tab_name)
+        print('get_tab_stru=',v_list)
+        v_json = json.dumps(v_list)
+        self.write(v_json)

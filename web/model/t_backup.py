@@ -49,6 +49,61 @@ def query_backup(tagname,db_env,db_type):
     db.commit()
     return v_list
 
+def query_backup_case(p_db_env):
+    result = {}
+    db  = get_connection()
+    cr  = db.cursor()
+    sql = """SELECT 
+                   c.dmmc AS 'db_type',
+                   a.db_desc,
+                   date_format(d.start_time,'%Y-%m-%d %H:%i:%s') as create_date,                  
+                   CASE WHEN SUBSTR(d.total_size,-1)='M' THEN 
+                      SUBSTR(d.total_size,1,LENGTH(total_size)-1)
+                   WHEN SUBSTR(d.total_size,-1)='G' THEN 
+                      SUBSTR(total_size,1,LENGTH(total_size)-1)*1024
+                   ELSE 0 END AS total_size,
+                   concat(d.elaspsed_backup+d.elaspsed_gzip,'') as backup_time,
+                   CASE WHEN d.status='0' THEN '√' ELSE '×' END flag                   
+             FROM t_db_source a,t_dmmx b,t_dmmx c,t_db_backup_total d,t_db_config e
+             WHERE a.market_id='000' 
+               AND a.db_env=b.dmm AND b.dm='03'
+               and a.db_env='{0}'
+               AND a.db_type=c.dmm AND c.dm='02'
+               AND d.db_tag=e.db_tag
+               AND e.db_id=a.id
+               AND create_date=DATE_SUB(DATE(NOW()),INTERVAL 1 DAY)
+             ORDER BY a.db_env,a.db_type
+                """.format(p_db_env)
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+
+    result['data']=v_list
+
+    sql = """SELECT 
+                      cast(SUM(CASE WHEN d.status='0' THEN 1 ELSE 0 END) as char) AS  success,       
+                      cast(SUM(CASE WHEN d.status='1' THEN 1 ELSE 0 END) as char) AS  failure              
+                 FROM t_db_source a,t_dmmx b,t_dmmx c,t_db_backup_total d,t_db_config e
+                 WHERE a.market_id='000' 
+                   AND a.db_env=b.dmm AND b.dm='03'
+                   and a.db_env='{0}'
+                   AND a.db_type=c.dmm AND c.dm='02'
+                   AND d.db_tag=e.db_tag
+                   AND e.db_id=a.id
+                   AND create_date=DATE_SUB(DATE(NOW()),INTERVAL 1 DAY)
+                 ORDER BY a.db_env,a.db_type
+                    """.format(p_db_env)
+    print(sql)
+    cr.execute(sql)
+    rs=cr.fetchone()
+    result['success'] = rs[0]
+    result['failure'] = rs[1]
+    cr.close()
+    db.commit()
+    return result
+
 def query_backup_log(tagname,db_env,begin_date,end_date):
     db = get_connection()
     cr = db.cursor()

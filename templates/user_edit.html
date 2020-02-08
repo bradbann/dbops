@@ -2,31 +2,70 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ static_url('assets/images/favicon.ico')}}">
-    <!-- App title -->
     <title>用户变更</title>
-    <link href="{{static_url('plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')}}" rel="stylesheet">
     <link href="{{static_url('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
-    <link href="{{static_url('plugins/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
     <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>
-    <!-- Sweet Alert -->
     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{static_url('plugins/jquery.filer/css/jquery.filer.css')}}" rel="stylesheet" />
+    <style>
+        .jFiler-theme-default .jFiler-input {
+            position: relative;
+            display: block;
+            width: 100%;
+            height: 35px;
+            font-size: 12px;
+            font-family: sans-serif;
+            color: rgb(136, 136, 136);
+            cursor: pointer;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 4px 5px -5px inset;
+            margin: 0px 0px 15px;
+            background: rgb(254, 254, 254);
+            border-width: 1px;
+            border-style: solid;
+            border-color: rgb(206, 206, 206);
+            border-image: initial;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+    </style>
 </head>
+
 <body>
    <p></p>
-   <div class="col-md-6">
-       <form class="form-horizontal" role="form">
+   <form class="form-horizontal" role="form">
+        <div class="row">
            <input  id="userid" type="hidden" name="userid" value={{userid}} >
-           <div class="form-group">
+           <div class="form-group col-md-6">
                 <div>
                     <label class="col-md-2 control-label">用户名</label>
                 </div>
                 <div class="col-md-10">
                     <input id="login"  type="text" class="form-control" placeholder="请输入用户名" value={{loginname}}>
                 </div>
-            </div>
-           <div class="form-group">
+           </div>
+        </div>
+    </form>
+    <form class="form-horizontal" action=""  method="POST" enctype="multipart/form-data" >
+        <div class="row">
+           <div class="form-group col-md-6">
+                <div>
+                    <label class="col-md-2 control-label">用户头像</label>
+                </div>
+                <div class="col-md-10">
+                    <input type="file" name="files[]" id="filer_input1"  multiple="multiple">
+                </div>
+           </div>
+           <div class="col-md-1">
+                <input  id="image_path" type="hidden" value="{{image_path}}" >
+                <input  id="image_name" type="hidden" value="{{image_name}}" >
+                <image  id="user_image" width="50px"  src="{{user_image}}" alt=''></image>
+           </div>
+        </div>
+   </form>
+
+   <form class="form-horizontal" role="form">
+        <div class="row">
+           <div class="form-group col-md-6">
                 <div>
                     <label class="col-md-2 control-label">姓名</label>
                 </div>
@@ -34,7 +73,10 @@
                     <input id="user" name="user" type="text" class="form-control" placeholder="请输入姓名" value={{username}}>
                 </div>
             </div>
-           <div class="form-group">
+        </div>
+
+        <div class="row">
+           <div class="form-group col-md-6">
                 <div>
                     <label class="col-md-2 control-label">密码</label>
                 </div>
@@ -42,7 +84,10 @@
                     <input id="pass" name="pass" type="password" class="form-control" placeholder="请输入密码" value={{password}}>
                 </div>
            </div>
-           <div class="form-group">
+        </div>
+
+        <div class="row">
+           <div class="form-group col-md-6">
                 <div>
                     <label class="col-md-2 control-label">性别</label>
                 </div>
@@ -59,7 +104,10 @@
                     </select>
                </div>
             </div>
-           <div class="form-group">
+        </div>
+
+        <div class="row">
+           <div class="form-group col-md-6">
                 <div>
                     <label class="col-md-2 control-label">部门</label>
                 </div>
@@ -75,7 +123,10 @@
                     </select>
                </div>
             </div>
-           <div class="form-group">
+        </div>
+
+        <div class="row">
+           <div class="form-group col-md-6">
                 <div>
                     <label class="col-md-2 control-label">电子邮箱</label>
                 </div>
@@ -83,7 +134,10 @@
                     <input id="email" name="email" type="text" class="form-control" placeholder="请输入电子邮箱" value={{email}}>
                 </div>
             </div>
-           <div class="form-group">
+        </div>
+
+        <div class="row">
+           <div class="form-group col-md-6">
                 <div>
                     <label class="col-md-2 control-label">联系方式</label>
                 </div>
@@ -91,7 +145,10 @@
                     <input id="phone" name="phone" type="text" class="form-control" placeholder="请输入联系方式" value={{phone}}>
                 </div>
             </div>
-           <div class="form-group">
+        </div>
+
+        <div class="row">
+           <div class="form-group col-md-6">
                 <div>
                     <label class="col-md-2 control-label">过期日期</label>
                 </div>
@@ -102,7 +159,10 @@
                     </div>
                 </div>
             </div>
-           <div class="form-group">
+        </div>
+
+        <div class="row">
+           <div class="form-group col-md-6">
                 <div>
                     <label class="col-md-2 control-label">用户状态</label>
                 </div>
@@ -119,7 +179,10 @@
                     </select>
                </div>
             </div>
-           <div class="form-group">
+        </div>
+
+        <div class="row">
+           <div class="form-group col-md-6">
                 <div>
                     <label class="col-md-2 control-label">系统角色</label>
                 </div>
@@ -131,8 +194,10 @@
                     </select>
                 </div>
            </div>
+        </div>
 
-           <div class="form-group">
+        <div class="row">
+           <div class="form-group col-md-6">
                 <div>
                     <label class="col-md-2 control-label">用户角色</label>
                 </div>
@@ -143,18 +208,17 @@
                       {% end %}
                     </select>
                 </div>
-
            </div>
+        </div>
 
-           <br>
-           <div class="form-group m-b-0">
-                <div class="col-sm-offset-6 col-sm-9">
-                  <button id="save" type="button" class="btn btn-custom waves-effect waves-light btn-md">变更</button>
-                  <button id="return" type="button" class="btn btn-custom waves-effect waves-light btn-md">返回</button>
-                </div>
-           </div>
-       </form>
-    </div>
+        <br>
+        <div class="form-group m-b-0">
+            <div class="col-sm-offset-3 col-sm-9">
+              <button id="save" type="button" class="btn btn-custom waves-effect waves-light btn-md">变更</button>
+              <button id="return" type="button" class="btn btn-custom waves-effect waves-light btn-md">返回</button>
+            </div>
+        </div>
+     </form>
 
     <!-- jQuery  -->
     <script src="{{static_url('plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js')}}"></script>
@@ -166,6 +230,9 @@
 
     <!-- Sweet-Alert  -->
     <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
+
+    <!-- File Upload js -->
+    <script src="{{static_url('plugins/jquery.filer/js/jquery.filer.js')}}"></script>
 
     <!-- Init js -->
     <script src="{{static_url('assets/pages/jquery.form-pickers.init.js')}}"></script>
@@ -214,33 +281,109 @@
         };
 
         $("#save").click(function () {
-          $.ajax({
-            url: "/user/edit/save",
-            type: "post",
-            datatype: "json",
-            data: {
-                userid     : $('#userid').val(),
-                loginname  : $('#login').val(),
-                username   : $('#user').val(),
-                password   : $('#pass').val(),
-                gender     : $('#gender').val(),
-                email      : $('#email').val(),
-                phone      : $('#phone').val(),
-                dept       : $('#dept').val(),
-                expire_date: $('#expire_date').val(),
-                status     : $('#status').val(),
-                roles      : get_privs()
-            },
-            success: function (dataSet) {
-                console.log(dataSet.code, dataSet.message);
-                if (dataSet.code==0) {
-                   swal("变更成功", "", "success")
-                } else {
-                   swal(dataSet.message, "", "error")
-                }
-            }
-         });
+
+           console.log('user_image=',$('#user_image')[0].src)
+           console.log('file_path=',$('#image_path').val())
+           console.log('file_name=',$('#image_name').val())
+           console.log('filer_input1=',$("#filer_input1").get(0).files)
+           console.log('filer_input2=',$("#filer_input1").get(0).files.length)
+
+          if ($("#filer_input1").get(0).files.length>0){
+              var fd = new FormData();
+              files  = $("#filer_input1").get(0).files;
+              fd.append("file", files[0]);
+              fd.append("username", $('#login').val());
+              $.ajax({
+                    url: "/user/add/uploadImage",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    data : fd,
+                    async:false,
+                    dataType: 'JSON',
+                    success: function (dataSet) {
+                        if (dataSet.code==0) {
+                            console.log('/user/add/uploadImage1=', dataSet);
+                            console.log('/user/add/uploadImage2=',dataSet.file_path+'/'+dataSet.file_name)
+                            $('#image_path').val(dataSet.file_path)
+                            $('#image_file').attr('src',dataSet.file_path+'/'+dataSet.file_name)
+
+                            $.ajax({
+                                url: "/user/edit/save",
+                                type: "post",
+                                datatype: "json",
+                                data: {
+                                    userid     : $('#userid').val(),
+                                    loginname  : $('#login').val(),
+                                    username   : $('#user').val(),
+                                    password   : $('#pass').val(),
+                                    gender     : $('#gender').val(),
+                                    email      : $('#email').val(),
+                                    phone      : $('#phone').val(),
+                                    dept       : $('#dept').val(),
+                                    expire_date: $('#expire_date').val(),
+                                    status     : $('#status').val(),
+                                    roles      : get_privs(),
+                                    file_path  : dataSet.file_path,
+                                    file_name  : dataSet.file_name,
+                                },
+                                success: function (dataSet) {
+                                    console.log(dataSet.code, dataSet.message);
+                                    if (dataSet.code==0) {
+                                       swal("变更成功", "", "success")
+                                    } else {
+                                       swal(dataSet.message, "", "error")
+                                    }
+                                }
+                             });
+
+                        } else {
+                            console.log('/user/add/uploadImage=', dataSet.message);
+                        }
+                    }
+               });
+          } else {
+              $.ajax({
+                    url: "/user/edit/save",
+                    type: "post",
+                    datatype: "json",
+                    data: {
+                        userid     : $('#userid').val(),
+                        loginname  : $('#login').val(),
+                        username   : $('#user').val(),
+                        password   : $('#pass').val(),
+                        gender     : $('#gender').val(),
+                        email      : $('#email').val(),
+                        phone      : $('#phone').val(),
+                        dept       : $('#dept').val(),
+                        expire_date: $('#expire_date').val(),
+                        status     : $('#status').val(),
+                        roles      : get_privs(),
+                        file_path  : $('#image_path').val(),
+                        file_name  : $('#image_name').val(),
+                    },
+                    success: function (dataSet) {
+                        console.log(dataSet.code, dataSet.message);
+                        if (dataSet.code==0) {
+                           swal("变更成功", "", "success")
+                        } else {
+                           swal(dataSet.message, "", "error")
+                        }
+                    }
+                 });
+          }
+
       });
+
+       //Example 2
+       $('#filer_input1').filer({
+            limit: 1,
+            maxSize: 3,
+            extensions: ['jpg', 'jpeg', 'png', 'gif', 'psd'],
+            changeInput: true,
+            showThumbs: true,
+            addMore: true
+       });
 
    </script>
 </body>

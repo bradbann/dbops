@@ -7,6 +7,7 @@
 
 from web.utils.common     import exception_info,current_rq,aes_encrypt,aes_decrypt,format_sql
 from web.utils.common     import get_connection,get_connection_ds,get_connection_ds_sqlserver,get_connection_ds_oracle,get_connection_ds_pg
+from web.model.t_ds       import get_ds_by_dsid
 from web.model.t_user     import get_user_by_loginame
 import re
 import os,json
@@ -625,3 +626,236 @@ def sync_log_query(p_param):
 
 def sync_log_query_detail(p_param):
     pass
+
+def query_sync_park():
+    # ds  = get_ds_by_dsid()
+    # db  = get_connection_ds(ds)
+    db  = get_connection()
+    cr  = db.cursor()
+    sql = """SELECT 
+                 b.sync_col_val,  
+                 b.comments,
+                 date_format(a.create_date,'%Y-%m-%d %H:%i:%s') as create_date,
+                 concat(a.duration,''),
+                 concat(a.amount,''),
+                 CASE WHEN TIMESTAMPDIFF(MINUTE,a.create_date,NOW())<60 THEN '√' ELSE '×' END AS flag
+            FROM t_db_sync_tasks_log a,t_db_sync_config b
+            WHERE a.sync_tag = b.sync_tag 
+              AND b.sync_ywlx='3' AND b.status='1'           
+              AND (a.sync_tag,a.create_date) IN(
+                SELECT 
+                     a.sync_tag,
+                     MAX(a.create_date)
+                FROM t_db_sync_tasks_log a
+                WHERE a.create_date>DATE_SUB(DATE(NOW()),INTERVAL 3 DAY)
+                GROUP BY a.sync_tag
+            )
+        """
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+
+def query_sync_park_real_time():
+    # ds  = get_ds_by_dsid()
+    # db  = get_connection_ds(ds)
+    db  = get_connection()
+    cr  = db.cursor()
+    sql = """SELECT 
+                 b.sync_col_val,  
+                 b.comments,
+                 date_format(a.create_date,'%Y-%m-%d %H:%i:%s') as create_date,
+                 concat(a.duration,''),
+                 concat(a.amount,''),
+                 CASE WHEN TIMESTAMPDIFF(MINUTE,a.create_date,NOW())<30 THEN '√' ELSE '×' END AS flag
+            FROM t_db_sync_tasks_log a,t_db_sync_config b
+            WHERE a.sync_tag = b.sync_tag 
+              AND b.sync_ywlx='4' AND b.status='1'
+              AND (a.sync_tag,a.create_date) IN(
+                SELECT 
+                     a.sync_tag,
+                     MAX(a.create_date)
+                FROM t_db_sync_tasks_log a
+                WHERE a.create_date>DATE_SUB(DATE(NOW()),INTERVAL 3 HOUR)
+                GROUP BY a.sync_tag
+            )
+        """
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+def query_sync_flow():
+    # ds  = get_ds_by_dsid()
+    # db  = get_connection_ds(ds)
+    db  = get_connection()
+    cr  = db.cursor()
+    sql = """SELECT 
+                 b.sync_col_val,  
+                 b.comments,
+                 date_format(a.create_date,'%Y-%m-%d %H:%i:%s') as create_date,
+                 concat(a.duration,''),
+                 concat(a.amount,''),
+                 CASE WHEN TIMESTAMPDIFF(MINUTE,a.create_date,NOW())<60 THEN '√' ELSE '×' END AS flag
+            FROM t_db_sync_tasks_log a,t_db_sync_config b
+            WHERE a.sync_tag = b.sync_tag 
+              AND b.sync_ywlx='1' AND b.status='1'           
+              AND (a.sync_tag,a.create_date) IN(
+                SELECT 
+                     a.sync_tag,
+                     MAX(a.create_date)
+                FROM t_db_sync_tasks_log a
+                WHERE a.create_date>DATE_SUB(DATE(NOW()),INTERVAL 2 DAY)
+                GROUP BY a.sync_tag
+            )
+        """
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+
+def query_sync_flow_real_time():
+    # ds  = get_ds_by_dsid()
+    # db  = get_connection_ds(ds)
+    db  = get_connection()
+    cr  = db.cursor()
+    sql = """SELECT 
+                 b.sync_col_val,  
+                 b.comments,
+                 date_format(a.create_date,'%Y-%m-%d %H:%i:%s') as create_date,
+                 concat(a.duration,''),
+                 concat(a.amount,''),
+                 CASE WHEN TIMESTAMPDIFF(MINUTE,a.create_date,NOW())<30 THEN '√' ELSE '×' END AS flag
+            FROM t_db_sync_tasks_log a,t_db_sync_config b
+            WHERE a.sync_tag = b.sync_tag 
+              AND b.sync_ywlx='2' AND b.status='1'
+              AND (a.sync_tag,a.create_date) IN(
+                SELECT 
+                     a.sync_tag,
+                     MAX(a.create_date)
+                FROM t_db_sync_tasks_log a
+                WHERE a.create_date>DATE_SUB(DATE(NOW()),INTERVAL 2 HOUR)
+                GROUP BY a.sync_tag
+            )
+        """
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+def query_sync_flow_device():
+    # ds  = get_ds_by_dsid()
+    # db  = get_connection_ds(ds)
+    db  = get_connection()
+    cr  = db.cursor()
+    sql = """SELECT 
+                 b.sync_col_val,  
+                 b.comments,
+                 date_format(a.create_date,'%Y-%m-%d %H:%i:%s') as create_date,
+                 concat(a.duration,''),
+                 concat(a.amount,''),
+                 CASE WHEN TIMESTAMPDIFF(MINUTE,a.create_date,NOW())<30 THEN '√' ELSE '×' END AS flag
+            FROM t_db_sync_tasks_log a,t_db_sync_config b
+            WHERE a.sync_tag = b.sync_tag 
+              AND b.sync_ywlx='5' AND b.status='1'
+              AND (a.sync_tag,a.create_date) IN(
+                SELECT 
+                     a.sync_tag,
+                     MAX(a.create_date)
+                FROM t_db_sync_tasks_log a
+                WHERE a.create_date>DATE_SUB(DATE(NOW()),INTERVAL 2 HOUR)
+                GROUP BY a.sync_tag
+            )
+        """
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+def query_sync_park_charge():
+    # ds  = get_ds_by_dsid()
+    # db  = get_connection_ds(ds)
+    db  = get_connection()
+    cr  = db.cursor()
+    sql = """SELECT 
+                 b.sync_col_val,  
+                 b.comments,
+                 date_format(a.create_date,'%Y-%m-%d %H:%i:%s') as create_date,
+                 concat(a.duration,''),
+                 concat(a.amount,''),
+                 CASE WHEN TIMESTAMPDIFF(MINUTE,a.create_date,NOW())<60 THEN '√' ELSE '×' END AS flag
+            FROM t_db_sync_tasks_log a,t_db_sync_config b
+            WHERE a.sync_tag = b.sync_tag 
+              AND b.sync_ywlx='7' AND b.status='1'
+              AND (a.sync_tag,a.create_date) IN(
+                SELECT 
+                     a.sync_tag,
+                     MAX(a.create_date)
+                FROM t_db_sync_tasks_log a
+                WHERE a.create_date>DATE_SUB(DATE(NOW()),INTERVAL 1 DAY)
+                GROUP BY a.sync_tag
+            )
+        """
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+def query_sync_bi():
+    # ds  = get_ds_by_dsid()
+    # db  = get_connection_ds(ds)
+    db  = get_connection()
+    cr  = db.cursor()
+    sql = """SELECT 
+                 b.sync_col_val,  
+                 b.comments,
+                 date_format(a.create_date,'%Y-%m-%d %H:%i:%s') as create_date,
+                 concat(a.duration,''),
+                 concat(a.amount,''),
+                 CASE WHEN TIMESTAMPDIFF(HOUR,a.create_date,NOW())<3 THEN '√' ELSE '×' END AS flag
+            FROM t_db_sync_tasks_log a,t_db_sync_config b
+            WHERE a.sync_tag = b.sync_tag 
+              AND b.sync_ywlx='18' AND b.status='1'
+              AND (a.sync_tag,a.create_date) IN(
+                SELECT 
+                     a.sync_tag,
+                     MAX(a.create_date)
+                FROM t_db_sync_tasks_log a
+                WHERE a.create_date>DATE_SUB(DATE(NOW()),INTERVAL 2 DAY)
+                GROUP BY a.sync_tag
+            )
+        """
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list

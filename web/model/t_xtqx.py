@@ -319,6 +319,111 @@ def get_tab_name(dbid,db_name):
     return result
 
 
+def get_tab_columns(dbid,db_name,tab_name):
+    try:
+        result = {}
+        p_ds   = get_ds_by_dsid(dbid)
+        db     = get_connection_ds(p_ds)
+        cr     = db.cursor()
+        sql    = """
+                    SELECT column_name,column_comment 
+                     FROM information_schema.columns
+                    WHERE table_schema='{0}'  AND table_name='{1}'
+                      ORDER BY ordinal_position
+                 """.format(db_name,tab_name)
+        cr.execute(sql)
+        rs=cr.fetchall()
+        v_list = []
+        for r in rs:
+            v_list.append(r)
+        cr.close()
+        result['code'] = '0'
+        result['message'] = v_list
+    except Exception as e:
+        print('get_db_name.err:',str(e))
+        result['code'] = '-1'
+        result['message'] = '获取数据库列名失败！'
+    return result
+
+
+def get_tab_keys(dbid,db_name,tab_name):
+    try:
+        result = {}
+        p_ds   = get_ds_by_dsid(dbid)
+        db     = get_connection_ds(p_ds)
+        cr     = db.cursor()
+        sql    = """
+                    SELECT GROUP_CONCAT(column_name)
+                     FROM information_schema.columns
+                    WHERE table_schema='{0}'  AND table_name='{1}'
+                       AND column_key='PRI'
+                      ORDER BY ordinal_position
+                 """.format(db_name,tab_name)
+        cr.execute(sql)
+        rs=cr.fetchone()
+        result['code'] = '0'
+        result['message'] = rs[0]
+    except Exception as e:
+        print('get_tab_keys.err:',str(e))
+        result['code'] = '-1'
+        result['message'] = '获取数据库列名失败！'
+    return result
+
+
+def get_tab_incr_col(dbid,db_name,tab_name):
+    try:
+        result = {}
+        p_ds   = get_ds_by_dsid(dbid)
+        db     = get_connection_ds(p_ds)
+        cr     = db.cursor()
+        sql    = """
+                    SELECT column_name,column_comment 
+                     FROM information_schema.columns
+                    WHERE table_schema='{0}'  AND table_name='{1}'
+                       AND data_type IN('timestamp','datetime','date')
+                      ORDER BY ordinal_position
+                 """.format(db_name,tab_name)
+        cr.execute(sql)
+        rs = cr.fetchall()
+        v_list = []
+        for r in rs:
+            v_list.append(r)
+        cr.close()
+        result['code'] = '0'
+        result['message'] = v_list
+    except Exception as e:
+        print('get_db_name.err:', str(e))
+        result['code'] = '-1'
+        result['message'] = '获取数据库列名失败！'
+    return result
+
+
+def get_tab_structure(dbid,db_name,tab_name):
+    result = {}
+    p_ds   = get_ds_by_dsid(dbid)
+    db     = get_connection_ds(p_ds)
+    cr     = db.cursor()
+    sql    = """SELECT c.column_name,
+                       c.column_comment,
+                       c.data_type,
+                       CASE WHEN c.extra='auto_increment' THEN '自增' ELSE '' END AS col_incr,
+                       CASE WHEN c.column_key='PRI' THEN '主键' ELSE '' END AS col_pk,
+                       CASE WHEN c.is_nullable='NO' THEN '非空' ELSE '' END AS col_null      
+                FROM information_schema.columns c
+                WHERE c.table_schema='{0}'  
+                  AND c.table_name='{1}'
+                ORDER BY c.ordinal_position
+             """.format(db_name,tab_name)
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+
 def get_tab_idx_by_tname(dbid,tab):
     try:
         result = {}

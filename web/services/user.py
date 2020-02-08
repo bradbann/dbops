@@ -12,6 +12,7 @@
 ######################################################################################
 
 import json
+import uuid
 import tornado.web
 from web.model.t_role  import get_roles
 from web.model.t_user  import save_user,get_user_by_userid,upd_user,del_user,query_user,query_user_proj_privs
@@ -55,9 +56,35 @@ class useradd_save(tornado.web.RequestHandler):
         d_user['expire_date']  = self.get_argument("expire_date")
         d_user['status']       = self.get_argument("status")
         d_user['privs']        = self.get_argument("privs").split(",")
+        d_user['file_path']    = self.get_argument("file_path")
+        d_user['file_name']    = self.get_argument("file_name")
         print('d_user=',d_user)
         result=save_user(d_user)
         self.write({"code": result['code'], "message": result['message']})
+
+class useradd_save_uploadImage(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        static_path = self.get_template_path().replace("templates", "static")
+        #username    = str(self.get_secure_cookie("username"), encoding="utf-8")
+        file_metas  = self.request.files["file"]
+        #username    = self.request.files["username"]
+        username = self.get_argument("username")
+        print('username=',username)
+
+        try:
+            for meta in file_metas:
+                file_path = static_path+'/'+'assets/images/users'
+                file_name=str(uuid.uuid1())+'_'+username+'.'+meta['filename'].split('.')[-1]
+                print('file_path=',file_path)
+                print('file_name=', file_name)
+                with open(file_path+'/'+file_name, 'wb') as up:
+                    up.write(meta['body'])
+            self.write({"code": 0, "file_path": '/static/assets/images/users',"file_name":file_name})
+        except Exception as e:
+            print(e)
+            self.write({"code": -1, "message": '保存图片失败'+str(e)})
+
 
 class userchange(tornado.web.RequestHandler):
     def get(self):
@@ -80,11 +107,14 @@ class useredit(tornado.web.RequestHandler):
                      dept        = d_user['dept'],
                      expire_date = d_user['expire_date'],
                      status      = d_user['status'],
-                     sys_roles   =get_sys_roles(userid),
-                     user_roles  =get_user_roles(userid),
-                     url = get_url_root(),
-                     genders=genders,
-                     depts=depts
+                     image_path  = d_user['image_path'],
+                     image_name  = d_user['image_name'],
+                     user_image  = d_user['image_path']+'/'+d_user['image_name'],
+                     sys_roles   = get_sys_roles(userid),
+                     user_roles  = get_user_roles(userid),
+                     url         = get_url_root(),
+                     genders     = genders,
+                     depts       = depts
                     )
 
 class useredit_save(tornado.web.RequestHandler):
@@ -103,6 +133,9 @@ class useredit_save(tornado.web.RequestHandler):
         d_user['status']      = self.get_argument("status")
         d_user['status']      = self.get_argument("status")
         d_user['roles']       = self.get_argument("roles").split(",")
+        d_user['file_path']   = self.get_argument("file_path")
+        d_user['file_name']   = self.get_argument("file_name")
+
         result=upd_user(d_user)
         self.write({"code": result['code'], "message": result['message']})
 

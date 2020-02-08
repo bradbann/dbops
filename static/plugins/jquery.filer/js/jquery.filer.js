@@ -947,8 +947,8 @@
 		theme: 'default',
 		templates: {
 			box: '<ul class="jFiler-items-list jFiler-items-default"></ul>',
-			item: '<li class="jFiler-item"><div class="jFiler-item-container"><div class="jFiler-item-inner"><div class="jFiler-item-icon pull-left">{{fi-icon}}</div><div class="jFiler-item-info pull-left"><div class="jFiler-item-title" title="{{fi-name}}">{{fi-name | limitTo:30}}</div><div class="jFiler-item-others"><span>size: {{fi-size2}}</span><span>type: {{fi-extension}}</span><span class="jFiler-item-status">{{fi-progressBar}}</span></div><div class="jFiler-item-assets222"><ul class="list-inline"><li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li></ul></div></div></div></div></li>',
-			itemAppend: '<li class="jFiler-item"><div class="jFiler-item-container"><div class="jFiler-item-inner"><div class="jFiler-item-icon pull-left">{{fi-icon}}</div><div class="jFiler-item-info pull-left"><div class="jFiler-item-title">{{fi-name | limitTo:35}}</div><div class="jFiler-item-others"><span>size: {{fi-size2}}</span><span>type: {{fi-extension}}</span><span class="jFiler-item-status"></span></div><div class="jFiler-item-assets222"><ul class="list-inline"><li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li></ul></div></div></div></div></li>',
+			item: '<li class="jFiler-item"><div class="jFiler-item-container"><div class="jFiler-item-inner"><div class="jFiler-item-icon pull-left">{{fi-icon}}</div><div class="jFiler-item-info pull-left"><div class="jFiler-item-title" title="{{fi-name}}">{{fi-name | limitTo:30}}</div><div class="jFiler-item-others"><span>size: {{fi-size2}}</span><span>type: {{fi-extension}}</span><span class="jFiler-item-status">{{fi-progressBar}}</span></div><div class="jFiler-item-assets"><ul class="list-inline"><li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li></ul></div></div></div></div></li>',
+			itemAppend: '<li class="jFiler-item"><div class="jFiler-item-container"><div class="jFiler-item-inner"><div class="jFiler-item-icon pull-left">{{fi-icon}}</div><div class="jFiler-item-info pull-left"><div class="jFiler-item-title">{{fi-name | limitTo:35}}</div><div class="jFiler-item-others"><span>size: {{fi-size2}}</span><span>type: {{fi-extension}}</span><span class="jFiler-item-status"></span></div><div class="jFiler-item-assets"><ul class="list-inline"><li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li></ul></div></div></div></div></li>',
 			progressBar: '<div class="bar"></div>',
 			itemAppendToEnd: false,
 			removeConfirmation: true,
@@ -975,16 +975,16 @@
 		onEmpty: null,
 		options: null,
 		captions: {
-			button: "Choose Files",
-			feedback: "Choose files To Upload",
-			feedback2: "files were chosen",
+			button: "<i class=\"ti-upload\"></i>",
+			feedback: "选择要上传的文件",
+			feedback2: "文件被选中",
 			drop: "Drop file here to Upload",
-			removeConfirmation: "Are you sure you want to remove this file?",
+			removeConfirmation: "您确定要删除此文件吗?",
 			errors: {
-				filesLimit: "Only {{fi-limit}} files are allowed to be uploaded.",
-				filesType: "Only Images are allowed to be uploaded.",
-				filesSize: "{{fi-name}} is too large! Please upload file up to {{fi-maxSize}} MB.",
-				filesSizeAll: "Files you've choosed are too large! Please upload files up to {{fi-maxSize}} MB."
+				filesLimit: "只允许上传 {{fi-limit}} 个文件.",
+				filesType: "只允许上传图片.",
+				filesSize: "{{fi-name}} 太大! 上传文件大小不能超过 {{fi-maxSize}} MB.",
+				filesSizeAll: "你选择的文件太大了!上传文件总大小不能超过 {{fi-maxSize}} MB."
 			}
 		}
 	}

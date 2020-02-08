@@ -140,16 +140,32 @@ def get_col_default_value(p_curdb,p_sql):
 def get_time_col_default_value(p_curdb,p_sql):
     cr  = p_curdb.cursor()
     cr.execute(p_sql)
-    cr.execute('''SELECT 
-                    table_name,column_name,
-                    CASE WHEN column_default='CURRENT_TIMESTAMP' AND extra='on update CURRENT_TIMESTAMP' THEN 
-                    1 ELSE 0 END 
-                  FROM  information_schema.columns   
-                  WHERE UPPER(table_schema)=DATABASE()  
-                   AND data_type IN('datetime','timestamp')
-                   AND column_key!='PRI'
-                   AND UPPER(table_name) = upper('{}')
-               '''.format(get_obj_name(p_sql)))
+    sql ='''SELECT 
+                    table_name,
+                    column_name,
+                    'CURRENT_TIMESTAMP',
+                    CASE WHEN column_default='CURRENT_TIMESTAMP'  THEN  1 ELSE 0 END
+              FROM  information_schema.columns   
+              WHERE UPPER(table_schema)=DATABASE()  
+               AND data_type IN('datetime','timestamp')
+               AND column_key!='PRI'
+               AND UPPER(table_name) = upper('{0}')
+               AND column_name='create_time'
+              union all  
+              SELECT 
+                    table_name,
+                    column_name,
+                    'CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+                    CASE WHEN column_default='CURRENT_TIMESTAMP' AND extra='on update CURRENT_TIMESTAMP' THEN  1 ELSE 0 END
+              FROM  information_schema.columns   
+              WHERE UPPER(table_schema)=DATABASE()  
+               AND data_type IN('datetime','timestamp')
+               AND column_key!='PRI'
+               AND UPPER(table_name) = upper('{0}')
+               AND column_name='update_time'
+           '''.format(get_obj_name(p_sql),get_obj_name(p_sql))
+    print('get_time_col_default_value=',sql )
+    cr.execute(sql)
     rs  = cr.fetchall()
     col = rs
     cr.execute('drop table {}'.format(get_obj_name(p_sql)))
@@ -216,7 +232,7 @@ def get_tab_tcol_datetime(p_curdb,p_sql,rule):
                                        AND b.data_type!='datetime')   
                     UNION ALL
                     SELECT table_name,
-                           'create_time' AS column_name
+                           'update_time' AS column_name
                      FROM  information_schema.tables a  
                     WHERE a.table_schema=DATABASE()  
                       AND a.table_name= LOWER('{1}')
@@ -406,9 +422,9 @@ def check_mysql_ddl(p_dbid,p_cdb,p_sql,p_user):
           v  = get_time_col_default_value(db_cur, p_sql)
           e  = rule['error']
           for i in v:
-             if i[2] == 0:
+             if i[3] == 0:
                 result = False
-                rule['error'] = e.format(i[0], i[1])
+                rule['error'] = e.format(i[0],i[1],i[2])
                 save_check_results(db_ops, rule, p_user, p_sql)
 
        #检查字符字段最大长度
