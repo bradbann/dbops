@@ -12,9 +12,16 @@
 
 import json
 import tornado.web
-from   web.model.t_transfer import query_transfer,save_transfer,get_transfer_by_transferid,upd_transfer,del_transfer,query_transfer_log,push_transfer_task,run_transfer_task,stop_transfer_task
-from   web.model.t_dmmx import get_dmm_from_dm,get_sync_server,get_sync_db_server,get_datax_sync_db_server,get_db_sync_tags,get_db_sync_tags_by_market_id,get_db_sync_ywlx,get_db_sync_ywlx_by_market_id
-from   web.utils.common import current_rq2,get_day_nday_ago,now
+from   web.model.t_transfer import query_transfer,save_transfer,get_transfer_by_transferid,upd_transfer,del_transfer
+from   web.model.t_transfer import query_transfer_log,push_transfer_task,run_transfer_task,stop_transfer_task,query_transfer_detail
+from   web.model.t_dmmx import get_dmm_from_dm,get_sync_server,get_sync_db_server
+from   web.utils.common import current_rq2
+
+
+class transferquery(tornado.web.RequestHandler):
+    def get(self):
+        self.render("./transfer_query.html"
+                    )
 
 class transfer_query(tornado.web.RequestHandler):
     def post(self):
@@ -24,11 +31,22 @@ class transfer_query(tornado.web.RequestHandler):
         v_json   = json.dumps(v_list)
         self.write(v_json)
 
+class transfer_query_detail(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        transfer_id   = self.get_argument("transfer_id")
+        v_list    = query_transfer_detail(transfer_id)
+        v_json    = json.dumps(v_list)
+        print('transfer_query_detail=',v_json)
+        self.write({"code": 0, "message": v_json})
+
+
 class transferadd(tornado.web.RequestHandler):
     def get(self):
         self.render("./transfer_add.html",
                     sync_server=get_sync_server(),
                     db_server=get_sync_db_server(),
+                    dm_transfer_type=get_dmm_from_dm('09'),
                     )
 
 class transferadd_save(tornado.web.RequestHandler):
@@ -37,6 +55,7 @@ class transferadd_save(tornado.web.RequestHandler):
         d_transfer['transfer_tag']         = self.get_argument("transfer_tag")
         d_transfer['task_desc']            = self.get_argument("task_desc")
         d_transfer['transfer_server']      = self.get_argument("transfer_server")
+        d_transfer['transfer_type']        = self.get_argument("transfer_type")
         d_transfer['sour_db_server']       = self.get_argument("sour_db_server")
         d_transfer['sour_db_name']         = self.get_argument("sour_db_name")
         d_transfer['sour_tab_name']        = self.get_argument("sour_tab_name")
@@ -46,6 +65,7 @@ class transferadd_save(tornado.web.RequestHandler):
         d_transfer['python3_home']         = self.get_argument("python3_home")
         d_transfer['script_base']          = self.get_argument("script_base")
         d_transfer['script_name']          = self.get_argument("script_name")
+        d_transfer['batch_size']           = self.get_argument("batch_size")
         d_transfer['api_server']           = self.get_argument("api_server")
         d_transfer['status']               = self.get_argument("status")
         print('transferadd_save=',d_transfer)
@@ -62,9 +82,11 @@ class transferedit(tornado.web.RequestHandler):
         d_transfer    = get_transfer_by_transferid(transfer_id)
         self.render("./transfer_edit.html",
                     transfer_server      = get_sync_server(),
+                    dm_transfer_type     = get_dmm_from_dm('09'),
                     db_server            = get_sync_db_server(),
                     transfer_id          = transfer_id,
                     transfer_tag         = d_transfer['transfer_tag'],
+                    transfer_db_type     = d_transfer['transfer_type'],
                     task_desc            = d_transfer['task_desc'],
                     server_id            = d_transfer['server_id'],
                     sour_db_id           = d_transfer['sour_db_id'],
@@ -76,6 +98,7 @@ class transferedit(tornado.web.RequestHandler):
                     script_path          = d_transfer['script_path'],
                     script_name          = d_transfer['script_file'],
                     python3_home         = d_transfer['python3_home'],
+                    batch_size           = d_transfer['batch_size'],
                     api_server           = d_transfer['api_server'],
                     status               = d_transfer['status'],
                     )
@@ -88,6 +111,7 @@ class transferedit_save(tornado.web.RequestHandler):
         d_transfer['transfer_tag']    = self.get_argument("transfer_tag")
         d_transfer['task_desc']       = self.get_argument("task_desc")
         d_transfer['transfer_server'] = self.get_argument("transfer_server")
+        d_transfer['transfer_type']   = self.get_argument("transfer_type")
         d_transfer['sour_db_server']  = self.get_argument("sour_db_server")
         d_transfer['sour_db_name']    = self.get_argument("sour_db_name")
         d_transfer['sour_tab_name']   = self.get_argument("sour_tab_name")
@@ -97,6 +121,7 @@ class transferedit_save(tornado.web.RequestHandler):
         d_transfer['python3_home']    = self.get_argument("python3_home")
         d_transfer['script_base']     = self.get_argument("script_base")
         d_transfer['script_name']     = self.get_argument("script_name")
+        d_transfer['batch_size']      = self.get_argument("batch_size")
         d_transfer['api_server']      = self.get_argument("api_server")
         d_transfer['status']          = self.get_argument("status")
         print(d_transfer)
@@ -156,4 +181,74 @@ class transferedit_stop(tornado.web.RequestHandler):
         api    = self.get_argument("api")
         v_list = stop_transfer_task(tag,api)
         v_json = json.dumps(v_list)
+        self.write(v_json)
+
+class transferclone(tornado.web.RequestHandler):
+    def get(self):
+        transfer_id   = self.get_argument("transfer_id")
+        d_transfer    = get_transfer_by_transferid(transfer_id)
+        self.render("./transfer_clone.html",
+                    transfer_server   = get_sync_server(),
+                    dm_transfer_type  = get_dmm_from_dm('09'),
+                    db_server         = get_sync_db_server(),
+                    transfer_id       = transfer_id,
+                    transfer_tag      = d_transfer['transfer_tag'].split('_v')[0]+'_v'+str(int(d_transfer['transfer_tag'].split('_v')[1])+1),
+                    transfer_db_type  = d_transfer['transfer_type'],
+                    task_desc         = d_transfer['task_desc'].split('_v')[0]+'_v'+str(int(d_transfer['task_desc'].split('_v')[1])+1),
+                    server_id         = d_transfer['server_id'],
+                    sour_db_id        = d_transfer['sour_db_id'],
+                    sour_schema       = d_transfer['sour_schema'],
+                    sour_table        = d_transfer['sour_table'],
+                    sour_where        = d_transfer['sour_where'],
+                    dest_db_id        = d_transfer['dest_db_id'],
+                    dest_schema       = d_transfer['dest_schema'],
+                    script_path       = d_transfer['script_path'],
+                    script_name       = d_transfer['script_file'],
+                    python3_home      = d_transfer['python3_home'],
+                    batch_size        = d_transfer['batch_size'],
+                    api_server        = d_transfer['api_server'],
+                    status            = d_transfer['status'],
+
+        )
+
+class transferclone_save(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        d_transfer = {}
+        d_transfer['transfer_tag']    = self.get_argument("transfer_tag")
+        d_transfer['task_desc']       = self.get_argument("task_desc")
+        d_transfer['transfer_server'] = self.get_argument("transfer_server")
+        d_transfer['transfer_type']   = self.get_argument("transfer_type")
+        d_transfer['sour_db_server']  = self.get_argument("sour_db_server")
+        d_transfer['sour_db_name']    = self.get_argument("sour_db_name")
+        d_transfer['sour_tab_name']   = self.get_argument("sour_tab_name")
+        d_transfer['sour_tab_where']  = self.get_argument("sour_tab_where")
+        d_transfer['dest_db_server']  = self.get_argument("dest_db_server")
+        d_transfer['dest_db_name']    = self.get_argument("dest_db_name")
+        d_transfer['python3_home']    = self.get_argument("python3_home")
+        d_transfer['script_base']     = self.get_argument("script_base")
+        d_transfer['script_name']     = self.get_argument("script_name")
+        d_transfer['batch_size']      = self.get_argument("batch_size")
+        d_transfer['api_server']      = self.get_argument("api_server")
+        d_transfer['status']          = self.get_argument("status")
+        print('transferclone_save=', d_transfer)
+        result = save_transfer(d_transfer)
+        self.write({"code": result['code'], "message": result['message']})
+
+class transferlogquery(tornado.web.RequestHandler):
+    def get(self):
+        self.render("./transfer_log_query.html",
+                    begin_date=current_rq2(),
+                    end_date=current_rq2()
+                    )
+
+class transfer_log_query(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        transfer_tag    = self.get_argument("transfer_tag")
+        begin_date      = self.get_argument("begin_date")
+        end_date        = self.get_argument("end_date")
+        task_status     = self.get_argument("task_status")
+        v_list          = query_transfer_log(transfer_tag,begin_date,end_date,task_status)
+        v_json          = json.dumps(v_list)
         self.write(v_json)

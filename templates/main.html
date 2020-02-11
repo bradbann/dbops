@@ -479,6 +479,88 @@
               var activeTab = $(e.target).text();
               var previousTab = $(e.relatedTarget).text();
               console.log(activeTab,previousTab)
+              show_bar();
+
+              if (activeTab=='好房备份') {
+                 $('#db-backup-bar').hide();
+              }
+
+              if (activeTab=='合生通备份') {
+                 //合生通生产数据库生产备份情况
+                  $.ajax({
+              url: "/backup_case",
+              type: "post",
+              datatype: "json",
+              data:{
+                  db_env: '1'
+              },
+              success: function (dataSet) {
+                 $('#db-backup-prod').DataTable( {
+                      "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                      "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                      destroy    :true,
+                      async      :true,
+                      ordering   :false,
+                      scrollY    :true,
+                      scrollX    :true,
+                      paging     : true,
+                      data       : dataSet.data,
+                      autoFill   : true,
+                      bAutoWidth : true,
+                      iDisplayLength: n_rows,
+                      info       :true,
+                      columns: [
+                        { "title": "数据库类型","width":"10%" },
+                        { "title": "数据源描述","width":"30%" },
+                        { "title": "备份日期","width":"15%" },
+                        { "title": "备份大小","width":"15%" },
+                        { "title": "备份时长","width":"15%" },
+                        { "title": "备份状态","width":"15%" },
+                      ],
+                     "language": {
+                                 "search"       : "在表格中搜索:",
+                                 "sProcessing"  : "处理中...",
+                                 "sLengthMenu"  : "显示 _MENU_ 项结果",
+                                 "sZeroRecords" : "没有匹配结果",
+                                 "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                 "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                                 "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                 "sInfoPostFix" : "",
+                                 "sSearch"      : "搜索:",
+                                 "sUrl"         : "",
+                                 "sEmptyTable"  : "表中数据为空",
+                                 "sLoadingRecords": "载入中...",
+                                 "sInfoThousands": ",",
+                                 "oPaginate": {
+                                     "sFirst"   : "首页",
+                                     "sPrevious": "上页",
+                                     "sNext"    : "下页",
+                                     "sLast"    : "末页"
+                                 },
+                                 "oAria": {
+                                     "sSortAscending" : ": 以升序排列此列",
+                                     "sSortDescending": ": 以降序排列此列"
+                                 }
+                             }
+                 });
+
+                 //统计成功失条数
+                 if (dataSet.failure>0) {
+                     $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span style="color:red">失败:'+dataSet.failure+'个</span>')
+                 } else {
+                     $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span>失败:'+dataSet.failure+'个</span>')
+                 }
+
+                //生成柱状图
+                 var $db_backup_data = new Array(dataSet.data.length);
+                 for (i=0;i<dataSet.data.length;i++){
+                     console.log(dataSet.data[i][1],dataSet.data[i][3],dataSet.data[i][4])
+                     $db_backup_data[i] = {'y':dataSet.data[i][1],'a':parseInt(dataSet.data[i][3]),'b':parseInt(dataSet.data[i][4])}
+                 }
+                 show_bar($db_backup_data)
+             }
+         });
+              }
 
               if (activeTab=='生产环境') {
                   //合生通生产数据库备份情况

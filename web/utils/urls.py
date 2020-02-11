@@ -16,7 +16,8 @@ from web.services.backup       import backup_log_query,backup_log_query_detail,b
 from web.services.sync         import syncadd,syncadd_save,syncquery,sync_query,syncchange,syncedit,syncedit_save,syncedit_del,synclogquery,syncloganalyze2,sync_log_analyze2
 from web.services.sync         import sync_log_query,sync_log_query_detail,syncedit_push,syncedit_run,syncedit_stop,syncedit_status,syncloganalyze,sync_log_analyze,get_sync_tasks,get_sync_ywlx
 from web.services.sync         import get_sync_park,get_sync_park_real_time,get_sync_flow,get_sync_flow_real_time,get_sync_flow_device,get_sync_park_charge,get_sync_bi
-from web.services.transfer     import transferadd,transferadd_save,transfer_query,transferchange,transferedit,transferedit_save,transferedit_del,transfer_query,transferedit_push,transferedit_run,transferedit_stop
+from web.services.transfer     import transferadd,transferadd_save,transferchange,transferedit,transferedit_save,transferedit_del,transfer_query,transferedit_push,transferedit_run,transferedit_stop
+from web.services.transfer     import transferquery,transferclone,transferclone_save,transferlogquery,transfer_log_query,transfer_query_detail
 from web.services.logon        import index,main,logon,logout,logon_check,tree,get_tree,logon_welcome,get_verify,forget_password_check,modify_password,modify_password_check,lockscreen,unlock
 from web.services.sql          import sqlquery,sql_query,sqlrelease,sql_check,sql_format,sql_check_result,sql_release,sqlaudit,sql_audit,sql_run,sql_audit_query,sql_audit_detail
 from web.services.sql          import get_tree_by_sql,get_tab_ddl,get_tab_idx,alt_tab,get_database,get_tables,get_columns,get_tab_stru,get_keys,get_incr_col
@@ -171,7 +172,9 @@ urls=[
         (r"/get/sync/bi",            get_sync_bi),
 
         #数据库传输
+        (r"/transfer/query",     transferquery),
         (r"/transfer/_query",    transfer_query),
+        (r"/transfer/_query/detail", transfer_query_detail),
         (r"/transfer/add",       transferadd),
         (r"/transfer/add/save",  transferadd_save),
         (r"/transfer/change"  ,  transferchange),
@@ -181,7 +184,29 @@ urls=[
         (r"/transfer/edit/push", transferedit_push),
         (r"/transfer/edit/run" , transferedit_run),
         (r"/transfer/edit/stop", transferedit_stop),
+        (r"/transfer/clone",     transferclone),
+        (r"/transfer/clone/save",transferclone_save),
+        (r"/transfer/log/query", transferlogquery),
+        (r"/transfer/log/_query", transfer_log_query),
 
+        # 大数据管理
+        (r"/bigdata/add", syncadd_bigdata),
+        (r"/bigdata/add/save", syncadd_bigdata_save),
+        (r"/bigdata/query", syncbigdataquery),
+        (r"/bigdata/_query", sync_bigdata_query),
+        (r"/bigdata/_query/detail", sync_bigdata_query_detail),
+        (r"/bigdata/_query/dataxTemplete", sync_bigdata_query_dataxTemplete),
+        (r"/bigdata/_query/dataxTemplete/downloads", sync_bigdata_downloads_dataxTemplete),
+        (r"/bigdata/change", syncchange_bigdata),
+        (r"/bigdata/edit", syncedit_bigdata),
+        (r"/bigdata/edit/save", syncedit_save_bigdata),
+        (r"/bigdata/clone", syncclone_bigdata),
+        (r"/bigdata/clone/save", syncclone_save_bigdata),
+        (r"/bigdata/edit/del", syncedit_del_bigdata),
+        (r"/bigdata/edit/push", syncedit_push_bigdata),
+        (r"/bigdata/edit/pushall", syncedit_pushall_bigdata),
+        (r"/bigdata/edit/run", syncedit_run_bigdata),
+        (r"/bigdata/edit/stop", syncedit_stop_bigdata),
 
         #系统设置
         (r"/sys/audit_rule", audit_rule),
@@ -190,25 +215,5 @@ urls=[
         (r"/sys/code", sys_code),
         (r"/sys/code/_query", sys_code_query),
         (r"/sys/test", sys_test),
-
-
-        #大数据管理
-        (r"/bigdata/add",             syncadd_bigdata),
-        (r"/bigdata/add/save",        syncadd_bigdata_save),
-        (r"/bigdata/query",           syncbigdataquery),
-        (r"/bigdata/_query",          sync_bigdata_query),
-        (r"/bigdata/_query/detail",   sync_bigdata_query_detail),
-        (r"/bigdata/_query/dataxTemplete", sync_bigdata_query_dataxTemplete),
-        (r"/bigdata/_query/dataxTemplete/downloads", sync_bigdata_downloads_dataxTemplete),
-        (r"/bigdata/change",       syncchange_bigdata),
-        (r"/bigdata/edit",         syncedit_bigdata),
-        (r"/bigdata/edit/save",    syncedit_save_bigdata),
-        (r"/bigdata/clone",        syncclone_bigdata),
-        (r"/bigdata/clone/save",   syncclone_save_bigdata),
-        (r"/bigdata/edit/del",     syncedit_del_bigdata),
-        (r"/bigdata/edit/push",    syncedit_push_bigdata),
-        (r"/bigdata/edit/pushall", syncedit_pushall_bigdata),
-        (r"/bigdata/edit/run",     syncedit_run_bigdata),
-        (r"/bigdata/edit/stop",    syncedit_stop_bigdata),
 
 ]

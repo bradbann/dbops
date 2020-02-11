@@ -72,12 +72,13 @@
              </div>
          </div>
          <div class="row">
-              <div class="col-md-offset-5 col-lg-offset-5col-xl-offset-5">
+              <div class="col-md-offset-4 col-lg-offset-4 col-xl-offset-4">
                    <input  id='dsupd' type='button' class="btn waves-effect waves-light btn-primary" value="变更"/>
                    <input  id='dsdel' type='button' class="btn waves-effect waves-light btn-primary" value="删除"/>
                    <input  id='push' type='button' class="btn waves-effect waves-light btn-primary"  value="推送"/>
                    <input  id='run' type='button' class="btn waves-effect waves-light btn-primary"   value="启动"/>
                    <input  id='stop' type='button' class="btn waves-effect waves-light btn-primary"  value="停止"/>
+                   <input  id='clone' type='button' class="btn waves-effect waves-light btn-primary"  value="克隆"/>
              </div>
          </div>
          <div id='scrDiv' class='divBG'>
@@ -110,6 +111,7 @@
            $('#push').attr("disabled",true);
            $('#run').attr("disabled",true);
            $('#stop').attr("disabled",true);
+           $('#clone').attr("disabled",true);
            $("#query_btn").click();
         });
 
@@ -124,12 +126,14 @@
               $('#push').attr("disabled",false);
               $('#run').attr("disabled",false);
               $('#stop').attr("disabled",false);
+              $('#clone').attr("disabled",false);
            } else {
               $('#dsupd').attr("disabled",true);
               $('#dsdel').attr("disabled",true);
               $('#push').attr("disabled",true);
               $('#run').attr("disabled",true);
               $('#stop').attr("disabled",true);
+              $('#clone').attr("disabled",true);
            }
         }
 
@@ -200,6 +204,7 @@
                       $('#push').attr("disabled",true);
                       $('#run').attr("disabled",true);
                       $('#stop').attr("disabled",true);
+                      $('#clone').attr("disabled",true);
                  }
              });
             });
@@ -211,7 +216,7 @@
                   var row=$(($(this).parent().parent().html()));
                   v_desc=row[2].innerHTML.replace(/&gt;/g,'>');
                   v_tag=row[1].innerHTML;
-                  v_api=row[7].innerHTML;
+                  v_api=row[5].innerHTML;
                   console.log("v_tag=",v_tag,"v_api=",v_api)
                   $.ajax({
                           url: "/transfer/edit/push",
@@ -254,7 +259,7 @@
                   var row=$(($(this).parent().parent().html()));
                   v_desc=row[2].innerHTML.replace(/&gt;/g,'>');
                   v_tag=row[1].innerHTML;
-                  v_api=row[7].innerHTML;
+                  v_api=row[5].innerHTML;
                   console.log("v_tag=",v_tag)
                   $.ajax({
                           url: "/transfer/edit/run",
@@ -289,7 +294,7 @@
                   var row=$(($(this).parent().parent().html()));
                   v_desc=row[2].innerHTML.replace(/&gt;/g,'>');
                   v_tag=row[1].innerHTML;
-                  v_api=row[7].innerHTML;
+                  v_api=row[5].innerHTML;
                   console.log("v_tag=",v_tag)
                   $.ajax({
                           url: "/transfer/edit/stop",
@@ -302,10 +307,10 @@
                           success: function (dataSet) {
                               console.log(dataSet.code, dataSet.message);
                               if (dataSet.code=='0') {
-                                     swal("运行成功!", "任务["+v_desc+"]已运行成功!", "success");
+                                     swal("停止成功!", "任务["+v_desc+"]已停止!", "success");
                                      $("#query_btn").click();
                               } else {
-                                  swal("运行失败!", "任务["+v_desc+"]"+dataSet.message+"!", "error");
+                                  swal("停止失败!", "任务["+v_desc+"]"+dataSet.message+"!", "error");
                               }
                               $('#dsupd').attr("disabled",true);
                               $('#dsdel').attr("disabled",true);
@@ -365,6 +370,16 @@
                     swal("已取消", "传输任务["+transferdesc+"]已取消！", "error");
                 }
             });
+        });
+
+        $('#clone').on('click', function() {
+             var transferid='';
+             $("#example tbody tr td input:checked").each( function() {
+                  var row=$(($(this).parent().parent().html()));
+                  transferid=row[0].innerHTML;
+                  console.log("transferid=",transferid)
+             });
+             $('#main-container-div').load("/transfer/clone?transfer_id="+transferid);
         });
 
         $(document).ready(function() {

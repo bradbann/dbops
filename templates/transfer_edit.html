@@ -66,6 +66,27 @@
            <div class="col-md-6">
                <div class="form-group">
                     <div>
+                        <label class="col-md-2 control-label"><span id="s_transfer_type">*</span>数据传输类型</label>
+                    </div>
+                    <div class="col-md-10">
+                        <select class="form-control select" id="transfer_type" >
+                            <option value='' selected = "selected">......</option>
+                            {% for var in dm_transfer_type %}
+                               {%  if var[0]==transfer_db_type %}
+                                  <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
+                               {% else %}
+                                  <option value={{var[0]}}>{{var[1]}}</option>
+                               {% end %}
+                            {% end %}
+                        </select>
+                   </div>
+               </div>
+           </div>
+       </div>
+       <div class="row">
+           <div class="col-md-6">
+               <div class="form-group">
+                    <div>
                         <label class="col-md-2 control-label"><span id="s_sour_db_server">*</span>源数据库实例</label>
                     </div>
                     <div class="col-md-10">
@@ -191,6 +212,18 @@
        </div>
        <div class="row">
          <div class="col-md-6">
+            <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_batch_size">*</span>传输批大小</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="batch_size" type="text" class="form-control" placeholder="请输入传输批大小" value="{{batch_size}}">
+                </div>
+           </div>
+          </div>
+       </div>
+       <div class="row">
+         <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_api_server">*</span>API服务器</label>
@@ -245,6 +278,7 @@
             document.all['s_transfer_tag'].style.color="#ff0000";
             document.all['s_task_desc'].style.color="#ff0000";
             document.all['s_transfer_server'].style.color="#ff0000";
+            document.all['s_transfer_type'].style.color="#ff0000";
             document.all['s_sour_db_server'].style.color="#ff0000";
             document.all['s_sour_tab_name'].style.color="#ff0000";
             document.all['s_dest_db_server'].style.color="#ff0000";
@@ -252,6 +286,7 @@
             document.all['s_python3_home'].style.color="#ff0000";
             document.all['s_script_base'].style.color="#ff0000";
             document.all['s_script_name'].style.color="#ff0000";
+            document.all['s_batch_size'].style.color="#ff0000";
             document.all['s_api_server'].style.color="#ff0000";
             document.all['s_status'].style.color="#ff0000";
         }
@@ -275,6 +310,7 @@
                     transfer_tag         : $('#transfer_tag').val(),
                     task_desc            : $('#task_desc').val(),
                     transfer_server      : $('#transfer_server').val(),
+                    transfer_type        : $('#transfer_type').val(),
                     sour_db_server       : $('#sour_db_server').val(),
                     sour_db_name         : $('#sour_db_name').val(),
                     sour_tab_name        : $('#sour_tab_name').val(),
@@ -284,6 +320,7 @@
                     python3_home         : $('#python3_home').val(),
                     script_base          : $('#script_base').val(),
                     script_name          : $('#script_name').val(),
+                    batch_size           : $('#batch_size').val(),
                     api_server           : $('#api_server').val(),
                     status               : $('#status').val()
             },

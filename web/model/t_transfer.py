@@ -11,6 +11,7 @@ from web.model.t_ds       import get_ds_by_dsid
 from web.model.t_user     import get_user_by_loginame
 import re
 import os,json
+import traceback
 
 def query_transfer(sync_tag):
     db = get_connection()
@@ -23,7 +24,7 @@ def query_transfer(sync_tag):
                  a.transfer_tag,
                  a.comments,
                  b.server_desc,
-                 concat(sour_schema,'.',sour_table) as transfer_obj,
+                 concat(substr(concat(sour_schema,'.',sour_table),1,40),'...') as transfer_obj,
                  a.api_server,
                  CASE a.STATUS WHEN '1' THEN '启用' WHEN '0' THEN '禁用' END  AS  flag
             FROM t_db_transfer_config a,t_server b 
@@ -39,42 +40,80 @@ def query_transfer(sync_tag):
     db.commit()
     return v_list
 
-def query_transfer_log(sync_tag,market_id,sync_ywlx,begin_date,end_date):
+def query_transfer_detail(transfer_id):
+    db = get_connection()
+    cr = db.cursor()
+    sql = """SELECT   a.transfer_tag,
+                      a.comments,
+                      b.server_desc,
+                      e.dmmc  AS transfer_type,
+                      CONCAT(c.ip,':',c.port,'/',a.sour_schema) AS transfer_db_sour,
+                      a.sour_schema,
+                      LOWER(a.sour_table) AS sour_table,
+                      a.sour_where,            
+                      CONCAT(d.ip,':',d.port,'/',a.dest_schema) AS transfer_db_dest,
+                      a.`dest_schema`,
+                      a.python3_home,
+                      a.script_path,
+                      a.script_file,
+                      a.batch_size,
+                      a.api_server,
+                      a.status	                        
+                FROM t_db_transfer_config a,t_server b,t_db_source c,t_db_source d,t_dmmx e
+                WHERE a.server_id=b.id 
+                AND a.sour_db_id=c.id
+                AND a.dest_db_id=d.id
+                AND a.transfer_type=e.dmm
+                AND e.dm='09'
+                AND a.id='{0}'
+                ORDER BY a.id
+             """.format(transfer_id)
+    print(sql)
+    cr.execute(sql)
+    rs=cr.fetchone()
+    v_list=list(rs)
+    cr.close()
+    db.commit()
+    return v_list
+
+def query_transfer_log(transfer_tag,begin_date,end_date,task_status):
     db = get_connection()
     cr = db.cursor()
 
     v_where=' and 1=1 '
-    if sync_tag != '':
-        v_where = v_where + " and a.sync_tag='{0}'\n".format(sync_tag)
-
-    if market_id != '':
-        v_where = v_where + " and a.sync_col_val='{0}'\n".format(market_id)
-
-    if sync_ywlx != '':
-        v_where = v_where + " and a.sync_ywlx='{0}'\n".format(sync_ywlx)
+    if transfer_tag != '':
+        v_where = v_where + " and a.transfer_tag='{0}'\n".format(transfer_tag)
 
     if begin_date != '':
-        v_where = v_where + " and b.create_date>='{0}'\n".format(begin_date+' 0:0:0')
+        v_where = v_where + " and a.create_date>='{0}'\n".format(begin_date+' 0:0:0')
     else:
-        v_where = v_where + " and b.create_date>=DATE_ADD(NOW(),INTERVAL -1 hour)\n"
+        v_where = v_where + " and a.create_date>=DATE_ADD(NOW(),INTERVAL -1 hour)\n"
 
     if end_date != '':
-        v_where = v_where + " and b.create_date<='{0}'\n".format(end_date+' 23:59:59')
+        v_where = v_where + " and a.create_date<='{0}'\n".format(end_date+' 23:59:59')
 
-    sql = """SELECT b.id,
-                    c.dmmc as market_name,
-                    a.comments,
-                    b.sync_tag,
-                    cast(b.create_date as char),
-                    b.duration,
-                    b.amount
-            FROM  t_db_sync_config a,t_db_sync_tasks_log b,t_dmmx c
-            WHERE a.sync_tag=b.sync_tag 
-              and c.dm='05' 
-              and a.sync_col_val=c.dmm
-              and a.status='1'
-              {0}
-            -- order by b.create_date desc,b.sync_tag 
+    if task_status == 'running':
+        v_where = v_where + " and a.percent!=100.00 \n"
+
+    if task_status == 'history':
+        v_where = v_where + " and a.percent=100.00 \n"
+
+    sql = """SELECT 
+                  a.id,
+                  concat(substr(a.transfer_tag,1,40),'...'),
+                  b.comments,
+                  a.table_name,               
+                  cast(a.create_date as char),
+                  cast(a.amount as char),
+                  cast(a.duration as char),
+                  cast(a.percent as char)              
+                FROM
+                  t_db_transfer_log a,
+                  t_db_transfer_config b 
+                WHERE a.transfer_tag = b.transfer_tag 
+                 and b.status='1'
+                 {0}
+             order by a.create_date desc,a.transfer_tag 
         """.format(v_where)
     print(sql)
     cr.execute(sql)
@@ -98,28 +137,30 @@ def save_transfer(p_transfer):
         transfer_tag            = p_transfer['transfer_tag']
         task_desc               = p_transfer['task_desc']
         transfer_server         = p_transfer['transfer_server']
+        transfer_type           = p_transfer['transfer_type']
         sour_db_server          = p_transfer['sour_db_server']
         sour_db_name            = p_transfer['sour_db_name']
         sour_tab_name           = p_transfer['sour_tab_name']
-        sour_tab_where          = p_transfer['sour_tab_where']
+        sour_tab_where          = format_sql(p_transfer['sour_tab_where'])
         dest_db_server          = p_transfer['dest_db_server']
         dest_db_name            = p_transfer['dest_db_name']
         python3_home            = p_transfer['python3_home']
         script_base             = p_transfer['script_base']
         script_name             = p_transfer['script_name']
+        batch_size              = p_transfer['batch_size']
         api_server              = p_transfer['api_server']
         status                  = p_transfer['status']
 
         sql="""insert into t_db_transfer_config(
                       transfer_tag,server_id,comments,sour_db_id,sour_schema,
                       sour_table,sour_where,dest_db_id,dest_schema,script_path,
-                      script_file,python3_home,api_server,status)
+                      script_file,python3_home,api_server,batch_size,status,transfer_type)
                values('{0}','{1}','{2}','{3}','{4}',
                       '{5}','{6}','{7}','{8}','{9}',
-                      '{10}','{11}','{12}','{13}')
+                      '{10}','{11}','{12}','{13}','{14}','{15}')
             """.format(transfer_tag,transfer_server,task_desc,sour_db_server,sour_db_name,
                        sour_tab_name,sour_tab_where,dest_db_server,dest_db_name,script_base,
-                       script_name,python3_home,api_server,status)
+                       script_name,python3_home,api_server,batch_size,status,transfer_type)
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -146,6 +187,7 @@ def upd_transfer(p_transfer):
         transfer_tag    = p_transfer['transfer_tag']
         task_desc       = p_transfer['task_desc']
         transfer_server = p_transfer['transfer_server']
+        transfer_type   = p_transfer['transfer_type']
         sour_db_server  = p_transfer['sour_db_server']
         sour_db_name    = p_transfer['sour_db_name']
         sour_tab_name   = p_transfer['sour_tab_name']
@@ -155,6 +197,7 @@ def upd_transfer(p_transfer):
         script_base     = p_transfer['script_base']
         script_name     = p_transfer['script_name']
         python3_home    = p_transfer['python3_home']
+        batch_size      = p_transfer['batch_size']
         api_server      = p_transfer['api_server']
         status          = p_transfer['status']
 
@@ -173,10 +216,12 @@ def upd_transfer(p_transfer):
                       script_file       ='{10}',
                       python3_home      ='{11}',
                       api_server        ='{12}',                   
-                      status            ='{13}'
-                where id={14}""".format(transfer_tag,transfer_server,task_desc,sour_db_server,sour_db_name,
-                                        sour_tab_name,sour_tab_where,dest_db_server,dest_db_name,script_base,
-                                        script_name,python3_home,api_server,status,transfer_id)
+                      status            ='{13}',
+                      batch_size        ='{14}',
+                      transfer_type     ='{15}'
+                where id={16}""".format(transfer_tag,transfer_server,task_desc,sour_db_server,sour_db_name,
+                                        sour_tab_name,format_sql(sour_tab_where),dest_db_server,dest_db_name,script_base,
+                                        script_name,python3_home,api_server,status,batch_size,transfer_type,transfer_id)
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -185,6 +230,7 @@ def upd_transfer(p_transfer):
         result['code']='0'
         result['message']='更新成功！'
     except :
+        print(traceback.format_exc())
         result['code'] = '-1'
         result['message'] = '更新失败！'
     return result
@@ -260,6 +306,11 @@ def check_transfer(p_transfer):
         result['message'] = '传输脚本名不能为空！'
         return result
 
+    if p_transfer["batch_size"] == "":
+        result['code'] = '-1'
+        result['message'] = '批大小不能为空！'
+        return result
+
     if p_transfer["api_server"] == "":
         result['code'] = '-1'
         result['message'] = 'API服务器不能为空！'
@@ -279,7 +330,7 @@ def get_transfer_by_transferid(p_transferid):
     cr = db.cursor()
     sql = """select   id,transfer_tag,server_id,comments,sour_db_id,sour_schema,
                       sour_table,sour_where,dest_db_id,dest_schema,script_path,
-                      script_file,python3_home,api_server,status
+                      script_file,python3_home,api_server,status,batch_size,transfer_type
              from t_db_transfer_config where id={0}
           """.format(p_transferid)
     cr.execute(sql)
@@ -300,6 +351,8 @@ def get_transfer_by_transferid(p_transferid):
     d_transfer['python3_home']   = rs[0][12]
     d_transfer['api_server']     = rs[0][13]
     d_transfer['status']         = rs[0][14]
+    d_transfer['batch_size']     = rs[0][15]
+    d_transfer['transfer_type']  = rs[0][16]
     cr.close()
     db.commit()
     print(d_transfer)
@@ -310,7 +363,8 @@ def push_transfer_task(p_tag,p_api):
         result = {}
         result['code'] = '0'
         result['message'] = '推送成功！'
-        v_cmd="curl -XPOST {0}/push_script_remote_sync -d 'tag={1}'".format(p_api,p_tag)
+        v_cmd="curl -XPOST {0}/push_script_remote_transfer -d 'tag={1}'".format(p_api,p_tag)
+        print('push_transfer_task=',v_cmd)
         r=os.popen(v_cmd).read()
         d=json.loads(r)
 
@@ -321,8 +375,9 @@ def push_transfer_task(p_tag,p_api):
            result['message'] = '{0}!'.format(d['msg'])
            return result
     except Exception as e:
+        print('push_transfer_task.error:',traceback.format_exc())
         result['code'] = '-1'
-        result['message'] = '{0!'.format(str(e))
+        result['message'] = '{0!'.format(traceback.format_exc())
         return result
 
 def run_transfer_task(p_tag,p_api):
@@ -330,7 +385,7 @@ def run_transfer_task(p_tag,p_api):
         result = {}
         result['code'] = '0'
         result['message'] = '执行成功！'
-        v_cmd = "curl -XPOST {0}/run_script_remote_sync -d 'tag={1}'".format(p_api,p_tag)
+        v_cmd = "curl -XPOST {0}/run_script_remote_transfer -d 'tag={1}'".format(p_api,p_tag)
         print('v_cmd=', v_cmd)
         r = os.popen(v_cmd).read()
         d = json.loads(r)
@@ -350,8 +405,8 @@ def stop_transfer_task(p_tag,p_api):
     try:
         result = {}
         result['code'] = '0'
-        result['message'] = '执行成功！'
-        v_cmd = "curl -XPOST {0}/stop_script_remote_sync -d 'tag={1}'".format(p_api,p_tag)
+        result['message'] = '停止成功！'
+        v_cmd = "curl -XPOST {0}/stop_script_remote_transfer -d 'tag={1}'".format(p_api,p_tag)
         r = os.popen(v_cmd).read()
         d = json.loads(r)
 
