@@ -18,7 +18,7 @@ from web.services.sync         import sync_log_query,sync_log_query_detail,synce
 from web.services.sync         import get_sync_park,get_sync_park_real_time,get_sync_flow,get_sync_flow_real_time,get_sync_flow_device,get_sync_park_charge,get_sync_bi
 from web.services.transfer     import transferadd,transferadd_save,transferchange,transferedit,transferedit_save,transferedit_del,transfer_query,transferedit_push,transferedit_run,transferedit_stop
 from web.services.transfer     import transferquery,transferclone,transferclone_save,transferlogquery,transfer_log_query,transfer_query_detail
-from web.services.logon        import index,main,logon,logout,logon_check,tree,get_tree,logon_welcome,get_verify,forget_password_check,modify_password,modify_password_check,lockscreen,unlock
+from web.services.logon        import index,main,logon,logout,logon_check,tree,get_tree,get_time,logon_welcome,get_verify,forget_password_check,modify_password,modify_password_check,lockscreen,unlock
 from web.services.sql          import sqlquery,sql_query,sqlrelease,sql_check,sql_format,sql_check_result,sql_release,sqlaudit,sql_audit,sql_run,sql_audit_query,sql_audit_detail
 from web.services.sql          import get_tree_by_sql,get_tab_ddl,get_tab_idx,alt_tab,get_database,get_tables,get_columns,get_tab_stru,get_keys,get_incr_col
 from web.services.sys          import audit_rule,audit_rule_save,sys_setting,sys_code,sys_code_query,sys_test
@@ -37,6 +37,7 @@ urls=[
         (r"/tree",get_tree),
         (r"/get_verify", get_verify),
         (r"/logon_check", logon_check),
+        (r"/time", get_time),
 
         #用户管理
         (r"/user/add",      useradd),

@@ -5,7 +5,6 @@
     <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
-    <!--<link href="{{static_url('plugins/datatables/fixedColumns.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>-->
 
     <!--Morris Chart CSS -->
 	<link href="{{static_url('plugins/morris/morris.css')}}" rel="stylesheet" >
@@ -16,9 +15,6 @@
     <link href="{{static_url('assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{static_url('assets/css/pages.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{static_url('assets/css/menu.css')}}"  rel="stylesheet" type="text/css" />
-    <!--<link href="{{static_url('assets/css/responsive.css')}}" rel="stylesheet" type="text/css" />-->
-    <!--<link href="{{static_url('plugins/switchery/switchery.min.css')}}" rel="stylesheet" >-->
-    <!--<link href="{{static_url('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet"  >-->
 
     <style>
         #db-backup-prod,#db-backup-pre,#db-backup-dev,#db-backup-uat,
@@ -26,7 +22,6 @@
         #db-sync-flow-device,#db-sync-park-charge,#db-sync-bi{
             width: 100% !important;
         }
-
     </style>
 
  </head>
@@ -37,9 +32,9 @@
             <div class="card-box widget-box-one">
                 <i class="mdi mdi-chart-areaspline widget-one-icon"></i>
                 <div class="wigdet-one-content">
-                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow">今日用户数</p>
+                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow">用户数</p>
                     <h2>22人 <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
-                    <p class="text-muted m-0"><b>开发:</b> 66&nbsp;<b>测试:</b>6&nbsp;<b>平台:</b>6</p>
+                    <p class="text-muted m-0"><b>合生通:</b> 66&nbsp;<b>好房:</b>6&nbsp;</p>
                 </div>
             </div>
         </div><!-- end col -->
@@ -48,9 +43,9 @@
             <div class="card-box widget-box-one">
                 <i class="mdi mdi-account-convert widget-one-icon"></i>
                 <div class="wigdet-one-content">
-                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow" >数据源数</p>
+                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow" >数据源</p>
                     <h2>89个 <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
-                    <p class="text-muted m-0"><b>生产:</b> 66&nbsp;<b>开发:</b>6&nbsp;<b>测试:</b>6</p>
+                    <p class="text-muted m-0"><b>合生通:</b> 66&nbsp;<b>好房:</b>6&nbsp;</p>
                 </div>
             </div>
         </div><!-- end col -->
@@ -59,9 +54,9 @@
             <div class="card-box widget-box-one">
                 <i class="mdi mdi-layers widget-one-icon"></i>
                 <div class="wigdet-one-content">
-                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow" >服务器数</p>
+                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow" >服务器</p>
                     <h2>24台 <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
-                    <p class="text-muted m-0"><b>同步:</b> 10&nbsp;<b>备份:</b> 14</p>
+                    <p class="text-muted m-0"><b>合生通:</b> 10&nbsp;<b>好房:</b> 14</p>
                 </div>
             </div>
         </div><!-- end col -->
@@ -72,7 +67,7 @@
                 <div class="wigdet-one-content">
                     <p class="m-0 text-uppercase font-600 font-secondary text-overflow" >工单数</p>
                     <h2>54个 <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
-                    <p class="text-muted m-0"><b>DDL工单:</b> 20&nbsp;<b>DML工单:</b> 32</p>
+                    <p class="text-muted m-0"><b>合生通:</b> 20&nbsp;<b>好房:</b> 32</p>
                 </div>
             </div>
         </div><!-- end col -->
@@ -81,9 +76,9 @@
             <div class="card-box widget-box-one">
                 <i class="mdi mdi-account-multiple widget-one-icon"></i>
                 <div class="wigdet-one-content">
-                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow">备份任务数</p>
+                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow">备份任务</p>
                     <h2>35 <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
-                    <p class="text-muted m-0"><b>生产:</b> 17&nbsp;<b>开发:</b>6&nbsp;<b>测试:</b>7&nbsp;<b>预生产:</b>5</p>
+                    <p class="text-muted m-0"><b>合生通:</b> 17&nbsp;<b>好房:</b>6</p>
                 </div>
             </div>
         </div><!-- end col -->
@@ -92,12 +87,67 @@
             <div class="card-box widget-box-one">
                 <i class="mdi mdi-download widget-one-icon"></i>
                 <div class="wigdet-one-content">
-                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow">同步任务数</p>
+                    <p class="m-0 text-uppercase font-600 font-secondary text-overflow">同步任务</p>
                     <h2>150 <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
-                    <p class="text-muted m-0"><b>客流:</b> 51&nbsp;<b>车流:</b>81&nbsp;<b>其它:</b>18</p>
+                    <p class="text-muted m-0"><b>合生通:</b> 51&nbsp;<b>好房:</b>81&nbsp;</p>
                 </div>
             </div>
         </div><!-- end col -->
+
+    </div>
+
+    <!--工单情况 -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <ul class="nav nav-pills m-b-30 pull-left">
+                <li class="active">
+                    <a href="#hopsonone-order" data-toggle="tab" aria-expanded="true">合生通工单</a>
+                </li>
+                <li id='incr_li3' class="">
+                    <a href="#easylife-order" data-toggle="tab" aria-expanded="false">好房工单</a>
+                </li>
+            </ul>
+            <div class="tab-content br-n pn">
+                <div id="hopsonone-order" class="tab-pane active">
+                    <ul class="nav nav-tabs tabs-bordered nav-justified">
+                        <li class="active">
+                            <a href="#hopsonone-order-prod" data-toggle="tab">生产环境</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-order-pre" data-toggle="tab">预生产环境</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-order-dev" data-toggle="tab">开发环境</a>
+                        </li>
+                        <li>
+                            <a href="#hopsonone-order-uat" data-toggle="tab">测试环境</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="hopsonone-order-prod">
+                            <table id="db-order-prod" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-order-pre">
+                            <table id="db-order-pre" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-order-dev">
+                            <table id="db-order-dev" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                        <div class="tab-pane" id="hopsonone-order-uat">
+                            <table id="db-order-uat" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                    </div>
+                    <div class="tab-footer">
+                        <span>成功:20,失败:0</span>
+                    </div>
+                </div>
+                <div id="easylife-order" class="tab-pane">
+                    <div class="row">
+                        <div id='ace-editor-incr3' class="col-md-12"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -248,61 +298,6 @@
         </div>
     </div>
 
-    <!--工单情况 -->
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <ul class="nav nav-pills m-b-30 pull-left">
-                <li class="active">
-                    <a href="#hopsonone-order" data-toggle="tab" aria-expanded="true">合生通工单</a>
-                </li>
-                <li id='incr_li3' class="">
-                    <a href="#easylife-order" data-toggle="tab" aria-expanded="false">好房工单</a>
-                </li>
-            </ul>
-            <div class="tab-content br-n pn">
-                <div id="hopsonone-order" class="tab-pane active">
-                    <ul class="nav nav-tabs tabs-bordered nav-justified">
-                        <li class="active">
-                            <a href="#hopsonone-order-prod" data-toggle="tab">生产环境</a>
-                        </li>
-                        <li>
-                            <a href="#hopsonone-order-pre" data-toggle="tab">预生产环境</a>
-                        </li>
-                        <li>
-                            <a href="#hopsonone-order-dev" data-toggle="tab">开发环境</a>
-                        </li>
-                        <li>
-                            <a href="#hopsonone-order-uat" data-toggle="tab">测试环境</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="hopsonone-order-prod">
-                            <table id="db-order-prod" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
-                        </div>
-                        <div class="tab-pane" id="hopsonone-order-pre">
-                            <table id="db-order-pre" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
-                        </div>
-                        <div class="tab-pane" id="hopsonone-order-dev">
-                            <table id="db-order-dev" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
-                        </div>
-                        <div class="tab-pane" id="hopsonone-order-uat">
-                            <table id="db-order-uat" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
-                        </div>
-                    </div>
-                    <div class="tab-footer">
-                        <span>成功:20,失败:0</span>
-                    </div>
-                </div>
-                <div id="easylife-order" class="tab-pane">
-                    <div class="row">
-                        <div id='ace-editor-incr3' class="col-md-12"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
     <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
     <script src="{{static_url('plugins/datatables/dataTables.buttons.min.js')}}"></script>
@@ -312,8 +307,6 @@
     <script src="{{static_url('plugins/datatables/dataTables.scroller.min.js')}}"></script>
     <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>
 	<script src="{{static_url('plugins/morris/morris.min.js')}}"></script>
-	<!--<script src="{{static_url('plugins/raphael/raphael-min.js')}}"></script>-->
-    <!--<script src="{{static_url('assets/pages/jquery.dashboard.js')}}"></script>-->
 
     <script>
         $(document).ready(function() {
@@ -479,87 +472,13 @@
               var activeTab = $(e.target).text();
               var previousTab = $(e.relatedTarget).text();
               console.log(activeTab,previousTab)
-              show_bar();
 
               if (activeTab=='好房备份') {
                  $('#db-backup-bar').hide();
               }
 
               if (activeTab=='合生通备份') {
-                 //合生通生产数据库生产备份情况
-                  $.ajax({
-              url: "/backup_case",
-              type: "post",
-              datatype: "json",
-              data:{
-                  db_env: '1'
-              },
-              success: function (dataSet) {
-                 $('#db-backup-prod').DataTable( {
-                      "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
-                      "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
-                      destroy    :true,
-                      async      :true,
-                      ordering   :false,
-                      scrollY    :true,
-                      scrollX    :true,
-                      paging     : true,
-                      data       : dataSet.data,
-                      autoFill   : true,
-                      bAutoWidth : true,
-                      iDisplayLength: n_rows,
-                      info       :true,
-                      columns: [
-                        { "title": "数据库类型","width":"10%" },
-                        { "title": "数据源描述","width":"30%" },
-                        { "title": "备份日期","width":"15%" },
-                        { "title": "备份大小","width":"15%" },
-                        { "title": "备份时长","width":"15%" },
-                        { "title": "备份状态","width":"15%" },
-                      ],
-                     "language": {
-                                 "search"       : "在表格中搜索:",
-                                 "sProcessing"  : "处理中...",
-                                 "sLengthMenu"  : "显示 _MENU_ 项结果",
-                                 "sZeroRecords" : "没有匹配结果",
-                                 "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-                                 "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
-                                 "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-                                 "sInfoPostFix" : "",
-                                 "sSearch"      : "搜索:",
-                                 "sUrl"         : "",
-                                 "sEmptyTable"  : "表中数据为空",
-                                 "sLoadingRecords": "载入中...",
-                                 "sInfoThousands": ",",
-                                 "oPaginate": {
-                                     "sFirst"   : "首页",
-                                     "sPrevious": "上页",
-                                     "sNext"    : "下页",
-                                     "sLast"    : "末页"
-                                 },
-                                 "oAria": {
-                                     "sSortAscending" : ": 以升序排列此列",
-                                     "sSortDescending": ": 以降序排列此列"
-                                 }
-                             }
-                 });
-
-                 //统计成功失条数
-                 if (dataSet.failure>0) {
-                     $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span style="color:red">失败:'+dataSet.failure+'个</span>')
-                 } else {
-                     $('#db-backup-total').html('<span>成功:'+dataSet.success+'个</span>&nbsp;,<span>失败:'+dataSet.failure+'个</span>')
-                 }
-
-                //生成柱状图
-                 var $db_backup_data = new Array(dataSet.data.length);
-                 for (i=0;i<dataSet.data.length;i++){
-                     console.log(dataSet.data[i][1],dataSet.data[i][3],dataSet.data[i][4])
-                     $db_backup_data[i] = {'y':dataSet.data[i][1],'a':parseInt(dataSet.data[i][3]),'b':parseInt(dataSet.data[i][4])}
-                 }
-                 show_bar($db_backup_data)
-             }
-         });
+                 $('#db-backup-bar').show();
               }
 
               if (activeTab=='生产环境') {
@@ -1321,7 +1240,6 @@
               }
 
           });
-
 
 
         });

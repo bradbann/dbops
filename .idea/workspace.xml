@@ -16,7 +16,7 @@
     <SUITE FILE_PATH="coverage/dbops$sync_bigdata.coverage" NAME="sync_bigdata Coverage Results" MODIFIED="1578902305418" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web/services" />
     <SUITE FILE_PATH="coverage/dbops$t_sync_datax.coverage" NAME="t_sync_datax Coverage Results" MODIFIED="1578905086745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web/model" />
     <SUITE FILE_PATH="coverage/dbops$t_sql_check.coverage" NAME="t_sql_check Coverage Results" MODIFIED="1575602827425" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web/model" />
-    <SUITE FILE_PATH="coverage/dbops$server.coverage" NAME="server Coverage Results" MODIFIED="1581412060493" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/dbops$server.coverage" NAME="server Coverage Results" MODIFIED="1581503405028" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -37,7 +37,7 @@
       <file leaf-file-name="server.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/controller/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
+            <state relative-caret-position="216">
               <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
               <folding>
                 <element signature="e#145#155#0" expanded="true" />
@@ -46,42 +46,62 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/main.html">
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/utils/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="477" column="67" lean-forward="true" selection-start-line="477" selection-start-column="67" selection-end-line="477" selection-end-column="67" />
+            <state relative-caret-position="360">
+              <caret line="39" column="23" selection-start-line="39" selection-start-column="23" selection-end-line="39" selection-end-column="23" />
               <folding>
-                <element signature="n#div#3;n#body#0;n#!!top" />
-                <element signature="n#div#4;n#body#0;n#!!top" />
-                <element signature="e#18300#21887#0" />
-                <element signature="e#17#23#1" expanded="true" />
-                <element signature="n#style#0;n#span#1;n#!!top" expanded="true" />
-                <element signature="e#17#23#1" expanded="true" />
-                <element signature="e#21936#24442#0" />
-                <element signature="e#24891#28478#0" />
-                <element signature="e#17#23#1" expanded="true" />
-                <element signature="n#style#0;n#span#1;n#!!top" expanded="true" />
-                <element signature="e#17#23#1" expanded="true" />
-                <element signature="e#17#23#1" expanded="true" />
-                <element signature="n#style#0;n#span#1;n#!!top" expanded="true" />
-                <element signature="e#17#23#1" expanded="true" />
-                <element signature="e#17#23#1" expanded="true" />
-                <element signature="n#style#0;n#span#1;n#!!top" expanded="true" />
-                <element signature="e#17#23#1" expanded="true" />
-                <element signature="e#17#23#1" expanded="true" />
-                <element signature="n#style#0;n#span#1;n#!!top" expanded="true" />
-                <element signature="e#17#23#1" expanded="true" />
+                <element signature="e#129#302#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="common.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="15" column="53" selection-start-line="15" selection-end-line="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="common.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/utils/common.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="558">
-              <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+            <state relative-caret-position="486">
+              <caret line="37" column="35" selection-start-line="37" selection-start-column="35" selection-end-line="37" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="sync_bigdata_add.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/sync_bigdata_add.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="108">
+              <caret line="6" column="47" lean-forward="true" selection-start-line="6" selection-end-line="7" />
+              <folding>
+                <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="transfer_add.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/transfer_add.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="108">
+              <caret line="6" column="25" lean-forward="true" selection-start-line="6" selection-end-line="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="transfer_edit.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/transfer_edit.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="594">
+              <caret line="33" column="31" lean-forward="true" selection-start-line="33" selection-start-column="31" selection-end-line="33" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -167,7 +187,6 @@
         <option value="$PROJECT_DIR$/web/services/sync_bigdata.py" />
         <option value="$PROJECT_DIR$/templates/sync_bigdata_edit.html" />
         <option value="$PROJECT_DIR$/templates/sync_bigdata_clone.html" />
-        <option value="$PROJECT_DIR$/web/services/logon.py" />
         <option value="$PROJECT_DIR$/web/services/backup.py" />
         <option value="$PROJECT_DIR$/web/model/t_sync.py" />
         <option value="$PROJECT_DIR$/web/services/sys.py" />
@@ -177,26 +196,27 @@
         <option value="$PROJECT_DIR$/templates/sql_audit.html" />
         <option value="$PROJECT_DIR$/web/services/sql.py" />
         <option value="$PROJECT_DIR$/web/model/t_sql_release.py" />
-        <option value="$PROJECT_DIR$/templates/index.html" />
         <option value="$PROJECT_DIR$/templates/sql_release.html" />
         <option value="$PROJECT_DIR$/templates/sql_query.html" />
         <option value="$PROJECT_DIR$/web/model/t_backup.py" />
-        <option value="$PROJECT_DIR$/templates/sync_bigdata_add.html" />
         <option value="$PROJECT_DIR$/web/model/t_dmmx.py" />
         <option value="$PROJECT_DIR$/templates/sync_add.html" />
         <option value="$PROJECT_DIR$/web/services/sync.py" />
-        <option value="$PROJECT_DIR$/templates/transfer_edit.html" />
         <option value="$PROJECT_DIR$/templates/transfer_clone.html" />
-        <option value="$PROJECT_DIR$/templates/transfer_change.html" />
         <option value="$PROJECT_DIR$/templates/sync_bigdata_change.html" />
-        <option value="$PROJECT_DIR$/web/utils/urls.py" />
         <option value="$PROJECT_DIR$/web/services/transfer.py" />
         <option value="$PROJECT_DIR$/web/model/t_transfer.py" />
-        <option value="$PROJECT_DIR$/templates/transfer_add.html" />
         <option value="$PROJECT_DIR$/templates/transfer_query.html" />
+        <option value="$PROJECT_DIR$/templates/transfer_change.html" />
         <option value="$PROJECT_DIR$/templates/transfer_log_query.html" />
         <option value="$PROJECT_DIR$/templates/main.html" />
+        <option value="$PROJECT_DIR$/web/services/logon.py" />
+        <option value="$PROJECT_DIR$/web/utils/urls.py" />
+        <option value="$PROJECT_DIR$/templates/index.html" />
         <option value="$PROJECT_DIR$/web/utils/common.py" />
+        <option value="$PROJECT_DIR$/templates/sync_bigdata_add.html" />
+        <option value="$PROJECT_DIR$/templates/transfer_add.html" />
+        <option value="$PROJECT_DIR$/templates/transfer_edit.html" />
       </list>
     </option>
   </component>
@@ -223,12 +243,18 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
               <item name="dbops" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
@@ -241,11 +267,17 @@
               <item name="web" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+              <item name="common.py" type="8704e2dd:PyFileNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -404,21 +436,20 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="5" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5040486" side_tool="true" type="SLIDING" weight="0.3293944" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="File Transfer" order="8" sideWeight="0.4959514" weight="0.017429193" />
+      <window_info anchor="bottom" id="File Transfer" order="8" sideWeight="0.4959514" visible="true" weight="0.017429193" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="11" weight="0.24928775" />
       <window_info anchor="bottom" id="Run" order="13" sideWeight="0.49517685" weight="0.0" />
       <window_info anchor="bottom" id="Terminal" order="10" weight="0.32897604" />
-      <window_info anchor="right" id="Remote Host" order="7" sideWeight="0.27559912" visible="true" weight="0.0" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5971564" visible="true" weight="0.2238806" />
+      <window_info anchor="right" id="Remote Host" order="7" sideWeight="0.27272728" visible="true" weight="0.0" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5971564" visible="true" weight="0.20149253" />
       <window_info anchor="bottom" id="Docker" order="6" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="4" side_tool="true" weight="0.32995737" />
-      <window_info anchor="right" id="SciView" order="3" sideWeight="0.7244009" side_tool="true" visible="true" weight="0.0" />
+      <window_info anchor="right" id="SciView" order="3" sideWeight="0.72727275" side_tool="true" visible="true" weight="0.0" />
       <window_info id="Structure" order="1" sideWeight="0.4028436" side_tool="true" weight="0.20418006" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Debug" order="2" weight="0.25816995" />
@@ -448,33 +479,14 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="128" />
+      <option name="time" value="133" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/his/sql_release.bak20191124.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2201" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/his/sql_query.bak20191124.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1928">
           <caret line="124" column="105" lean-forward="true" selection-start-line="124" selection-start-column="105" selection-end-line="124" selection-end-column="105" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/model/t_user.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="294" column="21" selection-start-line="294" selection-start-column="12" selection-end-line="294" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/logon.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="28" column="6" selection-start-line="28" selection-start-column="6" selection-end-line="28" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -489,13 +501,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="28">
           <caret line="42" column="27" lean-forward="true" selection-start-line="42" selection-start-column="27" selection-end-line="42" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/sql.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="81" column="6" selection-start-line="81" selection-start-column="6" selection-end-line="81" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -540,13 +545,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sync_bigdata_add.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14346">
-          <caret line="797" column="37" selection-start-line="797" selection-start-column="37" selection-end-line="797" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/model/t_dmmx.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="231">
@@ -564,20 +562,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sync_change.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="22" column="20" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/model/t_sys.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/user_edit.html">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
@@ -609,42 +594,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/transfer_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="234" column="16" lean-forward="true" selection-start-line="234" selection-start-column="16" selection-end-line="234" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sync_bigdata_change.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="65" column="15" lean-forward="true" selection-start-line="55" selection-start-column="8" selection-end-line="65" selection-end-column="15" />
-          <folding>
-            <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/sql_audit.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="861">
           <caret line="104" column="26" lean-forward="true" selection-start-line="79" selection-start-column="22" selection-end-line="104" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#6#0" expanded="true" />
-            <element signature="e#97#103#1" expanded="true" />
-            <element signature="e#195#201#1" expanded="true" />
-            <element signature="e#0#6#0" expanded="true" />
-            <element signature="e#97#103#1" expanded="true" />
-            <element signature="e#213#219#1" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/user_query.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="75" column="56" selection-start-line="75" selection-start-column="41" selection-end-line="75" selection-end-column="56" />
         </state>
       </provider>
     </entry>
@@ -676,16 +629,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sync_log_query.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="23" column="9" lean-forward="true" selection-start-line="17" selection-start-column="8" selection-end-line="23" selection-end-column="9" />
-          <folding>
-            <element signature="n#div#0;n#body#0;n#html#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/sync_edit.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4642">
@@ -711,46 +654,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-162">
           <caret line="30" column="26" selection-start-line="30" selection-start-column="9" selection-end-line="30" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#6#0" expanded="true" />
-            <element signature="e#100#106#1" expanded="true" />
-            <element signature="e#202#208#1" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/transfer_change.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="362">
-          <caret line="74" column="73" selection-start-line="74" selection-start-column="73" selection-end-line="74" selection-end-column="73" />
-          <folding>
-            <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
-            <element signature="e#690#737#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/transfer_add.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="274" column="91" lean-forward="true" selection-start-line="264" selection-start-column="3" selection-end-line="274" selection-end-column="91" />
-          <folding>
-            <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/transfer_query.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3912">
-          <caret line="256" column="18" lean-forward="true" selection-start-line="256" selection-start-column="18" selection-end-line="256" selection-end-column="18" />
-          <folding>
-            <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
-            <element signature="n#div#0;n#body#0;n#html#0;n#!!top" />
-            <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="e#5723#9202#0" />
-            <element signature="e#7408#8785#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -768,26 +671,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/transfer_log_query.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="141" column="108" selection-start-line="141" selection-start-column="108" selection-end-line="141" selection-end-column="108" />
-          <folding>
-            <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
-            <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="e#7765#9142#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/services/transfer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="281">
           <caret line="37" column="25" lean-forward="true" selection-start-line="37" selection-start-column="25" selection-end-line="37" selection-end-column="25" />
-          <folding>
-            <element signature="e#557#568#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -795,25 +682,74 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="299">
           <caret line="53" column="47" selection-start-line="53" selection-start-column="47" selection-end-line="53" selection-end-column="47" />
-          <folding>
-            <element signature="e#136#229#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/utils/urls.py">
+    <entry file="file://$PROJECT_DIR$/web/services/sql.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="178" column="51" lean-forward="true" selection-start-line="178" selection-start-column="51" selection-end-line="178" selection-end-column="51" />
-          <folding>
-            <element signature="e#129#302#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="217">
+          <caret line="184" column="6" selection-start-line="184" selection-start-column="6" selection-end-line="184" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sync_change.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="316" column="28" lean-forward="true" selection-start-line="309" selection-start-column="25" selection-end-line="316" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/user_query.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="303">
+          <caret line="24" column="102" lean-forward="true" selection-start-line="24" selection-start-column="102" selection-end-line="24" selection-end-column="102" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/user_edit.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/user_add.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/transfer_change.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4400">
+          <caret line="342" column="34" selection-start-line="342" selection-start-column="34" selection-end-line="342" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/transfer_log_query.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="87" column="4" selection-start-line="87" selection-start-column="4" selection-end-line="87" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/transfer_query.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="362">
+          <caret line="374" column="61" lean-forward="true" selection-start-line="374" selection-start-column="11" selection-end-line="374" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sync_log_query.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="592">
+          <caret line="168" column="11" lean-forward="true" selection-start-line="166" selection-start-column="8" selection-end-line="168" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/main.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="529">
+          <caret line="308" column="74" selection-start-line="308" selection-start-column="74" selection-end-line="308" selection-end-column="74" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/controller/server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
+        <state relative-caret-position="216">
           <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
           <folding>
             <element signature="e#145#155#0" expanded="true" />
@@ -821,39 +757,72 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/main.html">
+    <entry file="file://$PROJECT_DIR$/web/model/t_user.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="477" column="67" lean-forward="true" selection-start-line="477" selection-start-column="67" selection-end-line="477" selection-end-column="67" />
+        <state relative-caret-position="284">
+          <caret line="335" column="20" selection-start-line="335" selection-start-column="16" selection-end-line="335" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/services/logon.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1425">
+          <caret line="99" column="21" lean-forward="true" selection-start-line="99" selection-start-column="21" selection-end-line="99" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/utils/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="39" column="23" selection-start-line="39" selection-start-column="23" selection-end-line="39" selection-end-column="23" />
           <folding>
-            <element signature="n#div#3;n#body#0;n#!!top" />
-            <element signature="n#div#4;n#body#0;n#!!top" />
-            <element signature="e#18300#21887#0" />
-            <element signature="e#17#23#1" expanded="true" />
-            <element signature="n#style#0;n#span#1;n#!!top" expanded="true" />
-            <element signature="e#17#23#1" expanded="true" />
-            <element signature="e#21936#24442#0" />
-            <element signature="e#24891#28478#0" />
-            <element signature="e#17#23#1" expanded="true" />
-            <element signature="n#style#0;n#span#1;n#!!top" expanded="true" />
-            <element signature="e#17#23#1" expanded="true" />
-            <element signature="e#17#23#1" expanded="true" />
-            <element signature="n#style#0;n#span#1;n#!!top" expanded="true" />
-            <element signature="e#17#23#1" expanded="true" />
-            <element signature="e#17#23#1" expanded="true" />
-            <element signature="n#style#0;n#span#1;n#!!top" expanded="true" />
-            <element signature="e#17#23#1" expanded="true" />
-            <element signature="e#17#23#1" expanded="true" />
-            <element signature="n#style#0;n#span#1;n#!!top" expanded="true" />
-            <element signature="e#17#23#1" expanded="true" />
+            <element signature="e#129#302#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sync_bigdata_change.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="65" column="15" lean-forward="true" selection-start-line="55" selection-start-column="8" selection-end-line="65" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="15" column="53" selection-start-line="15" selection-end-line="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/utils/common.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
+        <state relative-caret-position="486">
+          <caret line="37" column="35" selection-start-line="37" selection-start-column="35" selection-end-line="37" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sync_bigdata_add.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="47" lean-forward="true" selection-start-line="6" selection-end-line="7" />
+          <folding>
+            <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/transfer_add.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="6" column="25" lean-forward="true" selection-start-line="6" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/transfer_edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="594">
+          <caret line="33" column="31" lean-forward="true" selection-start-line="33" selection-start-column="31" selection-end-line="33" selection-end-column="31" />
         </state>
       </provider>
     </entry>

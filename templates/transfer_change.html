@@ -269,6 +269,14 @@
                               tag: v_tag,
                               api: v_api
                           },
+                          beforeSend: function () {
+                              swal({
+                                    title: "正在运行...",
+                                    text: "任务["+v_desc+"]正在运行初始化...",
+                                    type: "info",
+                                    showConfirmButton: false
+                               });
+                          },
                           success: function (dataSet) {
                               console.log(dataSet.code, dataSet.message);
                               if (dataSet.code=='0') {
@@ -303,6 +311,14 @@
                           data:{
                               tag: v_tag,
                               api: v_api
+                          },
+                         beforeSend: function () {
+                              swal({
+                                    title: "正在停止...",
+                                    text: "任务["+v_desc+"]正在停止中...",
+                                    type: "info",
+                                    showConfirmButton: false
+                               });
                           },
                           success: function (dataSet) {
                               console.log(dataSet.code, dataSet.message);

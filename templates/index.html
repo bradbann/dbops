@@ -56,15 +56,32 @@
                                     <a href=""><i class="fa fa-search"></i></a>
                                 </form>
                             </li>
-                            <!--
+
                             <li class="hidden-xs">
-                                <span>{{china_rq}}</span></label>
+                                <form role="search" class="app-search">
+                                     <span class="form-control">{{china_rq}}</span></label>
+                                </form>
+
                             </li>
 
                             <li class="hidden-xs">
-                               <span>{{welcome}}</span>
+                                <form role="search" class="app-search">
+                                     <span class="form-control">{{china_week}}</span></label>
+                                </form>
                             </li>
-                            -->
+
+                            <li class="hidden-xs">
+                                <form role="search" class="app-search">
+                                     <span  id='span_time' class="form-control">{{china_time}}</span></label>
+                                </form>
+                            </li>
+
+                            <li class="hidden-xs">
+                                 <form role="search" class="app-search">
+                                     <span class="form-control">{{welcome}}</span>
+                                </form>
+                            </li>
+
                         </ul>
 
                         <!-- Right(Notification) -->
@@ -605,7 +622,6 @@
                         console.log(dataSet.code, dataSet.message);
                         if (dataSet.code==0) {
                             swal("变更成功", "", "success")
-                            //console.log(dataSet.code, dataSet.message);
                         } else {
                            swal(dataSet.message, "", "error")
                         }
@@ -613,11 +629,26 @@
                  })
             });
 
+            function get_time() {
+                $.ajax({
+                    url: "/time",
+                    type: "post",
+                    datatype: "text",
+                    success: function (dataSet) {
+                        $('#span_time').text(dataSet)
+                        console.log('get_time=',dataSet);
+                    }
+                 })
+            }
+
+
             $(document).ready(function() {
+
+                 setInterval("get_time();",1000);
 
                  $(".file").click(function() {
 					$('#main-container-div').load($(this).attr("id"));
-				 });
+                 });
 
                  $('#windows_main').click(function(){
                     $('#main-container-div').load("/main");
@@ -631,5 +662,6 @@
 
         </script>
 
+        get_time()
     </body>
 </html>

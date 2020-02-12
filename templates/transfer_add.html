@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>新建传输</title>
     <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>    <!-- Sweet Alert -->
+    <link href="{{static_url('assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
     <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
@@ -132,6 +133,15 @@
                    </div>
                </div>
            </div>
+           <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                          <button tabindex="0" class="btn btn-xs waves-effect waves-light" role="button" data-toggle="popover" data-trigger="focus" title="" data-content="支持多表传输，表间用逗号隔开！" data-original-title="小提示">
+                            <i class="ion-help"></i>
+                         </button>
+                    </div>
+               </div>
+           </div>
        </div>
        <div class="row">
            <div class="col-md-6">
@@ -142,6 +152,15 @@
                    <div class="col-md-10">
                         <input id="sour_tab_where"  type="text" class="form-control" placeholder="请输入源数据库表条件">
                    </div>
+               </div>
+           </div>
+           <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                          <button tabindex="0" class="btn btn-xs waves-effect waves-light" role="button" data-toggle="popover" data-trigger="focus" title="" data-content="单表支持按条件传输，多表不支持！" data-original-title="小提示">
+                            <i class="ion-help"></i>
+                         </button>
+                    </div>
                </div>
            </div>
        </div>
@@ -264,15 +283,16 @@
 
     <!-- Counter js  -->
     <script src="{{static_url('plugins/counterup/jquery.counterup.min.js')}}"></script>
+
     <!-- Sweet-Alert  -->
     <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
-    <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
-    <script src="{{static_url('plugins/datatables/dataTables.buttons.min.js')}}"></script>
-    <script src="{{static_url('plugins/datatables/buttons.bootstrap.min.js')}}"></script>
-    <script src="{{static_url('plugins/datatables/dataTables.responsive.min.js')}}"></script>
-    <script src="{{static_url('plugins/datatables/responsive.bootstrap.min.js')}}"></script>
-    <script src="{{static_url('plugins/datatables/dataTables.scroller.min.js')}}"></script>
+
+     <!-- Tooltipster js -->
+    <script src="{{static_url('plugins/tooltipster/tooltipster.bundle.min.js')}}"></script>
+    <script src="{{static_url('assets/pages/jquery.tooltipster.js')}}"></script>
+    <script src="{{static_url('assets/js/jquery.core.js')}}"></script>
+    <script src="{{static_url('assets/js/jquery.app.js')}}"></script>
+
 
     <script>
         function set_selected(){
@@ -291,6 +311,17 @@
             document.all['s_api_server'].style.color="#ff0000";
             document.all['s_status'].style.color="#ff0000";
         }
+
+        $("#sour_tab_name").bind("input propertychange",function(){
+           var s=$("#sour_tab_name").val()
+           if (s.indexOf(",") >=0 ) {
+                $("#sour_tab_where").val('')
+                $('#sour_tab_where').attr("readonly",true);
+           } else {
+               $('#sour_tab_where').attr("readonly",false);
+           }
+        });
+
 
         $("#add").click(function () {
             $.ajax({

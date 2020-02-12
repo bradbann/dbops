@@ -186,19 +186,28 @@ def china_rq():
     year =str(datetime.datetime.now().year)+'年'
     month=str(datetime.datetime.now().month).rjust(2,'0')+'月'
     day  =str(datetime.datetime.now().day).rjust(2,'0')+'日'
-    week =get_week_day(datetime.datetime.now())
-    return year+month+day+"  "+week
+    return year+month+day
 
-def welcome():
+def china_time():
+    hour = str(datetime.datetime.now().hour)+'点'
+    min  = str(datetime.datetime.now().minute).rjust(2,'0')+'分'
+    sec  = str(datetime.datetime.now().second).rjust(2,'0')+'秒'
+    return hour+min+sec
+
+def china_week():
+    week =get_week_day(datetime.datetime.now())
+    return week
+
+def welcome(username):
     hour =datetime.datetime.now().hour
     if hour >=6 and hour<12:
-        return '上午好！'
+        return '{0}，上午好！'.format(username)
     elif hour>=12 and hour<18:
-        return '下午好！'
+        return '{0}，下午好！'.format(username)
     elif hour>=18 and hour<23:
-        return '晚上好！'
+        return '{0}，晚上好！'.format(username)
     elif hour>=23  or hour>=0 and hour<6:
-        return '早点休息！'
+        return '{0}，早点休息！'.format(username)
 
 def exception_info():
     e_str = traceback.format_exc()
@@ -254,11 +263,6 @@ def format_mysql_error(env,msg):
                   replace("pymysql.err.ProgrammingError: (", ""). \
                   replace("pymysql.err.OperationalError: (", ""). \
                   replace(")","").replace('"','').replace("'","").split(',')
-    #return """
-    #          <b>运行环境：</b>{0}</br>
-    #          <b>错误代码：</b>{1}</br>
-    #          <b>错误消息：</b>{2}
-    #       """.format(env,p_msg[0],p_msg[1])
     return p_msg[1]
 
 def format_sqlserver_error(env,msg):

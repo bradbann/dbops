@@ -18,8 +18,7 @@ from web.model.t_user  import logon_user_check,check_forget_password,check_modif
 from web.model.t_user  import upd_password,get_user_by_userid,get_user_by_loginame,get_user_roles
 from web.model.t_xtqx  import get_tree_by_userid
 from web.model.t_dmmx  import get_dmm_from_dm
-from web.utils.common  import send_mail,get_rand_str,current_time,china_rq,welcome
-
+from web.utils.common  import send_mail,get_rand_str,current_time,china_rq,china_week,welcome,china_time
 from PIL import Image,ImageDraw,ImageFont
 
 class logon(tornado.web.RequestHandler):
@@ -37,7 +36,9 @@ class index(tornado.web.RequestHandler):
         if username:
            self.render("index.html",
                        china_rq    = china_rq(),
-                       welcome     = welcome(),
+                       china_week  = china_week(),
+                       china_time  = china_time(),
+                       welcome     = welcome(d_user['username']),
                        userid      = d_user['userid'],
                        loginname   = d_user['loginname'],
                        username    = d_user['username'],
@@ -93,6 +94,10 @@ class unlock(tornado.web.RequestHandler):
         else:
             self.write({"code":-1})
 
+
+class get_time(tornado.web.RequestHandler):
+    def post(self):
+        self.write(china_time())
 
 class logout(tornado.web.RequestHandler):
     def get(self):

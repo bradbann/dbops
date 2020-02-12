@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>新建同步</title>
     <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>    <!-- Sweet Alert -->
+    <link href="{{static_url('assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
     <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
@@ -116,6 +117,8 @@
                    <div class="form-group">
                         <div>
                             <button id='mdi-view-list' class="btn btn-xs waves-effect waves-light" disabled  onclick=showTabDetail()><i class="mdi mdi-view-list"></i></button>
+                            <!--<button id='mdi-view-list' class="btn btn-xs waves-effect waves-light" disabled  onclick=showTabDetail()></button>-->
+
                         </div>
                    </div>
                </div>
@@ -141,6 +144,9 @@
                     <div class="col-sm-offset-6 col-sm-9">
                         <button id='ion-arrow-down' class="btn btn-xs waves-effect waves-light"  disabled onclick=selectAll()><i class="ion-arrow-down-a"></i></button>
                         <button id='ion-arrow-up' class="btn btn-xs waves-effect waves-light"  disabled onclick=cancelAll()><i class="ion-arrow-up-a"></i></button>
+                        <!--<button id='ion-arrow-down' class="btn btn-xs waves-effect waves-light"  disabled onclick=selectAll()></button>-->
+                        <!--<button id='ion-arrow-up' class="btn btn-xs waves-effect waves-light"  disabled onclick=cancelAll()></button>-->
+
                     </div>
                </div>
               </div>
