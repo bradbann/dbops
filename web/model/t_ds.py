@@ -114,7 +114,6 @@ def get_ds_by_dsid(p_dsid):
                   db_env,inst_type,market_id
            from t_db_source where id={0}
         """.format(p_dsid)
-    print('get_ds_by_dsid=',sql)
     cr.execute(sql)
     rs = cr.fetchall()
     cr.close()
@@ -133,7 +132,6 @@ def get_ds_by_dsid(p_dsid):
     d_ds['inst_type']   = rs[0][14]
     d_ds['market_id']   = rs[0][15]
     d_ds['url']         = 'MySQL://{0}:{1}/{2}'.format(d_ds['ip'],d_ds['port'],d_ds['service'])
-    print(d_ds)
     return d_ds
 
 def get_ds_by_dsid_by_cdb(p_dsid,p_cdb):
@@ -150,7 +148,6 @@ def get_ds_by_dsid_by_cdb(p_dsid,p_cdb):
                   db_env,inst_type,market_id
            from t_db_source where id={1}
         """.format(p_cdb,p_dsid)
-    print('get_ds_by_dsid=',sql)
     cr.execute(sql)
     rs = cr.fetchall()
     cr.close()

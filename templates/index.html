@@ -629,22 +629,30 @@
                  })
             });
 
-            function get_time() {
-                $.ajax({
-                    url: "/time",
-                    type: "post",
-                    datatype: "text",
-                    success: function (dataSet) {
-                        $('#span_time').text(dataSet)
-                        console.log('get_time=',dataSet);
-                    }
-                 })
-            }
+            // function get_time() {
+            //     $.ajax({
+            //         url: "/time",
+            //         type: "post",
+            //         datatype: "text",
+            //         success: function (dataSet) {
+            //             $('#span_time').text(dataSet)
+            //             console.log('get_time=',dataSet);
+            //         }
+            //      })
+            // }
 
+            function updateTime() {
+                  var date = new Date();
+                  this.hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+                  this.minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+                  this.second = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+                  var currentTime =  this.hour + "时" + this.minute + "分" + this.second +'秒';
+                  $("#span_time").text(currentTime);
+            }
 
             $(document).ready(function() {
 
-                 setInterval("get_time();",1000);
+                 setInterval("updateTime();",1000);
 
                  $(".file").click(function() {
 					$('#main-container-div').load($(this).attr("id"));

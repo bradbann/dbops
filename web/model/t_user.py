@@ -364,7 +364,6 @@ def get_user_by_loginame(p_login_name):
     d_user['status']      = rs[0][9]
     d_user['file_path']   = rs[0][10]
     d_user['file_name']   = rs[0][11]
-    print("get_user_by_loginame=",d_user)
     return d_user
 
 def check_user(p_user):

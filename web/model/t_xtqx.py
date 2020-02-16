@@ -516,7 +516,7 @@ def get_tree_by_dbid(dbid):
         cr     = db.cursor()
         sql1 = """SELECT schema_name FROM information_schema.SCHEMATA order by 1"""
 
-        sql2 = """SELECT CONCAT(table_schema,'.',table_name) 
+        sql2 = """SELECT table_name
                    FROM information_schema.tables WHERE table_schema='{0}' order by 1
                """
         cr.execute(sql1)

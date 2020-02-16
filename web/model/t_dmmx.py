@@ -6,13 +6,11 @@
 # @Software: PyCharm
 
 from web.utils.common import get_connection,get_connection_ds
-#from web.model.t_ds import get_ds_by_dsid
 
 def get_dmm_from_dm(p_dm):
     db = get_connection()
     cr = db.cursor()
     sql = "select dmm,dmmc from t_dmmx where dm='{0}'".format(p_dm)
-    print(sql)
     cr.execute(sql)
     v_list = []
     for r in cr.fetchall():
@@ -24,7 +22,6 @@ def get_dmmc_from_dm(p_dm,p_dmm):
     db = get_connection()
     cr = db.cursor()
     sql = "select dmmc from t_dmmx where dm='{0}' and dmm={1}".format(p_dm,p_dmm)
-    print(sql)
     cr.execute(sql)
     rs=cr.fetchone()
     cr.close()
@@ -35,7 +32,6 @@ def get_backup_server():
     db = get_connection()
     cr = db.cursor()
     sql = "select id,server_desc from t_server WHERE server_type=1 order by market_id"
-    print(sql)
     cr.execute(sql)
     v_list = []
     for r in cr.fetchall():
@@ -47,7 +43,6 @@ def get_sync_server():
     db = get_connection()
     cr = db.cursor()
     sql = "select id,server_desc from t_server WHERE server_type=2 order by market_id"
-    print(sql)
     cr.execute(sql)
     v_list = []
     for r in cr.fetchall():
@@ -59,7 +54,6 @@ def get_db_server():
     db = get_connection()
     cr = db.cursor()
     sql = "SELECT id,db_desc FROM t_db_source WHERE  db_type in(0,4,5,6) AND STATUS=1 ORDER BY id"
-    print(sql)
     cr.execute(sql)
     v_list = []
     for r in cr.fetchall():
@@ -74,7 +68,6 @@ def get_db_backup_server():
              WHERE  (db_type in(0)  and user in('puppet','easylife') or db_type not in (0,2))
                 and STATUS=1 ORDER BY db_desc,db_type
           """
-    print(sql)
     cr.execute(sql)
     v_list = []
     for r in cr.fetchall():
@@ -87,7 +80,6 @@ def get_db_backup_tags():
     cr = db.cursor()
     sql = """SELECT db_tag,comments FROM t_db_config  WHERE STATUS=1  ORDER BY db_type,db_id 
           """
-    print(sql)
     cr.execute(sql)
     v_list = []
     for r in cr.fetchall():
@@ -100,7 +92,6 @@ def get_db_sync_tags():
     cr = db.cursor()
     sql = """SELECT sync_tag,comments FROM t_db_sync_config  WHERE STATUS=1  ORDER BY sync_col_val,comments 
           """
-    print(sql)
     cr.execute(sql)
     v_list = []
     for r in cr.fetchall():
@@ -196,7 +187,6 @@ def get_sync_db_server():
                 and STATUS=1 
                 and user!='puppet'
               ORDER BY db_desc,db_type"""
-    print(sql)
     cr.execute(sql)
     v_list = []
     for r in cr.fetchall():

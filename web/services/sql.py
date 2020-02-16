@@ -60,8 +60,6 @@ class sql_release(tornado.web.RequestHandler):
        desc       = self.get_argument("desc")
        ver        = self.get_argument("ver")
        type       = self.get_argument("type")
-
-       print('sql_release.user=',user)
        result     = save_sql(dbid,cdb,sql,desc,user,ver,type)
        self.write({"code": result['code'], "message": result['message']})
 
@@ -75,7 +73,6 @@ class sql_check(tornado.web.RequestHandler):
        sql        = self.get_argument("sql")
        desc       = self.get_argument("desc")
        type       = self.get_argument("type")
-       print('sql_release.user=',user)
        result     = check_sql(dbid,cdb,sql,desc,user,type)
        self.write({"code": result['code'], "message": result['message']})
 
@@ -95,7 +92,6 @@ class sql_check_result(tornado.web.RequestHandler):
        dbid   = self.get_argument("dbid")
        sql    = self.get_argument("sql")
        curdb  = self.get_argument("cur_db")
-       print('sql_query=',dbid,sql,'curdb=',curdb)
        v_list = query_check_result(user)
        v_dict = {"data": v_list}
        v_json = json.dumps(v_dict)

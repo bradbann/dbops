@@ -468,6 +468,7 @@
                                "dom"          : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
                                 destroy       : true,
                                 async         : true,
+                                ordering      : false,
                                 data          : dataSet.data,
                                 columns: [
                                     { "title": "规则ID" },
@@ -537,6 +538,8 @@
                       return false;
                   }
 
+                  return true;
+
               }
 
               $("#check_btn").click(function()
@@ -546,49 +549,50 @@
                   console.log('v_sql=',v_sql)
                   console.log('db_source=',$('#db_source').val())
 
-                  sql_check()
+                  if (sql_check()) {
 
-                  $.ajax({
-                    url     : "/sql/_check",
-                    type    : "post",
-                    datatype: "json",
-                    data: {
-                        dbid  :  $('#db_source').val(),
-                        cur_db:  $('#curr_db').text(),
-                        sql   :  editor.session.getTextRange(editor.getSelectionRange()),
-                        desc  :  $('#sql_desc').val(),
-                        ver   :  $('#db_ver').val(),
-                        type   : $('#db_order_type').val(),
-                    },
-                    beforeSend: function () {
-                          $('.modal').on('show.bs.modal', centerModals);
-                          $(window).on('resize', centerModals);
-                          $('#con-close-modal').modal({ keyboard: false,backdrop:false});
-                    },
-                    complete: function () {
-                          $('#con-close-modal').modal('hide');
-                    },
-                    success: function (dataSet) {
-                        console.log(dataSet);
-                        if (dataSet.status=="1") {
-                            showtips('error',dataSet.msg);
-                        } else {
-                            if (table != undefined) {
-                                console.log("table is defined=", table);
-                                table.destroy();
-                                $('#example').empty();
-                            }
-                            console.log(dataSet.code, dataSet.message);
-                            if (dataSet.code == '0') {
-                                showtips('success','检测通过!');
-                                $("#release_btn").attr("disabled", false);
-                            } else {
-                                $("#release_btn").attr("disabled", true);
-                            }
-                            query_release_result(editor.session.getTextRange(editor.getSelectionRange()))
-                        }
-                     }
-                 });
+                      $.ajax({
+                          url: "/sql/_check",
+                          type: "post",
+                          datatype: "json",
+                          data: {
+                              dbid: $('#db_source').val(),
+                              cur_db: $('#curr_db').text(),
+                              sql: editor.session.getTextRange(editor.getSelectionRange()),
+                              desc: $('#sql_desc').val(),
+                              ver: $('#db_ver').val(),
+                              type: $('#db_order_type').val(),
+                          },
+                          beforeSend: function () {
+                              $('.modal').on('show.bs.modal', centerModals);
+                              $(window).on('resize', centerModals);
+                              $('#con-close-modal').modal({keyboard: false, backdrop: false});
+                          },
+                          complete: function () {
+                              $('#con-close-modal').modal('hide');
+                          },
+                          success: function (dataSet) {
+                              console.log(dataSet);
+                              if (dataSet.status == "1") {
+                                  showtips('error', dataSet.msg);
+                              } else {
+                                  if (table != undefined) {
+                                      console.log("table is defined=", table);
+                                      table.destroy();
+                                      $('#example').empty();
+                                  }
+                                  console.log(dataSet.code, dataSet.message);
+                                  if (dataSet.code == '0') {
+                                      showtips('success', '检测通过!');
+                                      $("#release_btn").attr("disabled", false);
+                                  } else {
+                                      $("#release_btn").attr("disabled", true);
+                                  }
+                                  query_release_result(editor.session.getTextRange(editor.getSelectionRange()))
+                              }
+                          }
+                      });
+                  }
               });
 
               $("#release_btn").click(function()
@@ -625,6 +629,7 @@
                             console.log(dataSet.code, dataSet.message);
                             if (dataSet.code == '0') {
                                 showtips('success','发布成功!');
+                                $("#release_btn").attr("disabled", true);
 
                             } else {
                                 showtips('error',dataSet.message);

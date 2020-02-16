@@ -27,8 +27,8 @@ def get_server_ip():
     return '10.2.39.18'
 
 def get_server_port():
-    return '81'
-    #return options.port
+    #return '81'
+    return options.port
 
 def get_db_conf():
     d_db={}

@@ -26,7 +26,6 @@ def save_audit_rule(rule):
     result = check_rule(rule)
     if result['code']=='-1':
        return result
-
     try:
         db = get_connection()
         cr = db.cursor()

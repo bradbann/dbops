@@ -21,6 +21,17 @@
                 <div class="panel-body">
                    <div class="row" >
                       <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">检测DDL语法及权限</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input type="checkbox" id="switch_check_ddl"  checked switch="none"/>
+                                    <label for="switch_check_ddl" data-on-label="开"  data-off-label="关"></label>
+                                </div>
+                             </div>
+                      </div>
+                      <div class="col-md-3">
                            <div class="form-group">
                                 <div class="col-md-6 text-right">
                                    <label class="control-label">强制表必须有主键</label>
@@ -53,7 +64,10 @@
                                 </div>
                              </div>
                         </div>
-                        <div class="col-md-3">
+                   </div>
+                   <br>
+                   <div class="row" >
+                       <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
                                    <label class="control-label text-left">强制自增列初始值为1</label>
@@ -64,10 +78,6 @@
                                 </div>
                              </div>
                         </div>
-
-                   </div>
-                   <br>
-                   <div class="row" >
                         <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
@@ -103,22 +113,21 @@
 
                              </div>
                         </div>
-
-                        <div class="col-md-3">
+                   </div>
+                   <br>
+                   <div class="row">
+                       <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
                                    <label class="control-label">检查是否为not null</label>
                                 </div>
                                 <div class="col-md-6 text-left">
-                                    <input type="checkbox" id="switch_col_notnull"  checked switch="none"/>
-                                    <label for="switch_col_notnull" data-on-label="开"  data-off-label="关"></label>
+                                    <input type="checkbox" id="switch_col_not_null"  checked switch="none"/>
+                                    <label for="switch_col_not_null" data-on-label="开"  data-off-label="关"></label>
                                 </div>
 
                              </div>
                         </div>
-                   </div>
-                   <br>
-                   <div class="row">
                         <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
@@ -151,7 +160,11 @@
                                 </div>
                              </div>
                         </div>
-                        <div class="col-md-3">
+
+                   </div>
+                   <br>
+                   <div class="row" >
+                       <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
                                    <label class="control-label">表必须拥有字段</label>
@@ -161,9 +174,6 @@
                                 </div>
                              </div>
                       </div>
-                   </div>
-                   <br>
-                   <div class="row" >
                       <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
@@ -185,28 +195,8 @@
                                 </div>
                              </div>
                       </div>
-                       <div class="col-md-3">
-                             <div class="form-group">
-                                <div class="col-md-6 text-right">
-                                   <label class="control-label text-left">检测DDL语法及权限</label>
-                                </div>
-                                <div class="col-md-6 text-left">
-                                    <input type="checkbox" id="switch_check_ddl"  checked switch="none"/>
-                                    <label for="switch_check_ddl" data-on-label="开"  data-off-label="关"></label>
-                                </div>
-                             </div>
-                        </div>
-                        <div class="col-md-3">
-                             <div class="form-group">
-                                <div class="col-md-6 text-right">
-                                   <label class="control-label text-left">允许便用虚拟列</label>
-                                </div>
-                                <div class="col-md-6 text-left">
-                                    <input type="checkbox" id="switch_virtual_col"   switch="none"/>
-                                    <label for="switch_virtual_col" data-on-label="开"  data-off-label="关"></label>
-                                </div>
-                             </div>
-                        </div>
+
+
                    </div>
                    <br>
                    <div class="row" >
@@ -224,7 +214,7 @@
                        <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
-                                   <label class="control-label text-left">开启索引名称规范</label>
+                                   <label class="control-label text-left">开启索引名规范</label>
                                 </div>
                                 <div class="col-md-6 text-left">
                                     <input type="checkbox" id="switch_idx_name_check"  checked switch="none"/>
@@ -232,18 +222,24 @@
                                 </div>
                              </div>
                         </div>
-                       <div class="col-md-3">
+                        <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
-                                   <label class="control-label text-left">允许索引名为空</label>
+                                   <label class="control-label text-left">开启工单名规范</label>
                                 </div>
                                 <div class="col-md-6 text-left">
-                                    <input type="checkbox" id="switch13" checked switch="none"/>
-                                    <label for="switch13" data-on-label="开"  data-off-label="关"></label>
+                                    <input type="checkbox" id="switch_order_check"  checked switch="none"/>
+                                    <label for="switch_order_check" data-on-label="开"  data-off-label="关"></label>
                                 </div>
                              </div>
                         </div>
-                        <div class="col-md-3">
+
+                   </div>
+
+
+                    <br>
+                   <div class="row" >
+                       <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
                                    <label class="control-label text-left">允许工单多条DDL</label>
@@ -254,7 +250,31 @@
                                 </div>
                              </div>
                         </div>
+                       <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">允许工单多条DML</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input type="checkbox" id="switch2020"  checked switch="none"/>
+                                    <label for="switch2020" data-on-label="开"  data-off-label="关"></label>
+                                </div>
+                             </div>
+                        </div>
+                        <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">DDL最大影响行数</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input class="vertical-spin" type="text" value="10000">
+                                </div>
+                             </div>
+                        </div>
+
                    </div>
+
+
                    <br>
                    <div class="row" >
                        <div class="col-md-3">
@@ -279,30 +299,21 @@
                                 </div>
                              </div>
                         </div>
-                       <div class="col-md-3">
-                             <div class="form-group">
-                                <div class="col-md-6 text-right">
-                                   <label class="control-label text-left">单表索引数上限</label>
-                                </div>
-                                <div class="col-md-6 text-left">
-                                    <input class="vertical-spin" type="text" value="5">
-                                </div>
-                             </div>
-                        </div>
-                       <div class="col-md-3">
-                             <div class="form-group">
-                                <div class="col-md-6 text-right">
-                                   <label class="control-label">单个索引指定字段上限</label>
-                                </div>
-                                <div class="col-md-6 text-left">
-                                    <input class="vertical-spin" type="text" value="5">
-                                </div>
-                             </div>
-                        </div>
 
                    </div>
                    <br>
                    <div class="row" >
+                       <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">允许便用虚拟列</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input type="checkbox" id="switch_virtual_col"   switch="none"/>
+                                    <label for="switch_virtual_col" data-on-label="开"  data-off-label="关"></label>
+                                </div>
+                             </div>
+                        </div>
                         <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
@@ -336,16 +347,7 @@
                                 </div>
                              </div>
                         </div>
-                       <div class="col-md-3">
-                             <div class="form-group">
-                                <div class="col-md-6 text-right">
-                                   <label class="control-label text-left">DDL最大影响行数</label>
-                                </div>
-                                <div class="col-md-6 text-left">
-                                    <input class="vertical-spin" type="text" value="10000">
-                                </div>
-                             </div>
-                        </div>
+
                     </div>
                    <br>
                    <div class="row" >
@@ -381,17 +383,7 @@
                                 </div>
                              </div>
                         </div>
-                        <div class="col-md-3">
-                             <div class="form-group">
-                                <div class="col-md-6 text-right">
-                                   <label class="control-label text-left">开启工单名规范</label>
-                                </div>
-                                <div class="col-md-6 text-left">
-                                    <input type="checkbox" id="switch_order_check"  checked switch="none"/>
-                                    <label for="switch_order_check" data-on-label="开"  data-off-label="关"></label>
-                                </div>
-                             </div>
-                        </div>
+
                    </div>
                    <br>
 
@@ -462,6 +454,53 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-border panel-brown">
+                <div class="panel-heading">
+                    <h3 class="panel-title">索引规范</h3>
+                    <hr>
+                </div>
+                <div class="panel-body">
+                    <div class="row" >
+                         <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">允许索引名为空</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input type="checkbox" id="switch13" checked switch="none"/>
+                                    <label for="switch13" data-on-label="开"  data-off-label="关"></label>
+                                </div>
+                             </div>
+                         </div>
+                         <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">单表索引数上限</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input class="vertical-spin" type="text" value="5">
+                                </div>
+                             </div>
+                        </div>
+                        <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label">单个索引字段上限</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input class="vertical-spin" type="text" value="5">
+                                </div>
+                             </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default panel-border">
@@ -714,7 +753,7 @@
                 switch_char_max_len             : $('#switch_char_max_len').val(),
                 switch_tab_has_time_fields      : $('#switch_tab_has_time_fields').val(),
 
-                switch_tab_tcol_datetime        : $('#switch_tab_tcol_datetime').val(),
+                switch_tab_tcol_datetime        : $('#switch_tab_tcol_datetime').is(":checked"),
                 switch_tab_char_total_len       : $('#switch_tab_char_total_len').val(),
                 switch_check_ddl                : $('#switch_check_ddl').is(":checked"),
                 switch_virtual_col              : $('#switch_virtual_col').is(":checked"),
