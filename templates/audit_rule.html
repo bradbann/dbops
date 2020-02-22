@@ -8,6 +8,11 @@
     <link href="{{static_url('plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css')}}" rel="stylesheet" />
     <link href="{{static_url('plugins/bootstrap-touchspin/css/jquery.bootstrap-touchspin.min.css')}}" rel="stylesheet" />
     <link href="{{static_url('assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
+
+     <!-- Notification css (Toastr) -->
+    <link href="{{static_url('plugins/toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{static_url('assets/css/components.css')}}" rel="stylesheet" type="text/css" />
+
 </head>
 <body>
     <p></p>
@@ -195,8 +200,16 @@
                                 </div>
                              </div>
                       </div>
-
-
+                      <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">DDL最大影响行数</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input id='switch_tab_ddl_max_rows' class="vertical-spin" type="text" value="10000">
+                                </div>
+                             </div>
+                       </div>
                    </div>
                    <br>
                    <div class="row" >
@@ -222,58 +235,30 @@
                                 </div>
                              </div>
                         </div>
-                        <div class="col-md-3">
-                             <div class="form-group">
-                                <div class="col-md-6 text-right">
-                                   <label class="control-label text-left">开启工单名规范</label>
-                                </div>
-                                <div class="col-md-6 text-left">
-                                    <input type="checkbox" id="switch_order_check"  checked switch="none"/>
-                                    <label for="switch_order_check" data-on-label="开"  data-off-label="关"></label>
-                                </div>
-                             </div>
-                        </div>
-
-                   </div>
-
-
-                    <br>
-                   <div class="row" >
                        <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
                                    <label class="control-label text-left">允许工单多条DDL</label>
                                 </div>
                                 <div class="col-md-6 text-left">
-                                    <input type="checkbox" id="switch20"  checked switch="none"/>
-                                    <label for="switch20" data-on-label="开"  data-off-label="关"></label>
+                                    <input type="checkbox" id="switch_ddl_batch"  checked switch="none"/>
+                                    <label for="switch_ddl_batch" data-on-label="开"  data-off-label="关"></label>
                                 </div>
                              </div>
                         </div>
+
                        <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
                                    <label class="control-label text-left">允许工单多条DML</label>
                                 </div>
                                 <div class="col-md-6 text-left">
-                                    <input type="checkbox" id="switch2020"  checked switch="none"/>
-                                    <label for="switch2020" data-on-label="开"  data-off-label="关"></label>
+                                    <input type="checkbox" id="switch_dml_batch"  checked switch="none"/>
+                                    <label for="switch_dml_batch" data-on-label="开"  data-off-label="关"></label>
                                 </div>
                              </div>
                         </div>
-                        <div class="col-md-3">
-                             <div class="form-group">
-                                <div class="col-md-6 text-right">
-                                   <label class="control-label text-left">DDL最大影响行数</label>
-                                </div>
-                                <div class="col-md-6 text-left">
-                                    <input class="vertical-spin" type="text" value="10000">
-                                </div>
-                             </div>
-                        </div>
-
                    </div>
-
 
                    <br>
                    <div class="row" >
@@ -299,11 +284,7 @@
                                 </div>
                              </div>
                         </div>
-
-                   </div>
-                   <br>
-                   <div class="row" >
-                       <div class="col-md-3">
+                        <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
                                    <label class="control-label text-left">允许便用虚拟列</label>
@@ -325,6 +306,10 @@
                                 </div>
                              </div>
                         </div>
+                   </div>
+                   <br>
+                   <div class="row" >
+
                         <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
@@ -347,10 +332,6 @@
                                 </div>
                              </div>
                         </div>
-
-                    </div>
-                   <br>
-                   <div class="row" >
                         <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
@@ -372,41 +353,83 @@
                                 </div>
                              </div>
                         </div>
+                    </div>
+                   <br>
+                   <div class="row" >
                         <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
                                    <label class="control-label text-left">禁止使用触发器</label>
                                 </div>
                                 <div class="col-md-6 text-left">
-                                    <input type="checkbox" id="switch_disable_trigger"  checked switch="none"/>
+                                    <input type="checkbox" id="switch_disable_trigger"   switch="none"/>
                                     <label for="switch_disable_trigger" data-on-label="开"  data-off-label="关"></label>
                                 </div>
                              </div>
                         </div>
-
-                   </div>
-                   <br>
-
-                   <div class="row" >
                         <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
-                                   <label class="control-label text-left">打开OSC</label>
+                                   <label class="control-label text-left">禁止使用函数</label>
                                 </div>
                                 <div class="col-md-6 text-left">
-                                    <input type="checkbox" id="switch24"   switch="none"/>
-                                    <label for="switch24" data-on-label="开"  data-off-label="关"></label>
+                                    <input type="checkbox" id="switch_disable_func"   switch="none"/>
+                                    <label for="switch_disable_func" data-on-label="开"  data-off-label="关"></label>
+                                </div>
+                             </div>
+                        </div>
+                        <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">禁止使用过程</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input type="checkbox" id="switch_disable_proc"   switch="none"/>
+                                    <label for="switch_disable_proc" data-on-label="开"  data-off-label="关"></label>
+                                </div>
+                             </div>
+                        </div>
+                        <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">禁止使用事件</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input type="checkbox" id="switch_disable_event"   switch="none"/>
+                                    <label for="switch_disable_event" data-on-label="开"  data-off-label="关"></label>
                                 </div>
                              </div>
                         </div>
                    </div>
                    <br>
+                   <div class="row" >
+                     <div class="col-md-3">
+                         <div class="form-group">
+                            <div class="col-md-6 text-right">
+                               <label class="control-label text-left">DDL超时时间</label>
+                            </div>
+                            <div class="col-md-6 text-left">
+                                <input class="vertical-spin" type="text" value="60">
+                            </div>
+                         </div>
+                     </div>
+                     <div class="col-md-3">
+                         <div class="form-group">
+                            <div class="col-md-6 text-right">
+                               <label class="control-label text-left">打开OSC</label>
+                            </div>
+                            <div class="col-md-6 text-left">
+                                <input type="checkbox" id="switch24"   switch="none"/>
+                                <label for="switch24" data-on-label="开"  data-off-label="关"></label>
+                            </div>
+                         </div>
+                    </div>
                 </div>
-                <br>
             </div>
-        </div>
-        </div>
+           </div>
+      </div>
     </div>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-border panel-brown">
@@ -416,17 +439,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="row" >
-                        <div class="col-md-3">
-                             <div class="form-group">
-                                <div class="col-md-6 text-right">
-                                   <label class="control-label text-left">表名最大长度</label>
-                                </div>
-                                <div class="col-md-6 text-left">
-                                    <input class="switch_tab_max_len" id="switch_tab_max_len" type="text" value="60">
-                                </div>
-                             </div>
-                        </div>
-                        <div class="col-md-3">
+                         <div class="col-md-3">
                              <div class="form-group">
                                 <div class="col-md-6 text-right">
                                    <label class="control-label text-left">表名不能以数字开头</label>
@@ -435,17 +448,36 @@
                                     <input type="checkbox" id="switch_tab_not_digit_first"  checked switch="none"/>
                                     <label for="switch_tab_not_digit_first" data-on-label="开"  data-off-label="关"></label>
                                 </div>
-
                              </div>
                         </div>
-
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                              <div class="form-group">
-                                <div class="col-md-2 text-right">
-                                   <label class="control-label text-left">表名禁止前后缀</label>
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">禁止连续2位及以上数字为后缀</label>
                                 </div>
-                                <div class="col-md-10 text-left">
-                                    <input class="form-control" id="switch_tab_disable_suffix" type="text" value="sys、bak、temp、tmp、yyyymmdd、yyyy_mm_dd">
+                                <div class="col-md-6 text-left">
+                                    <input type="checkbox" id="switch_tab_two_digit_end"  checked switch="none"/>
+                                    <label for="switch_tab_two_digit_end" data-on-label="开"  data-off-label="关"></label>
+                                </div>
+                             </div>
+                         </div>
+                        <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">表名最大长度</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input id='switch_tab_max_len' class="vertical-spin" type="text" value="60">
+                                </div>
+                             </div>
+                        </div>
+                        <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">禁止表名前后缀</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input class="form-control" id="switch_tab_disable_prefix" type="text" value="temp,tmp,bak,backup">
                                 </div>
                              </div>
                         </div>
@@ -469,8 +501,19 @@
                                    <label class="control-label text-left">允许索引名为空</label>
                                 </div>
                                 <div class="col-md-6 text-left">
-                                    <input type="checkbox" id="switch13" checked switch="none"/>
-                                    <label for="switch13" data-on-label="开"  data-off-label="关"></label>
+                                    <input type="checkbox" id="switch_idx_name_null" checked switch="none"/>
+                                    <label for="switch_idx_name_null" data-on-label="开"  data-off-label="关"></label>
+                                </div>
+                             </div>
+                         </div>
+                        <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">启用索引名规则</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input type="checkbox" id="switch_idx_name_rule"  switch="none"/>
+                                    <label for="switch_idx_name_rule" data-on-label="开"  data-off-label="关"></label>
                                 </div>
                              </div>
                          </div>
@@ -480,7 +523,7 @@
                                    <label class="control-label text-left">单表索引数上限</label>
                                 </div>
                                 <div class="col-md-6 text-left">
-                                    <input class="vertical-spin" type="text" value="5">
+                                    <input id='switch_idx_numbers' class="vertical-spin" type="text" value="5">
                                 </div>
                              </div>
                         </div>
@@ -490,11 +533,25 @@
                                    <label class="control-label">单个索引字段上限</label>
                                 </div>
                                 <div class="col-md-6 text-left">
-                                    <input class="vertical-spin" type="text" value="5">
+                                    <input id='switch_idx_col_numbers' class="vertical-spin" type="text" value="5">
                                 </div>
                              </div>
                         </div>
 
+                    </div>
+                    <br>
+                    <div class="row" >
+                         <div class="col-md-3">
+                             <div class="form-group">
+                                <div class="col-md-6 text-right">
+                                   <label class="control-label text-left">允许索引名与列名相同</label>
+                                </div>
+                                <div class="col-md-6 text-left">
+                                    <input type="checkbox" id="switch_idx_name_col" checked switch="none"/>
+                                    <label for="switch_idx_name_col" data-on-label="开"  data-off-label="关"></label>
+                                </div>
+                             </div>
+                         </div>
                     </div>
                 </div>
             </div>
@@ -689,13 +746,204 @@
     <script src="{{static_url('plugins/bootstrap-select/js/bootstrap-select.min.js')}}" type="text/javascript"></script>
     <script src="{{static_url('plugins/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js')}}" type="text/javascript"></script>
 
+    <!-- Toastr js -->
+    <script src="{{static_url('plugins/toastr/toastr.min.js')}}"></script>
+
     <script>
-      $(document).ready(function() {
+
+        function showtips(flag,title,content){
+                toastr.options = {
+                      "closeButton": false,
+                      "debug": false,
+                      "newestOnTop": false,
+                      "progressBar": true,
+                      "positionClass": "toast-top-right",
+                      "preventDuplicates": false,
+                      "onclick": null,
+                      "showDuration": "3000",
+                      "hideDuration": "1000",
+                      "timeOut": "5000",
+                      "extendedTimeOut": "1000",
+                      "showEasing": "swing",
+                      "hideEasing": "linear",
+                      "showMethod": "fadeIn",
+                      "hideMethod": "fadeOut"
+                    }
+                    toastr[flag](content,title)
+        }
+
+       function set_attr(data){
+            var  obj = JSON.parse(data);
+            console.log('obj=',obj)
+
+            //DDL审核规则:rows:1
+            if (obj['switch_check_ddl'] == "true") {
+                $('#switch_check_ddl').prop({checked:true});
+            } else {
+                $('#switch_check_ddl').prop({checked:false});
+            }
+
+            if (obj['switch_tab_not_exists_pk'] == "true") {
+                $('#switch_tab_not_exists_pk').prop({checked:true});
+            } else {
+                $('#switch_tab_not_exists_pk').prop({checked:false});
+            }
+
+           if (obj['switch_tab_pk_id'] == "true") {
+                $('#switch_tab_pk_id').prop({checked:true});
+            } else {
+                $('#switch_tab_pk_id').prop({checked:false});
+            }
+
+            if (obj['switch_tab_pk_auto_incr'] == "true") {
+                $('#switch_tab_pk_auto_incr').prop({checked:true});
+            } else {
+                $('#switch_tab_pk_auto_incr').prop({checked:false});
+            }
+
+            //DDL审核规则:rows:2
+            if (obj['switch_tab_pk_autoincrement_1'] == "true") {
+                $('#switch_tab_pk_autoincrement_1').prop({checked:true});
+            } else {
+                $('#switch_tab_pk_autoincrement_1').prop({checked:false});
+            }
+
+            if (obj['switch_pk_not_int_bigint'] == "true") {
+                $('#switch_pk_not_int_bigint').prop({checked:true});
+            } else {
+                $('#switch_pk_not_int_bigint').prop({checked:false});
+            }
+
+           if (obj['switch_tab_comment'] == "true") {
+                $('#switch_tab_comment').prop({checked:true});
+            } else {
+                $('#switch_tab_comment').prop({checked:false});
+            }
+
+            if (obj['switch_col_comment'] == "true") {
+                $('#switch_col_comment').prop({checked:true});
+            } else {
+                $('#switch_col_comment').prop({checked:false});
+            }
+
+            //DDL审核规则:rows:3
+            if (obj['switch_col_not_null'] == "true") {
+                $('#switch_col_not_null').prop({checked:true});
+            } else {
+                $('#switch_col_not_null').prop({checked:false});
+            }
+
+            if (obj['switch_col_default_value'] == "true") {
+                $('#switch_col_default_value').prop({checked:true});
+            } else {
+                $('#switch_col_default_value').prop({checked:false});
+            }
+
+           if (obj['switch_tcol_default_value'] == "true") {
+                $('#switch_tcol_default_value').prop({checked:true});
+            } else {
+                $('#switch_tcol_default_value').prop({checked:false});
+            }
+
+            $('#switch_char_max_len').val(obj['switch_char_max_len'])
+
+            //DDL审核规则:rows:4
+            $('#switch_tab_has_time_fields').val(obj['switch_tab_has_time_fields'])
+
+            if (obj['switch_tab_tcol_datetime'] == "true") {
+                $('#switch_tab_tcol_datetime').prop({checked:true});
+            } else {
+                $('#switch_tab_tcol_datetime').prop({checked:false});
+            }
+            $('#switch_tab_char_total_len').val(obj['switch_tab_char_total_len'])
+            $('#switch_tab_ddl_max_rows').val(obj['switch_tab_ddl_max_rows'])
+
+            //DDL审核规则:rows:5 ，表命名规范
+            if (obj['switch_tab_name_check'] == "true") {
+                $('#switch_tab_name_check').prop({checked:true});
+            } else {
+                $('#switch_tab_name_check').prop({checked:false});
+            }
+
+            if (obj['switch_tab_not_digit_first'] == "true") {
+                $('#switch_tab_not_digit_first').prop({checked:true});
+            } else {
+                $('#switch_tab_not_digit_first').prop({checked:false});
+            }
+
+            if (obj['switch_tab_two_digit_end'] == "true") {
+                $('#switch_tab_two_digit_end').prop({checked:true});
+            } else {
+                $('#switch_tab_two_digit_end').prop({checked:false});
+            }
+            $('#switch_tab_max_len').val(obj['switch_tab_max_len'])
+            $('#switch_tab_disable_prefix').val(obj['switch_tab_disable_prefix'])
+
+            //DDL批量开关
+             if (obj['switch_ddl_batch'] == "true") {
+                $('#switch_ddl_batch').prop({checked:true});
+            } else {
+                $('#switch_ddl_batch').prop({checked:false});
+            }
+            //DML批量开关
+            if (obj['switch_dml_batch'] == "true") {
+                $('#switch_dml_batch').prop({checked:true});
+            } else {
+                $('#switch_dml_batch').prop({checked:false});
+            }
+
+            //DDL审核规则:rows:5 ，索引命名规范
+            if (obj['switch_idx_name_check'] == "true") {
+                $('#switch_idx_name_check').prop({checked:true});
+            } else {
+                $('#switch_idx_name_check').prop({checked:false});
+            }
+
+            if (obj['switch_idx_name_null'] == "true") {
+                $('#switch_idx_name_null').prop({checked:true});
+            } else {
+                $('#switch_idx_name_null').prop({checked:false});
+            }
+
+            if (obj['switch_idx_name_rule'] == "true") {
+                $('#switch_idx_name_rule').prop({checked:true});
+            } else {
+                $('#switch_idx_name_rule').prop({checked:false});
+            }
+            $('#switch_idx_numbers').val(obj['switch_idx_numbers'])
+            $('#switch_idx_col_numbers').val(obj['switch_idx_col_numbers'])
+
+           if (obj['switch_idx_name_col'] == "true") {
+                $('#switch_idx_name_col').prop({checked:true});
+            } else {
+                $('#switch_idx_name_col').prop({checked:false});
+            }
+
+            //DDL审核规则:rows:6
+            // switch_virtual_col
+
+        }
+
+       function query_rule() {
+            $.ajax({
+                  url: "/sys/query_rule",
+                  type: "post",
+                  datatype: "json",
+                  success: function (dataSet) {
+                      console.log('message=',dataSet.message,'code=',dataSet.code);
+                      set_attr(dataSet.message)
+                  }
+             });
+        }
+
+       $(document).ready(function() {
             $(".vertical-spin").TouchSpin({
                 verticalbuttons:    true,
                 verticalupclass:   'ion-plus-round',
                 verticaldownclass: 'ion-minus-round'
             });
+
+            query_rule();
       });
 
       $('#switch_pk_not_int_bigint').change(function(){
@@ -707,8 +955,36 @@
               $('#switch_tab_pk_auto_incr').prop({checked:true});
               $('#switch_tab_pk_autoincrement_1').prop({checked:true});
           }
-
       });
+
+
+      $('#switch_check_ddl').click(function(){
+             showtips('error','','检测DDL语法及权限不能修改!');
+      });
+
+      $('#switch_idx_name_rule').change(function(){
+          if ($('#switch_idx_name_rule').is(":checked")) {
+             showtips('info','索引名称规范','普通:idx_col_n1,唯一:idx_col_u1,复合:idx_col_c1,col:为索引的首列名,n1:表示n+数字');
+          }
+      })
+
+      $('#switch_idx_name_null').change(function(){
+          if ($('#switch_idx_name_null').is(":checked")) {
+              $('#switch_idx_name_rule').prop({checked:false});
+          } else {
+              $('#switch_idx_name_rule').prop({checked:true});
+              $('#switch_idx_name_rule').change()
+          }
+      })
+
+      $('#switch_idx_name_rule').change(function(){
+          if ($('#switch_idx_name_rule').is(":checked")) {
+              $('#switch_idx_name_null').prop({checked:false});
+          } else {
+              $('#switch_idx_name_null').prop({checked:true});
+          }
+      })
+
 
       $('#switch_check_ddl').change(function(){
           if ($('#switch_check_ddl').is(":checked")) {
@@ -718,15 +994,43 @@
           }
       });
 
+      //表名规范控制
       $('#switch_tab_name_check').change(function(){
           if ($('#switch_tab_name_check').is(":checked")) {
-                $('#switch_tab_max_len').prop({disabled:false});
-                $('#switch_tab_not_digit_first').prop({checked:true});
-                $('#switch_tab_disable_suffix').prop({disabled:false});
+              $('#switch_tab_not_digit_first').prop({checked:true});
+              $('#switch_tab_not_digit_first').prop({disabled:false});
+              $('#switch_tab_two_digit_end').prop({checked:true});
+              $('#switch_tab_two_digit_end').prop({disabled:false});
+              $('#switch_tab_max_len').prop({disabled:false});
+              $('#switch_tab_disable_prefix').prop({disabled:false});
+
           } else {
-                $('#switch_tab_max_len').prop({disabled:true});
-                $('#switch_tab_not_digit_first').prop({checked:false});
-                $('#switch_tab_disable_suffix').prop({disabled:true});
+              $('#switch_tab_not_digit_first').prop({checked:false});
+              $('#switch_tab_not_digit_first').prop({disabled:true});
+              $('#switch_tab_two_digit_end').prop({checked:false});
+              $('#switch_tab_two_digit_end').prop({disabled:true});
+              $('#switch_tab_max_len').prop({disabled:true});
+              $('#switch_tab_disable_prefix').prop({disabled:true});
+          }
+      });
+
+      //索引规范控制
+      $('#switch_idx_name_check').change(function(){
+          if ($('#switch_idx_name_check').is(":checked")) {
+              $('#switch_idx_name_null').prop({disabled:false});
+              $('#switch_idx_name_null').prop({checked:true});
+              $('#switch_idx_name_rule').prop({disabled:false});
+              $('#switch_idx_name_rule').prop({checked:false});
+              $('#switch_idx_col_numbers').prop({disabled:false});
+              $('#switch_idx_col_numbers').prop({disabled:false});
+
+          } else {
+              $('#switch_idx_name_null').prop({disabled:true});
+              $('#switch_idx_name_null').prop({checked:false});
+              $('#switch_idx_name_rule').prop({disabled:true});
+              $('#switch_idx_name_rule').prop({checked:false});
+              $('#switch_idx_col_numbers').prop({disabled:true});
+              $('#switch_idx_col_numbers').prop({disabled:true});
           }
       });
 
@@ -738,27 +1042,45 @@
             type: "post",
             datatype: "json",
             data: {
+                switch_check_ddl                : $('#switch_check_ddl').is(":checked"),
                 switch_tab_not_exists_pk        : $('#switch_tab_not_exists_pk').is(":checked"),
                 switch_tab_pk_id                : $('#switch_tab_pk_id').is(":checked"),
                 switch_tab_pk_auto_incr         : $('#switch_tab_pk_auto_incr').is(":checked"),
-                switch_tab_pk_autoincrement_1   : $('#switch_tab_pk_autoincrement_1').is(":checked"),
 
+                switch_tab_pk_autoincrement_1   : $('#switch_tab_pk_autoincrement_1').is(":checked"),
                 switch_pk_not_int_bigint        : $('#switch_pk_not_int_bigint').is(":checked"),
                 switch_tab_comment              : $('#switch_tab_comment').is(":checked"),
                 switch_col_comment              : $('#switch_col_comment').is(":checked"),
-                switch_col_not_null             : $('#switch_col_not_null').is(":checked"),
 
+                switch_col_not_null             : $('#switch_col_not_null').is(":checked"),
                 switch_col_default_value        : $('#switch_col_default_value').is(":checked"),
                 switch_tcol_default_value       : $('#switch_tcol_default_value').is(":checked"),
                 switch_char_max_len             : $('#switch_char_max_len').val(),
-                switch_tab_has_time_fields      : $('#switch_tab_has_time_fields').val(),
 
+                switch_tab_has_time_fields      : $('#switch_tab_has_time_fields').val(),
                 switch_tab_tcol_datetime        : $('#switch_tab_tcol_datetime').is(":checked"),
                 switch_tab_char_total_len       : $('#switch_tab_char_total_len').val(),
-                switch_check_ddl                : $('#switch_check_ddl').is(":checked"),
-                switch_virtual_col              : $('#switch_virtual_col').is(":checked"),
+                switch_tab_ddl_max_rows         : $('#switch_tab_ddl_max_rows').val(),
 
+                //表命令规范
+                switch_tab_name_check           : $('#switch_tab_name_check').is(":checked"),
+                switch_tab_not_digit_first      : $('#switch_tab_not_digit_first').is(":checked"),
+                switch_tab_two_digit_end        : $('#switch_tab_two_digit_end').is(":checked"),
                 switch_tab_max_len              : $('#switch_tab_max_len').val(),
+                switch_tab_disable_prefix       : $('#switch_tab_disable_prefix').val(),
+
+                //批量DDL，DML开关
+                switch_ddl_batch                : $('#switch_ddl_batch').is(":checked"),
+                switch_dml_batch                : $('#switch_dml_batch').is(":checked"),
+
+                //索引命名规范
+                switch_idx_name_check           : $('#switch_idx_name_check').is(":checked"),
+                switch_idx_name_null            : $('#switch_idx_name_null').is(":checked"),
+                switch_idx_name_rule            : $('#switch_idx_name_rule').is(":checked"),
+                switch_idx_numbers              : $('#switch_idx_numbers').val(),
+                switch_idx_col_numbers          : $('#switch_idx_col_numbers').val(),
+                switch_idx_name_col             : $('#switch_idx_name_col').is(":checked"),
+                switch_virtual_col              : $('#switch_virtual_col').is(":checked"),
 
             },
             success: function (dataSet) {

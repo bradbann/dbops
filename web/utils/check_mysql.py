@@ -773,9 +773,9 @@ def check_table_valid(p_sql):
             result['message'] = '表名前缀不能为SYS！'
 
         if get_obj_type(p_sql) == 'TABLE' and len(re.findall(r'\d{2,9}$', get_obj_name(p_sql).upper(), re.M)) > 0:
-                result['code'] = '1'
-                result['message'] = '禁止表名以连续2位及以上数字作为后缀名！'
-                return result
+            result['code'] = '1'
+            result['message'] = '禁止表名以连续2位及以上数字作为后缀名！'
+            return result
 
     return result
 

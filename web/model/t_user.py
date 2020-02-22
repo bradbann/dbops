@@ -306,6 +306,18 @@ def get_user_by_userid(p_userid):
     print("get_user_by_userid=",d_user,rs[0][3],rs[0][1])
     return d_user
 
+def get_users(p_dept):
+    db  = get_connection()
+    cr  = db.cursor()
+    sql = """select login_name,name from t_user  WHERE dept='{0}' order by id""".format(p_dept)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r)) 
+    cr.close()
+    return v_list
+
+
 def get_logon_user():
     db = get_connection()
     cr = db.cursor()

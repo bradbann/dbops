@@ -27,8 +27,8 @@ def get_server_ip():
     return '10.2.39.18'
 
 def get_server_port():
-    #return '81'
-    return options.port
+    return '81'
+    #return options.port
 
 def get_db_conf():
     d_db={}
@@ -354,7 +354,10 @@ def get_file_contents(filename):
     return lines
 
 def format_exception(v_sql):
-    return v_sql.split(',')[1].replace('"','')[0:-1]+'!'
+    try:
+      return v_sql.split(',')[1].replace('"','')[0:-1]+'!'
+    except:
+      return v_sql
 
 def format_sql(v_sql):
     return v_sql.replace("\\","\\\\").replace("'","\\'")

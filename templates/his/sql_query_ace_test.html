@@ -1,0 +1,121 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>数据库查询</title>
+    <link rel="stylesheet" href="{{static_url('assets/font-awesome/4.5.0/css/font-awesome.min.css')}}" />
+    <!-- ace styles -->
+    <link rel="stylesheet" href="{{static_url('assets/css/ace.min.css')}}"  />
+
+    <!--<link rel="stylesheet" href="{{static_url('assets/css/ace-skins.min.css')}}"/>-->
+    <!--<link rel="stylesheet" href="{{static_url('assets/css/ace-rtl.min.css')}}" />-->
+    <!--<script src="{{static_url('assets/js/ace-extra.min.js')}}"></script>-->
+<style>
+
+</style>
+
+</head>
+
+<body>
+   <p></p> <p></p> <p></p> <p></p>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="widget-box widget-color-green2">
+                <div class="widget-header">
+                    <h4 class="widget-title lighter smaller">
+                        合生通mysql测试环境
+                    </h4>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main padding-8">
+                        <ul id="tree1"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <!--ace treeview -->
+   <!--<script src="{{static_url('assets/js/jquery-2.1.4.min.js')}}"></script>-->
+   <script src="{{static_url('assets/js/tree.min.js')}}"></script>
+   <script src="{{static_url('assets/js/ace-elements.min.js')}}"></script>
+   <script src="{{static_url('assets/js/ace.min.js')}}"></script>
+
+   <!-- Toastr js -->
+   <script src="{{static_url('plugins/toastr/toastr.min.js')}}"></script>
+
+   <script type="text/javascript">
+
+        $(document).ready(function() {
+
+           var sampleData = initiateDemoData();//see below
+
+			  $('#tree1').ace_tree({
+					dataSource: sampleData['dataSource'] ,
+					loadingHTML:'<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>',
+					'open-icon' : 'ace-icon fa fa-folder-open',
+					'close-icon' : 'ace-icon fa fa-folder',
+					'itemSelect' : true,
+					'folderSelect': true,
+					'multiSelect': true,
+					'selected-icon' : null,
+					'unselected-icon' : null,
+					'folder-open-icon' : 'ace-icon tree-plus',
+					'folder-close-icon' : 'ace-icon tree-minus'
+				});
+
+	          function initiateDemoData(){
+
+					var tree_data = {
+						'music' : {text: 'Music', type: 'folder', 'icon-class':'orange'}	,
+						'video' : {text: 'Video', type: 'folder', 'icon-class':'blue'}
+					}
+					tree_data['music']['additionalParameters'] = {
+						'children' : [
+							{text: '<i class="ace-icon fa fa-music blue"></i> song1.ogg', type: 'item'},
+							{text: '<i class="ace-icon fa fa-music blue"></i> song2.ogg', type: 'item'},
+							{text: '<i class="ace-icon fa fa-music blue"></i> song3.ogg', type: 'item'},
+							{text: '<i class="ace-icon fa fa-music blue"></i> song4.ogg', type: 'item'},
+							{text: '<i class="ace-icon fa fa-music blue"></i> song5.ogg', type: 'item'}
+						]
+					}
+					tree_data['video']['additionalParameters'] = {
+						'children' : [
+							{text: '<i class="ace-icon fa fa-film blue"></i> movie1.avi', type: 'item'},
+							{text: '<i class="ace-icon fa fa-film blue"></i> movie2.avi', type: 'item'},
+							{text: '<i class="ace-icon fa fa-film blue"></i> movie3.avi', type: 'item'},
+							{text: '<i class="ace-icon fa fa-film blue"></i> movie4.avi', type: 'item'},
+							{text: '<i class="ace-icon fa fa-film blue"></i> movie5.avi', type: 'item'}
+						]
+					}
+
+					var dataSource = function(options, callback){
+						var $data = null
+						if(!("text" in options) && !("type" in options)){
+							$data = tree_data;//the root tree
+							callback({ data: $data });
+							return;
+						}
+						else if("type" in options && options.type == "folder") {
+							if("additionalParameters" in options && "children" in options.additionalParameters)
+								$data = options.additionalParameters.children || {};
+							else $data = {}//no data
+						}
+
+						if($data != null)//this setTimeout is only for mimicking some random delay
+							setTimeout(function(){callback({ data: $data });} , parseInt(Math.random() * 500) + 200);
+
+						//we have used static data here
+						//but you can retrieve your data dynamically from a server using ajax call
+						//checkout examples/treeview.html and examples/treeview.js for more info
+					}
+
+					return {'dataSource' : dataSource}
+				}
+        });
+
+ </script>
+
+</body>
+
+</html>

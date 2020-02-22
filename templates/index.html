@@ -629,18 +629,6 @@
                  })
             });
 
-            // function get_time() {
-            //     $.ajax({
-            //         url: "/time",
-            //         type: "post",
-            //         datatype: "text",
-            //         success: function (dataSet) {
-            //             $('#span_time').text(dataSet)
-            //             console.log('get_time=',dataSet);
-            //         }
-            //      })
-            // }
-
             function updateTime() {
                   var date = new Date();
                   this.hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
@@ -669,7 +657,5 @@
             });
 
         </script>
-
-        get_time()
     </body>
 </html>

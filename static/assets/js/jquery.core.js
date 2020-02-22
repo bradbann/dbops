@@ -222,7 +222,3 @@ function($) {
     "use strict";
     $.Components.init();
 }(window.jQuery);
-
-
-
-

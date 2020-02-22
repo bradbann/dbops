@@ -67,3 +67,17 @@ def query_dm(p_code):
     cr.close()
     db.commit()
     return v_list
+
+def query_rule():
+    db = get_connection()
+    cr = db.cursor()
+    sql = "SELECT rule_code,rule_value FROM t_sql_audit_rule"
+    print(sql)
+    cr.execute(sql)
+    v_dict = {}
+    for r in cr.fetchall():
+        v_dict[r[0]]=r[1]
+    cr.close()
+    db.commit()
+    print('query_rule=',v_dict)
+    return v_dict
