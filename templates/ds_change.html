@@ -7,13 +7,9 @@
     <!-- DataTables -->
     <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/buttons.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{static_url('plugins/datatables/fixedHeader.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{static_url('plugins/datatables/dataTables.colVis.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{static_url('plugins/datatables/fixedColumns.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
-    <!-- Sweet Alert -->
     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
 
     <style>
@@ -54,6 +50,16 @@
                 </select>
              </div>
           </div>
+          <div class="col-md-2">
+             <div class="input-group">
+                 <span class="input-group-addon">数据源类型</span>
+                 <select class="form-control select" id="ds_type" >
+                    <option value='' selected = "selected">.....</option>
+                    <option value='backup' >备份数据源</option>
+                    <option value='sync' >同步数据源</option>
+                </select>
+             </div>
+          </div>
            <div class="col-md-1">
              <div class="input-group">
                 <span class="input-group-btn">
@@ -70,6 +76,7 @@
           <div class="col-md-offset-5 col-lg-offset-5col-xl-offset-5">
                <input  id='dsupd' type='button' class="btn waves-effect waves-light btn-primary" value="变更"/>
                <input  id='dsdel' type='button' class="btn waves-effect waves-light btn-primary" value="删除"/>
+              <input  id='dsclone' type='button' class="btn waves-effect waves-light btn-primary" value="克隆"/>
           </div>
      </div>
     </div>
@@ -93,18 +100,28 @@
         $("#dsname").bind("input propertychange",function(){
            $('#dsupd').attr("disabled",true);
            $('#dsdel').attr("disabled",true);
+           $('#dsclone').attr("disabled",true);
            $("#query_btn").click();
         });
 
         $("#market_id").bind("input propertychange",function(){
            $('#dsupd').attr("disabled",true);
            $('#dsdel').attr("disabled",true);
+           $('#dsclone').attr("disabled",true);
            $("#query_btn").click();
         });
 
         $("#db_env").bind("input propertychange",function(){
            $('#dsupd').attr("disabled",true);
            $('#dsdel').attr("disabled",true);
+           $('#dsclone').attr("disabled",true);
+           $("#query_btn").click();
+        });
+
+        $("#ds_type").bind("input propertychange",function(){
+           $('#dsupd').attr("disabled",true);
+           $('#dsdel').attr("disabled",true);
+           $('#dsclone').attr("disabled",true);
            $("#query_btn").click();
         });
 
@@ -116,9 +133,13 @@
            if ( rec==1 ){
               $('#dsupd').attr("disabled",false);
               $('#dsdel').attr("disabled",false);
+              $('#dsclone').attr("disabled",false);
+
            } else {
               $('#dsupd').attr("disabled",true);
-              $('#dsdel').attr("disabled",true); }
+              $('#dsdel').attr("disabled",true);
+              $('#dsclone').attr("disabled",true);
+           }
         }
 
         $("#query_btn").click(function() {
@@ -130,6 +151,7 @@
                       dsname   : $('#dsname').val(),
                       market_id: $('#market_id').val(),
                       db_env   : $('#db_env').val(),
+                      ds_type  : $('#ds_type').val(),
                   },
                   success: function (dataSet) {
                       $('#example').DataTable( {
@@ -190,9 +212,20 @@
                          });
                       $('#dsupd').attr("disabled",true);
                       $('#dsdel').attr("disabled",true);
+                      $('#dsclone').attr("disabled",true);
                  }
              });
             });
+
+        $('#dsclone').on('click', function() {
+             var dsid='';
+             $("#example tbody tr td input:checked").each( function() {
+                  var row=$(($(this).parent().parent().html()));
+                  dsid=row[0].innerHTML;
+                  console.log("dsid=",dsid)
+             });
+             $('#main-container-div').load("/ds/clone?dsid="+dsid);
+        });
 
         $('#dsupd').on('click', function() {
              var dsid='';

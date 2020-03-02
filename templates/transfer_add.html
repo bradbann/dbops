@@ -3,13 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>新建传输</title>
-    <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>    <!-- Sweet Alert -->
-    <link href="{{static_url('assets/css/icons.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{static_url('plugins/tooltipster/tooltipster.bundle.min.css')}}" rel="stylesheet" >
     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
-    <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
-    <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <style>
         .modal-lg {
             width:65%;
@@ -136,7 +131,7 @@
            <div class="col-md-6">
                <div class="form-group">
                     <div>
-                          <button tabindex="0" class="btn btn-xs waves-effect waves-light" role="button" data-toggle="popover" data-trigger="focus" title="" data-content="支持多表传输，表间用逗号隔开！" data-original-title="小提示">
+                          <button type="button" tabindex="0" class="btn btn-xs waves-effect waves-light" role="button" data-toggle="popover" data-trigger="focus" title="" data-content="支持多表传输，表间用逗号隔开！" data-original-title="小提示">
                             <i class="ion-help"></i>
                          </button>
                     </div>
@@ -157,8 +152,8 @@
            <div class="col-md-6">
                <div class="form-group">
                     <div>
-                          <button tabindex="0" class="btn btn-xs waves-effect waves-light" role="button" data-toggle="popover" data-trigger="focus" title="" data-content="单表支持按条件传输，多表不支持！" data-original-title="小提示">
-                            <i class="ion-help"></i>
+                          <button type="button" tabindex="0" class="btn btn-xs waves-effect waves-light" role="button" data-toggle="popover" data-trigger="focus" title="" data-content="单表支持按条件传输，多表不支持！" data-original-title="小提示">
+                              <i class="ion-help"></i>
                          </button>
                     </div>
                </div>
@@ -280,9 +275,6 @@
           </div>
        </div>
     </form>
-
-    <!-- Counter js  -->
-    <script src="{{static_url('plugins/counterup/jquery.counterup.min.js')}}"></script>
 
     <!-- Sweet-Alert  -->
     <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>

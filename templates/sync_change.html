@@ -104,12 +104,14 @@
              </div>
          </div>
          <div class="row">
-              <div class="col-md-offset-5 col-lg-offset-5col-xl-offset-5">
-                   <input  id='dsupd' type='button' class="btn waves-effect waves-light btn-primary" value="变更"/>
-                   <input  id='dsdel' type='button' class="btn waves-effect waves-light btn-primary" value="删除"/>
-                   <input  id='push' type='button' class="btn waves-effect waves-light btn-primary"  value="推送"/>
-                   <input  id='run' type='button' class="btn waves-effect waves-light btn-primary"   value="启动"/>
-                   <input  id='stop' type='button' class="btn waves-effect waves-light btn-primary"  value="停止"/>
+              <div class="col-md-offset-4 col-lg-offset-4 col-xl-offset-4">
+                   <input  id='dsupd' type='button' class="btn waves-effect waves-light btn-primary"  value="变更"/>
+                   <input  id='dsdel' type='button' class="btn waves-effect waves-light btn-primary"  value="删除"/>
+                   <input  id='push'  type='button' class="btn waves-effect waves-light btn-primary"  value="推送"/>
+                   <input  id='run'   type='button' class="btn waves-effect waves-light btn-primary"  value="启动"/>
+                   <input  id='stop'  type='button' class="btn waves-effect waves-light btn-primary"  value="停止"/>
+                   <input  id='clone' type='button' class="btn waves-effect waves-light btn-primary"  value="克隆"/>
+
              </div>
          </div>
          <div id='scrDiv' class='divBG'>
@@ -142,6 +144,7 @@
            $('#push').attr("disabled",true);
            $('#run').attr("disabled",true);
            $('#stop').attr("disabled",true);
+           $('#clone').attr("disabled",true);
            $("#query_btn").click();
         });
 
@@ -151,6 +154,7 @@
            $('#push').attr("disabled",true);
            $('#run').attr("disabled",true);
            $('#stop').attr("disabled",true);
+           $('#clone').attr("disabled",true);
            $("#query_btn").click();
         });
 
@@ -160,6 +164,7 @@
            $('#push').attr("disabled",true);
            $('#run').attr("disabled",true);
            $('#stop').attr("disabled",true);
+           $('#clone').attr("disabled",true);
            $("#query_btn").click();
         });
 
@@ -169,6 +174,7 @@
            $('#push').attr("disabled",true);
            $('#run').attr("disabled",true);
            $('#stop').attr("disabled",true);
+           $('#clone').attr("disabled",true);
            $("#query_btn").click();
         });
 
@@ -178,6 +184,7 @@
            $('#push').attr("disabled",true);
            $('#run').attr("disabled",true);
            $('#stop').attr("disabled",true);
+           $('#clone').attr("disabled",true);
            $("#query_btn").click();
         });
 
@@ -192,12 +199,14 @@
               $('#push').attr("disabled",false);
               $('#run').attr("disabled",false);
               $('#stop').attr("disabled",false);
+              $('#clone').attr("disabled",false);
            } else {
               $('#dsupd').attr("disabled",true);
               $('#dsdel').attr("disabled",true);
               $('#push').attr("disabled",true);
               $('#run').attr("disabled",true);
               $('#stop').attr("disabled",true);
+              $('#clone').attr("disabled",true);
            }
         }
 
@@ -236,7 +245,7 @@
                           scrollX    :true,
                           scrollCollapse: true,
                           paging:     true,
-                          iDisplayLength: 16,
+                          iDisplayLength: 15,
                           data: dataSet,
                           columns: [
                             { "title": "标识符"},
@@ -286,6 +295,7 @@
                       $('#push').attr("disabled",true);
                       $('#run').attr("disabled",true);
                       $('#stop').attr("disabled",true);
+                      $('#clone').attr("disabled",true);
                  }
              });
             });
@@ -411,6 +421,16 @@
                   console.log("syncid=",syncid)
              });
              $('#main-container-div').load("/sync/edit?sync_id="+syncid);
+        });
+
+        $('#clone').on('click', function() {
+             var syncid='';
+             $("#example tbody tr td input:checked").each( function() {
+                  var row=$(($(this).parent().parent().html()));
+                  syncid=row[0].innerHTML;
+                  console.log("syncid=",syncid)
+             });
+             $('#main-container-div').load("/sync/clone?sync_id="+syncid);
         });
 
         $('#dsdel').on('click', function() {

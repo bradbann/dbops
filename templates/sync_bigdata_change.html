@@ -75,6 +75,17 @@
                 </select>
              </div>
          </div>
+         <div class="col-md-2">
+             <div class="input-group">
+                 <span class="input-group-addon">大数据环境</span>
+                 <select class="form-control select" id="sync_env" >
+                     <option value='' selected = "selected">.....</option>
+                     <option  value='prod' >大数据生产</option>
+                     <option value='dev' >大数据开发</option>
+                     <option value='uat'>大数据测试</option>
+                </select>
+             </div>
+         </div>
 
          <div class="col-md-1">
              <div class="input-group">
@@ -190,6 +201,7 @@
                       sync_tag   : $('#tagname').val(),
                       sync_ywlx  : $('#sync_ywlx').val(),
                       sync_type  : $('#sync_type').val(),
+                      sync_env   : $('#sync_env').val()
                   },
                   success: function (dataSet) {
                       $('#example').DataTable( {
@@ -202,7 +214,7 @@
                           scrollX    :true,
                           scrollCollapse: true,
                           paging:     true,
-                          iDisplayLength: 16,
+                          iDisplayLength: 15,
                           data: dataSet,
                           columns: [
                             { "title": "标识符"},
@@ -213,7 +225,7 @@
                             { "title": "同步方向" },
                             { "title": "运行时间" },
                             { "title": "接口服务器"},
-                            { "title": "任务状态"},
+                            { "title": "状态"},
                             {
                                 "title":"选择",
                                 "width": "25px",

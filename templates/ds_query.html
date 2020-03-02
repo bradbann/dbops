@@ -50,6 +50,16 @@
                 </select>
              </div>
           </div>
+          <div class="col-md-2">
+             <div class="input-group">
+                 <span class="input-group-addon">数据源类型</span>
+                 <select class="form-control select" id="ds_type" >
+                    <option value='' selected = "selected">.....</option>
+                    <option value='backup' >备份数据源</option>
+                    <option value='sync' >同步数据源</option>
+                </select>
+             </div>
+          </div>
            <div class="col-md-1">
              <div class="input-group">
                <span class="input-group-btn">
@@ -90,6 +100,10 @@
            $("#query_btn").click();
         });
 
+         $("#ds_type").bind("input propertychange",function(){
+           $("#query_btn").click();
+        });
+
         $(document).ready(function() {
             $("#query_btn").click(function() {
               $.ajax({
@@ -100,6 +114,7 @@
                       dsname   : $('#dsname').val(),
                       market_id: $('#market_id').val(),
                       db_env   : $('#db_env').val(),
+                      ds_type  : $('#ds_type').val(),
                   },
                   success: function (dataSet) {
                       $('#example').DataTable( {

@@ -51,10 +51,11 @@ def del_check_results(db,user):
 
 def get_obj_name(p_sql):
     if p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("TABLE") > 0 \
-        or p_sql.upper().count("ALTER") > 0 and p_sql.upper().count("TABLE") > 0 \
-          or p_sql.upper().count("DROP") > 0 and p_sql.upper().count("TABLE") > 0 \
-            or  p_sql.upper().count("CREATE")>0 and p_sql.upper().count("VIEW")>0 \
-              or p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("FUNCTION") > 0 \
+        or p_sql.upper().count("TRUNCATE") > 0 and p_sql.upper().count("TABLE") > 0 \
+         or p_sql.upper().count("ALTER") > 0 and p_sql.upper().count("TABLE") > 0 \
+           or p_sql.upper().count("DROP") > 0 and p_sql.upper().count("TABLE") > 0 \
+             or  p_sql.upper().count("CREATE")>0 and p_sql.upper().count("VIEW")>0 \
+               or p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("FUNCTION") > 0 \
                 or p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("PROCEDURE") > 0 \
                   or p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("INDEX") > 0 \
                     or p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("TRIGGER") > 0  :
@@ -68,8 +69,14 @@ def get_obj_name(p_sql):
           return obj.split('(')[0]
        else:
           return obj
-    else:
-       return ''
+
+    if get_obj_op(p_sql) in('INSERT','DELETE'):
+         return  re.split(r'\s+', p_sql.strip())[2].split('(')[0].strip().replace('`','')
+
+    if get_obj_op(p_sql) in('UPDATE'):
+         return re.split(r'\s+', p_sql.strip())[1].split('(')[0].strip().replace('`','')
+
+
 
 def get_obj_type(p_sql):
     if p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("TABLE") > 0 \
@@ -102,6 +109,8 @@ def get_obj_op(p_sql):
        return re.split(r'\s+', p_sql)[0].upper()+'_'+re.split(r'\s+', p_sql)[1].upper()
     if re.split(r'\s+', p_sql)[0].upper()== 'ALTER' and re.split(r'\s+', p_sql)[1].upper()=='TABLE' and  re.split(r'\s+', p_sql)[3].upper() in('ADD','DROP'):
        return re.split(r'\s+', p_sql)[0].upper()+'_'+re.split(r'\s+', p_sql)[1].upper()+'_'+re.split(r'\s+', p_sql)[3].upper()
+    if re.split(r'\s+', p_sql)[0].upper() in('INSERT','UPDATE','DELETE') :
+       return re.split(r'\s+', p_sql)[0].upper()
 
 
 def get_obj_pk_name(p_curdb,p_sql):
@@ -1659,13 +1668,65 @@ def process_single_ddl(p_dbid,p_cdb,p_sql,p_user):
                 if  not check_idx_rule(db_ops,db_cur, p_sql.strip(), p_user, n_sxh):
                     result = False
 
-
     if result:
         rule['id'] = '0'
         rule['error'] = '检测通过!'
         save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
-
     return result
+
+
+def get_dml_privs_grammar(p_curdb,p_sql):
+    try:
+        op = get_obj_op(p_sql)
+        cr  = p_curdb.cursor()
+        if op in ('INSERT','UPDATE','DELETE'):
+            if check_mysql_tab_exists(p_curdb, get_obj_name(p_sql)) == 0:
+                return '表:{0}不存在!'.format(get_obj_name(p_sql))
+            try:
+                cr.execute(f_get_table_ddl(p_curdb,get_obj_name(p_sql)).replace(get_obj_name(p_sql),'dbops_'+get_obj_name(p_sql)))
+                cr.execute(p_sql.replace(get_obj_name(p_sql), 'dbops_' + get_obj_name(p_sql)))
+                cr.execute('drop table {0}'.format('dbops_' + get_obj_name(p_sql)))
+                return None
+            except Exception as e:
+                return process_result(str(e))
+    except Exception as e:
+        return process_result(str(e))
+
+
+def get_dml_rows(p_curdb,p_sql):
+    try:
+        if check_mysql_tab_exists(p_curdb, get_obj_name(p_sql)) == 0:
+            return '表:{0}不存在!'.format(get_obj_name(p_sql))
+
+        op = get_obj_op(p_sql)
+        cr = p_curdb.cursor()
+        if op == 'INSERT':
+           cr.execute(f_get_table_ddl(p_curdb, get_obj_name(p_sql)).
+                        replace(get_obj_name(p_sql),'dbops_' + get_obj_name(p_sql)))
+           cr.execute(p_sql.replace(get_obj_name(p_sql), 'dbops_' + get_obj_name(p_sql)))
+           cr.execute('select count(0) from {0}'.format('dbops_' + get_obj_name(p_sql)))
+           rs=cr.fetchone()
+           cr.execute('drop table {0}'.format('dbops_' + get_obj_name(p_sql)))
+           return rs[0]
+        elif op in('UPDATE','DELETE'):
+           cr.execute('select count(0) from {0} {1}'.
+                       format( get_obj_name(p_sql),p_sql[p_sql.upper().find('WHERE'):]))
+           rs=cr.fetchone()
+           return rs[0]
+
+    except Exception as e:
+        return process_result(str(e))
+
+
+def is_number(str):
+  try:
+    if str=='NaN':
+      return False
+    float(str)
+    return True
+  except ValueError:
+    return False
+
 
 def process_single_dml(p_dbid,p_cdb,p_sql,p_user):
     n_sxh  = 1
@@ -1679,7 +1740,7 @@ def process_single_dml(p_dbid,p_cdb,p_sql,p_user):
     cr_ops.execute(ops_sql)
     rs_ops = cr_ops.fetchall()
 
-    print('输出检测项...')
+    print('输出检测项...op=',get_obj_op(p_sql))
     print('-'.ljust(150, '-'))
     for r in rs_ops:
         print(r)
@@ -1692,213 +1753,79 @@ def process_single_dml(p_dbid,p_cdb,p_sql,p_user):
 
         rule['error'] = format_sql(rule['error'])
 
-        if rule['rule_code'] == 'switch_check_ddl' and rule['rule_value'] == 'true':
-            if get_obj_op(p_sql) in('CREATE_TABLE','ALTER_TABLE_ADD','ALTER_TABLE_DROP'):
-                print('检测DDL语法及权限...')
-                v = get_obj_privs_grammar(db_cur, p_sql.strip())
-                if v != '0':
-                    if v.count('存在') >0 :
-                        rule['error'] = format_sql(format_exception(v))
-                        save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
-                        result = False
-                        break
-                    else:
-                        rule['error'] = format_sql(format_exception(v))
-                        save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
-                        result = False
-
-        if rule['rule_code'] == 'switch_tab_not_exists_pk' and rule['rule_value'] == 'true':
-            if get_obj_op(p_sql) == 'CREATE_TABLE':
-                print('检查表必须为主键...')
-                if get_obj_type(p_sql.strip()) == 'TABLE' and not (
-                        p_sql.upper().count('PRIMARY') > 0 and p_sql.upper().count('KEY') > 0):
-                    rule['error'] = rule['error'].format(get_obj_name(p_sql.strip()))
-                    save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
+        if rule['rule_code'] == 'switch_dml_where' and rule['rule_value'] == 'true':
+            if get_obj_op(p_sql) in('UPDATE','DELETE'):
+               print('检测DML语句条件...')
+               if p_sql.upper().strip().count(' WHERE ') == 0:
+                    save_check_results(db_ops, rule, p_user, p_sql.strip(), n_sxh)
                     result = False
 
-        if rule['rule_code'] == 'switch_tab_pk_id' and rule['rule_value'] == 'true':
-            if get_obj_op(p_sql) == 'CREATE_TABLE':
-                print('强制主键名为ID...')
-                if get_obj_type(p_sql) == 'TABLE' and (p_sql.upper().count('PRIMARY') > 0 \
-                        and p_sql.upper().count('KEY') > 0) and get_obj_pk_name(db_cur,p_sql) != 'id':
-                    rule['error'] = rule['error'].format(get_obj_name(p_sql.strip()))
-                    save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
-                    result = False
 
-        if rule['rule_code'] == 'switch_tab_pk_auto_incr' and rule['rule_value'] == 'true':
-            if get_obj_op(p_sql) == 'CREATE_TABLE':
-                print('强制主键为自增列...')
-                if get_obj_type(p_sql) == 'TABLE' and (p_sql.upper().count('PRIMARY') > 0 \
-                            and p_sql.upper().count('KEY') > 0) and get_obj_pk_exists_auto_incr(db_cur, p_sql) == 0:
-                    rule['error'] = rule['error'].format(get_obj_name(p_sql.strip()))
-                    save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
-                    result = False
+        if rule['rule_code'] == 'switch_dml_order' and rule['rule_value'] == 'true':
+            if get_obj_op(p_sql) in('UPDATE','DELETE'):
+               print('DML语句禁用 ORDER BY...')
+               if re.search('\s+ORDER\s+BY\s+', p_sql.strip().upper()) is not None:
+                  save_check_results(db_ops, rule, p_user, p_sql.strip(), n_sxh)
+                  result = False
 
-        if rule['rule_code'] == 'switch_tab_pk_autoincrement_1' and rule['rule_value'] == 'true':
-            if get_obj_op(p_sql) == 'CREATE_TABLE':
-                print('强制自增列初始值为1...')
-                if get_obj_type(p_sql) == 'TABLE' \
-                        and (p_sql.upper().count('PRIMARY') > 0  and p_sql.upper().count('KEY') > 0) \
-                           and get_obj_exists_auto_incr_not_1(db_cur, p_sql) != 1:
-                    rule['error'] = rule['error'].format(get_obj_name(p_sql.strip()))
-                    save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
-                    result = False
+        if rule['rule_code'] == 'switch_dml_select' and rule['rule_value'] == 'true':
+            if get_obj_op(p_sql) in('INSERT','UPDATE','DELETE'):
+               print('DML语句禁用 SELECT...')
+               if re.search('SELECT\s+', p_sql.strip().upper()) is not None\
+                    and re.search('\s+FROM\s+', p_sql.strip().upper()) is not None:
+                  save_check_results(db_ops, rule, p_user, p_sql.strip(), n_sxh)
+                  result = False
 
-        if rule['rule_code'] == 'switch_pk_not_int_bigint' and rule['rule_value'] == 'false':
-            if get_obj_op(p_sql) == 'CREATE_TABLE':
-                print('不允许主键类型非int/bigint...')
-                if get_obj_type(p_sql) == 'TABLE' and (p_sql.upper().count('PRIMARY') > 0 \
-                        and p_sql.upper().count('KEY') > 0) and get_obj_pk_type_not_int_bigint(db_cur, p_sql) > 0:
-                    rule['error'] = rule['error'].format(get_obj_name(p_sql.strip()))
-                    save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
-                    result = False
+        if rule['rule_code'] == 'switch_dml_max_rows':
+            if get_obj_op(p_sql) in('INSERT','UPDATE','DELETE'):
+               print('DML最大影响行数...')
+               v =  get_dml_rows(db_cur,p_sql)
+               print('v=',v)
+               if is_number(str(v)):
+                   if v > int(rule['rule_value']):
+                      rule['error'] = rule['error'].format(rule['rule_value'])
+                      save_check_results(db_ops, rule, p_user, p_sql.strip(), n_sxh)
+                      result = False
+               else:
+                   rule['error'] = rule['error'].format(format_exception(v))
+                   save_check_results(db_ops, rule, p_user, p_sql.strip(), n_sxh)
+                   result = False
 
-        if rule['rule_code'] == 'switch_tab_comment' and rule['rule_value'] == 'true':
-            if get_obj_op(p_sql) == 'CREATE_TABLE':
-                print('检查表注释...')
-                if get_obj_type(p_sql) == 'TABLE' and get_tab_comment(db_cur, p_sql) == 0:
-                    rule['error'] = rule['error'].format(get_obj_name(p_sql.strip()))
-                    save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
-                    result = False
+        if rule['rule_code'] == 'switch_dml_ins_exists_col' and rule['rule_value'] == 'true':
+            if get_obj_op(p_sql) in('INSERT'):
+               print('检查插入语句那必须存在列名...')
+               n_pos= re.split(r'\s+', p_sql.strip())[2].count(')')
+               if n_pos == 0:
+                   n_pos = re.split(r'\s+', p_sql.strip())[3].count(')')
+               if n_pos == 0:
+                   save_check_results(db_ops, rule, p_user, p_sql.strip(), n_sxh)
+                   result = False
 
-        if rule['rule_code'] == 'switch_col_comment' and rule['rule_value'] == 'true' and get_obj_type(
-                p_sql) == 'TABLE':
-            if get_obj_op(p_sql) in ('CREATE_TABLE', 'ALTER_TABLE_ADD'):
-                print('检查列注释...')
-                v = get_col_comment(db_cur, p_sql)
-                e = rule['error']
-                try:
-                    for i in v:
-                        if i[2] == 0:
-                            result = False
-                            rule['error'] = e.format(i[0].replace('dbops_' + get_obj_name(p_sql), get_obj_name(p_sql)),
-                                                     i[1])
-                            save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
-                except IndexError as e:
-                    result = False
-                    rule['error'] = v
-                    save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
-                except:
-                    result = False
-                    rule['error'] = v
-                    save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
+        if rule['rule_code'] == 'switch_dml_ins_cols' \
+                and get_audit_rule('switch_dml_ins_exists_col')['rule_value'] == 'true':
+           if get_obj_op(p_sql) in ('INSERT'):
+               print('INSERT语句字段上限...')
+               n_cols = 0
+               try:
+                   n_cols = re.split(r'\s+',  p_sql.strip())[2].split('(')[1].split(')')[0].count(',')+1
+               except:
+                   n_cols = re.split(r'\s+', p_sql.strip())[3].split('(')[1].split(')')[0].count(',')+1
+               if n_cols>int(rule['rule_value']):
+                  rule['error'] =rule['error'].format(rule['rule_value'])
+                  save_check_results(db_ops, rule, p_user, p_sql.strip(), n_sxh)
+                  result = False
 
-        if rule['rule_code'] == 'switch_col_not_null' and rule['rule_value'] == 'true' and get_obj_type(
-                p_sql) == 'TABLE':
-            if get_obj_op(p_sql) in ('CREATE_TABLE', 'ALTER_TABLE_ADD'):
-                print('检查列是否为空...')
-                v = get_col_not_null(db_cur, p_sql)
-                e = rule['error']
-                try:
-                    for i in v:
-                        if i[2] == 0:
-                            result = False
-                            rule['error'] = e.format(i[0].replace('dbops_' + get_obj_name(p_sql), get_obj_name(p_sql)),
-                                                     i[1])
-                            save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
-                except IndexError as e:
-                    result = False
-                    rule['error'] = v
-                    save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
-                except:
-                    result = False
-                    rule['error'] = v
-                    save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
 
-        if rule['rule_code'] == 'switch_col_default_value' and rule['rule_value'] == 'true' and get_obj_type(
-                p_sql) == 'TABLE':
-            if get_obj_op(p_sql) in ('CREATE_TABLE', 'ALTER_TABLE_ADD'):
-                print('检查列默认值...')
-                v = get_col_default_value(db_cur, p_sql)
-                e = rule['error']
-                try:
+        if result:
+            if rule['rule_code'] == 'switch_check_dml' and rule['rule_value'] == 'true':
+                if get_obj_op(p_sql) in ('INSERT', 'UPDATE', 'DELETE'):
+                    print('检测DML语法及权限...')
+                    v = get_dml_privs_grammar(db_cur, p_sql.strip())
                     if v is not None:
-                        for i in v:
-                            if i[2] == 0:
-                                result = False
-                                rule['error'] = e.format(i[0].
-                                                  replace('dbops_' + get_obj_name(p_sql), get_obj_name(p_sql)),i[1])
-                                save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
-                except IndexError as e:
-                    result = False
-                    rule['error'] = v
-                    save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
-                except:
-                    result = False
-                    rule['error'] = v
-                    save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
-
-
-        if rule['rule_code'] == 'switch_time_col_default_value' and rule['rule_value'] == 'true' and get_obj_type(
-                p_sql) == 'TABLE':
-            if get_obj_op(p_sql) in ('CREATE_TABLE'):
-                print('检查时间字段默认值...')
-                v = get_time_col_default_value(db_cur, p_sql)
-                e = rule['error']
-                try:
-                    for i in v:
-                        if i[3] == 0:
-                            result = False
-                            rule['error'] = e.format(i[0], i[1], i[2])
-                            save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
-                except IndexError as e:
-                    result = False
-                    rule['error'] = v
-                    save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
-                except:
-                    result = False
-                    rule['error'] = v
-                    save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
-
-        if rule['rule_code'] == 'switch_char_max_len' and get_obj_type(p_sql) == 'TABLE':
-            if get_obj_op(p_sql) == 'CREATE_TABLE':
-                print('字符字段最大长度...')
-                v = get_tab_char_col_len(db_cur, p_sql, rule)
-                e = rule['error']
-                for i in v:
-                    if i[2] == 0:
+                        rule['error'] = format_sql(format_exception(v))
+                        save_check_results(db_ops, rule, p_user, p_sql.strip(), n_sxh)
                         result = False
-                        rule['error'] = e.format(i[0], i[1], rule['rule_value'])
-                        save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
 
-        if rule['rule_code'] == 'switch_tab_has_time_fields' and get_obj_type(p_sql) == 'TABLE':
-            if get_obj_op(p_sql) in('CREATE_TABLE','ALTER_TABLE_ADD','ALTER_TABLE_DROP'):
-                print('表必须拥有字段...')
-                v = get_tab_has_fields(db_cur, p_sql, rule)
-                e = rule['error']
-                try:
-                    for i in v:
-                        result = False
-                        rule['error'] = e.format(i[0], i[1])
-                        save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
-                except IndexError as e:
-                    result = False
-                    rule['error'] = v
-                    save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
-                except:
-                    result = False
-                    rule['error'] = v
-                    save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
-
-        if rule['rule_code'] == 'switch_tab_tcol_datetime' \
-                and rule['rule_value'] == 'true' and get_obj_type(p_sql) == 'TABLE':
-            if get_obj_op(p_sql) == 'CREATE_TABLE':
-                print('时间字段类型为datetime...')
-                v = get_tab_tcol_datetime(db_cur, p_sql, rule)
-                e = rule['error']
-                try:
-                    for i in v:
-                        result = False
-                        rule['error'] = e.format(i[0], i[1])
-                        save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
-                except IndexError as e:
-                    result = False
-                    rule['error'] = v
-                    save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
-                except:
-                    result = False
-                    rule['error'] = v
-                    save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
 
     if result:
         rule['id'] = '0'
@@ -2535,6 +2462,7 @@ def get_audit_rule(p_key):
     ops_sql = "select * from t_sql_audit_rule where rule_code='{0}'".format(p_key)
     cr_ops.execute(ops_sql)
     rs=cr_ops.fetchone()
+    cr_ops.close()
     return rs
 
 
@@ -2558,6 +2486,7 @@ def check_mysql_ddl(p_dbid,p_cdb,p_sql,p_user,p_type):
             else:
                rule['error'] = format_sql(rule['error'])
                save_check_results(db_ops, rule, p_user, '---', 1)
+               return False
         elif p_type == '2':
             rule = get_audit_rule('switch_dml_batch')
             if rule['rule_value'] == 'true':
@@ -2566,6 +2495,7 @@ def check_mysql_ddl(p_dbid,p_cdb,p_sql,p_user,p_type):
             else:
                 rule['error'] = format_sql(rule['error'])
                 save_check_results(db_ops, rule, p_user, '---', 1)
+                return False
 
 
 def save_check_results(db,rule,user,psql,sxh):

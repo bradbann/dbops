@@ -18,21 +18,25 @@ from web.model.t_role  import get_roles
 from web.model.t_user  import save_user,get_user_by_userid,upd_user,del_user,query_user,query_user_proj_privs
 from web.model.t_user  import get_sys_roles,get_user_roles,save_user_proj_privs,init_user_proj_privs
 from web.model.t_dmmx  import get_dmm_from_dm
+from web.model.t_xtqx  import check_url
 from web.model.t_ds    import query_project
 from web.utils.common  import get_url_root
 
 class userquery(tornado.web.RequestHandler):
     def get(self):
-        username = str(self.get_secure_cookie("username"), encoding="utf-8")
-        if username:
-            self.render("user_query.html")
+        userid   = str(self.get_secure_cookie("userid"), encoding="utf-8")
+        if userid:
+            if check_url(userid,self.request.uri):
+                self.render("user_query.html")
+            else:
+                self.render("page-500.html")
         else:
             self.render("page-404.html")
 
 
 class useradd(tornado.web.RequestHandler):
     def get(self):
-        roles  =get_roles();
+        roles  = get_roles()
         gender = get_dmm_from_dm('04')
         dept   = get_dmm_from_dm('01')
         print('gender=',gender)
@@ -96,6 +100,8 @@ class useredit(tornado.web.RequestHandler):
         d_user  = get_user_by_userid(userid)
         genders = get_dmm_from_dm('04')
         depts   = get_dmm_from_dm('01')
+        print('sys_roles=',get_sys_roles(userid))
+        print('user_roles=', get_user_roles(userid))
         self.render("./user_edit.html",
                      userid      = d_user['userid'],
                      loginname   = d_user['loginname'],
@@ -133,6 +139,7 @@ class useredit_save(tornado.web.RequestHandler):
         d_user['status']      = self.get_argument("status")
         d_user['status']      = self.get_argument("status")
         d_user['roles']       = self.get_argument("roles").split(",")
+        print('useredit_save=',d_user['roles'] )
         d_user['file_path']   = self.get_argument("file_path")
         d_user['file_name']   = self.get_argument("file_name")
 
@@ -154,10 +161,24 @@ class user_query(tornado.web.RequestHandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         qname = self.get_argument("qname")
-        v_list=query_user(qname)
+        v_list = query_user(qname)
         v_json = json.dumps(v_list)
         print(v_json)
         self.write(v_json)
+        # userid = str(self.get_secure_cookie("userid"), encoding="utf-8")
+        # if userid:
+        #     if check_url(userid, self.request.uri):
+        #         qname = self.get_argument("qname")
+        #         v_list = query_user(qname)
+        #         v_json = json.dumps(v_list)
+        #         print(v_json)
+        #         self.write(v_json)
+        #     else:
+        #         self.render("page-500.html")
+        # else:
+        #     self.render("page-500.html")
+
+
 
 class user_init_proj_privs(tornado.web.RequestHandler):
     def get(self):

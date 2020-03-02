@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="{{ static_url('assets/images/favicon.ico')}}">
+    <title>端口变更</title>
+    <link rel="stylesheet" href="{{static_url('plugins/morris/morris.css')}}">
+    <link href="{{static_url('plugins/timepicker/bootstrap-timepicker.min.css')}}" rel="stylesheet">
+    <link href="{{static_url('plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')}}" rel="stylesheet">
+    <link href="{{static_url('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
+    <link href="{{static_url('plugins/clockpicker/css/bootstrap-clockpicker.min.css')}}" rel="stylesheet">
+    <link href="{{static_url('plugins/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
+    <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>
+    <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <p></p>
+   <div class="col-md-6">
+       <form class="form-horizontal" role="form">
+           <input  id="port_id" type="hidden" name="userid" value={{p_port['id']}} >
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_app_name">*</span>应用名</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="app_name"  type="text" class="form-control" placeholder="请输入应用名" value={{p_port['app_name']}}>
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_app_port">*</span>端口号</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="app_port"  type="text" class="form-control" placeholder="请输端口号" value={{p_port['app_port']}} >
+                </div>
+           </div>
+
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_app_dev">*</span>开发者</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="app_dev" >
+                        <option value='' selected = "selected">......</option>
+                         {% for var in developer %}
+                           <option value={{var[0]}} >{{var[1]}}</option>
+                           {% if p_port['app_dev']==var[0] %}
+                              <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
+                           {% else %}
+                              <option value={{var[0]}} >{{var[1]}}</option>
+                           {% end  %}
+                         {% end %}
+                    </select>
+               </div>
+           </div>
+
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_app_desc">*</span>应用描述</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="app_desc"  type="text" class="form-control" placeholder="请输入应用描述" value={{p_port['app_desc']}} >
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">附加信息</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="app_ext"  type="text" class="form-control" placeholder="请输入附加信息"  value={{p_port['app_ext']}}>
+                </div>
+           </div>
+           <br>
+           <div class="form-group m-b-0">
+                <div class="col-sm-offset-6 col-sm-9">
+                  <button id="add" type="button" class="btn btn-custom waves-effect waves-light btn-md">更新</button>
+                  <button id="return" type="button" class="btn btn-custom waves-effect waves-light btn-md">返回</button>
+                </div>
+           </div>
+       </form>
+    </div>
+
+    <!-- Sweet-Alert  -->
+    <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
+    <script>
+        $(document).ready(function() {
+            $('#return').on('click', function () {
+                $('#main-container-div').load('/port/change');
+            });
+
+            $("#save").click(function () {
+                $.ajax({
+                    url: "/port/edit/save",
+                    type: "post",
+                    datatype: "json",
+                    data: {
+                        port_id    : $('#port_id').val(),
+                        app_name   : $('#app_name').val(),
+                        app_port   : $('#app_port').val(),
+                        app_dev    : $('#app_dev').val(),
+                        app_desc   : $('#app_desc').val(),
+                        app_ext    : $('#app_ext').val()
+                    },
+                    success: function (dataSet) {
+                        console.log(dataSet.code, dataSet.message);
+                        if (dataSet.code == 0) {
+                            swal("变更成功", "", "success")
+                        } else {
+                            swal(dataSet.message, "", "error")
+                        }
+                    }
+                });
+            });
+        });
+   </script>
+</body>
+
+</html>

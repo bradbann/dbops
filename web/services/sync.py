@@ -148,6 +148,71 @@ class syncedit_save(tornado.web.RequestHandler):
         result=upd_sync(d_sync)
         self.write({"code": result['code'], "message": result['message']})
 
+
+class syncclone(tornado.web.RequestHandler):
+    def get(self):
+        sync_id   = self.get_argument("sync_id")
+        d_sync    = get_sync_by_syncid(sync_id)
+        self.render("./sync_clone.html",
+                    sync_server          = get_sync_server(),
+                    db_server            = get_sync_db_server(),
+                    dm_db_type           = get_dmm_from_dm('02'),
+                    dm_sync_ywlx         = get_dmm_from_dm('08'),
+                    dm_sync_data_type    = get_dmm_from_dm('09'),
+                    dm_sync_time_type    = get_dmm_from_dm('10'),
+                    server_id            = d_sync['server_id'],
+                    sour_db_server       = d_sync['sour_db_server'],
+                    desc_db_server       = d_sync['desc_db_server'],
+                    sync_tag             = d_sync['sync_tag']+'_clone',
+                    sync_ywlx            = d_sync['sync_ywlx'],
+                    sync_data_type       = d_sync['sync_data_type'],
+                    script_base          = d_sync['script_base'],
+                    script_name          = d_sync['script_name'],
+                    run_time             = d_sync['run_time'],
+                    task_desc            = d_sync['task_desc']+'_clone',
+                    python3_home         = d_sync['python3_home'],
+                    sync_schema          = d_sync['sync_schema'],
+                    sync_tables          = d_sync['sync_tables'],
+                    sync_batch_size      = d_sync['sync_batch_size'],
+                    sync_batch_size_incr = d_sync['sync_batch_size_incr'],
+                    sync_gap             = d_sync['sync_gap'],
+                    sync_col_name        = d_sync['sync_col_name'],
+                    sync_col_val         = d_sync['sync_col_val'],
+                    sync_time_type       = d_sync['sync_time_type'],
+                    api_server           = d_sync['api_server'],
+                    status               = d_sync['status'],
+                    )
+
+class syncclone_save(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        d_sync = {}
+        d_sync['sync_server']     = self.get_argument("sync_server")
+        d_sync['sour_db_server']  = self.get_argument("sour_db_server")
+        d_sync['desc_db_server']  = self.get_argument("desc_db_server")
+        d_sync['sync_tag']        = self.get_argument("sync_tag")
+        d_sync['sync_ywlx']       = self.get_argument("sync_ywlx")
+        d_sync['sync_data_type']  = self.get_argument("sync_data_type")
+        d_sync['script_base']     = self.get_argument("script_base")
+        d_sync['script_name']     = self.get_argument("script_name")
+        d_sync['run_time']        = self.get_argument("run_time")
+        d_sync['task_desc']       = self.get_argument("task_desc")
+        d_sync['python3_home']    = self.get_argument("python3_home")
+        d_sync['sync_schema']     = self.get_argument("sync_schema")
+        d_sync['sync_tables']     = self.get_argument("sync_tables")
+        d_sync['sync_batch_size'] = self.get_argument("sync_batch_size")
+        d_sync['sync_batch_size_incr'] = self.get_argument("sync_batch_size_incr")
+        d_sync['sync_gap']       = self.get_argument("sync_gap")
+        d_sync['sync_col_name']  = self.get_argument("sync_col_name")
+        d_sync['sync_col_val']   = self.get_argument("sync_col_val")
+        d_sync['sync_time_type'] = self.get_argument("sync_time_type")
+        d_sync['api_server']     = self.get_argument("api_server")
+        d_sync['status']         = self.get_argument("status")
+        print(d_sync)
+        result=save_sync(d_sync)
+        self.write({"code": result['code'], "message": result['message']})
+
+
 class syncedit_del(tornado.web.RequestHandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")

@@ -6,8 +6,11 @@
 # @Software: PyCharm
 
 from web.model.t_ds   import get_ds_by_dsid
-from web.utils.common import get_connection_ds,get_connection_ds_sqlserver
+from web.utils.common import get_connection_ds,get_connection_ds_sqlserver,get_connection_ds_read_limit
 from web.utils.common import exception_info_mysql,exception_info_sqlserver,format_mysql_error,format_sqlserver_error
+from web.model.t_sql_check import get_audit_rule
+import traceback
+import pymysql
 
 def check_sql(p_dbid,p_sql,curdb):
     result = {}
@@ -38,9 +41,11 @@ def check_sql(p_dbid,p_sql,curdb):
         return result
 
 
-    if p_sql.upper().count("ALTER") >= 1 or p_sql.upper().count("DROP") >= 1 or p_sql.upper().count("CREATE") >= 1 \
-          or  p_sql.upper().count("GRANT") >= 1 or p_sql.upper().count("REVOKE") >= 1 \
-            or p_sql.upper().count("UPDATE") >= 1 or p_sql.upper().count("DELETE") >= 1 or p_sql.upper().count("INSERT") >= 1:
+    if p_sql.upper().count("ALTER") >= 1 or p_sql.upper().count("DROP") >= 1 \
+            or p_sql.upper().count("CREATE") >= 1  or  p_sql.upper().count("GRANT") >= 1 \
+              or p_sql.upper().count("REVOKE") >= 1 or p_sql.upper().count("TRUNCATE") >= 1 \
+               or p_sql.upper().count("UPDATE") >= 1 or p_sql.upper().count("DELETE") >= 1 \
+                 or p_sql.upper().count("INSERT") >= 1:
         result['status'] = '1'
         result['msg']    = '不允许进行DDL、DML操作!'
         result['data']   = ''
@@ -92,6 +97,9 @@ def get_mysql_result(p_ds,p_sql,curdb):
     data     = []
     p_env    = ''
 
+    #get read timeout
+    read_timeout = int(get_audit_rule('switch_timeout')['rule_value'])
+    print('read_timeout=',read_timeout)
     if p_ds['db_env']=='1':
         p_env='PROD'
     if p_ds['db_env']=='2':
@@ -101,25 +109,42 @@ def get_mysql_result(p_ds,p_sql,curdb):
     cr=''
     rs=''
     if p_sql.find('.') > 0:
-        db = get_connection_ds(p_ds)
+        db = get_connection_ds_read_limit(p_ds,read_timeout)
         cr = db.cursor()
         print('db1=', db)
     else:
         p_ds['service'] = curdb
         print('p_ds=', p_ds)
-        db = get_connection_ds(p_ds)
+        db = get_connection_ds_read_limit(p_ds,read_timeout)
         cr = db.cursor()
         print('db2=', db)
 
     try:
         cr.execute(p_sql)
         rs = cr.fetchall()
-        print('rs=',rs)
+        #print('rs=',rs)
+
+        #get sensitive column
+        c_sensitive = get_audit_rule('switch_sensitive_columns')['rule_value'].split(',')
 
         #process desc
+        i_sensitive = []
+
         desc = cr.description
         for i in range(len(desc)):
+            if desc[i][0] in c_sensitive:
+                i_sensitive.append(i)
             columns.append({"title": desc[i][0]})
+        print('i_sensitive=',i_sensitive)
+
+        #check sql rwos
+        rule = get_audit_rule('switch_query_rows')
+        if len(rs)>int(rule['rule_value']):
+            result['status'] = '1'
+            result['msg'] = rule['error'].format(rule['rule_value'])
+            result['data'] = ''
+            result['column'] = ''
+            return result
 
         #process data
         for i in rs:
@@ -129,7 +154,10 @@ def get_mysql_result(p_ds,p_sql,curdb):
                 if i[j] is None:
                    tmp.append('')
                 else:
-                   tmp.append(str(i[j]))
+                   if j in  i_sensitive:
+                       tmp.append(get_audit_rule('switch_sensitive_columns')['error'])
+                   else:
+                       tmp.append(str(i[j]))
             data.append(tmp)
 
         result['status'] = '0'
@@ -139,13 +167,28 @@ def get_mysql_result(p_ds,p_sql,curdb):
         cr.close()
         db.close()
         return result
+    except pymysql.err.OperationalError as e:
+        err= traceback.format_exc()
+        print('get_mysql_result=', err)
+        if err.find('timed out')>0:
+            rule  = get_audit_rule('switch_timeout')
+            result['status'] = '1'
+            result['msg'] = rule['error'].format(rule['rule_value'])
+            result['data'] = ''
+            result['column'] = ''
+            return result
+        else:
+            result['status'] = '1'
+            result['msg'] = format_mysql_error(p_env, exception_info_mysql())
+            result['data'] = ''
+            result['column'] = ''
+            return result
     except:
+        print('get_mysql_result=',traceback.format_exc())
         result['status'] = '1'
         result['msg'] = format_mysql_error(p_env,exception_info_mysql())
         result['data'] = ''
         result['column'] = ''
-        #cr.close()
-        #db.close()
         return result
 
 def exe_query(p_dbid,p_sql,curdb):

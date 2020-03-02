@@ -11,7 +11,7 @@ from web.utils.common     import get_connection_ds_pg,get_connection_ds_mongo,ge
 from web.model.t_user     import get_user_by_loginame
 import re
 
-def query_ds(dsname,market_id,db_env):
+def query_ds(dsname,market_id,db_env,ds_type):
     db = get_connection()
     cr = db.cursor()
     v_where=' and 1=1 '
@@ -24,6 +24,13 @@ def query_ds(dsname,market_id,db_env):
 
     if db_env != '':
         v_where = v_where + " and a.db_env='{0}'\n".format(db_env)
+
+    if ds_type == 'backup':
+        v_where = v_where + " and a.user='puppet'\n"
+
+    if ds_type == 'sync':
+        v_where = v_where + " and a.user!='puppet'\n"
+
 
     sql ="""select  a.id,
                     d.dmmc as market_name,
@@ -105,6 +112,34 @@ def get_dsid():
     db.commit()
     return rs[0]
 
+def check_ds_repeat(p_ds):
+    result = {}
+    db = get_connection()
+    cr = db.cursor()
+    sql = """select count(0)
+              from t_db_source 
+             where ip='{0}'  and port='{1}' and service='{2}' and user='{3}'
+          """.format(p_ds["ip"],p_ds["port"], p_ds["service"], p_ds["user"])
+    print('check_ds_repeat1=',sql)
+    cr.execute(sql)
+    rs1 = cr.fetchone()
+    sql = """select count(0) from t_db_source where db_desc='{0}' """.format(p_ds["db_desc"])
+    print('check_ds_repeat2=', sql)
+    cr.execute(sql)
+    rs2 = cr.fetchone()
+    if rs1[0]>0:
+        result['code'] = True
+        result['message'] = '数据源不能重复!'
+    elif rs2[0]>0:
+        result['code'] = True
+        result['message'] = '数据源描述不能重复!'
+    else:
+        result['code'] = False
+        result['message'] = '!'
+    cr.close()
+    db.commit()
+    return result
+
 def get_ds_by_dsid(p_dsid):
     db = get_connection()
     cr = db.cursor()
@@ -175,7 +210,8 @@ def get_dss_sql_query(logon_name):
     cr = db.cursor()
     d_user=get_user_by_loginame(logon_name)
 
-    sql="""select cast(id as char) as id,concat(b.dmmc,':/',ip,':',port,'/',service) as name 
+    sql="""select cast(id as char) as id,a.db_desc as name
+                  -- concat(b.dmmc,':/',ip,':',port,'/',service) as name 
            from t_db_source a,t_dmmx b
            where a.db_type=b.dmm and b.dm='02' and a.status='1'
                and (select proj_id from t_user_proj_privs where proj_id=a.id and user_id='{0}' and priv_id='1')
@@ -212,7 +248,8 @@ def get_dss_sql_release(logon_name):
     db = get_connection()
     cr = db.cursor()
     d_user = get_user_by_loginame(logon_name)
-    sql="""select cast(id as char) as id,concat(b.dmmc,':/',ip,':',port,'/',service) as name 
+    sql="""select cast(id as char) as id,a.db_desc as name 
+                  -- concat(b.dmmc,':/',ip,':',port,'/',service) as name 
            from t_db_source a,t_dmmx b
            where a.db_type=b.dmm and b.dm='02' and a.status='1'
                and (select proj_id from t_user_proj_privs where proj_id=a.id and user_id='{0}' and priv_id='2')
@@ -228,7 +265,7 @@ def get_dss_sql_release(logon_name):
 
 def save_ds(p_ds):
     result = {}
-    val=check_ds(p_ds)
+    val=check_ds(p_ds,'add')
     if val['code']=='-1':
         return val
     try:
@@ -272,7 +309,7 @@ def save_ds(p_ds):
 
 def upd_ds(p_ds):
     result={}
-    val = check_ds(p_ds)
+    val = check_ds(p_ds,'upd')
     if  val['code'] == '-1':
         return val
     try:
@@ -344,7 +381,7 @@ def del_ds(p_dsid):
         result['message'] = '删除失败！'
     return result
 
-def check_ds(p_ds):
+def check_ds(p_ds,p_flag):
     result = {}
     if p_ds["ip"]=="":
         result['code']='-1'
@@ -387,6 +424,13 @@ def check_ds(p_ds):
         result['code'] = '-1'
         result['message'] = '口令不能为空！'
         return result
+
+    if p_flag == 'add':
+        v = check_ds_repeat(p_ds)
+        if v['code']:
+            result['code'] = '-1'
+            result['message'] = v['message']
+            return result
 
     result['code'] = '0'
     result['message'] = '验证通过'

@@ -9,11 +9,11 @@ from web.services.user         import userquery,useradd,useradd_save,useradd_sav
 from web.services.user         import projectquery,project_query,projectprivs,projectprivs_save,project_privs_query
 from web.services.role         import rolequery,roleadd,roleadd_save,role_query,rolechange,roleedit,roleedit_save,roleedit_del,role_check
 from web.services.menu         import menuquery,menu_query,menuadd,menuadd_save,menuchange,menuedit,menuedit_save,menuedit_del
-from web.services.ds           import dsquery,ds_query,dsadd,dsadd_save,dschange,dsedit,dsedit_save,dsedit_del,dstest,ds_check_valid
+from web.services.ds           import dsquery,ds_query,dsadd,dsadd_save,dschange,dsedit,dsedit_save,dsedit_del,dstest,ds_check_valid,dsclone,dsclone_save
 from web.services.server       import serverquery,server_query,serveradd,serveradd_save,serverchange,serveredit,serveredit_save,serveredit_del,server_check_valid
 from web.services.backup       import backupquery,backup_query,backup_case,backupadd,backupadd_save,backupchange,backupedit,backupedit_save,backupedit_del,backuplogquery
 from web.services.backup       import backup_log_query,backup_log_query_detail,backupedit_push,backupedit_run,backupedit_stop,backupedit_status,backuploganalyze,backup_log_analyze,get_backup_tasks
-from web.services.sync         import syncadd,syncadd_save,syncquery,sync_query,syncchange,syncedit,syncedit_save,syncedit_del,synclogquery,syncloganalyze2,sync_log_analyze2
+from web.services.sync         import syncadd,syncadd_save,syncquery,sync_query,syncchange,syncedit,syncedit_save,syncclone,syncclone_save,syncedit_del,synclogquery,syncloganalyze2,sync_log_analyze2
 from web.services.sync         import sync_log_query,sync_log_query_detail,syncedit_push,syncedit_run,syncedit_stop,syncedit_status,syncloganalyze,sync_log_analyze,get_sync_tasks,get_sync_ywlx
 from web.services.sync         import get_sync_park,get_sync_park_real_time,get_sync_flow,get_sync_flow_real_time,get_sync_flow_device,get_sync_park_charge,get_sync_bi
 from web.services.transfer     import transferadd,transferadd_save,transferchange,transferedit,transferedit_save,transferedit_del,transfer_query,transferedit_push,transferedit_run,transferedit_stop
@@ -25,9 +25,7 @@ from web.services.sys          import audit_rule,audit_rule_save,sys_setting,sys
 from web.services.sync_bigdata import syncadd_bigdata,syncadd_bigdata_save,syncbigdataquery,sync_bigdata_query,sync_bigdata_query_detail,sync_bigdata_query_dataxTemplete
 from web.services.sync_bigdata import sync_bigdata_downloads_dataxTemplete,syncchange_bigdata,syncedit_bigdata,syncedit_save_bigdata,syncedit_del_bigdata,syncedit_push_bigdata
 from web.services.sync_bigdata import syncedit_pushall_bigdata,syncedit_run_bigdata,syncedit_stop_bigdata,syncclone_bigdata,syncclone_save_bigdata
-from web.services.port         import portadd,portadd_save,portchange,portedit,portedit_save,portedit_del,port_query,portquery
-
-
+from web.services.port         import portadd,portadd_save,portchange,portedit,portedit_save,portedit_del,port_query,portquery,portedit_imp,portedit_exp
 
 urls=[
         #主页面
@@ -86,6 +84,8 @@ urls=[
         (r"/ds/change",    dschange),
         (r"/ds/edit",      dsedit),
         (r"/ds/edit/save", dsedit_save),
+        (r"/ds/clone",     dsclone),
+        (r"/ds/clone/save",dsclone_save),
         (r"/ds/edit/del",  dsedit_del),
         (r"/ds/test",      dstest),
         (r"/ds/check/valid", ds_check_valid),
@@ -153,6 +153,8 @@ urls=[
         (r"/sync/change"  ,          syncchange),
         (r"/sync/edit"    ,          syncedit),
         (r"/sync/edit/save",         syncedit_save),
+        (r"/sync/clone",             syncclone),
+        (r"/sync/clone/save",        syncclone_save),
         (r"/sync/edit/del" ,         syncedit_del),
         (r"/sync/edit/push",         syncedit_push),
         (r"/sync/edit/run" ,         syncedit_run),
@@ -198,7 +200,7 @@ urls=[
         (r"/bigdata/add/save", syncadd_bigdata_save),
         (r"/bigdata/query",    syncbigdataquery),
         (r"/bigdata/_query",   sync_bigdata_query),
-        (r"/bigdata/_query/detail",  sync_bigdata_query_detail),
+        (r"/bigdata/_query/detail",        sync_bigdata_query_detail),
         (r"/bigdata/_query/dataxTemplete", sync_bigdata_query_dataxTemplete),
         (r"/bigdata/_query/dataxTemplete/downloads", sync_bigdata_downloads_dataxTemplete),
         (r"/bigdata/change",       syncchange_bigdata),
@@ -212,23 +214,25 @@ urls=[
         (r"/bigdata/edit/run",     syncedit_run_bigdata),
         (r"/bigdata/edit/stop",    syncedit_stop_bigdata),
 
-        #系统设置
-        (r"/sys/audit_rule",      audit_rule),
-        (r"/sys/query_rule",      sys_query_rule),
-        (r"/sys/audit_rule/save", audit_rule_save),
-        (r"/sys/setting",         sys_setting),
-        (r"/sys/code",            sys_code),
-        (r"/sys/code/_query",     sys_code_query),
-        (r"/sys/test",            sys_test),
-
         #端口管理
-        (r"/port/query", portquery),
-        (r"/port/_query", port_query),
-        (r"/port/add", portadd),
-        (r"/port/add/save", portadd_save),
-        (r"/port/change", portchange),
-        (r"/port/edit", portedit),
+        (r"/port/query",     portquery),
+        (r"/port/_query",    port_query),
+        (r"/port/add",       portadd),
+        (r"/port/add/save",  portadd_save),
+        (r"/port/change",    portchange),
+        (r"/port/edit",      portedit),
         (r"/port/edit/save", portedit_save),
-        (r"/port/edit/del", portedit_del),
+        (r"/port/edit/del",  portedit_del),
+        (r"/port/edit/imp",  portedit_imp),
+        (r"/port/edit/exp",  portedit_exp),
+
+        # 系统设置
+        (r"/sys/audit_rule", audit_rule),
+        (r"/sys/query_rule", sys_query_rule),
+        (r"/sys/audit_rule/save", audit_rule_save),
+        (r"/sys/setting", sys_setting),
+        (r"/sys/code", sys_code),
+        (r"/sys/code/_query", sys_code_query),
+        (r"/sys/test", sys_test),
 
 ]

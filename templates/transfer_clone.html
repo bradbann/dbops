@@ -2,15 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="shortcut icon" href="{{ static_url('assets/images/favicon.ico')}}">
-    <title>传输维护</title>
-    <link rel="stylesheet" href="{{static_url('plugins/morris/morris.css')}}">
-    <link href="{{static_url('plugins/timepicker/bootstrap-timepicker.min.css')}}" rel="stylesheet">
-    <link href="{{static_url('plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')}}" rel="stylesheet">
-    <link href="{{static_url('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
-    <link href="{{static_url('plugins/clockpicker/css/bootstrap-clockpicker.min.css')}}" rel="stylesheet">
-    <link href="{{static_url('plugins/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
-    <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>
+    <title>传输克隆</title>
+    <link href="{{static_url('plugins/tooltipster/tooltipster.bundle.min.css')}}" rel="stylesheet" >
     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -127,6 +120,15 @@
                    </div>
                </div>
            </div>
+            <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                          <button type="button" tabindex="0" class="btn btn-xs waves-effect waves-light" role="button" data-toggle="popover" data-trigger="focus" title="" data-content="支持多表传输，表间用逗号隔开！" data-original-title="小提示">
+                            <i class="ion-help"></i>
+                         </button>
+                    </div>
+               </div>
+           </div>
        </div>
        <div class="row">
            <div class="col-md-6">
@@ -137,6 +139,15 @@
                    <div class="col-md-10">
                         <input id="sour_tab_where"  type="text" class="form-control" placeholder="请输入源数据库表条件" value="{{sour_where}}">
                    </div>
+               </div>
+           </div>
+           <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                          <button type="button" tabindex="0" class="btn btn-xs waves-effect waves-light" role="button" data-toggle="popover" data-trigger="focus" title="" data-content="单表支持按条件传输，多表不支持！" data-original-title="小提示">
+                            <i class="ion-help"></i>
+                         </button>
+                    </div>
                </div>
            </div>
        </div>
@@ -271,6 +282,11 @@
 
     <!-- Sweet-Alert  -->
     <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
+     <!-- Tooltipster js -->
+    <script src="{{static_url('plugins/tooltipster/tooltipster.bundle.min.js')}}"></script>
+    <script src="{{static_url('assets/pages/jquery.tooltipster.js')}}"></script>
+    <script src="{{static_url('assets/js/jquery.core.js')}}"></script>
+    <script src="{{static_url('assets/js/jquery.app.js')}}"></script>
 
     <script>
 

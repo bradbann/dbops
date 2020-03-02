@@ -3,15 +3,13 @@
 <head>
     <meta charset="utf-8">
     <title>新建同步</title>
-    <!--<script src="{{static_url('assets/js/modernizr.min.js')}}"></script>    &lt;!&ndash; Sweet Alert &ndash;&gt;-->
-    <!--<link href="{{static_url('assets/css/core.css')}}" rel="stylesheet" type="text/css" />-->
-    <!--<link href="{{static_url('assets/css/components.css')}}" rel="stylesheet" type="text/css" />-->
-    <!--<link href="{{static_url('assets/css/icons.css')}}" rel="stylesheet" type="text/css" />-->
+    <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>    <!-- Sweet Alert -->
+    <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
     <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
-     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{static_url('plugins/datatables/fixedColumns.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
 
     <style>
         #sour_tab_cols,#sele_sour_tab_cols {
@@ -119,9 +117,7 @@
                <div class="col-md-1">
                    <div class="form-group">
                         <div>
-                            <button id='mdi-view-list' class="btn btn-xs waves-effect waves-light" disabled  onclick=showTabDetail()><i class="mdi mdi-view-list"></i></button>
-                            <!--<button id='mdi-view-list' class="btn btn-xs waves-effect waves-light" disabled  onclick=showTabDetail()></button>-->
-
+                            <button type="button" id='mdi-view-list' class="btn btn-xs waves-effect waves-light" disabled  onclick=showTabDetail()><i class="mdi mdi-view-list"></i></button>
                         </div>
                    </div>
                </div>
@@ -145,11 +141,8 @@
              <div class="col-md-6">
                <div class="form-group m-b-0">
                     <div class="col-sm-offset-6 col-sm-9">
-                        <button id='ion-arrow-down' class="btn btn-xs waves-effect waves-light"  disabled onclick=selectAll()><i class="ion-arrow-down-a"></i></button>
-                        <button id='ion-arrow-up' class="btn btn-xs waves-effect waves-light"  disabled onclick=cancelAll()><i class="ion-arrow-up-a"></i></button>
-                        <!--<button id='ion-arrow-down' class="btn btn-xs waves-effect waves-light"  disabled onclick=selectAll()></button>-->
-                        <!--<button id='ion-arrow-up' class="btn btn-xs waves-effect waves-light"  disabled onclick=cancelAll()></button>-->
-
+                        <button type="button" id='ion-arrow-down' class="btn btn-xs waves-effect waves-light"  disabled onclick=selectAll()><i class="ion-arrow-down-a"></i></button>
+                        <button type="button" id='ion-arrow-up' class="btn btn-xs waves-effect waves-light"  disabled onclick=cancelAll()><i class="ion-arrow-up-a"></i></button>
                     </div>
                </div>
               </div>
@@ -443,11 +436,9 @@
     </div>
    </div><!-- /.modal -->
 
-    <!-- Counter js  -->
+   <!-- Counter js  -->
     <script src="{{static_url('plugins/counterup/jquery.counterup.min.js')}}"></script>
-    <!-- Sweet-Alert  -->
     <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
-
     <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
     <script src="{{static_url('plugins/datatables/dataTables.buttons.min.js')}}"></script>

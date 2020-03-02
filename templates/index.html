@@ -2,14 +2,8 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <!-- App favicon -->
         <link rel="shortcut icon" href="{{static_url('assets/images/favicon.ico')}}">
-        <!-- App title -->
         <title>数据库自动化运维平台</title>
-        <!--Morris Chart CSS -->
-		<link rel="stylesheet" href="{{static_url('plugins/morris/morris.css')}}">
-
-        <!-- App css -->
         <link href="{{static_url('assets/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
         <link href="{{static_url('assets/css/core.css')}}" rel="stylesheet" type="text/css" />
         <link href="{{static_url('assets/css/components.css')}}" rel="stylesheet" type="text/css" />
@@ -19,12 +13,17 @@
         <link href="{{static_url('assets/css/responsive.css')}}" rel="stylesheet" type="text/css" />
         <link href="{{static_url('plugins/custombox/css/custombox.min.css')}}" rel="stylesheet">
 		<link href="{{static_url('plugins/switchery/switchery.min.css')}}" rel="stylesheet" >
-        <link href="{{static_url('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet" >
         <link href="{{static_url('plugins/tooltipster/tooltipster.bundle.min.css')}}" rel="stylesheet" >
-
-        <!-- Sweet Alert -->
         <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
-
+        <link href="{{static_url('plugins/jquery.filer/css/jquery.filer.css')}}" rel="stylesheet" />
+        <style>
+            .modal-lg {
+                width:650px;
+                height:600px;
+                margin-left:35%;
+                margin-top:5%;
+            }
+    </style>
     </head>
 
     <body class="fixed-left">
@@ -84,7 +83,6 @@
 
                         </ul>
 
-                        <!-- Right(Notification) -->
                         <ul class="nav navbar-nav navbar-right">
                             <li>
                                 <a href="#" class="right-menu-item dropdown-toggle" data-toggle="dropdown">
@@ -210,7 +208,7 @@
                                     <li><a href="/logout"><i class="ti-power-off m-r-5"></i>系统注销</a></li>
                                 </ul>
                             </li>
-                        </ul> <!-- end navbar-right -->
+                        </ul>
                     </div><!-- end container -->
                 </div><!-- end navbar -->
             </div>
@@ -250,10 +248,6 @@
                 </footer>
 
             </div>
-            <!-- ============================================================== -->
-            <!-- End Right content here -->
-            <!-- ============================================================== -->
-
             <!-- Right Sidebar -->
             <div class="side-bar right-bar">
                 <a href="javascript:void(0);" class="right-bar-toggle">
@@ -303,12 +297,11 @@
                 </div>
             </div>
             <!-- /Right-bar -->
-
         </div>
         <!-- END wrapper -->
 
         <div id="con-userinfo-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -316,133 +309,190 @@
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" role="form">
+                            <div class="row">
                                <input  id="userid" type="hidden" name="userid" value={{userid}} >
-                               <div class="form-group">
-                                    <div>
-                                        <label class="col-md-2 control-label">用户名</label>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <input id="login"  type="text" class="form-control" placeholder="请输入用户名" value={{loginname}} disabled>
-                                    </div>
-                                </div>
-                               <div class="form-group">
-                                    <div>
-                                        <label class="col-md-2 control-label">姓名</label>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <input id="user" name="user" type="text" class="form-control" placeholder="请输入姓名" value={{username}} disabled>
+                               <div class="row">
+                                   <div class="form-group">
+                                        <div>
+                                            <label class="col-md-2 control-label">用户名</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input id="login"  type="text" class="form-control" placeholder="请输入用户名" value={{loginname}} disabled>
+                                        </div>
+                                        <div class="col-md-2"></div>
                                     </div>
                                 </div>
+                            </div>
+                        </form>
+                        <form class="form-horizontal" action=""  method="POST" enctype="multipart/form-data" >
+                            <div class="row">
                                <div class="form-group">
                                     <div>
-                                        <label class="col-md-2 control-label">密码</label>
+                                        <label class="col-md-2 control-label">用户头像</label>
                                     </div>
-                                    <div class="col-md-10">
-                                        <input id="pass" name="pass" type="password" class="form-control" placeholder="请输入密码" value={{password}}>
+                                    <div class="col-md-8">
+                                        <input type="file" name="files[]" id="user_detail_filer_input"  multiple="multiple">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input  id="user_detail_image_path" type="hidden" value="{{file_path}}" >
+                                        <input  id="user_detail_image_file" type="hidden" value="{{file_name}}" >
+                                        <image  id="user_image" width="50px"  src="{{user_image}}" alt=''></image>
                                     </div>
                                </div>
-                               <div class="form-group">
-                                    <div>
-                                        <label class="col-md-2 control-label">性别</label>
-                                    </div>
-                                   <div class="col-md-10">
-                                        <select class="form-control select" id="gender" name="gender" disabled>
-                                            {% if gender=='1' %}
-                                                <option value="1" selected = "selected">男</option>
-                                                <option value="2">女</option>
-                                            {% end %}
-                                            {% if gender=='2' %}
-                                                <option value='2' selected = "selected">女</option>
-                                                <option value={{gender}}>男</option>
-                                            {% end %}
-                                        </select>
-                                   </div>
-                                </div>
-                               <div class="form-group">
-                                    <div>
-                                        <label class="col-md-2 control-label">部门</label>
-                                    </div>
-                                   <div class="col-md-10">
-                                        <select class="form-control select" id="dept" name="dept" disabled>
-                                           {% for var in depts %}
-                                               {% if dept==var[0] %}
-                                                  <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
-                                               {% else %}
-                                                  <option value={{var[0]}} >{{var[1]}}</option>
-                                               {% end  %}
-                                          {% end %}
-                                        </select>
-                                   </div>
-                                </div>
-                               <div class="form-group">
-                                    <div>
-                                        <label class="col-md-2 control-label">电子邮箱</label>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <input id="email" name="email" type="text" class="form-control" placeholder="请输入电子邮箱" value={{email}}>
-                                    </div>
-                                </div>
-                               <div class="form-group">
-                                    <div>
-                                        <label class="col-md-2 control-label">联系方式</label>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <input id="phone" name="phone" type="text" class="form-control" placeholder="请输入联系方式" value={{phone}}>
-                                    </div>
-                                </div>
-                               <div class="form-group">
-                                    <div>
-                                        <label class="col-md-2 control-label">过期日期</label>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <div class="input-group">
-                                            <input  id="expire_date" name="expire_date" type="text" disabled class="form-control datepicker" placeholder="yyyy/mm/dd" id="datepicker" value={{expire_date}}>
-                                            <span class="input-group-addon bg-custom b-0"><i class="mdi mdi-calendar text-white"></i></span>
+                            </div>
+                        </form>
+                        <form class="form-horizontal" role="form" >
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-md-2 control-label">姓名</label>
                                         </div>
+                                        <div class="col-md-8">
+                                            <input id="user" name="user" type="text" class="form-control" placeholder="请输入姓名" value={{username}} disabled>
+                                        </div>
+                                        <div class="col-md-2"></div>
                                     </div>
                                 </div>
-                               <div class="form-group">
-                                    <div>
-                                        <label class="col-md-2 control-label">用户状态</label>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-md-2 control-label">密码</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input id="pass" name="pass" type="password" class="form-control" placeholder="请输入密码" value={{password}}>
+                                        </div>
+                                        <div class="col-md-2"></div>
                                     </div>
-                                   <div class="col-md-10">
-                                        <select class="form-control select" id="status" name="status" disabled>
-                                            {% if status=='1' %}
-                                                <option value="1" selected = "selected">启用</option>
-                                                <option value="0">禁用</option>
-                                            {% end %}
-                                            {% if status=='0' %}
-                                                <option value="1" >启用</option>
-                                                <option value="0" selected = "selected">禁用</option>
-                                            {% end %}
-                                        </select>
+                               </div>
+                               <div class="row">
+                                   <div class="form-group">
+                                        <div>
+                                            <label class="col-md-2 control-label">性别</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select class="form-control select" id="gender" name="gender" disabled>
+                                                {% if gender=='1' %}
+                                                    <option value="1" selected = "selected">男</option>
+                                                    <option value="2">女</option>
+                                                {% end %}
+                                                {% if gender=='2' %}
+                                                    <option value='2' selected = "selected">女</option>
+                                                    <option value={{gender}}>男</option>
+                                                {% end %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2"></div>
                                    </div>
                                </div>
 
-                               <div class="form-group">
-                                    <div>
-                                        <label class="col-md-2 control-label">用户角色</label>
+                               <div class="row">
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-md-2 control-label">部门</label>
+                                        </div>
+                                       <div class="col-md-8">
+                                            <select class="form-control select" id="dept" name="dept" disabled>
+                                               {% for var in depts %}
+                                                   {% if dept==var[0] %}
+                                                      <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
+                                                   {% else %}
+                                                      <option value={{var[0]}} >{{var[1]}}</option>
+                                                   {% end  %}
+                                              {% end %}
+                                            </select>
+                                       </div>
+                                      <div class="col-md-2"></div>
                                     </div>
-                                    <div class="col-md-10">
-                                        <select multiple="multiple" class="form-control" id="sele_role_priv" name="roles" >
-                                          {% for var in user_roles %}
-                                             <option value={{var[0]}} >{{var[1]}}</option>
-                                          {% end %}
-                                        </select>
-                                    </div>
+                                </div>
+                               <div class="row">
+                                   <div class="form-group">
+                                        <div>
+                                            <label class="col-md-2 control-label">电子邮箱</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input id="email" name="email" type="text" class="form-control" placeholder="请输入电子邮箱" value={{email}}>
+                                        </div>
+                                        <div class="col-md-2"></div>
+                                   </div>
+                                </div>
+                               <div class="row">
+                                   <div class="form-group">
+                                        <div>
+                                            <label class="col-md-2 control-label">联系方式</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input id="phone" name="phone" type="text" class="form-control" placeholder="请输入联系方式" value={{phone}}>
+                                        </div>
+                                        <div class="col-md-2"></div>
+                                   </div>
+                                </div>
+                               <div class="row">
+                                   <div class="form-group">
+                                        <div>
+                                            <label class="col-md-2 control-label">过期日期</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="input-group">
+                                                <input  id="expire_date" name="expire_date" type="text" disabled class="form-control datepicker" placeholder="yyyy/mm/dd" id="datepicker" value={{expire_date}}>
+                                                <span class="input-group-addon bg-custom b-0"><i class="mdi mdi-calendar text-white"></i></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2"></div>
+                                   </div>
+                                </div>
+                               <div class="row">
+                                   <div class="form-group">
+                                        <div>
+                                            <label class="col-md-2 control-label">用户状态</label>
+                                        </div>
+                                       <div class="col-md-8">
+                                            <select class="form-control select" id="status" name="status" disabled>
+                                                {% if status=='1' %}
+                                                    <option value="1" selected = "selected">启用</option>
+                                                    <option value="0">禁用</option>
+                                                {% end %}
+                                                {% if status=='0' %}
+                                                    <option value="1" >启用</option>
+                                                    <option value="0" selected = "selected">禁用</option>
+                                                {% end %}
+                                            </select>
+                                       </div>
+                                       <div class="col-md-2"></div>
+                                   </div>
+                               </div>
+
+                               <div class="row">
+                                   <div class="form-group">
+                                        <div>
+                                            <label class="col-md-2 control-label">用户角色</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select multiple="multiple" class="form-control" id="sele_role_priv" name="roles" >
+                                              {% for var in user_roles %}
+                                                 <option value={{var[0]}} >{{var[1]}}</option>
+                                              {% end %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2"></div>
+                                   </div>
                                </div>
                            </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">关闭</button>
-                        <button type="button" class="btn btn-info waves-effect waves-light" id='btn-user-change'>变更</button>
+                        <div class="col-md-4"></div>
+                         <div class="col-md-4">
+                            <div class="input-group">
+                                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-info waves-effect waves-light" id='btn-user-change'>变更</button>
+                             </div>
+                        </div>
+                        <div class="col-md-4"></div>
                     </div>
                 </div>
             </div>
         </div><!-- /.modal -->
 
         <div id="custom-modal" class="modal-demo">
-
             <div class="custom-modal-text">
                 <div class="row">
                     <div class="account-content">
@@ -531,6 +581,9 @@
         <!-- tooltipster -->
         <script src="{{static_url('plugins/tooltipster/tooltipster.bundle.min.js')}}"></script>
 
+         <!-- File Upload js -->
+        <script src="{{static_url('plugins/jquery.filer/js/jquery.filer.js')}}"></script>
+
         <!-- App js -->
         <script src="{{static_url('assets/js/jquery.core.js')}}"></script>
         <script src="{{static_url('assets/js/jquery.app.js')}}"></script>
@@ -601,32 +654,118 @@
             }
 
             $('#btn-user-change').click(function(){
-                $.ajax({
-                    url: "/user/edit/save",
-                    type: "post",
-                    datatype: "json",
-                    data: {
-                        userid     : $('#userid').val(),
-                        loginname  : $('#login').val(),
-                        username   : $('#user').val(),
-                        password   : $('#pass').val(),
-                        gender     : $('#gender').val(),
-                        email      : $('#email').val(),
-                        phone      : $('#phone').val(),
-                        dept       : $('#dept').val(),
-                        expire_date: $('#expire_date').val(),
-                        status     : $('#status').val(),
-                        roles      : get_privs()
-                    },
-                    success: function (dataSet) {
-                        console.log(dataSet.code, dataSet.message);
-                        if (dataSet.code==0) {
-                            swal("变更成功", "", "success")
-                        } else {
-                           swal(dataSet.message, "", "error")
-                        }
-                    }
-                 })
+                // $.ajax({
+                //     url: "/user/edit/save",
+                //     type: "post",
+                //     datatype: "json",
+                //     data: {
+                //         userid     : $('#userid').val(),
+                //         loginname  : $('#login').val(),
+                //         username   : $('#user').val(),
+                //         password   : $('#pass').val(),
+                //         gender     : $('#gender').val(),
+                //         email      : $('#email').val(),
+                //         phone      : $('#phone').val(),
+                //         dept       : $('#dept').val(),
+                //         expire_date: $('#expire_date').val(),
+                //         status     : $('#status').val(),
+                //         roles      : get_privs()
+                //     },
+                //     success: function (dataSet) {
+                //         console.log(dataSet.code, dataSet.message);
+                //         if (dataSet.code==0) {
+                //             swal("变更成功", "", "success")
+                //         } else {
+                //            swal(dataSet.message, "", "error")
+                //         }
+                //     }
+                //  })
+
+                 if ($("#user_detail_filer_input").get(0).files.length>0){
+                      var fd = new FormData();
+                      files  = $("#user_detail_filer_input").get(0).files;
+                      fd.append("file", files[0]);
+                      fd.append("username", $('#login').val());
+                      $.ajax({
+                            url: "/user/add/uploadImage",
+                            type: "POST",
+                            processData: false,
+                            contentType: false,
+                            data : fd,
+                            async:false,
+                            dataType: 'JSON',
+                            success: function (dataSet) {
+                                if (dataSet.code==0) {
+                                    console.log('/user/add/uploadImage1=', dataSet);
+                                    console.log('/user/add/uploadImage2=',dataSet.file_path+'/'+dataSet.file_name)
+                                    $('#user_detail_image_path').val(dataSet.file_path)
+                                    $('#user_detail_image_file').attr('src',dataSet.file_path+'/'+dataSet.file_name)
+
+                                    $.ajax({
+                                        url: "/user/edit/save",
+                                        type: "post",
+                                        datatype: "json",
+                                        data: {
+                                            userid     : $('#userid').val(),
+                                            loginname  : $('#login').val(),
+                                            username   : $('#user').val(),
+                                            password   : $('#pass').val(),
+                                            gender     : $('#gender').val(),
+                                            email      : $('#email').val(),
+                                            phone      : $('#phone').val(),
+                                            dept       : $('#dept').val(),
+                                            expire_date: $('#expire_date').val(),
+                                            status     : $('#status').val(),
+                                            roles      : get_privs(),
+                                            file_path  : dataSet.file_path,
+                                            file_name  : dataSet.file_name,
+                                        },
+                                        success: function (dataSet) {
+                                            console.log(dataSet.code, dataSet.message);
+                                            if (dataSet.code==0) {
+                                               swal("变更成功", "", "success")
+                                            } else {
+                                               swal(dataSet.message, "", "error")
+                                            }
+                                        }
+                                     });
+
+                                } else {
+                                    console.log('/user/add/uploadImage=', dataSet.message);
+                                }
+                            }
+                       });
+                  } else {
+                      $.ajax({
+                            url: "/user/edit/save",
+                            type: "post",
+                            datatype: "json",
+                            data: {
+                                userid     : $('#userid').val(),
+                                loginname  : $('#login').val(),
+                                username   : $('#user').val(),
+                                password   : $('#pass').val(),
+                                gender     : $('#gender').val(),
+                                email      : $('#email').val(),
+                                phone      : $('#phone').val(),
+                                dept       : $('#dept').val(),
+                                expire_date: $('#expire_date').val(),
+                                status     : $('#status').val(),
+                                roles      : get_privs(),
+                                file_path  : $('#user_detail_image_path').val(),
+                                file_name  : $('#user_detail_image_file').val(),
+                            },
+                            success: function (dataSet) {
+                                console.log(dataSet.code, dataSet.message);
+                                if (dataSet.code==0) {
+                                   swal("变更成功", "", "success")
+                                } else {
+                                   swal(dataSet.message, "", "error")
+                                }
+                            }
+                         });
+                  }
+
             });
 
             function updateTime() {
@@ -649,6 +788,16 @@
                  $('#windows_main').click(function(){
                     $('#main-container-div').load("/main");
                  });
+
+                  //Example 2
+                  $('#user_detail_filer_input').filer({
+                        limit: 1,
+                        maxSize: 3,
+                        extensions: ['jpg', 'jpeg', 'png', 'gif', 'psd'],
+                        changeInput: true,
+                        showThumbs: true,
+                        addMore: true
+                   });
 
                  //load user image
                  $('#account-img-id').attr('src',$('#image_path').val()+'/'+$('#image_file').val())

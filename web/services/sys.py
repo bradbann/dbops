@@ -52,10 +52,8 @@ class audit_rule_save(tornado.web.RequestHandler):
        rule['switch_tab_max_len']             = self.get_argument("switch_tab_max_len")
        rule['switch_tab_disable_prefix']      = self.get_argument("switch_tab_disable_prefix")
 
-       #r批量语句开关
+       #r批量DDL语句开关
        rule['switch_ddl_batch']               = self.get_argument("switch_ddl_batch")
-       rule['switch_dml_batch']               = self.get_argument("switch_dml_batch")
-       rule['switch_virtual_col']             = self.get_argument("switch_virtual_col")
 
        #索引规范参数
        rule['switch_idx_name_check']          = self.get_argument("switch_idx_name_check")
@@ -64,6 +62,23 @@ class audit_rule_save(tornado.web.RequestHandler):
        rule['switch_idx_numbers']             = self.get_argument("switch_idx_numbers")
        rule['switch_idx_col_numbers']         = self.get_argument("switch_idx_col_numbers")
        rule['switch_idx_name_col']            = self.get_argument("switch_idx_name_col")
+
+       rule['switch_virtual_col']             = self.get_argument("switch_virtual_col")
+
+       #批量DML语句开关
+       rule['switch_check_dml']              = self.get_argument("switch_check_dml")
+       rule['switch_dml_batch']              = self.get_argument("switch_dml_batch")
+       rule['switch_dml_where']              = self.get_argument("switch_dml_where")
+       rule['switch_dml_order']              = self.get_argument("switch_dml_order")
+       rule['switch_dml_select']             = self.get_argument("switch_dml_select")
+       rule['switch_dml_max_rows']           = self.get_argument("switch_dml_max_rows")
+       rule['switch_dml_ins_cols']           = self.get_argument("switch_dml_ins_cols")
+       rule['switch_dml_ins_exists_col']     = self.get_argument("switch_dml_ins_exists_col")
+
+       #查询开关
+       rule['switch_query_rows']             = self.get_argument("switch_query_rows")
+       rule['switch_timeout']                = self.get_argument("switch_timeout")
+       rule['switch_sensitive_columns']      = self.get_argument("switch_sensitive_columns")
 
        print('audit_rule_save=',rule)
        result = save_audit_rule(rule)

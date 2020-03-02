@@ -5,13 +5,11 @@
 # @File    : t_user.py
 # @Software: PyCharm
 
-from web.utils.common     import exception_info,current_rq,aes_encrypt,aes_decrypt,format_sql
-from web.utils.common     import get_connection,get_connection_ds,get_connection_ds_sqlserver,get_connection_ds_oracle,get_connection_ds_pg
-from web.model.t_ds       import get_ds_by_dsid
-from web.model.t_user     import get_user_by_loginame
-import re
-import os,json
+from web.utils.common import exception_info,get_connection
+from web.utils.common import current_rq
 import traceback
+import xlrd,xlwt
+import os,zipfile
 
 def query_port(app_name):
     db = get_connection()
@@ -70,53 +68,29 @@ def save_port(p_port):
         result['message'] = '保存失败！'
     return result
 
-def upd_port(p_transfer):
+def upd_port(p_port):
     result={}
-    val = check_port(p_transfer)
+    val = check_port(p_port)
     if  val['code'] == '-1':
         return val
     try:
         db              = get_connection()
         cr              = db.cursor()
-        transfer_id     = p_transfer['transfer_id']
-        transfer_tag    = p_transfer['transfer_tag']
-        task_desc       = p_transfer['task_desc']
-        transfer_server = p_transfer['transfer_server']
-        transfer_type   = p_transfer['transfer_type']
-        sour_db_server  = p_transfer['sour_db_server']
-        sour_db_name    = p_transfer['sour_db_name']
-        sour_tab_name   = p_transfer['sour_tab_name']
-        sour_tab_where  = p_transfer['sour_tab_where']
-        dest_db_server  = p_transfer['dest_db_server']
-        dest_db_name    = p_transfer['dest_db_name']
-        script_base     = p_transfer['script_base']
-        script_name     = p_transfer['script_name']
-        python3_home    = p_transfer['python3_home']
-        batch_size      = p_transfer['batch_size']
-        api_server      = p_transfer['api_server']
-        status          = p_transfer['status']
+        port_id         = p_port['port_id']
+        app_name        = p_port['app_name']
+        app_port        = p_port['app_port']
+        app_dev         = p_port['app_dev']
+        app_desc        = p_port['app_desc']
+        app_ext         = p_port['app_ext']
 
-        sql="""update t_db_transfer_config 
+        sql="""update t_port
                   set  
-                      transfer_tag      ='{0}',
-                      server_id         ='{1}', 
-                      comments          ='{2}', 
-                      sour_db_id        ='{3}', 
-                      sour_schema       ='{4}',
-                      sour_table        ='{5}',
-                      sour_where        ='{6}',
-                      dest_db_id        ='{7}',
-                      dest_schema       ='{8}',                    
-                      script_path       ='{9}',
-                      script_file       ='{10}',
-                      python3_home      ='{11}',
-                      api_server        ='{12}',                   
-                      status            ='{13}',
-                      batch_size        ='{14}',
-                      transfer_type     ='{15}'
-                where id={16}""".format(transfer_tag,transfer_server,task_desc,sour_db_server,sour_db_name,
-                                        sour_tab_name,format_sql(sour_tab_where),dest_db_server,dest_db_name,script_base,
-                                        script_name,python3_home,api_server,status,batch_size,transfer_type,transfer_id)
+                      app_name      ='{0}',
+                      app_port      ='{1}', 
+                      app_dev       ='{2}', 
+                      app_desc      ='{3}', 
+                      app_ext       ='{4}'                     
+                where id={5}""".format(app_name,app_port,app_dev,app_desc,app_ext,port_id)
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -130,12 +104,12 @@ def upd_port(p_transfer):
         result['message'] = '更新失败！'
     return result
 
-def del_port(p_transferid):
+def del_port(p_portid):
     result={}
     try:
         db = get_connection()
         cr = db.cursor()
-        sql="delete from t_db_transfer_config  where id='{0}'".format(p_transferid)
+        sql="delete from t_port  where id='{0}'".format(p_portid)
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -179,22 +153,149 @@ def check_port(p_port):
 def get_port_by_portid(p_transferid):
     db = get_connection()
     cr = db.cursor()
-    sql = """select   id,transfer_tag,server_id,comments,sour_db_id,sour_schema,
-                      sour_table,sour_where,dest_db_id,dest_schema,script_path,
-                      script_file,python3_home,api_server,status,batch_size,transfer_type
-             from t_db_transfer_config where id={0}
+    sql = """select  id,app_name,app_port,app_dev,app_desc,app_ext from t_port where id={0}
           """.format(p_transferid)
     cr.execute(sql)
     rs = cr.fetchall()
     d_port = {}
-    d_port['server_id']      = rs[0][0]
-    d_port['transfer_tag']   = rs[0][1]
-    d_port['server_id']      = rs[0][2]
-    d_port['task_desc']      = rs[0][3]
-    d_port['sour_db_id']     = rs[0][4]
-    d_port['sour_schema']    = rs[0][5]
-    d_port['sour_table']     = rs[0][6]
+    d_port['id']       = rs[0][0]
+    d_port['app_name'] = rs[0][1]
+    d_port['app_port'] = rs[0][2]
+    d_port['app_dev']  = rs[0][3]
+    d_port['app_desc'] = rs[0][4]
+    d_port['app_ext']  = rs[0][5]
     cr.close()
     db.commit()
     print(d_port)
     return d_port
+
+def imp_port(p_file):
+    try:
+        result={}
+        file  = xlrd.open_workbook(p_file)
+        name  = file.sheet_names()[0]
+        sheet = file.sheet_by_name(name)
+        vals  = ''
+        for i in range(1, sheet.nrows):
+            val=''
+            for j in range(0, sheet.ncols):
+                val=val+"'"+str(sheet.cell(i, j).value)+"',"
+            vals =vals +'('+val[0:-1]+'),'
+
+        db = get_connection()
+        cr = db.cursor()
+        sql="insert into t_port(app_name,app_port,app_dev,app_desc,app_ext) values {0}".format(vals[0:-1])
+        print(sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result={}
+        result['code']='0'
+        result['message']='导入成功！'
+    except :
+        result['code'] = '-1'
+        result['message'] = '导入失败！'
+    return result
+
+def set_styles(fontsize):
+    cell_borders   = xlwt.Borders()
+    header_borders = xlwt.Borders()
+    header_styles  = xlwt.XFStyle()
+    cell_styles    = xlwt.XFStyle()
+    # add table header style
+    header_borders.left   = xlwt.Borders.THIN
+    header_borders.right  = xlwt.Borders.THIN
+    header_borders.top    = xlwt.Borders.THIN
+    header_borders.bottom = xlwt.Borders.THIN
+    header_styles.borders = header_borders
+    header_pattern = xlwt.Pattern()
+    header_pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+    header_pattern.pattern_fore_colour = 22
+    # add font
+    font = xlwt.Font()
+    font.name = 'Times New Roman'
+    font.bold = True
+    font.size = fontsize
+    header_styles.font = font
+    #add alignment
+    header_alignment = xlwt.Alignment()
+    header_alignment.horz = xlwt.Alignment.HORZ_CENTER
+    header_alignment.vert = xlwt.Alignment.VERT_CENTER
+    header_styles.alignment = header_alignment
+    header_styles.borders = header_borders
+    header_styles.pattern = header_pattern
+    #add col style
+    cell_borders.left     = xlwt.Borders.THIN
+    cell_borders.right    = xlwt.Borders.THIN
+    cell_borders.top      = xlwt.Borders.THIN
+    cell_borders.bottom   = xlwt.Borders.THIN
+    # add alignment
+    cell_alignment        = xlwt.Alignment()
+    cell_alignment.horz   = xlwt.Alignment.HORZ_LEFT
+    cell_alignment.vert   = xlwt.Alignment.VERT_CENTER
+    cell_styles.alignment = cell_alignment
+    cell_styles.borders   = cell_borders
+    font2 = xlwt.Font()
+    font2.name = 'Times New Roman'
+    font2.size = fontsize
+    cell_styles.font = font2
+    return header_styles,cell_styles
+
+def exp_port(static_path):
+    db  = get_connection()
+    cr  = db.cursor()
+    row_data  = 0
+    workbook  = xlwt.Workbook(encoding='utf8')
+    worksheet = workbook.add_sheet('port')
+    header_styles, cell_styles = set_styles(15)
+    os.system('cd {0}'.format(static_path + '/downloads/port'))
+    file_name   = static_path + '/downloads/port/exp_port_{0}.xls'.format(current_rq())
+    file_name_s = 'exp_port_{0}.xls'.format(current_rq())
+
+
+    sql = "SELECT  a.app_name,a.app_port,a.app_dev,a.app_desc,a.app_ext FROM  t_port a  order by a.id"
+    print(sql)
+    cr.execute(sql)
+    rs=cr.fetchall()
+    desc = cr.description
+
+    #写表头
+    for k in range(len(desc)):
+        worksheet.write(row_data, k, desc[k][0], header_styles)
+        if k == len(desc) - 1:
+            worksheet.col(k).width = 8000
+        else:
+            worksheet.col(k).width = 4000
+
+    #写单元格
+    row_data = row_data + 1
+    for i in rs:
+        for j in range(len(i)):
+            if i[j] is None:
+                worksheet.write(row_data, j, '', cell_styles)
+            else:
+                worksheet.write(row_data, j, str(i[j]), cell_styles)
+        row_data = row_data + 1
+
+    workbook.save(file_name)
+    db.commit()
+    cr.close()
+
+    print("{0} export complete!".format(file_name))
+
+    #生成zip压缩文件
+    zip_file = static_path + '/downloads/port/exp_port_{0}.zip'.format(current_rq())
+    rzip_file = '/static/downloads/port/exp_port_{0}.zip'.format(current_rq())
+
+    #若文件存在则删除
+    if os.path.exists(zip_file):
+        os.system('rm -f {0}'.format(zip_file))
+
+    z = zipfile.ZipFile(zip_file, 'w', zipfile.ZIP_DEFLATED, allowZip64=True)
+    z.write(file_name, arcname=file_name_s)
+    z.close()
+    print('zip_file=', zip_file)
+
+    # 删除json文件
+    os.system('rm -f {0}'.format(file_name))
+    return rzip_file

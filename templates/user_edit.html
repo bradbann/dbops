@@ -37,7 +37,7 @@
            <input  id="userid" type="hidden" name="userid" value={{userid}} >
            <div class="form-group col-md-6">
                 <div>
-                    <label class="col-md-2 control-label">用户名</label>
+                    <label class="col-md-2 control-label"><span id="s_login">*</span>用户名</label>
                 </div>
                 <div class="col-md-10">
                     <input id="login"  type="text" class="form-control" placeholder="请输入用户名" value={{loginname}}>
@@ -45,6 +45,7 @@
            </div>
         </div>
     </form>
+
     <form class="form-horizontal" action=""  method="POST" enctype="multipart/form-data" >
         <div class="row">
            <div class="form-group col-md-6">
@@ -67,7 +68,7 @@
         <div class="row">
            <div class="form-group col-md-6">
                 <div>
-                    <label class="col-md-2 control-label">姓名</label>
+                    <label class="col-md-2 control-label"><span id="s_user">*</span>姓名</label>
                 </div>
                 <div class="col-md-10">
                     <input id="user" name="user" type="text" class="form-control" placeholder="请输入姓名" value={{username}}>
@@ -78,7 +79,7 @@
         <div class="row">
            <div class="form-group col-md-6">
                 <div>
-                    <label class="col-md-2 control-label">密码</label>
+                    <label class="col-md-2 control-label"><span id="s_pass">*</span>密码</label>
                 </div>
                 <div class="col-md-10">
                     <input id="pass" name="pass" type="password" class="form-control" placeholder="请输入密码" value={{password}}>
@@ -89,7 +90,7 @@
         <div class="row">
            <div class="form-group col-md-6">
                 <div>
-                    <label class="col-md-2 control-label">性别</label>
+                    <label class="col-md-2 control-label"><span id="s_gender">*</span>性别</label>
                 </div>
                <div class="col-md-10">
                     <select class="form-control select" id="gender" name="gender">
@@ -109,7 +110,7 @@
         <div class="row">
            <div class="form-group col-md-6">
                 <div>
-                    <label class="col-md-2 control-label">部门</label>
+                    <label class="col-md-2 control-label"><span id="s_dept">*</span>部门</label>
                 </div>
                <div class="col-md-10">
                     <select class="form-control select" id="dept" name="dept">
@@ -128,7 +129,7 @@
         <div class="row">
            <div class="form-group col-md-6">
                 <div>
-                    <label class="col-md-2 control-label">电子邮箱</label>
+                    <label class="col-md-2 control-label"><span id="s_email">*</span>电子邮箱</label>
                 </div>
                 <div class="col-md-10">
                     <input id="email" name="email" type="text" class="form-control" placeholder="请输入电子邮箱" value={{email}}>
@@ -139,7 +140,7 @@
         <div class="row">
            <div class="form-group col-md-6">
                 <div>
-                    <label class="col-md-2 control-label">联系方式</label>
+                    <label class="col-md-2 control-label"><span id="s_phone">*</span>联系方式</label>
                 </div>
                 <div class="col-md-10">
                     <input id="phone" name="phone" type="text" class="form-control" placeholder="请输入联系方式" value={{phone}}>
@@ -150,7 +151,7 @@
         <div class="row">
            <div class="form-group col-md-6">
                 <div>
-                    <label class="col-md-2 control-label">过期日期</label>
+                    <label class="col-md-2 control-label"><span id="s_expire_date">*</span>过期日期</label>
                 </div>
                 <div class="col-md-10">
                     <div class="input-group">
@@ -164,7 +165,7 @@
         <div class="row">
            <div class="form-group col-md-6">
                 <div>
-                    <label class="col-md-2 control-label">用户状态</label>
+                    <label class="col-md-2 control-label"><span id="s_status">*</span>用户状态</label>
                 </div>
                <div class="col-md-10">
                     <select class="form-control select" id="status" name="status">
@@ -187,9 +188,9 @@
                     <label class="col-md-2 control-label">系统角色</label>
                 </div>
                 <div class="col-md-10">
-                    <select multiple="multiple" class="form-control" id="sele_sys_priv" name="roles" >
-                        {% for var in sys_roles %}
-                          <option value={{var[0]}} >{{var[1]}}</option>
+                    <select multiple="multiple" class="form-control" id="ue_sele_sys_priv"  >
+                        {% for var1 in sys_roles %}
+                          <option value={{var1[0]}} >{{var1[1]}}</option>
                         {% end %}
                     </select>
                 </div>
@@ -199,13 +200,13 @@
         <div class="row">
            <div class="form-group col-md-6">
                 <div>
-                    <label class="col-md-2 control-label">用户角色</label>
+                    <label class="col-md-2 control-label"><span id="s_ue_sele_role_priv">*</span>用户角色</label>
                 </div>
                 <div class="col-md-10">
-                    <select multiple="multiple" class="form-control" id="sele_role_priv" name="roles" >
-                      {% for var in user_roles %}
-                         <option value={{var[0]}} >{{var[1]}}</option>
-                      {% end %}
+                    <select multiple="multiple" class="form-control" id="ue_sele_role_priv"  >
+                        {% for var1 in user_roles %}
+                          <option value={{var1[0]}} >{{var1[1]}}</option>
+                        {% end %}
                     </select>
                 </div>
            </div>
@@ -238,32 +239,57 @@
     <script src="{{static_url('assets/pages/jquery.form-pickers.init.js')}}"></script>
 
     <script>
+        function set_selected(){
+            document.all['s_login'].style.color="#ff0000";
+            document.all['s_user'].style.color="#ff0000";
+            document.all['s_pass'].style.color="#ff0000";
+            document.all['s_gender'].style.color="#ff0000";
+            document.all['s_dept'].style.color="#ff0000";
+            document.all['s_email'].style.color="#ff0000";
+            document.all['s_phone'].style.color="#ff0000";
+            document.all['s_expire_date'].style.color="#ff0000";
+            document.all['s_status'].style.color="#ff0000";
+            document.all['s_ue_sele_role_priv'].style.color="#ff0000";
+        }
+
         $(document).ready(function() {
+
+          set_selected()
+
           $('#expire_date').attr("readonly", "readonly");
 
-          $("#sele_sys_priv").click(function () {
-               var options=$('#sele_sys_priv option:selected');
+          $("#ue_sele_sys_priv").click(function () {
+               var options=$('#ue_sele_sys_priv option:selected');
+               console.log('ue_sele_sys_priv=>options.length=',options.length)
                if(options.length>0){
                 for (var i=0;i<options.length;i++){
                       value=$(options[i]).val();
                       text =$(options[i]).text();
-                      $('#sele_role_priv').append("<option value='"+value+"'>"+text+"</option>");
+                      $('#ue_sele_role_priv').append("<option value='"+value+"'>"+text+"</option>");
+                      console.log(value,text,$('#ue_sele_sys_priv option').length,$('#ue_sele_role_priv option').length)
                 }
-                $('#sele_sys_priv option:selected').remove();
+                $('#ue_sele_sys_priv option:selected').remove();
+                console.log('ue_sele_sys_priv1=',$('#ue_sele_sys_priv').text())
+                console.log('ue_sele_role_priv1=',$('#ue_sele_role_priv').text())
                }
           });
 
-          $("#sele_role_priv").click(function () {
-               options=$('#sele_role_priv option:selected');
+          $("#ue_sele_role_priv").click(function () {
+               options=$('#ue_sele_role_priv option:selected');
+               console.log('ue_sele_role_priv=>options.length=',options.length)
                if(options.length>0){
                 for (var i=0;i<options.length;i++){
                       value=$(options[i]).val();
                       text =$(options[i]).text();
-                      $('#sele_sys_priv').append("<option value='"+value+"'>"+text+"</option>");
+                      $('#ue_sele_sys_priv').append("<option value='"+value+"'>"+text+"</option>");
+                      console.log(value,text,$('#ue_sele_sys_priv option').length,$('#ue_sele_role_priv option').length)
                 }
-                $('#sele_role_priv option:selected').remove();
+                $('#ue_sele_role_priv option:selected').remove();
+                console.log('ue_sele_sys_priv2=',$('#ue_sele_sys_priv').text())
+                console.log('ue_sele_role_priv2=',$('#ue_sele_role_priv').text())
                }
           });
+
         });
 
         $('#return').on('click', function() {
@@ -273,7 +299,8 @@
         function get_privs(){
              var tmp='';
              var val='';
-             $('#sele_role_priv option').each(function(){
+             console.log('get_privs=',$('#ue_sele_role_priv option'))
+             $('#ue_sele_role_priv option').each(function(){
                val=$(this).val();
                tmp=tmp+','+val;
              });
@@ -287,6 +314,7 @@
            console.log('file_name=',$('#image_name').val())
            console.log('filer_input1=',$("#filer_input1").get(0).files)
            console.log('filer_input2=',$("#filer_input1").get(0).files.length)
+
 
           if ($("#filer_input1").get(0).files.length>0){
               var fd = new FormData();

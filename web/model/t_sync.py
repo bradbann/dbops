@@ -235,7 +235,7 @@ def query_sync_log_detail(p_tag,p_sync_rqq,p_sync_rqz):
 def save_sync(p_backup):
     result = {}
     #增加tag重复验证
-    val=check_sync(p_backup)
+    val=check_sync(p_backup,'add')
     if val['code']=='-1':
         return val
     try:
@@ -299,7 +299,7 @@ def save_sync(p_backup):
 
 def upd_sync(p_sync):
     result={}
-    val = check_sync(p_sync)
+    val = check_sync(p_sync,'upd')
     if  val['code'] == '-1':
         return val
     try:
@@ -388,7 +388,33 @@ def del_sync(p_syncid):
         result['message'] = '删除失败！'
     return result
 
-def check_sync(p_server):
+
+def check_sync_repeat(p_sync):
+    result = {}
+    db = get_connection()
+    cr = db.cursor()
+    sql = """select count(0) from t_db_sync_config where sync_tag='{0}' """.format(p_sync["sync_tag"])
+    print('check_sync_repeat1=', sql)
+    cr.execute(sql)
+    rs1 = cr.fetchone()
+    sql = """select count(0) from t_db_sync_config where comments='{0}' """.format(p_sync["task_desc"])
+    print('check_sync_repeat2=', sql)
+    cr.execute(sql)
+    rs2 = cr.fetchone()
+    if rs1[0]>0:
+        result['code'] = True
+        result['message'] = '数据标识不能重复!'
+    elif rs2[0]>0:
+        result['code'] = True
+        result['message'] = '同步描述不能重复!'
+    else:
+        result['code'] = False
+        result['message'] = '!'
+    cr.close()
+    db.commit()
+    return result
+
+def check_sync(p_server,p_flag):
     result = {}
 
     if p_server["sync_server"]=="":
@@ -495,6 +521,14 @@ def check_sync(p_server):
         result['code'] = '-1'
         result['message'] = '任务状态不能为空！'
         return result
+
+    if p_flag == 'add':
+        v = check_sync_repeat(p_server)
+        if v['code']:
+            result['code'] = '-1'
+            result['message'] = v['message']
+            return result
+
 
     result['code'] = '0'
     result['message'] = '验证通过'

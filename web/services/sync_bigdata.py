@@ -30,7 +30,8 @@ class sync_bigdata_query(tornado.web.RequestHandler):
         sync_tag   = self.get_argument("sync_tag")
         sync_ywlx  = self.get_argument("sync_ywlx")
         sync_type  = self.get_argument("sync_type")
-        v_list     = query_datax_sync(sync_tag,sync_ywlx,sync_type)
+        sync_env   = self.get_argument("sync_env")
+        v_list     = query_datax_sync(sync_tag,sync_ywlx,sync_type,sync_env)
         v_json     = json.dumps(v_list)
         self.write(v_json)
 
@@ -55,7 +56,7 @@ class sync_bigdata_downloads_dataxTemplete(tornado.web.RequestHandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         sync_id     = self.get_argument("sync_id")
-        static_path = self.get_template_path().replace("templates", "static");
+        static_path = self.get_template_path().replace("templates", "static")
         zipfile     = downloads_datax_sync_dataxTemplete(sync_id,static_path)
         print('sync_bigdata_downloads_dataxTemplete=',zipfile)
         self.write({"code": 0, "message": zipfile})
@@ -108,7 +109,9 @@ class syncchange_bigdata(tornado.web.RequestHandler):
         self.render("./sync_bigdata_change.html" ,
                     dm_proj_type = get_dmm_from_dm('05'),
                     dm_sync_ywlx = get_dmm_from_dm('08'),
-                    dm_sync_data_type = get_dmm_from_dm('09'),)
+                    dm_sync_data_type = get_dmm_from_dm('09'),
+
+                    )
 
 class syncedit_bigdata(tornado.web.RequestHandler):
     def get(self):

@@ -24,11 +24,11 @@ def get_url_root():
     return 'http://'+get_server_ip()+':'+get_server_port()
 
 def get_server_ip():
-    return '10.2.39.18'
+    return '10.2.39.17'
 
 def get_server_port():
-    return '81'
-    #return options.port
+    #return '81'
+    return options.port
 
 def get_db_conf():
     d_db={}
@@ -65,7 +65,26 @@ def get_connection_ds(p_ds):
     service  = p_ds['service']
     user     = p_ds['user']
     password = p_ds['password']
-    conn     = pymysql.connect(host=ip, port=int(port), user=user, passwd=password, db=service, charset='utf8',read_timeout=3)
+    conn     = pymysql.connect(host=ip, port=int(port), user=user, passwd=password, db=service, charset='utf8',read_timeout=30000)
+    return conn
+
+def get_connection_ds_read_limit(p_ds,p_timeout):
+    ip       = p_ds['ip']
+    port     = p_ds['port']
+    service  = p_ds['service']
+    user     = p_ds['user']
+    password = p_ds['password']
+    conn     = pymysql.connect(host=ip, port=int(port), user=user, passwd=password, db=service, charset='utf8',read_timeout=p_timeout)
+    return conn
+
+def get_connection_ds_write_limit(p_ds,p_timeout):
+    ip       = p_ds['ip']
+    port     = p_ds['port']
+    service  = p_ds['service']
+    user     = p_ds['user']
+    password = p_ds['password']
+    conn     = pymysql.connect(host=ip, port=int(port), user=user, passwd=password,
+                               db=service, charset='utf8',read_timeout=p_timeout,write_timeout=p_timeout)
     return conn
 
 def get_connection_ds_mongo(p_ds):

@@ -9,7 +9,7 @@ from web.utils.common    import exception_info,get_connection,get_connection_dic
 from web.model.t_ds      import get_ds_by_dsid
 import os,json,zipfile
 
-def query_datax_sync(sync_tag,sync_ywlx,sync_type):
+def query_datax_sync(sync_tag,sync_ywlx,sync_type,sync_env):
     db = get_connection()
     cr = db.cursor()
     v_where=' and  1=1 '
@@ -22,7 +22,17 @@ def query_datax_sync(sync_tag,sync_ywlx,sync_type):
     if sync_type != '':
         v_where = v_where + " and a.sync_type='{0}'\n".format(sync_type)
 
+    if sync_env == 'prod':
+        v_where = v_where + " and a.zk_hosts='192.168.100.63:2181,192.168.100.64:2181,192.168.100.69:2181'\n"
+    elif sync_env == "dev":
+        v_where = v_where + " and a.zk_hosts='10.2.39.165:2181,10.2.39.166:2181,10.2.39.182:2181'\n"
+    elif sync_env == "uat":
+        v_where = v_where + " and a.zk_hosts='10.2.39.84:2181,10.2.39.89:2181,10.2.39.67:2181'\n"
+    else:
+        pass
+
     sql = """SELECT  a.id,
+                     -- concat(substr(sync_tag,1,40),'...') as sync_tag,
                      sync_tag,
 		             CONCAT(SUBSTR(a.comments,1,30),'...'),
                      CONCAT(b.server_ip,':',b.server_port) AS sync_server,

@@ -12,7 +12,7 @@
        <form class="form-horizontal" role="form">
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">项目编码名</label>
+                    <label class="col-md-2 control-label"><span id="s_ds_market_id">*</span>项目编码</label>
                 </div>
                <div class="col-md-10">
                     <select class="form-control select" id="market_id" >
@@ -25,7 +25,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">数据库实例</label>
+                    <label class="col-md-2 control-label"><span id="s_ds_inst_type">*</span>实例类型</label>
                 </div>
                 <div class="col-md-10">
                     <select class="form-control select" id="inst_type" >
@@ -38,7 +38,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">数据库类型</label>
+                    <label class="col-md-2 control-label"><span id="s_ds_db_type">*</span>数据库类型</label>
                 </div>
                 <div class="col-md-10">
                     <select class="form-control select" id="db_type" >
@@ -51,7 +51,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">数据库环境</label>
+                    <label class="col-md-2 control-label"><span id="s_ds_db_env">*</span>数据库环境</label>
                 </div>
                 <div class="col-md-10">
                     <select class="form-control select" id="db_env" >
@@ -64,7 +64,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">数据源描述</label>
+                    <label class="col-md-2 control-label"><span id="s_ds_db_desc">*</span>数据源描述</label>
                 </div>
                 <div class="col-md-10">
                     <input id="db_desc" type="text" class="form-control" placeholder="请输入数据源描述">
@@ -72,7 +72,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">数据源地址</label>
+                    <label class="col-md-2 control-label"><span id="s_ds_ip">*</span>数据源地址</label>
                 </div>
                 <div class="col-md-10">
                     <input id="ip" type="text" class="form-control" placeholder="请输入数据源地址">
@@ -80,7 +80,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">数据源端口</label>
+                    <label class="col-md-2 control-label"><span id="s_ds_port">*</span>数据源端口</label>
                 </div>
                 <div class="col-md-10">
                     <input id="port" type="text" class="form-control" placeholder="请输入数据源端口">
@@ -96,7 +96,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">数据源用户</label>
+                    <label class="col-md-2 control-label"><span id="s_ds_user">*</span>数据源用户</label>
                 </div>
                 <div class="col-md-10">
                     <input id="user" type="text" class="form-control" placeholder="请输入数据源用户">
@@ -104,7 +104,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">数据源口令</label>
+                    <label class="col-md-2 control-label"><span id="s_ds_pass">*</span>数据源口令</label>
                 </div>
                 <div class="col-md-10">
                     <input id="pass" name="pass" type="password" class="form-control" placeholder="请输入数据源口令">
@@ -113,7 +113,7 @@
 
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">数据源状态</label>
+                    <label class="col-md-2 control-label"><span id="s_ds_status">*</span>数据源状态</label>
                 </div>
                <div class="col-md-10">
                     <select class="form-control select" id="status" name="status">
@@ -135,7 +135,22 @@
     <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
 
     <script>
+
+        function set_selected(){
+            document.all['s_ds_market_id'].style.color="#ff0000";
+            document.all['s_ds_inst_type'].style.color="#ff0000";
+            document.all['s_ds_db_type'].style.color="#ff0000";
+            document.all['s_ds_db_env'].style.color="#ff0000";
+            document.all['s_ds_db_desc'].style.color="#ff0000";
+            document.all['s_ds_ip'].style.color="#ff0000";
+            document.all['s_ds_port'].style.color="#ff0000";
+            document.all['s_ds_user'].style.color="#ff0000";
+            document.all['s_ds_pass'].style.color="#ff0000";
+            document.all['s_ds_status'].style.color="#ff0000";
+        }
+
         $(document).ready(function() {
+          set_selected()
 
           $("#add").click(function () {
             $.ajax({

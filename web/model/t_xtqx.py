@@ -75,6 +75,34 @@ def get_menu_by_menuid(p_menuid):
     d_menu['parent_id'] = rs[0][4]
     return d_menu
 
+def get_url_by_userid(p_userid):
+    db = get_connection()
+    cr = db.cursor()
+    sql="""SELECT url
+            FROM t_xtqx
+               WHERE STATUS='1'
+             AND id IN(SELECT b.priv_id
+                   FROM t_user_role a ,t_role_privs b
+                   WHERE a.role_id=b.role_id
+                     AND a.user_id='{0}')
+            ORDER BY id""".format(p_userid)
+    cr.execute(sql)
+    rs = cr.fetchall()
+    cr.close()
+    db.commit()
+    uris = []
+    for i in rs:
+        uris.append((rs[0][0]))
+    return uris
+
+def check_url(userid,uri):
+    uuri = get_url_by_userid(userid)
+    if uri not in uuri:
+        return False
+    else:
+        return True
+
+
 def init_menu():
     db = get_connection()
     cr = db.cursor()
@@ -141,7 +169,9 @@ def save_menu(p_menu):
 def get_privs():
     db = get_connection()
     cr = db.cursor()
-    sql="select cast(id as char) as id,name from t_xtqx where status='1' AND url !=''"
+    sql="""select cast(a.id as char) as id,
+                  CONCAT((SELECT NAME FROM t_xtqx b WHERE b.id=a.parent_id),'=>',NAME) AS NAME 
+           from t_xtqx a where a.status='1' AND a.url !=''"""
     cr.execute(sql)
     v_list = []
     for r in cr.fetchall():
@@ -153,10 +183,11 @@ def get_privs():
 def get_privs_sys(p_roleid):
     db = get_connection()
     cr = db.cursor()
-    sql="""select cast(id as char) as id,name 
-           from t_xtqx
-           where status='1' AND url !=''
-             and id not in(select priv_id from t_role_privs where role_id='{0}')      
+    sql="""select cast(a.id as char) as id,
+                  CONCAT((SELECT NAME FROM t_xtqx c WHERE c.id=a.parent_id),'=>',NAME) AS NAME  
+           from t_xtqx a
+           where a.status='1' AND a.url !=''
+             and a.id not in(select priv_id from t_role_privs b where b.role_id='{0}')      
         """.format(p_roleid)
     cr.execute(sql)
     v_list = []
@@ -169,10 +200,11 @@ def get_privs_sys(p_roleid):
 def get_privs_role(p_roleid):
     db = get_connection()
     cr = db.cursor()
-    sql="""select cast(id as char) as id,name
-           from t_xtqx 
-            where status='1'  AND url !=''
-              AND id in(select priv_id from t_role_privs where role_id='{0}')
+    sql="""select cast(a.id as char) as id,
+                  CONCAT((SELECT NAME FROM t_xtqx c WHERE c.id=a.parent_id),'=>',NAME) AS NAME  
+           from t_xtqx a
+            where a.status='1'  AND url !=''
+              AND a.id in(select priv_id from t_role_privs b where b.role_id='{0}')
         """.format(p_roleid)
     cr.execute(sql)
     v_list = []
@@ -251,12 +283,14 @@ def get_tree_by_userid(p_username):
         result['message'] = '加载失败！'
     return result
 
-def get_tab_ddl_by_tname(dbid,tab):
+def get_tab_ddl_by_tname(dbid,tab,cur_db):
     try:
         result = {}
         v_node = ""
         v_html = ""
         p_ds   = get_ds_by_dsid(dbid)
+        p_ds['service'] = cur_db
+        print('get_tab_ddl_by_tname(p_ds)=>',p_ds)
         db     = get_connection_ds(p_ds)
         cr     = db.cursor()
         sql    = """show create table {0}""".format(tab)
@@ -462,10 +496,11 @@ def get_tab_idx_by_tname(dbid,tab):
     return result
 
 
-def get_tab_idx_by_tname(dbid,tab):
+def get_tab_idx_by_tname(dbid,tab,cur_db):
     try:
         result = {}
         p_ds   = get_ds_by_dsid(dbid)
+        p_ds['service'] = cur_db
         db     = get_connection_ds(p_ds)
         cr     = db.cursor()
         sql    = '''SHOW INDEXES FROM {0}'''.format(tab)

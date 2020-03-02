@@ -21,6 +21,7 @@ def query_transfer(sync_tag):
         v_where = v_where + " and a.transfer_tag='{0}'\n".format(sync_tag)
 
     sql = """SELECT  a.id,
+                 -- concat(substr(a.transfer_tag,1,40),'...') as transfer_tag,
                  a.transfer_tag,
                  a.comments,
                  b.server_desc,

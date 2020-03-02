@@ -85,17 +85,17 @@
             </div>
        </div>
        <div class="col-md-3">
-            <div class="form-group">
-               <div>
-                    <label class="col-md-3 control-label">数据库环境：&nbsp;</label>
-               </div>
-               <div>
-                    <label class="col-md-6 control-label text-muted"><span id="curr_db_desc"></span></label>
-               </div>
-               <div>
-                    <label class="col-md-3 control-label"></label>
-               </div>
-            </div>
+            <!--<div class="form-group">-->
+               <!--<div>-->
+                    <!--<label class="col-md-3 control-label">数据库环境：&nbsp;</label>-->
+               <!--</div>-->
+               <!--<div>-->
+                    <!--<label class="col-md-6 control-label text-muted"><span id="curr_db_desc"></span></label>-->
+               <!--</div>-->
+               <!--<div>-->
+                    <!--<label class="col-md-3 control-label"></label>-->
+               <!--</div>-->
+            <!--</div>-->
        </div>
        <div class="col-md-3">
             <div class="form-group">
@@ -282,7 +282,7 @@
                             },
                             success: function (dataSet) {
                                 console.log('input propertychange=',dataSet)
-                                $('#curr_db_desc').text(dataSet.desc)
+                                //$('#curr_db_desc').text(dataSet.desc)
                                 $('#db_menu_title').html(dataSet.url)
                                 $('#browser').empty()
                                 $('#browser').append(dataSet.message);
@@ -316,6 +316,7 @@
                                                 datatype: "json",
                                                 data: {
                                                     dbid  :  $('#db_source').val(),
+                                                    cur_db:  $('#curr_db').text(),
                                                     tab   :  txt
                                                 },
                                                 success: function (dataSet) {
@@ -338,6 +339,7 @@
                                                 datatype: "json",
                                                 data: {
                                                     dbid  :  $('#db_source').val(),
+                                                    cur_db:  $('#curr_db').text(),
                                                     tab   :  txt
                                                 },
                                                 success: function (dataSet) {
@@ -535,7 +537,7 @@
                                              "sSortDescending": ": 以降序排列此列"
                                          }
                                        }
-                             });
+                            });
                        }
                      }
                  });

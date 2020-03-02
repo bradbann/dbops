@@ -80,6 +80,17 @@
                 </select>
              </div>
          </div>
+         <div class="col-md-2">
+             <div class="input-group">
+                 <span class="input-group-addon">大数据环境</span>
+                 <select class="form-control select" id="sync_env" >
+                     <option value='' selected = "selected">.....</option>
+                     <option value='prod' >大数据生产</option>
+                     <option value='dev' >大数据开发</option>
+                     <option value='uat'>大数据测试</option>
+                </select>
+             </div>
+         </div>
 
          <div class="col-md-1">
              <div class="input-group">
@@ -104,7 +115,7 @@
       <div class="modal-dialog modal-lg-detail">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <button type="  button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h4 class="modal-title">任务详情</h4>
             </div>
             <div class="modal-body">
@@ -428,7 +439,6 @@
     </div>
    </div><!-- /.modal -->
 
-   <script src="{{static_url('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
    <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
    <script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
    <script src="{{static_url('plugins/datatables/dataTables.buttons.min.js')}}"></script>
@@ -436,7 +446,6 @@
    <script src="{{static_url('plugins/datatables/dataTables.responsive.min.js')}}"></script>
    <script src="{{static_url('plugins/datatables/responsive.bootstrap.min.js')}}"></script>
    <script src="{{static_url('plugins/datatables/dataTables.scroller.min.js')}}"></script>
-   <script src="{{static_url('assets/pages/jquery.form-pickers.init.js')}}"></script>
    <script>
         $(document).keydown(function(event){
             if (event.keyCode == 13) { //判断为Enter键
@@ -487,6 +496,7 @@
                       sync_tag   : $('#tagname').val(),
                       sync_ywlx  : $('#sync_ywlx').val(),
                       sync_type  : $('#sync_type').val(),
+                      sync_env   : $('#sync_env').val()
                   },
                   success: function (dataSet) {
                       $('#example').DataTable( {
@@ -499,7 +509,7 @@
                       scrollX    :true,
                       scrollCollapse: true,
                       paging:     true,
-                      iDisplayLength: 16,
+                      iDisplayLength: 15,
                       //bAutoWidth: true,
                       data: dataSet,
                       columns: [
@@ -511,7 +521,7 @@
                         { "title": "同步方向" },
                         { "title": "运行时间" },
                         { "title": "接口服务器"},
-                        { "title": "任务状态"},
+                        { "title": "状态"},
                         {
                             "title":"功能",
                             "width": "25px",
@@ -629,13 +639,14 @@
                   success: function (dataSet) {
                       console.log('message=',dataSet.message,'code=',dataSet.code);
                       set_attr(dataSet.message)
+                      $('#con-close-modal').modal({
+                          keyboard: false,
+                          backdrop:false
+                       });
                   }
              });
 
-            $('#con-close-modal').modal({
-              keyboard: false,
-              backdrop:false
-            });
+
         }
 
         function showTemplete(v) {

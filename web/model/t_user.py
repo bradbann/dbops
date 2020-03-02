@@ -39,7 +39,7 @@ def logon_user_check(login_name,password,verify_code,verify_img):
         result['message'] = '口令有误！'
         return result
 
-    if verify_code!=verify_img:
+    if verify_code.upper()!=verify_img.upper():
         result['code'] = '-1'
         result['message'] = '验证码不正确！'
         return result

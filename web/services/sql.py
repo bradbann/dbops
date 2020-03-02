@@ -149,24 +149,27 @@ class get_tree_by_sql(tornado.web.RequestHandler):
 
 class get_tab_ddl(tornado.web.RequestHandler):
     def post(self):
-        dbid  = self.get_argument("dbid")
-        tab   = self.get_argument("tab")
-        print('get_tab_ddl=',dbid,tab)
-        result = get_tab_ddl_by_tname(dbid,tab)
+        dbid    = self.get_argument("dbid")
+        cur_db  = self.get_argument("cur_db")
+        tab     = self.get_argument("tab")
+        print('get_tab_ddl=',dbid,tab,cur_db)
+        result = get_tab_ddl_by_tname(dbid,tab,cur_db)
         self.write({"code": result['code'], "message": result['message']})
 
 class get_tab_idx(tornado.web.RequestHandler):
     def post(self):
-        dbid  = self.get_argument("dbid")
-        tab   = self.get_argument("tab")
-        print('get_tab_ddl=',dbid,tab)
-        result = get_tab_idx_by_tname(dbid,tab)
+        dbid   = self.get_argument("dbid")
+        cur_db = self.get_argument("cur_db")
+        tab    = self.get_argument("tab")
+        print('get_tab_idx=',dbid,tab,cur_db)
+        result = get_tab_idx_by_tname(dbid,tab,cur_db)
         self.write({"code": result['code'], "message": result['message']})
 
 class alt_tab(tornado.web.RequestHandler):
     def post(self):
-        dbid  = self.get_argument("dbid")
-        tab   = self.get_argument("tab")
+        dbid   = self.get_argument("dbid")
+        cur_db = self.get_argument("cur_db")
+        tab    = self.get_argument("tab")
         print('get_tab_ddl=',dbid,tab)
         result = alt_tab_desc(dbid,tab)
         self.write({"code": result['code'], "message": result['message']})

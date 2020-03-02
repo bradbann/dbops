@@ -28,8 +28,9 @@ class ds_query(tornado.web.RequestHandler):
         dsname     = self.get_argument("dsname")
         market_id  = self.get_argument("market_id")
         db_env     = self.get_argument("db_env")
-        v_list = query_ds(dsname,market_id,db_env)
-        v_json = json.dumps(v_list)
+        ds_type    = self.get_argument("ds_type")
+        v_list     = query_ds(dsname,market_id,db_env,ds_type)
+        v_json     = json.dumps(v_list)
         self.write(v_json)
 
 class dsadd(tornado.web.RequestHandler):
@@ -107,6 +108,49 @@ class dsedit_save(tornado.web.RequestHandler):
         d_ds['status']      = self.get_argument("status")
         result=upd_ds(d_ds)
         self.write({"code": result['code'], "message": result['message']})
+
+
+class dsclone(tornado.web.RequestHandler):
+    def get(self):
+        dsid=self.get_argument("dsid")
+        d_ds      =get_ds_by_dsid(dsid)
+        self.render("./ds_clone.html",
+                     market_id  = d_ds['market_id'],
+                     inst_type  = d_ds['inst_type'],
+                     db_type    = d_ds['db_type'],
+                     db_env     = d_ds['db_env'],
+                     dm_db_type = get_dmm_from_dm('02'),
+                     dm_db_env  = get_dmm_from_dm('03'),
+                     dm_inst_type=get_dmm_from_dm('07'),
+                     dm_proj_type=get_dmm_from_dm('05'),
+                     db_desc    = d_ds['db_desc'],
+                     ip         = d_ds['ip'],
+                     port       = d_ds['port'],
+                     service    = d_ds['service'],
+                     user       = d_ds['user'],
+                     password   = d_ds['password'],
+                     status     = d_ds['status'],
+                     url=get_url_root()
+                    )
+
+class dsclone_save(tornado.web.RequestHandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        d_ds={}
+        d_ds['market_id']   = self.get_argument("market_id")
+        d_ds['inst_type']   = self.get_argument("inst_type")
+        d_ds['db_type']     = self.get_argument("db_type")
+        d_ds['db_env']      = self.get_argument("db_env")
+        d_ds['db_desc']     = self.get_argument("db_desc")
+        d_ds['ip']          = self.get_argument("ip")
+        d_ds['port']        = self.get_argument("port")
+        d_ds['service']     = self.get_argument("service")
+        d_ds['user']        = self.get_argument("user")
+        d_ds['pass']        = self.get_argument("pass")
+        d_ds['status']      = self.get_argument("status")
+        result=save_ds(d_ds)
+        self.write({"code": result['code'], "message": result['message']})
+
 
 class dsedit_del(tornado.web.RequestHandler):
     def post(self):

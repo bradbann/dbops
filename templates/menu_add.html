@@ -13,7 +13,7 @@
        <form class="form-horizontal" role="form">
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">菜单名称</label>
+                    <label class="col-md-2 control-label"><span id="s_menu_name">*</span>菜单名称</label>
                 </div>
                 <div class="col-md-10">
                     <input id="name"  type="text" class="form-control" placeholder="请输入菜单名称">
@@ -21,7 +21,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">功能链接</label>
+                    <label class="col-md-2 control-label"><span id="s_menu_url">*</span>功能链接</label>
                 </div>
                 <div class="col-md-10">
                     <input id="url"  type="text" class="form-control" placeholder="请输入功能链接">
@@ -29,7 +29,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">菜单状态</label>
+                    <label class="col-md-2 control-label"><span id="s_menu_status">*</span>菜单状态</label>
                 </div>
                <div class="col-md-10">
                     <select class="form-control select" id="status" name="status">
@@ -41,7 +41,7 @@
 
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">上级节点</label>
+                    <label class="col-md-2 control-label"><span id="s_menu_parent">*</span>上级节点</label>
                 </div>
                 <div class="col-md-10">
                     <select class="form-control" id="parent_id" >
@@ -64,8 +64,16 @@
     <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
 
     <script>
-        $(document).ready(function() {
 
+        function set_selected(){
+            document.all['s_menu_name'].style.color="#ff0000";
+            document.all['s_menu_url'].style.color="#ff0000";
+            document.all['s_menu_status'].style.color="#ff0000";
+            document.all['s_menu_parent'].style.color="#ff0000";
+        }
+
+        $(document).ready(function() {
+          set_selected()
           $("#add").click(function () {
             $.ajax({
                 url: "/menu/add/save",

@@ -51,6 +51,7 @@ class index(tornado.web.RequestHandler):
                        status      = d_user['status'],
                        file_path   = d_user['file_path'],
                        file_name   = d_user['file_name'],
+                       user_image  = d_user['file_path']+'/'+d_user['file_name'],
                        user_roles  = get_user_roles(userid),
                        genders     = genders,
                        depts       = depts,

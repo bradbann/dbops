@@ -2,17 +2,14 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <!-- App title -->
     <title>角色新增</title>
-    <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>
-    <!-- Sweet Alert -->
     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
     <style>
-        #sele_sys_priv {
+        #ra_sele_sys_priv {
             height: 290px;
             max-height: 290px;
         }
-        #sele_role_priv {
+        #ra_sele_role_priv {
             height: 190px;
             max-height: 190px;
         }
@@ -24,7 +21,7 @@
        <form class="form-horizontal" role="form">
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">角色名称</label>
+                    <label class="col-md-2 control-label"><span id="s_role_name">*</span>角色名称</label>
                 </div>
                 <div class="col-md-10">
                     <input id="name"  type="text" class="form-control" placeholder="请输入角色名称">
@@ -32,12 +29,12 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">角色状态</label>
+                    <label class="col-md-2 control-label"><span id="s_role_status">*</span>角色状态</label>
                 </div>
                <div class="col-md-10">
                     <select class="form-control select" id="status" name="status">
-                        <option value="0">启用</option>
-                        <option value="1">禁用</option>
+                        <option value="1">启用</option>
+                        <option value="0">禁用</option>
                     </select>
                </div>
             </div>
@@ -46,7 +43,7 @@
                     <label class="col-md-2 control-label">系统权限</label>
                 </div>
                 <div class="col-md-10">
-                    <select multiple="multiple" class="form-control" id="sele_sys_priv" >
+                    <select multiple="multiple" class="form-control" id="ra_sele_sys_priv" >
                         {% for var in privs %}
                            <option value={{var[0]}} >{{var[1]}}</option>
                         {% end %}
@@ -56,10 +53,10 @@
 
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">角色权限</label>
+                    <label class="col-md-2 control-label"><span id="s_ra_sele_role_priv">*</span>角色权限</label>
                 </div>
                 <div class="col-md-10">
-                    <select multiple="multiple" class="form-control" id="sele_role_priv" >
+                    <select multiple="multiple" class="form-control" id="ra_sele_role_priv" >
                     </select>
                 </div>
 
@@ -78,36 +75,64 @@
 
 
     <script>
+        function set_selected(){
+            document.all['s_role_name'].style.color="#ff0000";
+            document.all['s_role_status'].style.color="#ff0000";
+            document.all['s_ra_sele_role_priv'].style.color="#ff0000";
+        }
+
         $(document).ready(function() {
 
-          $("#sele_sys_priv").click(function () {
-               options=$('#sele_sys_priv option:selected');
+         set_selected()
+         // console.log('---------------------------------------------0')
+         // console.log($('#ra_sele_sys_priv option').length,$('#ra_sele_role_priv option').length)
+         //  var options1=$('#ra_sele_sys_priv option');
+         //  if(options1.length>0){
+         //    for (var i=0;i<options1.length;i++){
+         //          value=$(options1[i]).val();
+         //          text =$(options1[i]).text();
+         //          console.log(value,text)
+         //      }
+         //  }
+         // console.log('---------------------------------------------1')
+         // var options2=$('#ra_sele_role_priv option');
+         // if(options2.length>0){
+         //    for (var i=0;i<options2.length;i++){
+         //          value=$(options2[i]).val();
+         //          text =$(options2[i]).text();
+         //          console.log(value,text)
+         //      }
+         //  }
+         // console.log('---------------------------------------------2')
+
+         $("#ra_sele_sys_priv").click(function () {
+               options=$('#ra_sele_sys_priv option:selected');
                if(options.length>0){
                 for (var i=0;i<options.length;i++){
                       value=$(options[i]).val();
                       text =$(options[i]).text();
-                      $('#sele_role_priv').append("<option value='"+value+"'>"+text+"</option>");
+                      $('#ra_sele_role_priv').append("<option value='"+value+"'>"+text+"</option>");
                 }
-                $('#sele_sys_priv option:selected').remove();
+                $('#ra_sele_sys_priv option:selected').remove();
                }
           });
 
-          $("#sele_role_priv").click(function () {
-               options=$('#sele_role_priv option:selected');
+          $("#ra_sele_role_priv").click(function () {
+               options=$('#ra_sele_role_priv option:selected');
                if(options.length>0){
                 for (var i=0;i<options.length;i++){
                       value=$(options[i]).val();
                       text =$(options[i]).text();
-                      $('#sele_sys_priv').append("<option value='"+value+"'>"+text+"</option>");
+                      $('#ra_sele_sys_priv').append("<option value='"+value+"'>"+text+"</option>");
                 }
-                $('#sele_role_priv option:selected').remove();
+                $('#ra_sele_role_priv option:selected').remove();
                }
           });
 
           function get_privs(){
              var tmp='';
              var val='';
-             $('#sele_role_priv option').each(function(){
+             $('#ra_sele_role_priv option').each(function(){
                val=$(this).val();
                tmp=tmp+','+val;
              });
