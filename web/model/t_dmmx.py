@@ -27,6 +27,18 @@ def get_dmmc_from_dm(p_dm,p_dmm):
     cr.close()
     return rs[0]
 
+def get_users_from_proj(p_userid):
+    db = get_connection()
+    cr = db.cursor()
+    sql = """select id,name from t_user 
+              where project_group=(select project_group from t_user where id='{0}')""".format(p_userid)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list
+
 
 def get_backup_server():
     db = get_connection()
@@ -193,6 +205,32 @@ def get_sync_db_server():
         v_list.append(list(r))
     cr.close()
     return v_list
+
+def get_sync_db_server_by_type(p_type):
+    try:
+        result = {}
+        db  = get_connection()
+        cr  = db.cursor()
+        sql = """SELECT id,db_desc
+                      FROM t_db_source 
+                    WHERE  db_type ='{0}' and db_env in(1,2,3,4) 
+                        and STATUS=1 
+                        and user!='puppet'
+                      ORDER BY db_desc,db_type""".format(p_type)
+        cr.execute(sql)
+        rs=cr.fetchall()
+        v_list = []
+        for r in rs:
+            v_list.append(list(r))
+        cr.close()
+        result['code'] = '0'
+        result['message'] = v_list
+    except Exception as e:
+        print('get_sync_db_server_by_type.ERROR:',str(e))
+        result['code'] = '-1'
+        result['message'] = '获取数据库名失败！'
+    return result
+
 
 def get_datax_sync_db_server():
     db = get_connection()

@@ -29,11 +29,12 @@ def query_sync(sync_tag,market_id,sync_ywlx,sync_type):
         v_where = v_where + " and a.sync_type='{0}'\n".format(sync_type)
 
     sql = """SELECT  a.id,
+                     concat(substr(a.sync_tag,1,40),'...') as sync_tag_,             
                      a.sync_tag,
-                     a.comments,
+                     concat(substr(a.comments,1,30),'...') as comments,
                      CONCAT(b.server_ip,':',b.server_port) AS sync_server,
                      c.dmmc AS  sync_ywlx,
-                     d.dmmc AS  sync_type,
+                    --  d.dmmc AS  sync_type,
                      a.run_time,
                      a.api_server,
                      CASE a.STATUS WHEN '1' THEN '启用' WHEN '0' THEN '禁用' END  STATUS
@@ -622,9 +623,9 @@ def stop_sync_task(p_tag,p_api):
         result['code'] = '0'
         result['message'] = '执行成功！'
         v_cmd = "curl -XPOST {0}/stop_script_remote_sync -d 'tag={1}'".format(p_api,p_tag)
+        print('stop_sync_task=',v_cmd)
         r = os.popen(v_cmd).read()
         d = json.loads(r)
-
         if d['code'] == 200:
             return result
         else:
@@ -639,7 +640,6 @@ def stop_sync_task(p_tag,p_api):
 
 def update_sync_status():
     try:
-        #通过p_tag自动获取api_server地址
         result = {}
         result['code'] = '0'
         result['message'] = '执行成功！'

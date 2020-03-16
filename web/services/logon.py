@@ -13,19 +13,21 @@
 
 import tornado.web
 import random,os,json
-
+import time
 from web.model.t_user  import logon_user_check,check_forget_password,check_modify_password,save_forget_authention_string,check_auth_str_exist,get_userid_by_auth
 from web.model.t_user  import upd_password,get_user_by_userid,get_user_by_loginame,get_user_roles
 from web.model.t_xtqx  import get_tree_by_userid
 from web.model.t_dmmx  import get_dmm_from_dm
 from web.utils.common  import send_mail,get_rand_str,current_time,china_rq,china_week,welcome,china_time
 from PIL import Image,ImageDraw,ImageFont
+from web.utils.basehandler import basehandler
 
 class logon(tornado.web.RequestHandler):
     def get(self):
         self.render("page-login.html")
 
-class index(tornado.web.RequestHandler):
+class index(basehandler):
+    @tornado.web.authenticated
     def get(self):
         username  = str(self.get_secure_cookie("username"), encoding="utf-8")
         userid    = str(self.get_secure_cookie("userid"), encoding="utf-8")
@@ -72,11 +74,6 @@ class tree(tornado.web.RequestHandler):
         result['message']=msg
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         self.write({"code": result['code'], "message": result['message']})
-'''
-class logon(tornado.web.RequestHandler):
-    def get(self):
-        self.render("./logon/logon.html")
-'''
 
 class lockscreen(tornado.web.RequestHandler):
     def get(self):
@@ -102,9 +99,14 @@ class get_time(tornado.web.RequestHandler):
 
 class logout(tornado.web.RequestHandler):
     def get(self):
-        self.set_secure_cookie("username", "",expires_days=None)
+        self.set_secure_cookie("username", '',expires_days=None)
+        self.set_secure_cookie("userid", '', expires_days=None)
         #self.redirect("/")
         self.render("page-logout.html")
+
+class error(tornado.web.RequestHandler):
+    def get(self):
+        self.render("page-500.html")
 
 
 class logon_welcome(tornado.web.RequestHandler):
@@ -122,8 +124,8 @@ class logon_check(tornado.web.RequestHandler):
         print('resul=',result)
         if result['code'] == '0':
             d_user=get_user_by_loginame(username)
-            self.set_secure_cookie("username", username, expires_days=None)
-            self.set_secure_cookie("userid", d_user['userid'], expires_days=None)
+            self.set_secure_cookie("username", username,expires=time.time() + 1800)
+            self.set_secure_cookie("userid", d_user['userid'], expires=time.time() + 1800)
         self.write({"code": result['code'], "message": result['message'], "url": result['url']})
 
 class forget_password_check(tornado.web.RequestHandler):
@@ -224,3 +226,18 @@ class get_verify(tornado.web.RequestHandler):
         v_json = json.dumps(v_dict)
         print(v_json)
         self.write(v_json)
+
+class forget_password(basehandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("./user/forget_password.html",url=get_url_root())
+
+class check(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        qname = self.get_argument("qname")
+        if qname == '':
+            self.write('{"code":"-1","message":"用户名不能为空!"}')
+        else:
+            self.write('{"code":"0","message":"验证成功！"}')

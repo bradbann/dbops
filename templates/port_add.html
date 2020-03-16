@@ -3,8 +3,17 @@
 <head>
     <meta charset="utf-8">
     <title>新增端口</title>
-    <!-- Sweet Alert -->
     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
+     <style>
+        #develper {
+            height: 200px;
+            max-height: 290px;
+        }
+        #app_dev {
+            height: 100px;
+            max-height: 100px;
+        }
+    </style>
 </head>
 <body>
    <p></p>
@@ -29,16 +38,25 @@
 
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label"><span id="s_app_dev">*</span>开发者</label>
+                    <label class="col-md-2 control-label">程序员</label>
                 </div>
-               <div class="col-md-10">
-                    <select class="form-control select" id="app_dev" >
-                        <option value='' selected = "selected">......</option>
+                <div class="col-md-10">
+                    <select multiple="multiple" class="form-control" id="develper" >
                          {% for var in developer %}
                           <option value={{var[0]}} >{{var[1]}}</option>
                          {% end %}
                     </select>
-               </div>
+                </div>
+           </div>
+
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_app_dev">*</span>开发者</label>
+                </div>
+                <div class="col-md-10">
+                    <select multiple="multiple" class="form-control" id="app_dev" >
+                    </select>
+                </div>
            </div>
 
            <div class="form-group">
@@ -60,7 +78,7 @@
            <br>
            <div class="form-group m-b-0">
                 <div class="col-sm-offset-6 col-sm-9">
-                  <button id="add" type="button" class="btn btn-custom waves-effect waves-light btn-md">保存</button>
+                  <button id="add_port" type="button" class="btn btn-custom waves-effect waves-light btn-md">保存</button>
                 </div>
            </div>
        </form>
@@ -70,6 +88,40 @@
     <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
 
     <script>
+
+          $("#develper").click(function () {
+               options=$('#develper option:selected');
+               if(options.length>0){
+                for (var i=0;i<options.length;i++){
+                      value=$(options[i]).val();
+                      text =$(options[i]).text();
+                      $('#app_dev').append("<option value='"+value+"'>"+text+"</option>");
+                }
+                $('#develper option:selected').remove();
+               }
+          });
+
+          $("#app_dev").click(function () {
+               options=$('#app_dev option:selected');
+               if(options.length>0){
+                for (var i=0;i<options.length;i++){
+                      value=$(options[i]).val();
+                      text =$(options[i]).text();
+                      $('#develper').append("<option value='"+value+"'>"+text+"</option>");
+                }
+                $('#app_dev option:selected').remove();
+               }
+          });
+
+          function get_developers(){
+             var tmp='';
+             var val='';
+             $('#app_dev option').each(function(){
+               val=$(this).val();
+               tmp=tmp+','+val;
+             });
+             return tmp.substr(1);
+          };
 
         function set_selected(){
             document.all['s_app_name'].style.color="#ff0000";
@@ -82,7 +134,7 @@
 
           set_selected()
 
-          $("#add").click(function () {
+          $("#add_port").click(function () {
             $.ajax({
                 url: "/port/add/save",
                 type: "post",
@@ -90,7 +142,7 @@
                 data: {
                     app_name   : $('#app_name').val(),
                     app_port   : $('#app_port').val(),
-                    app_dev    : $('#app_dev').val(),
+                    app_dev    : get_developers(),
                     app_desc   : $('#app_desc').val(),
                     app_ext    : $('#app_ext').val()
                 },

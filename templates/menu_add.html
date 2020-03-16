@@ -21,7 +21,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label"><span id="s_menu_url">*</span>功能链接</label>
+                    <label class="col-md-2 control-label">功能链接</label>
                 </div>
                 <div class="col-md-10">
                     <input id="url"  type="text" class="form-control" placeholder="请输入功能链接">
@@ -33,8 +33,8 @@
                 </div>
                <div class="col-md-10">
                     <select class="form-control select" id="status" name="status">
-                        <option value="0">启用</option>
-                        <option value="1">禁用</option>
+                        <option value="1">启用</option>
+                        <option value="0">禁用</option>
                     </select>
                </div>
             </div>
@@ -67,7 +67,6 @@
 
         function set_selected(){
             document.all['s_menu_name'].style.color="#ff0000";
-            document.all['s_menu_url'].style.color="#ff0000";
             document.all['s_menu_status'].style.color="#ff0000";
             document.all['s_menu_parent'].style.color="#ff0000";
         }

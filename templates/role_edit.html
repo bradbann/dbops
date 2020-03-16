@@ -151,7 +151,17 @@
                 } else {
                    swal(dataSet.message, "", "error")
                 }
-            }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('jqXHR.responseText=',jqXHR.responseText);
+                console.log('jqXHR.status=',jqXHR.status);
+                console.log('jqXHR.readyState=',jqXHR.readyState);
+                console.log('jqXHR.statusText=',jqXHR.statusText);
+                console.log('textStatus=',textStatus);
+                console.log('errorThrown=',errorThrown);
+                swal({title: "系统已注销，请重新登陆!",showConfirmButton: false});
+                setTimeout("window.location.href='/login'",3000);
+           }
          });
       });
 

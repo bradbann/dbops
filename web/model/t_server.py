@@ -205,12 +205,17 @@ def check_server(p_server):
 
     if p_server["server_desc"]=="":
         result['code']='-1'
-        result['message']='项目描述不能为空！'
+        result['message']='服务器描述不能为空！'
         return result
 
     if p_server["market_id"]=="":
         result['code']='-1'
-        result['message']='所属项目不能为空！'
+        result['message']='项目编码不能为空！'
+        return result
+
+    if p_server["server_type"]=="":
+        result['code']='-1'
+        result['message']='服务器类型不能为空！'
         return result
 
     if p_server["server_ip"]=="":

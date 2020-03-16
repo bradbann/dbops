@@ -15,39 +15,32 @@ import json
 import uuid
 import tornado.web
 from web.model.t_role  import get_roles
-from web.model.t_user  import save_user,get_user_by_userid,upd_user,del_user,query_user,query_user_proj_privs
-from web.model.t_user  import get_sys_roles,get_user_roles,save_user_proj_privs,init_user_proj_privs
+from web.model.t_user  import save_user,get_user_by_userid,upd_user,del_user,query_user,get_sys_roles,get_user_roles,save_user_proj_privs
 from web.model.t_dmmx  import get_dmm_from_dm
-from web.model.t_xtqx  import check_url
 from web.model.t_ds    import query_project
 from web.utils.common  import get_url_root
+from web.utils.basehandler import basehandler
 
-class userquery(tornado.web.RequestHandler):
+class userquery(basehandler):
+    @tornado.web.authenticated
     def get(self):
-        userid   = str(self.get_secure_cookie("userid"), encoding="utf-8")
-        if userid:
-            if check_url(userid,self.request.uri):
-                self.render("user_query.html")
-            else:
-                self.render("page-500.html")
-        else:
-            self.render("page-404.html")
+        self.render("user_query.html")
 
-
-class useradd(tornado.web.RequestHandler):
+class useradd(basehandler):
+    @tornado.web.authenticated
     def get(self):
         roles  = get_roles()
         gender = get_dmm_from_dm('04')
         dept   = get_dmm_from_dm('01')
-        print('gender=',gender)
-        print('dept=',dept)
-        print('roles=',roles)
+        proj_group = get_dmm_from_dm('18')
         self.render("./user_add.html",
                     roles=roles,
                     gender=gender,
-                    dept=dept)
+                    dept=dept,
+                    proj_group=proj_group)
 
-class useradd_save(tornado.web.RequestHandler):
+class useradd_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         d_user={}
         d_user['login']        = self.get_argument("login")
@@ -56,6 +49,7 @@ class useradd_save(tornado.web.RequestHandler):
         d_user['gender']       = self.get_argument("gender")
         d_user['email']        = self.get_argument("email")
         d_user['phone']        = self.get_argument("phone")
+        d_user['proj_group']   = self.get_argument("proj_group")
         d_user['dept']         = self.get_argument("dept")
         d_user['expire_date']  = self.get_argument("expire_date")
         d_user['status']       = self.get_argument("status")
@@ -66,16 +60,14 @@ class useradd_save(tornado.web.RequestHandler):
         result=save_user(d_user)
         self.write({"code": result['code'], "message": result['message']})
 
-class useradd_save_uploadImage(tornado.web.RequestHandler):
+class useradd_save_uploadImage(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         static_path = self.get_template_path().replace("templates", "static")
-        #username    = str(self.get_secure_cookie("username"), encoding="utf-8")
         file_metas  = self.request.files["file"]
-        #username    = self.request.files["username"]
         username = self.get_argument("username")
         print('username=',username)
-
         try:
             for meta in file_metas:
                 file_path = static_path+'/'+'assets/images/users'
@@ -90,16 +82,19 @@ class useradd_save_uploadImage(tornado.web.RequestHandler):
             self.write({"code": -1, "message": '保存图片失败'+str(e)})
 
 
-class userchange(tornado.web.RequestHandler):
+class userchange(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./user_change.html",url=get_url_root())
 
-class useredit(tornado.web.RequestHandler):
+class useredit(basehandler):
+    @tornado.web.authenticated
     def get(self):
         userid  = self.get_argument("userid")
         d_user  = get_user_by_userid(userid)
         genders = get_dmm_from_dm('04')
         depts   = get_dmm_from_dm('01')
+        proj_groups = get_dmm_from_dm('18')
         print('sys_roles=',get_sys_roles(userid))
         print('user_roles=', get_user_roles(userid))
         self.render("./user_edit.html",
@@ -110,6 +105,7 @@ class useredit(tornado.web.RequestHandler):
                      gender      = d_user['gender'],
                      email       = d_user['email'],
                      phone       = d_user['phone'],
+                     proj_group  = d_user['project_group'],
                      dept        = d_user['dept'],
                      expire_date = d_user['expire_date'],
                      status      = d_user['status'],
@@ -120,10 +116,12 @@ class useredit(tornado.web.RequestHandler):
                      user_roles  = get_user_roles(userid),
                      url         = get_url_root(),
                      genders     = genders,
-                     depts       = depts
+                     depts       = depts,
+                     proj_groups = proj_groups
                     )
 
-class useredit_save(tornado.web.RequestHandler):
+class useredit_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         d_user={}
@@ -134,6 +132,7 @@ class useredit_save(tornado.web.RequestHandler):
         d_user['gender']      = self.get_argument("gender")
         d_user['email']       = self.get_argument("email")
         d_user['phone']       = self.get_argument("phone")
+        d_user['proj_group']  = self.get_argument("proj_group")
         d_user['dept']        = self.get_argument("dept")
         d_user['expire_date'] = self.get_argument("expire_date")
         d_user['status']      = self.get_argument("status")
@@ -142,11 +141,11 @@ class useredit_save(tornado.web.RequestHandler):
         print('useredit_save=',d_user['roles'] )
         d_user['file_path']   = self.get_argument("file_path")
         d_user['file_name']   = self.get_argument("file_name")
-
         result=upd_user(d_user)
         self.write({"code": result['code'], "message": result['message']})
 
-class useredit_del(tornado.web.RequestHandler):
+class useredit_del(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         d_user={}
@@ -154,10 +153,8 @@ class useredit_del(tornado.web.RequestHandler):
         result=del_user(d_user)
         self.write({"code": result['code'], "message": result['message']})
 
-class user_query(tornado.web.RequestHandler):
-    def get(self):
-        self.render("page-500.html")
-
+class user_query(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         qname = self.get_argument("qname")
@@ -165,69 +162,26 @@ class user_query(tornado.web.RequestHandler):
         v_json = json.dumps(v_list)
         print(v_json)
         self.write(v_json)
-        # userid = str(self.get_secure_cookie("userid"), encoding="utf-8")
-        # if userid:
-        #     if check_url(userid, self.request.uri):
-        #         qname = self.get_argument("qname")
-        #         v_list = query_user(qname)
-        #         v_json = json.dumps(v_list)
-        #         print(v_json)
-        #         self.write(v_json)
-        #     else:
-        #         self.render("page-500.html")
-        # else:
-        #     self.render("page-500.html")
 
-
-
-class user_init_proj_privs(tornado.web.RequestHandler):
+class projectquery(basehandler):
+    @tornado.web.authenticated
     def get(self):
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
-        dsid = self.get_argument("dsid")
-        v_list=init_user_proj_privs(dsid);
-        v_dict = {"data": v_list}
-        v_json = json.dumps(v_dict)
-        self.write(v_json)
-
-class project_privs_query(tornado.web.RequestHandler):
-    def post(self):
-        print('project_privs_query,,,,,,,,,,,,,,,,,,,,,,,,,,')
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
-        qname = self.get_argument("qname")
-        dsid  = self.get_argument("dsid")
-        v_list=query_user_proj_privs(qname,dsid)
-        v_json = json.dumps(v_list)
-        self.write(v_json)
-
-class check(tornado.web.RequestHandler):
-    def post(self):
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
-        qname = self.get_argument("qname")
-        if qname == '':
-            self.write('{"code":"-1","message":"用户名不能为空!"}')
-        else:
-            self.write('{"code":"0","message":"验证成功！"}')
-
-class projectquery(tornado.web.RequestHandler):
-    def get(self):
-        #self.render("./projectquery.html",url=get_url_root())
         self.render("./projectquery.html")
 
-class project_query(tornado.web.RequestHandler):
+class project_query(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        qname  = self.get_argument("qname")
-        v_list = query_project(qname)
+        qname     = self.get_argument("qname")
+        userid    = self.get_argument("userid")
+        is_grants = self.get_argument("is_grants")
+        print('project_privs_query=', qname, userid, is_grants,type(is_grants))
+        v_list = query_project(qname,userid,is_grants)
         v_json = json.dumps(v_list)
         self.write(v_json)
 
-class projectprivs(tornado.web.RequestHandler):
-    def get(self):
-        dsid=self.get_argument("dsid")
-        #self.render("./projectprivs.html",dsid=dsid,url=get_url_root())
-        self.render("./projectprivs.html", dsid=dsid)
-
-class projectprivs_save(tornado.web.RequestHandler):
+class projectprivs_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         d_proj={}
@@ -235,10 +189,11 @@ class projectprivs_save(tornado.web.RequestHandler):
         d_proj['userid']        = self.get_argument("userid")
         d_proj['priv_query']    = self.get_argument("priv_query")
         d_proj['priv_release']  = self.get_argument("priv_release")
+        d_proj['priv_audit']    = self.get_argument("priv_audit")
+        d_proj['priv_execute']  = self.get_argument("priv_execute")
+        d_proj['priv_order']    = self.get_argument("priv_order")
         print('d_proj=',d_proj)
         result=save_user_proj_privs(d_proj)
         self.write({"code": result['code'], "message": result['message']})
 
-class forget_password(tornado.web.RequestHandler):
-    def get(self):
-        self.render("./user/forget_password.html",url=get_url_root())
+

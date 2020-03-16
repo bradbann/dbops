@@ -63,20 +63,6 @@
            border:1px;
            overflow-x:auto;
        }
-
-        #mb{
-            display: none;
-            height: 100%;
-            width: 100%;
-            position: fixed;
-            *position: absolute;
-            *height: 800px;
-            background: black;
-            top:0;
-            left: 0;
-            opacity:0.6;
-        }
-
     </style>
 </head>
 
@@ -165,7 +151,7 @@
                </div>
            </div>
       </div>
- </form>
+  </form>
    <div class="row">
        <div class="col-lg-3">
             <div id='div-tree-panal' class="panel panel-border panel-info" style="height: 720px;">
@@ -214,7 +200,7 @@
      </div>
    </div><!-- /.modal -->
 
-   <div class="contextMenu" id="myMenu1">
+  <div class="contextMenu" id="myMenu1">
   <ul>
     <li id="tab_definition"><img  src="{{static_url('assets/images/add.png')}}" /> 表定义</li>
     <li id="idx_definition"><img  src="{{static_url('assets/images/edit.gif')}}"/> 索引定义</li>
@@ -234,6 +220,7 @@
    <script src="{{static_url('plugins/toastr/toastr.min.js')}}"></script>
 
    <script type="text/javascript">
+
         function set_selected(){
             document.all['s_sql_desc'].style.color="#ff0000";
             document.all['s_db_source'].style.color="#ff0000";
@@ -279,7 +266,6 @@
 
               editor.setHighlightActiveLine(true);
 
-              //模态窗口居中显示
               function centerModals() {
                   $('.modal').each(function(i) {
                     var $clone = $(this).clone().css('display', 'block').appendTo('body');
@@ -336,7 +322,6 @@
                     editor.execCommand('find');
               });
 
-              //disable release button
               $("#release_btn").attr("disabled", true);
 
               $("#db_source").bind("input propertychange",function(){
@@ -482,9 +467,9 @@
                                     { "title": "检测结果" }
                                 ],
                                 scrollX       : true,
-                                scrollY       : true,
+                                scrollY       : "250px",
                                 scrollCollapse: true,
-                                paging        : true,
+                                paging        : false,
                                 iDisplayLength: 6,
                                 "language"    : {
                                      "search"         : "在表格中搜索:",
@@ -517,57 +502,153 @@
 
               }
 
-              function sql_check() {
+              function count(sour,subs){
+                var a=sour;
+                var b=subs;
+
+                var count=0;
+                var i=0;
+                for(i=0;i<=a.length;i++){
+
+                    if(a.indexOf(b)==i){
+                       a=a.substring(i+1,a.length);
+                       count++;
+                    }
+                }
+                return count
+              }
+
+              function sql_check(v_type,v_sql) {
 
                   if ($('#db_source').val()=='') {
                       showtips('error','请选择数据源!');
                       return false;
                   }
-
                   if ($('#curr_db').text()=='') {
                       showtips('error','当前数据库不能为空!');
                       return false;
                   }
-
                   if ($('#sql_desc').val()=='') {
                       showtips('error','请输入工单描述!');
                       return false;
                   }
-
                   if ($('#db_order_type').val()=='') {
                       showtips('error','工单类型不能为空!');
                       return false;
                   }
-
                   if (v_sql=='') {
                       showtips('error','请选中发布语句!');
                       return false;
                   }
 
-                  return true;
+                  //工单类型为DDL检测
+                  if (v_type  == '1'){
 
+                      if (v_sql.match(/^update/s+$) !=null || v_sql.match(/^insert/s+$) !=null || v_sql.match(/^delete/s+$) !=null )
+                      {
+                          showtips('error','不允许执行DML语句!');
+                          return false;
+                      }
+                      if (v_sql.match(/^grant/s+$) !=null || v_sql.match(/^remoke/s+$) !=null)
+                      {
+                          showtips('error','不允许执行DCL语句!');
+                          return false;
+                      }
+                      if (v_sql.match(/^procedure/s+$) !=null || v_sql.match(/^function/s+$) !=null || v_sql.match(/^trigger/s+$) !=null || v_sql.match(/^event/s+$) !=null )
+                      {
+                          showtips('error','不允许执行过程、函数、触发器、事件!');
+                          return false;
+                      }
+                  }
+
+                   //工单类型为DML检测
+                  if (v_type  == '2'){
+
+                      if (v_sql.indexOf('create ')!= -1 ||  v_sql.indexOf('alter ')!= -1 || v_sql.indexOf('drop ')!= -1  || v_sql.indexOf('truncate ')!= -1) {
+                          showtips('error','不允许执行DDL语句!');
+                          return false;
+                      }
+                      if (v_sql.indexOf('grant ')!= -1 ||  v_sql.indexOf('remoke ')!= -1  ) {
+                          showtips('error','不允许执行DCL语句!');
+                          return false;
+                      }
+                      if (v_sql.indexOf('procedure ')!= -1 ||  v_sql.indexOf('function ')!= -1 ||v_sql.indexOf('trigger ')!= -1 ||  v_sql.indexOf('event ')!= -1 ) {
+                          showtips('error','不允许执行过程、函数、触发器、事件!');
+                          return false;
+                      }
+                  }
+
+                  //工单类型为DCL检测
+                  if (v_type  == '3'){
+
+                      if (v_sql.indexOf('update ')!= -1 ||  v_sql.indexOf('insert ')!= -1 || v_sql.indexOf('delete ')!= -1 ) {
+                          showtips('error','不允许执行DML语句!');
+                          return false;
+                      }
+
+                      if (v_sql.indexOf('create ')!= -1 ||  v_sql.indexOf('alter ')!= -1 || v_sql.indexOf('drop ')!= -1  || v_sql.indexOf('truncate ')!= -1) {
+                          showtips('error','不允许执行DDL语句!');
+                          return false;
+                      }
+
+                      if (v_sql.indexOf('procedure ')!= -1 ||  v_sql.indexOf('function ')!= -1 ||v_sql.indexOf('trigger ')!= -1 ||  v_sql.indexOf('event ')!= -1 ) {
+                          showtips('error','不允许执行过程、函数、触发器、事件!');
+                          return false;
+                      }
+                  }
+
+                  //工单类型为存储过程
+                  if (v_type  == '4'){
+
+                     if (count(v_sql,'procedure ')==0 && count(v_sql,'function ')==0 && count(v_sql,'trigger ')==0  && count(v_sql,'event ')==0 ) {
+
+                          if (v_sql.indexOf('update')!= -1 ||  v_sql.indexOf('insert')!= -1 || v_sql.indexOf('delete')!= -1 ) {
+                              showtips('error','不允许执行DML语句!');
+                              return false;
+                          }
+
+                          if (v_sql.indexOf('create ')!= -1 ||  v_sql.indexOf('alter ')!= -1 || v_sql.indexOf('drop ')!= -1  || v_sql.indexOf('truncate ')!= -1) {
+                              showtips('error','不允许执行DDL语句!');
+                              return false;
+                          }
+
+                          if (v_sql.indexOf('grant ')!= -1 ||  v_sql.indexOf('remoke ')!= -1  ) {
+                              showtips('error','不允许执行DCL语句!');
+                              return false;
+                          }
+                     }
+
+                      if (count(v_sql,'procedure ')>1 || count(v_sql,'function ')>1 || count(v_sql,'trigger ')>1  || count(v_sql,'event ')>1 ) {
+                          showtips('error','一次只能发部一个过程、函数、触发器、事件对象!');
+                          return false;
+                      }
+                  }
+
+                  return true;
               }
 
               $("#check_btn").click(function()
               {
                   var editor = ace.edit("ace-editor");
-                  v_sql=editor.session.getTextRange(editor.getSelectionRange())
+                  var v_sql=editor.session.getTextRange(editor.getSelectionRange())
+                  var v_type =  $('#db_order_type').val()
+
+                  console.log('v_type=',v_type)
                   console.log('v_sql=',v_sql)
                   console.log('db_source=',$('#db_source').val())
 
-                  if (sql_check()) {
-
+                  if (sql_check(v_type,v_sql.toLowerCase())) {
                       $.ajax({
                           url: "/sql/_check",
                           type: "post",
                           datatype: "json",
                           data: {
-                              dbid: $('#db_source').val(),
+                              dbid  : $('#db_source').val(),
                               cur_db: $('#curr_db').text(),
-                              sql: editor.session.getTextRange(editor.getSelectionRange()),
-                              desc: $('#sql_desc').val(),
-                              ver: $('#db_ver').val(),
-                              type: $('#db_order_type').val(),
+                              sql   : v_sql,
+                              desc  : $('#sql_desc').val(),
+                              ver   : $('#db_ver').val(),
+                              type  : v_type,
                           },
                           beforeSend: function () {
                               $('.modal').on('show.bs.modal', centerModals);
@@ -603,50 +684,50 @@
 
               $("#release_btn").click(function()
               {
-                  var editor = ace.edit("ace-editor");
+                  var editor = ace.edit("ace-editor")
                   v_sql=editor.session.getTextRange(editor.getSelectionRange())
                   console.log('v_sql=',v_sql)
                   console.log('db_source=',$('#db_source').val())
 
-                  sql_check()
+                  //sql_check()
 
                   $.ajax({
-                    url     : "/sql/_release",
-                    type    : "post",
-                    datatype: "json",
-                    data: {
-                        dbid  :  $('#db_source').val(),
-                        cur_db:  $('#curr_db').text(),
-                        sql   :  editor.session.getTextRange(editor.getSelectionRange()),
-                        desc  :  $('#sql_desc').val(),
-                        ver   :  $('#db_ver').val(),
-                        type  :  $('#db_order_type').val(),
-                    },
-                    success: function (dataSet) {
-                        console.log(dataSet);
-                        if (dataSet.status=="1") {
-                            showtips('error',dataSet.msg);
-                        } else {
-                            if (table != undefined) {
-                                console.log("table is defined=", table);
-                                table.destroy();
-                                $('#example').empty();
-                            }
-                            console.log(dataSet.code, dataSet.message);
-                            if (dataSet.code == '0') {
-                                showtips('success','发布成功!');
-                                $("#release_btn").attr("disabled", true);
-
+                        url     : "/sql/_release",
+                        type    : "post",
+                        datatype: "json",
+                        data: {
+                            dbid  :  $('#db_source').val(),
+                            cur_db:  $('#curr_db').text(),
+                            sql   :  editor.session.getTextRange(editor.getSelectionRange()),
+                            desc  :  $('#sql_desc').val(),
+                            ver   :  $('#db_ver').val(),
+                            type  :  $('#db_order_type').val(),
+                        },
+                        success: function (dataSet) {
+                            console.log(dataSet);
+                            if (dataSet.status=="1") {
+                                showtips('error',dataSet.msg);
                             } else {
-                                showtips('error',dataSet.message);
+                                if (table != undefined) {
+                                    console.log("table is defined=", table);
+                                    table.destroy();
+                                    $('#example').empty();
+                                }
+                                console.log(dataSet.code, dataSet.message);
+                                if (dataSet.code == '0') {
+                                    showtips('success','发布成功!');
+                                    $("#release_btn").attr("disabled", true);
+
+                                } else {
+                                    showtips('error',dataSet.message);
+                                }
+                                query_release_result(editor.session.getTextRange(editor.getSelectionRange()))
                             }
-                            query_release_result(editor.session.getTextRange(editor.getSelectionRange()))
-                        }
-                     }
-                 });
+                         }
+                  });
               });
-        });
- </script>
+          });
+    </script>
 
 </body>
 

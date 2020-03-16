@@ -14,13 +14,17 @@
 import json
 import tornado.web
 from web.model.t_sys  import save_audit_rule,query_dm,query_rule
+from web.utils.basehandler import basehandler
 
-class audit_rule(tornado.web.RequestHandler):
+
+class audit_rule(basehandler):
+   @tornado.web.authenticated
    def get(self):
        logon_name = str(self.get_secure_cookie("username"), encoding="utf-8")
        self.render("./audit_rule.html")
 
-class audit_rule_save(tornado.web.RequestHandler):
+class audit_rule_save(basehandler):
+   @tornado.web.authenticated
    def post(self):
        self.set_header("Content-Type", "application/json; charset=UTF-8")
        rule={}
@@ -45,25 +49,38 @@ class audit_rule_save(tornado.web.RequestHandler):
        rule['switch_tab_char_total_len']      = self.get_argument("switch_tab_char_total_len")
        rule['switch_tab_ddl_max_rows']        = self.get_argument("switch_tab_ddl_max_rows")
 
-       #表名规范参数
        rule['switch_tab_name_check']          = self.get_argument("switch_tab_name_check")
+       rule['switch_idx_name_check']          = self.get_argument("switch_idx_name_check")
+       rule['switch_ddl_batch']               = self.get_argument("switch_ddl_batch")
+       rule['switch_ddl_timeout']             = self.get_argument("switch_ddl_timeout")
+
+       rule['switch_disable_trigger']         = self.get_argument("switch_disable_trigger")
+       rule['switch_disable_func']            = self.get_argument("switch_disable_func")
+       rule['switch_disable_proc']            = self.get_argument("switch_disable_proc")
+       rule['switch_disable_event']           = self.get_argument("switch_disable_event")
+
+       rule['switch_drop_database']           = self.get_argument("switch_drop_database")
+       rule['switch_drop_table']              = self.get_argument("switch_drop_table")
+       rule['switch_virtual_col']             = self.get_argument("switch_virtual_col")
+       rule['switch_tab_migrate']             = self.get_argument("switch_tab_migrate")
+
+       rule['switch_col_order_rule']          = self.get_argument("switch_col_order_rule")
+       rule['switch_col_charset']             = self.get_argument("switch_col_charset")
+       rule['switch_tab_charset']             = self.get_argument("switch_tab_charset")
+       rule['switch_tab_charset_range']       = self.get_argument("switch_tab_charset_range")
+
+       #表名规范参数
        rule['switch_tab_not_digit_first']     = self.get_argument("switch_tab_not_digit_first")
        rule['switch_tab_two_digit_end']       = self.get_argument("switch_tab_two_digit_end")
        rule['switch_tab_max_len']             = self.get_argument("switch_tab_max_len")
        rule['switch_tab_disable_prefix']      = self.get_argument("switch_tab_disable_prefix")
 
-       #r批量DDL语句开关
-       rule['switch_ddl_batch']               = self.get_argument("switch_ddl_batch")
-
        #索引规范参数
-       rule['switch_idx_name_check']          = self.get_argument("switch_idx_name_check")
        rule['switch_idx_name_null']           = self.get_argument("switch_idx_name_null")
        rule['switch_idx_name_rule']           = self.get_argument("switch_idx_name_rule")
        rule['switch_idx_numbers']             = self.get_argument("switch_idx_numbers")
        rule['switch_idx_col_numbers']         = self.get_argument("switch_idx_col_numbers")
        rule['switch_idx_name_col']            = self.get_argument("switch_idx_name_col")
-
-       rule['switch_virtual_col']             = self.get_argument("switch_virtual_col")
 
        #批量DML语句开关
        rule['switch_check_dml']              = self.get_argument("switch_check_dml")
@@ -85,17 +102,20 @@ class audit_rule_save(tornado.web.RequestHandler):
        self.write({"code": result['code'], "message": result['message']})
 
 
-class sys_setting(tornado.web.RequestHandler):
+class sys_setting(basehandler):
+   @tornado.web.authenticated
    def get(self):
        logon_name = str(self.get_secure_cookie("username"), encoding="utf-8")
        self.render("./sys_setting.html")
 
-class sys_code(tornado.web.RequestHandler):
+class sys_code(basehandler):
+   @tornado.web.authenticated
    def get(self):
        logon_name = str(self.get_secure_cookie("username"), encoding="utf-8")
        self.render("./sys_code.html")
 
-class sys_code_query(tornado.web.RequestHandler):
+class sys_code_query(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         code     = self.get_argument("code")
@@ -103,13 +123,15 @@ class sys_code_query(tornado.web.RequestHandler):
         v_json   = json.dumps(v_list)
         self.write(v_json)
 
-class sys_test(tornado.web.RequestHandler):
+class sys_test(basehandler):
+   @tornado.web.authenticated
    def get(self):
        logon_name = str(self.get_secure_cookie("username"), encoding="utf-8")
        self.render("./his/backup_log_analyze.bak.html")
 
 
-class sys_query_rule(tornado.web.RequestHandler):
+class sys_query_rule(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         v_json    = query_rule()

@@ -103,6 +103,7 @@
                   </div>
              </div>
          </div>
+         <input  id="sync_tag_tmp" type="hidden"  value= >
          <div class="row">
               <div class="col-md-offset-4 col-lg-offset-4 col-xl-offset-4">
                    <input  id='dsupd' type='button' class="btn waves-effect waves-light btn-primary"  value="变更"/>
@@ -188,7 +189,8 @@
            $("#query_btn").click();
         });
 
-        function isSelect() {
+        function isSelect(v) {
+           $('#sync_tag_tmp').val(v)
            var rec=0;
            $("#example tbody tr td input:checked").each( function() {
               rec=rec+1;
@@ -209,19 +211,6 @@
               $('#clone').attr("disabled",true);
            }
         }
-
-        function update_task_status(){
-           $.ajax({
-                      url: "/sync/edit/status",
-                      type: "post",
-                      datatype: "json",
-                      data:{
-                      },
-                      success: function (dataSet) {
-                          console.log('update_task_status=',dataSet.code, dataSet.message);
-                      }
-                  });
-        };
 
         $("#query_btn").click(function() {
               $.ajax({
@@ -249,11 +238,12 @@
                           data: dataSet,
                           columns: [
                             { "title": "标识符"},
-                            { "title": "标签名"},
+                            { "title": "同步标识号"},
+                            { "title": "同步标识号","visible":false},
                             { "title": "任务描述"},
                             { "title": "同步服务器" },
                             { "title": "业务类型" },
-                            { "title": "同步方向" },
+                            // { "title": "同步方向" },
                             { "title": "运行时间" },
                             { "title": "接口服务器"},
                             { "title": "任务状态"},
@@ -261,7 +251,10 @@
                                 "title":"选择",
                                 "width": "25px",
                                 "render": function(data,type,row){
-                                     return '<input type="radio" name="userid" onclick="isSelect();" >'; }
+
+                                     //return '<input type="radio" name="userid" onclick="isSelect();" >';
+                                     return '<input type="radio"  name="sync_selec_id"  onclick=isSelect("' + row[2] + '")>'
+                                }
                             },
                           ],
                           "language": {
@@ -305,9 +298,9 @@
               var v_desc='';
               $("#example tbody tr td input:checked").each( function() {
                   var row=$(($(this).parent().parent().html()));
+                  v_tag=$('#sync_tag_tmp').val()
                   v_desc=row[2].innerHTML.replace(/&gt;/g,'>');
-                  v_tag=row[1].innerHTML;
-                  v_api=row[7].innerHTML;
+                  v_api=row[6].innerHTML;
                   console.log("v_tag=",v_tag,"v_api=",v_api)
                   $.ajax({
                           url: "/sync/edit/push",
@@ -348,9 +341,9 @@
               var v_desc='';
               $("#example tbody tr td input:checked").each( function() {
                   var row=$(($(this).parent().parent().html()));
+                  v_tag=$('#sync_tag_tmp').val()
                   v_desc=row[2].innerHTML.replace(/&gt;/g,'>');
-                  v_tag=row[1].innerHTML;
-                  v_api=row[7].innerHTML;
+                  v_api=row[6].innerHTML;
                   console.log("v_tag=",v_tag)
                   $.ajax({
                           url: "/sync/edit/run",
@@ -359,6 +352,14 @@
                           data:{
                               tag: v_tag,
                               api: v_api
+                          },
+                         beforeSend: function () {
+                              swal({
+                                    title: "正在运行中...",
+                                    text: "任务["+v_desc+"]正在运行中...",
+                                    type: "info",
+                                    showConfirmButton: false
+                               });
                           },
                           success: function (dataSet) {
                               console.log(dataSet.code, dataSet.message);
@@ -383,9 +384,9 @@
               var v_desc='';
               $("#example tbody tr td input:checked").each( function() {
                   var row=$(($(this).parent().parent().html()));
+                  v_tag=$('#sync_tag_tmp').val()
                   v_desc=row[2].innerHTML.replace(/&gt;/g,'>');
-                  v_tag=row[1].innerHTML;
-                  v_api=row[7].innerHTML;
+                  v_api=row[6].innerHTML;
                   console.log("v_tag=",v_tag)
                   $.ajax({
                           url: "/sync/edit/stop",
@@ -395,13 +396,21 @@
                               tag: v_tag,
                               api: v_api
                           },
+                         beforeSend: function () {
+                              swal({
+                                    title: "正在停止中...",
+                                    text: "任务["+v_desc+"]正在停止中...",
+                                    type: "info",
+                                    showConfirmButton: false
+                               });
+                          },
                           success: function (dataSet) {
                               console.log(dataSet.code, dataSet.message);
                               if (dataSet.code=='0') {
-                                     swal("运行成功!", "任务["+v_desc+"]已运行成功!", "success");
+                                     swal("停止成功!", "任务["+v_desc+"]已停止运行!", "success");
                                      $("#query_btn").click();
                               } else {
-                                  swal("运行失败!", "任务["+v_desc+"]"+dataSet.message+"!", "error");
+                                  swal("停止失败!", "任务["+v_desc+"]"+dataSet.message+"!", "error");
                               }
                               $('#dsupd').attr("disabled",true);
                               $('#dsdel').attr("disabled",true);

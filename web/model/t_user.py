@@ -137,46 +137,41 @@ def save_forget_authention_string(p_username,p_auth_string):
         result['message'] = '保存失败！'
     return result
 
-def init_user_proj_privs(p_dsid):
-    print("dsid....=",p_dsid)
-    db   = get_connection()
-    cr   = db.cursor()
-    sql  = """select  u.id,u.login_name,u.name,u.email,u.phone,u.dept,
-                      (select count(0) from t_user_proj_privs 
-                       where proj_id='{0}' and user_id=u.id and priv_id='1') as query_priv,
-                      (select count(0) from t_user_proj_privs 
-                       where proj_id='{0}' and user_id=u.id and priv_id='2') as release_priv         
-              from t_user  u order by convert(name using gbk) asc""".format(p_dsid,p_dsid)
-    cr.execute(sql)
-    print('查询成功！')
-    v_list = []
-    for r in cr.fetchall():
-        v_list.append(list(r))
-    cr.close()
-    db.commit()
-    return v_list
-
 def query_user(p_name):
     db = get_connection()
     cr = db.cursor()
     if p_name == "":
-        sql = """select id,login_name,name,gender,email,phone,dept,date_format(expire_date,'%Y-%m-%d') as expire_date,
+        sql = """select a.id,a.login_name,
+                     CONCAT(a.file_path,'/',a.file_name) as user_image,
+                     a.name,
+                     (select dmmc from t_dmmx where dm='04' and dmm=a.gender) as gender,
+                     a.email,a.phone,
+                     (select dmmc from t_dmmx where dm='18' and dmm=a.project_group) as project_group,
+                     (select dmmc from t_dmmx where dm='01' and dmm=a.dept) as dept,
+                     date_format(expire_date,'%Y-%m-%d') as expire_date,
                      case status when '1' then '启用'
                                  when '0' then '禁用'
                      end  status,
                      date_format(creation_date,'%Y-%m-%d')    creation_date,
                      date_format(last_update_date,'%Y-%m-%d') last_update_date 
-                                 from t_user 
-                                 order by convert(name using gbk) asc""".format(p_name)
+                 from t_user a
+                 order by convert(a.name using gbk) asc""".format(p_name)
     else:
-        sql = """select id,login_name,name,gender,email,phone,dept,date_format(expire_date,'%Y-%m-%d') as expire_date,
-                     case status when '1' then '启用'
+        sql = """select a.id,a.login_name,
+                     CONCAT(a.file_path,'/',a.file_name) as user_image,
+                     name,
+                     (select dmmc from t_dmmx where dm='04' and dmm=a.gender) as gender,
+                     a.email,a.phone,
+                     (select dmmc from t_dmmx where dm='18' and dmm=a.project_group) as project_group,
+                     (select dmmc from t_dmmx where dm='01' and dmm=a.dept) as dept,
+                     date_format(a.expire_date,'%Y-%m-%d') as expire_date,
+                     case a.status when '1' then '启用'
                                  when '0' then '禁用'
                      end  status,
-                     date_format(creation_date,'%Y-%m-%d')    creation_date,
-                     date_format(last_update_date,'%Y-%m-%d') last_update_date 
-                 from t_user  
-                where binary name like '%{0}%' or login_name like '%{1}%'                
+                     date_format(a.creation_date,'%Y-%m-%d')    creation_date,
+                     date_format(a.last_update_date,'%Y-%m-%d') last_update_date 
+                 from t_user a 
+                where binary name like '%{0}%' or a.login_name like '%{1}%'                
                  order by convert(name using gbk) asc""".format(p_name,p_name)
     print(sql)
     cr.execute(sql)
@@ -187,7 +182,7 @@ def query_user(p_name):
     db.commit()
     return v_list
 
-def query_user_proj_privs(p_name,p_dsid):
+def query_user_proj_privs(p_name,p_dsid,is_grants):
     db = get_connection()
     cr = db.cursor()
     if p_name == "":
@@ -284,8 +279,10 @@ def check_auth_str_exist(p_auth_str):
 def get_user_by_userid(p_userid):
     db = get_connection()
     cr = db.cursor()
-    sql="select cast(id as char) as id,login_name,name,password,gender,email,phone,dept,date_format(expire_date,'%Y-%m-%d') as expire_date,status,file_path,file_name " \
-        "from t_user where id={0}".format(p_userid)
+    sql="""select cast(id as char) as id,login_name,name,password,gender,email,phone,dept,
+                  date_format(expire_date,'%Y-%m-%d') as expire_date,status,file_path,file_name,project_group 
+        from t_user where id={0}""".format(p_userid)
+
     cr.execute(sql)
     rs = cr.fetchall()
     cr.close()
@@ -303,13 +300,14 @@ def get_user_by_userid(p_userid):
     d_user['status']     = rs[0][9]
     d_user['image_path'] = rs[0][10] if rs[0][10] else ''
     d_user['image_name'] = rs[0][11] if rs[0][11] else ''
+    d_user['project_group'] = rs[0][12]
     print("get_user_by_userid=",d_user,rs[0][3],rs[0][1])
     return d_user
 
 def get_users(p_dept):
     db  = get_connection()
     cr  = db.cursor()
-    sql = """select login_name,name from t_user  WHERE dept='{0}' order by id""".format(p_dept)
+    sql = """select id,name from t_user  WHERE dept='{0}' order by id""".format(p_dept)
     cr.execute(sql)
     v_list = []
     for r in cr.fetchall():
@@ -461,6 +459,7 @@ def save_user(p_user):
         gender       = p_user['gender']
         email        = p_user['email']
         phone        = p_user['phone']
+        proj_group   = p_user['proj_group']
         dept         = p_user['dept']
         expire_date  = p_user['expire_date']
         status       = p_user['status']
@@ -468,10 +467,19 @@ def save_user(p_user):
         file_path    = p_user['file_path']
         file_name    = p_user['file_name']
 
-        print(username,password,gender,email,phone,dept,expire_date,file_path,file_name)
-        sql="""insert into t_user(id,login_name,name,password,gender,email,phone,dept,expire_date,status,file_path,file_name,creation_date,creator,last_update_date,updator) 
-                    values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}')
-            """.format(userid,loginname,username,password,gender,email,phone,dept,expire_date,status,file_path,file_name,current_rq(),'DBA',current_rq(),'DBA');
+        if file_path=='':
+           file_path = '/static/assets/images/users'
+
+        if  file_name=='':
+            if gender=='1':
+                file_name = 'boy.png'
+            else:
+                file_name = 'girl.png'
+
+        print(username,password,gender,email,phone,proj_group,dept,expire_date,file_path,file_name)
+        sql="""insert into t_user(id,login_name,name,password,gender,email,phone,project_group,dept,expire_date,status,file_path,file_name,creation_date,creator,last_update_date,updator) 
+                    values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}')
+            """.format(userid,loginname,username,password,gender,email,phone,proj_group,dept,expire_date,status,file_path,file_name,current_rq(),'DBA',current_rq(),'DBA');
         print(sql)
         cr.execute(sql)
 
@@ -486,47 +494,86 @@ def save_user(p_user):
         print(e)
         result['code'] = '-1'
         result['message'] = '保存失败！'
-    return result
+        return result
 
 def save_user_proj_privs(d_proj):
     result = {}
     dsid = d_proj['dsid']
     userid = d_proj['userid']
-    priv_query = d_proj['priv_query']
+    priv_query   = d_proj['priv_query']
     priv_release = d_proj['priv_release']
+    priv_audit   = d_proj['priv_audit']
+    priv_execute = d_proj['priv_execute']
+    priv_order   = d_proj['priv_order']
+
     try:
         db = get_connection()
         cr = db.cursor()
 
+        #process query privs
         if priv_query=='1':
-           sql = "select count(0) from t_user_proj_privs where proj_id='{0}' and user_id='{1}' and priv_id='1'".format(dsid,userid)
+           sql = """delete from  t_user_proj_privs 
+                       where proj_id='{0}' and user_id='{1}' and priv_id='1'""".format(dsid,userid)
            cr.execute(sql)
-           rs=cr.fetchone()
-           if rs[0]==0:
-                sql="insert into t_user_proj_privs(proj_id,user_id,priv_id) values('{0}','{1}','{2}') ".format(dsid,userid,'1')
-                cr.execute(sql)
+           sql = """insert into t_user_proj_privs(proj_id,user_id,priv_id) 
+                        values('{0}','{1}','{2}') """.format(dsid,userid, '1')
+           cr.execute(sql)
         else:
-            sql = "select count(0) from t_user_proj_privs where proj_id='{0}' and user_id='{1}' and priv_id='1'".format(dsid, userid)
+            sql = """delete from  t_user_proj_privs 
+                        where proj_id='{0}' and user_id='{1}' and priv_id='1'""".format(dsid, userid)
             cr.execute(sql)
-            rs = cr.fetchone()
-            if rs[0] > 0:
-                sql = "delete from t_user_proj_privs where proj_id='{0}' and user_id='{1}' and priv_id='1' ".format(dsid,userid)
-                cr.execute(sql)
 
+        # process release privs
         if priv_release == '1':
-            sql = "select count(0) from t_user_proj_privs where proj_id='{0}' and user_id='{1}' and priv_id='2'".format(dsid,userid)
+            sql = """delete from  t_user_proj_privs 
+                        where proj_id='{0}' and user_id='{1}' and priv_id='2'""".format(dsid, userid)
             cr.execute(sql)
-            rs = cr.fetchone()
-            if rs[0] == 0:
-               sql="insert into t_user_proj_privs(proj_id,user_id,priv_id) values('{0}','{1}','{2}')".format(dsid, userid, '2')
-               cr.execute(sql)
+            sql = """insert into t_user_proj_privs(proj_id,user_id,priv_id) 
+                           values('{0}','{1}','{2}') """.format(dsid, userid, '2')
+            cr.execute(sql)
         else:
-            sql = "select count(0) from t_user_proj_privs where proj_id='{0}' and user_id='{1}' and priv_id='2'".format(dsid, userid)
+            sql = """delete from  t_user_proj_privs 
+                         where proj_id='{0}' and user_id='{1}' and priv_id='2'""".format(dsid, userid)
             cr.execute(sql)
-            rs = cr.fetchone()
-            if rs[0] > 0:
-                sql = "delete from t_user_proj_privs where proj_id='{0}' and user_id='{1}' and priv_id='2' ".format(dsid,userid)
-                cr.execute(sql)
+
+        # process audit privs
+        if priv_audit == '1':
+            sql = """delete from  t_user_proj_privs 
+                           where proj_id='{0}' and user_id='{1}' and priv_id='3'""".format(dsid, userid)
+            cr.execute(sql)
+            sql = """insert into t_user_proj_privs(proj_id,user_id,priv_id) 
+                              values('{0}','{1}','{2}') """.format(dsid, userid, '3')
+            cr.execute(sql)
+        else:
+            sql = """delete from  t_user_proj_privs 
+                            where proj_id='{0}' and user_id='{1}' and priv_id='3'""".format(dsid, userid)
+            cr.execute(sql)
+
+        #process execute privs
+        if priv_execute == '1':
+            sql = """delete from  t_user_proj_privs 
+                         where proj_id='{0}' and user_id='{1}' and priv_id='4'""".format(dsid, userid)
+            cr.execute(sql)
+            sql = """insert into t_user_proj_privs(proj_id,user_id,priv_id) 
+                         values('{0}','{1}','{2}') """.format(dsid, userid, '4')
+            cr.execute(sql)
+        else:
+            sql = """delete from  t_user_proj_privs 
+                          where proj_id='{0}' and user_id='{1}' and priv_id='4'""".format(dsid, userid)
+            cr.execute(sql)
+
+        #process order privs
+        if priv_order == '1':
+            sql = """delete from  t_user_proj_privs 
+                            where proj_id='{0}' and user_id='{1}' and priv_id='5'""".format(dsid, userid)
+            cr.execute(sql)
+            sql = """insert into t_user_proj_privs(proj_id,user_id,priv_id) 
+                            values('{0}','{1}','{2}') """.format(dsid, userid, '5')
+            cr.execute(sql)
+        else:
+            sql = """delete from  t_user_proj_privs 
+                             where proj_id='{0}' and user_id='{1}' and priv_id='5'""".format(dsid, userid)
+            cr.execute(sql)
 
         cr.close()
         db.commit()
@@ -552,12 +599,22 @@ def upd_user(p_user):
         gender      = p_user['gender']
         email       = p_user['email']
         phone       = p_user['phone']
+        proj_group  = p_user['proj_group']
         dept        = p_user['dept']
         expire_date = p_user['expire_date']
         status      = p_user['status']
         roles       = p_user['roles']
         file_path   = p_user['file_path']
         file_name   = p_user['file_name']
+
+        if file_path == '':
+            file_path = '/static/assets/images/users'
+
+        if file_name == '':
+            if gender == '1':
+                file_name = 'boy.png'
+            else:
+                file_name = 'girl.png'
 
         sql="""update t_user 
                   set  name     ='{0}',
@@ -572,9 +629,10 @@ def upd_user(p_user):
                        last_update_date ='{9}' ,
                        updator   ='{10}',
                        file_path ='{11}',
-                       file_name = '{12}'
-                where id='{13}'""".format(username,loginname,password,gender,email,phone,dept,expire_date,status,
-                                          current_rq(),'DBA',file_path,file_name,userid)
+                       file_name = '{12}',
+                       project_group = '{13}'
+                where id='{14}'""".format(username,loginname,password,gender,email,phone,dept,expire_date,status,
+                                          current_rq(),'DBA',file_path,file_name,proj_group,userid)
         print("upd_user=",sql)
         cr.execute(sql)
         upd_user_role(userid,roles)

@@ -14,13 +14,15 @@ import json
 import tornado.web
 from   web.model.t_user import get_users
 from   web.model.t_port import query_port,save_port,get_port_by_portid,upd_port,del_port,imp_port,exp_port
+from   web.utils.basehandler import basehandler
 
-
-class portquery(tornado.web.RequestHandler):
+class portquery(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./port_query.html" )
 
-class port_query(tornado.web.RequestHandler):
+class port_query(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         app_name  = self.get_argument("app_name")
@@ -28,11 +30,13 @@ class port_query(tornado.web.RequestHandler):
         v_json    = json.dumps(v_list)
         self.write(v_json)
 
-class portadd(tornado.web.RequestHandler):
+class portadd(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./port_add.html",developer=get_users('01'))
 
-class portadd_save(tornado.web.RequestHandler):
+class portadd_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         d_port = {}
         d_port['app_name']    = self.get_argument("app_name")
@@ -44,17 +48,27 @@ class portadd_save(tornado.web.RequestHandler):
         result=save_port(d_port)
         self.write({"code": result['code'], "message": result['message']})
 
-class portchange(tornado.web.RequestHandler):
+class portchange(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./port_change.html")
 
-class portedit(tornado.web.RequestHandler):
+class portedit(basehandler):
+    @tornado.web.authenticated
     def get(self):
-        port_id   = self.get_argument("port_id")
-        d_port    = get_port_by_portid(port_id)
-        self.render("./port_edit.html",p_port = d_port,developer=get_users('01') )
+        port_id  = self.get_argument("port_id")
+        d_port   = get_port_by_portid(port_id)
+        pro = []
+        dev = []
+        for i in get_users('01'):
+          if  d_port['app_dev'].count(str(i[0]))>0:
+              dev.append(i)
+          else:
+              pro.append(i)
+        self.render("./port_edit.html",p_port = d_port,pros=pro ,devs=dev)
 
-class portedit_save(tornado.web.RequestHandler):
+class portedit_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         d_port = {}
@@ -68,14 +82,16 @@ class portedit_save(tornado.web.RequestHandler):
         result=upd_port(d_port)
         self.write({"code": result['code'], "message": result['message']})
 
-class portedit_del(tornado.web.RequestHandler):
+class portedit_del(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         port_id  = self.get_argument("port_id")
         result   = del_port(port_id)
         self.write({"code": result['code'], "message": result['message']})
 
-class portedit_imp(tornado.web.RequestHandler):
+class portedit_imp(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         static_path = self.get_template_path().replace("templates", "static")
@@ -95,7 +111,8 @@ class portedit_imp(tornado.web.RequestHandler):
             self.write({"code": -1, "message": '导入失败' + str(e)})
 
 
-class portedit_exp(tornado.web.RequestHandler):
+class portedit_exp(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         static_path = self.get_template_path().replace("templates", "static");

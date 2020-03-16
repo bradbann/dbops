@@ -538,24 +538,6 @@ def stop_backup_task(p_tag,p_api):
         result['message'] = '执行失败！'
         return result
 
-def update_backup_status():
-    try:
-        #通过p_tag自动获取api_server地址
-        result = {}
-        result['code'] = '0'
-        result['message'] = '执行成功！'
-        r = os.system("curl -XPOST {0}/update_backup_status".format(get_api_server()))
-        if r == 0:
-            return result
-        else:
-            result['code'] = '-1'
-            result['message'] = '执行失败！'
-            return result
-    except:
-        result['code'] = '-1'
-        result['message'] = '执行失败！'
-        return result
-
 def backup_log_query(p_param):
     pass
 

@@ -71,6 +71,7 @@
                   </div>
              </div>
          </div>
+         <input  id="transfer_tag_tmp" type="hidden"  value= >
          <div class="row">
               <div class="col-md-offset-4 col-lg-offset-4 col-xl-offset-4">
                    <input  id='dsupd' type='button' class="btn waves-effect waves-light btn-primary" value="变更"/>
@@ -114,7 +115,8 @@
            $("#query_btn").click();
         });
 
-        function isSelect() {
+        function isSelect(v) {
+           $('#transfer_tag_tmp').val(v)
            var rec=0;
            $("#example tbody tr td input:checked").each( function() {
               rec=rec+1;
@@ -155,21 +157,22 @@
                           scrollX    :true,
                           scrollCollapse: true,
                           paging:     true,
-                          iDisplayLength: 16,
+                          iDisplayLength: 15,
                           data: dataSet,
                           columns: [
                             { "title": "标识符"},
                             { "title": "传输标识号"},
+                            { "title": "传输标识号","visible":false},
                             { "title": "任务描述"},
                             { "title": "传输服务器" },
-                            { "title": "传输对象"},
                             { "title": "接口服务器"},
                             { "title": "任务状态"},
                             {
                                 "title":"选择",
                                 "width": "25px",
                                 "render": function(data,type,row){
-                                     return '<input type="radio" name="userid" onclick="isSelect();" >'; }
+                                    return '<input type="radio" name="userid" onclick=isSelect("'+row[2]+'"); >';
+                                }
                             },
                           ],
                           "language": {
@@ -213,10 +216,11 @@
               var v_desc='';
               $("#example tbody tr td input:checked").each( function() {
                   var row=$(($(this).parent().parent().html()));
+                  console.log('row=',row)
+                  v_tag=$('#transfer_tag_tmp').val()
                   v_desc=row[2].innerHTML.replace(/&gt;/g,'>');
-                  v_tag=row[1].innerHTML;
-                  v_api=row[5].innerHTML;
-                  console.log("v_tag=",v_tag,"v_api=",v_api)
+                  v_api=row[4].innerHTML;
+                  console.log("v_tag=",v_tag,"v_desc=",v_desc,"v_api=",v_api)
                   $.ajax({
                           url: "/transfer/edit/push",
                           type: "post",
@@ -256,9 +260,9 @@
               var v_desc='';
               $("#example tbody tr td input:checked").each( function() {
                   var row=$(($(this).parent().parent().html()));
+                  v_tag=$('#transfer_tag_tmp').val()
                   v_desc=row[2].innerHTML.replace(/&gt;/g,'>');
-                  v_tag=row[1].innerHTML;
-                  v_api=row[5].innerHTML;
+                  v_api=row[4].innerHTML;
                   console.log("v_tag=",v_tag)
                   $.ajax({
                           url: "/transfer/edit/run",
@@ -299,9 +303,9 @@
               var v_desc='';
               $("#example tbody tr td input:checked").each( function() {
                   var row=$(($(this).parent().parent().html()));
+                  v_tag=$('#transfer_tag_tmp').val()
                   v_desc=row[2].innerHTML.replace(/&gt;/g,'>');
-                  v_tag=row[1].innerHTML;
-                  v_api=row[5].innerHTML;
+                  v_api=row[4].innerHTML;
                   console.log("v_tag=",v_tag)
                   $.ajax({
                           url: "/transfer/edit/stop",
@@ -357,7 +361,7 @@
              });
             swal({
                 title: "确认要删除吗?",
-                text: "数据源["+transferdesc+"]将被删除了！",
+                text: "传输任务["+transferdesc+"]将被删除了！",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",

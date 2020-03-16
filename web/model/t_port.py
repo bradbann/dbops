@@ -16,16 +16,23 @@ def query_port(app_name):
     cr = db.cursor()
     v_where =''
     if app_name != '':
-        v_where = " where a.app_name like '%{0}%'\n".format(app_name)
+        v_where = "  where ( t.app_name like '%{0}%' or  t.app_dev like '%{1}%')".format(app_name,app_name)
 
-    sql = """SELECT  a.id,
+    sql = """SELECT * FROM (
+                SELECT  a.id,
+                     a.app_name,
+                     a.app_port,
+                     GROUP_CONCAT(b.name) AS app_dev,
+                     a.app_desc,
+                     a.app_ext        
+                FROM  t_port a,t_user b
+                WHERE INSTR(a.app_dev,b.id)>0   
+                GROUP BY a.id,
                  a.app_name,
                  a.app_port,
                  a.app_dev,
                  a.app_desc,
-                 a.app_ext
-            FROM  t_port a
-              {0}
+                 a.app_ext) t {0}
           """.format(v_where)
     print(sql)
     cr.execute(sql)
@@ -122,39 +129,56 @@ def del_port(p_portid):
         result['message'] = '删除失败！'
     return result
 
+
+def check_port_rep(p_port):
+    db = get_connection()
+    cr = db.cursor()
+    sql = "select count(0) from t_port  where  instr(app_port,'{0}')>0".format(p_port['app_port'])
+    print(sql)
+    cr.execute(sql)
+    rs=cr.fetchone()
+    cr.close()
+    db.commit()
+    return rs[0]
+
 def check_port(p_port):
     result = {}
 
     if p_port["app_name"]=="":
         result['code']='-1'
-        result['message']='应用名不能为空！'
+        result['message']='应用名不能为空!'
         return result
 
     if p_port["app_port"] == "":
         result['code'] = '-1'
-        result['message'] = '端口号不能为空！'
+        result['message'] = '端口号不能为空!'
         return result
 
     if p_port["app_dev"]=="":
         result['code']='-1'
-        result['message']='开发者不能为空！'
+        result['message']='开发者不能为空!'
         return result
 
     if p_port["app_desc"]=="":
         result['code']='-1'
-        result['message']='应用描述不能为空！'
+        result['message']='应用描述不能为空!'
         return result
 
+    if check_port_rep(p_port)>0:
+        result['code'] = '-1'
+        result['message'] = '端口号重复!'
+        return result
 
     result['code'] = '0'
     result['message'] = '验证通过'
     return result
 
-def get_port_by_portid(p_transferid):
+def get_port_by_portid(p_portid):
     db = get_connection()
     cr = db.cursor()
     sql = """select  id,app_name,app_port,app_dev,app_desc,app_ext from t_port where id={0}
-          """.format(p_transferid)
+          """.format(p_portid)
+    print(sql)
     cr.execute(sql)
     rs = cr.fetchall()
     d_port = {}

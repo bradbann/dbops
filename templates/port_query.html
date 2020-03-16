@@ -20,7 +20,7 @@
     <div class="col-md-12">
        <div class="col-md-3 input-group">
             <span class="input-group-addon"><i class="mdi mdi-server"></i></span>
-            <input type="text" id="appname" class="form-control" placeholder="请输入应用名">
+            <input type="text" id="appname" class="form-control" placeholder="请输入应用名、开发者">
             <span class="input-group-btn">
                <button type="button"  id='query_btn' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
             </span>
@@ -64,10 +64,10 @@
                       "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
                       destroy    :true,
                       async      :true,
-                      scrollY    :true,
+                      scrollY    :"600px",
                       scrollX    :true,
                       scrollCollapse: true,
-                      paging:     true,
+                      paging:     false,
                       iDisplayLength: 16,
                       data: dataSet,
                       columns: [

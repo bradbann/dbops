@@ -21,11 +21,11 @@ def query_transfer(sync_tag):
         v_where = v_where + " and a.transfer_tag='{0}'\n".format(sync_tag)
 
     sql = """SELECT  a.id,
-                 -- concat(substr(a.transfer_tag,1,40),'...') as transfer_tag,
+                 concat(substr(a.transfer_tag,1,40),'...') as transfer_tag,
                  a.transfer_tag,
-                 a.comments,
+                 concat(substr(a.comments,1,30),'...') as  comments,
                  b.server_desc,
-                 concat(substr(concat(sour_schema,'.',sour_table),1,40),'...') as transfer_obj,
+                 -- concat(substr(concat(sour_schema,'.',sour_table),1,40),'...') as transfer_obj,
                  a.api_server,
                  CASE a.STATUS WHEN '1' THEN '启用' WHEN '0' THEN '禁用' END  AS  flag
             FROM t_db_transfer_config a,t_server b 
@@ -368,7 +368,6 @@ def push_transfer_task(p_tag,p_api):
         print('push_transfer_task=',v_cmd)
         r=os.popen(v_cmd).read()
         d=json.loads(r)
-
         if d['code']==200:
            return result
         else:

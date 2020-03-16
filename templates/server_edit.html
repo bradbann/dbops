@@ -23,7 +23,7 @@
            <input  id="server_id" type="hidden" name="userid" value={{server_id}} >
             <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">服务器描述</label>
+                    <label class="col-md-2 control-label"><span id="s_server_desc">*</span>服务器描述</label>
                 </div>
                 <div class="col-md-10">
                     <input id="server_desc"  type="text" class="form-control" value={{server_desc}}>
@@ -31,7 +31,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">项目编码名</label>
+                    <label class="col-md-2 control-label"><span id="s_market_id">*</span>项目编码名</label>
                 </div>
                 <div class="col-md-10">
                     <select class="form-control select" id="market_id" >
@@ -47,7 +47,7 @@
             </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">服务器类型</label>
+                    <label class="col-md-2 control-label"><span id="s_server_type">*</span>服务器类型</label>
                 </div>
                 <div class="col-md-10">
                     <select class="form-control select" id="server_type" >
@@ -63,7 +63,7 @@
            </div>
             <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">服务器地址</label>
+                    <label class="col-md-2 control-label"><span id="s_server_ip">*</span>服务器地址</label>
                 </div>
                 <div class="col-md-10">
                     <input id="server_ip"  type="text" class="form-control" placeholder="请输入服务器地址" value={{server_ip}}>
@@ -71,7 +71,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">服务器端口</label>
+                    <label class="col-md-2 control-label"><span id="s_server_port">*</span>服务器端口</label>
                 </div>
                 <div class="col-md-10">
                     <input id="server_port"  type="text" class="form-control" placeholder="请输入服务器端口" value={{server_port}}>
@@ -79,7 +79,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">服务器用户</label>
+                    <label class="col-md-2 control-label"><span id="s_server_user">*</span>服务器用户</label>
                 </div>
                 <div class="col-md-10">
                     <input id="server_user"  type="text" class="form-control" placeholder="请输入服务器用户" value={{server_user}}>
@@ -87,7 +87,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">服务器密码</label>
+                    <label class="col-md-2 control-label"><span id="s_server_pass">*</span>服务器密码</label>
                 </div>
                 <div class="col-md-10">
                     <input id="server_pass"  type="password" class="form-control" placeholder="请输入服务器密码" value={{server_pass}}>
@@ -95,7 +95,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">服务器系统</label>
+                    <label class="col-md-2 control-label"><span id="s_server_os">*</span>服务器系统</label>
                 </div>
                 <div class="col-md-10">
                     <input id="server_os"  type="text" class="form-control" placeholder="请输入服务器系统"  value={{server_os}}>
@@ -103,7 +103,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">服务器CPU</label>
+                    <label class="col-md-2 control-label"><span id="s_server_cpu">*</span>服务器CPU</label>
                 </div>
                 <div class="col-md-10">
                     <input id="server_cpu"  type="text" class="form-control" placeholder="请输入服务器CPU" value={{server_cpu}}>
@@ -111,7 +111,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">服务器内存</label>
+                    <label class="col-md-2 control-label"><span id="s_server_mem">*</span>服务器内存</label>
                 </div>
                 <div class="col-md-10">
                     <input id="server_mem"  type="text" class="form-control" placeholder="请输入服务器内存" value={{server_mem}}>
@@ -119,7 +119,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">服务器状态</label>
+                    <label class="col-md-2 control-label"><span id="s_status">*</span>服务器状态</label>
                 </div>
                <div class="col-md-10">
                     <select class="form-control select" id="status" name="status" value={{status}} >
@@ -165,7 +165,22 @@
     <script src="{{static_url('assets/pages/jquery.form-pickers.init.js')}}"></script>
 
     <script>
+        function set_selected(){
+            document.all['s_server_desc'].style.color="#ff0000";
+            document.all['s_market_id'].style.color="#ff0000";
+            document.all['s_server_type'].style.color="#ff0000";
+            document.all['s_server_ip'].style.color="#ff0000";
+            document.all['s_server_port'].style.color="#ff0000";
+            document.all['s_server_user'].style.color="#ff0000";
+            document.all['s_server_pass'].style.color="#ff0000";
+            document.all['s_server_os'].style.color="#ff0000";
+            document.all['s_server_cpu'].style.color="#ff0000";
+            document.all['s_server_mem'].style.color="#ff0000";
+            document.all['s_status'].style.color="#ff0000";
+        }
         $(document).ready(function() {
+            set_selected()
+
             $('#return').on('click', function () {
                 $('#main-container-div').load('/server/change');
             });

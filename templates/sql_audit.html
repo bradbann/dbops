@@ -1,18 +1,18 @@
 <html>
 <head>
-    <title>数据库审核</title>
+    <title>SQL审核</title>
     <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/fixedColumns.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
 
-     <!-- ace code -->
+    <!-- ace code -->
     <link   type="text/css" href="{{static_url('assets/css/minified/components.min.css')}}"  rel="stylesheet" >
     <script type="text/javascript" src="{{static_url('plugins/editors/ace/ace.js')}}"></script>
     <script type="text/javascript" src="{{static_url('plugins/editors/ace/ext/language_tools.js')}}"></script>
 
-     <!-- Sweet Alert -->
+   <!-- Sweet Alert -->
     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
 
     <style>
@@ -50,7 +50,9 @@
           $("#query_btn").click(function()
           {
                 var name = $("#name").val();
-                $.post("/sql/audit/query",{qname:name}, function(dataSet,status){
+                var dsid = $("#db_audit_source").val();
+                var ver  = $("#db_ver").val();
+                $.post("/sql/audit/query",{qname:name,dsid:dsid,ver:ver}, function(dataSet,status){
                 if(status == "success")
                 {
                    console.log(dataSet);
@@ -70,16 +72,17 @@
                          { "title": "工单描述" },
                          { "title": "工单状态" },
                          { "title": "工单类型" },
-                         { "title": "数据库环境" },
+                         { "title": "数据库环境"},
+                         { "title": "版本号"},
                          { "title": "发布人" },
-                         { "title": "发布时间" },
+                         { "title": "发布时间"},
                          { "title": "审核人"},
                          { "title": "审核时间"},
                          { "title": "操作"},
                        ],
                         columnDefs: [
-                         {
-                            targets: 9,
+                        {
+                            targets: 10,
                             render: function(data, type, row, meta){
                                  console.log('row[0]='+row[0]);
                                  var id=row[0]
@@ -88,17 +91,19 @@
                                  if (status=='已发布') {
                                     msg ='&nbsp;'+
                                           '<input class="btn btn-xs btn-primary"  type="button"  value="详情" onclick="showSql(\''+id+'\');"/>' +'&nbsp;'+
-                                          '<input class="btn btn-xs btn-primary"  type="button"  value="审核" onclick="auditSql(\''+id+'\');"/>' +'&nbsp;'+
-                                          '<input class="btn btn-xs btn-primary disabled" disabled type="button"   value="运行" onclick="runSql(\''+id+'\');"/>';
+                                          '<input class="btn btn-xs btn-primary"  type="button"  value="审核" onclick="auditSql(\''+id+'\');"/>' +'&nbsp;';
                                     return msg;
-                                 }
-
-                                 if (status=='已审核') {
+                                 } else if  (status=='已审核') {
                                     msg ='&nbsp;'+
                                           '<input class="btn btn-xs btn-primary"  type="button"  value="详情" onclick="showSql(\''+id+'\');"/>' +'&nbsp;'+
-                                          '<input class="btn btn-xs btn-primary disabled" disabled  type="button"  value="审核" onclick="auditSql(\''+id+'\');"/>' +'&nbsp;'+
-                                          '<input class="btn btn-xs btn-primary"  type="button"   value="运行" onclick="runSql(\''+id+'\');"/>';
+                                          '<input class="btn btn-xs btn-primary disabled" disabled  type="button"  value="审核" onclick="auditSql(\''+id+'\');"/>' +'&nbsp;';
                                     return msg;
+                                 } else {
+                                    msg ='&nbsp;'+
+                                          '<input class="btn btn-xs btn-primary"  type="button"  value="详情" onclick="showSql(\''+id+'\');"/>' +'&nbsp;'+
+                                          '<input class="btn btn-xs btn-primary disabled" disabled  type="button"  value="审核" onclick="auditSql(\''+id+'\');"/>' +'&nbsp;';
+                                    return msg;
+
                                  }
                             }
                          }
@@ -205,17 +210,6 @@
         });
     }
 
-    function runSql(row){
-        $('#sql_id').val(row)
-        $('#db_source').val('')
-        $('#db_name').val('')
-        $('#sql_result').text('')
-        $('#con-close-modal2').modal({
-               keyboard: false,
-               backdrop:false
-         });
-    }
-
  </script>
 </head>
 
@@ -223,13 +217,45 @@
     <p></p>
     <div class="row">
         <div class="col-md-12">
-           <div class="col-md-3 input-group">
-                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input type="text" id="name"  class="form-control" placeholder="请输入关键字">
-                <span class="input-group-btn">
-                   <button type="button"  id='query_btn' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
-                </span>
-          </div>
+           <div class="col-md-3">
+               <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    <input type="text" id="name"  class="form-control" placeholder="请输入关键字">
+               </div>
+            </div>
+            <div class="col-md-3">
+                 <div class="input-group">
+                     <span class="input-group-addon">数据库环境</span>
+                       <select class="form-control select" id="db_audit_source">
+                            <option value='' selected = "selected">...</option>
+                            {% for var in audit_dss %}
+                              <option value={{var[0]}}>{{var[1]}}</option>
+                            {% end %}
+                       </select>
+                 </div>
+            </div>
+            <div class="col-md-3">
+                <div>
+                    <label class="col-md-4 control-label"><span id="s_sql_ver">*</span>版本:</label>
+                </div>
+                <div class="col-md-8">
+                    <select class="form-control select" id="db_ver">
+                        <option value='' selected = "selected">...</option>
+                        {% for var in vers %}
+                          <option value={{var[0]}}>{{var[1]}}</option>
+                        {% end %}
+                    </select>
+
+                </div>
+             </div>
+             <div class="col-md-1">
+               <div class="input-group">
+                    <span class="input-group-btn">
+                       <button type="button"  id='query_btn' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
+                    </span>
+               </div>
+            </div>
+
         </div>
      </div>
     <p></p>
@@ -261,64 +287,6 @@
         </div>
     </div>
    </div><!-- /.modal -->
-
-    <!--执行语句窗口 -->
-     <div id="con-close-modal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-       <div class="modal-dialog modal-lg-run">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">执行工单</h4>
-            </div>
-            <div class="modal-body">
-                <div class="panel panel-flat">
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <input id="sql_id" type="hidden"  value='' >
-                            <div >
-                                <label class="col-md-3 control-label">运行环境：</label>
-                            </div>
-                            <div class="col-md-9">
-                                <select class="form-control select" id="db_source">
-                                    <option value='' selected = "selected">...</option>
-                                    {% for var in dss %}
-                                      <option value={{var[0]}}>{{var[1]}}</option>
-                                    {% end %}
-                                </select>
-                           </div>
-                        </div>
-                        <div class="form-group">
-                            <div>
-                                <label class="col-md-3 control-label" style="padding:10px">数据库名：</label>
-                            </div>
-                            <div class="col-md-9" style="padding:10px">
-                                <select class="form-control select" id="db_name">
-                                    <option value='' selected = "selected">...</option>
-                                    {% for var in dss %}
-                                      <option value={{var[0]}}>{{var[1]}}</option>
-                                    {% end %}
-                                </select>
-                           </div>
-                         </div>
-                         <div class="form-group">
-                            <div>
-                                <label class="col-md-3 control-label">执行结果：</label>
-                            </div>
-                            <div class="col-md-9">
-                                <textarea class="form-control" disabled rows="3" style="min-width: 90%" id="sql_result"></textarea>
-                           </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div class="col-sm-offset-3 col-sm-4">
-                       <button type="button" class="btn btn-custom waves-effect waves-light btn-md" id="run_btn" >运行</button>
-                       <button type="button" class="btn btn-custom waves-effect waves-light btn-md" data-dismiss="modal">关闭</button>
-                    </div>
-                </div>
-            </div>
-    </div>
-   </div><!-- /.modal -->
- </div>
 
 </body>
 
@@ -356,38 +324,6 @@
         }
      });
 
-     $("#run_btn").click(function()
-     {
-          var editor = ace.edit("ace-editor");
-          v_sql=editor.session.getTextRange(editor.getSelectionRange())
-          console.log('v_sql=',v_sql)
-          console.log('db_source=',$('#db_source').val())
-
-          if($('#db_source').val()=='') {
-              swal('请选择运行环境!', "", "info")
-              return false;
-          }
-
-          if($('#db_name').val()=='') {
-              swal('请选择数据库名', "", "info")
-              return false;
-          }
-
-         $.ajax({
-            url     : "/sql/_run",
-            type    : "post",
-            datatype: "json",
-            data: {
-                dbid   :  $('#db_source').val(),
-                db_name:  $('#db_name').val(),
-                sql_id :  $('#sql_id').val()
-            },
-            success: function (dataSet) {
-                console.log(dataSet);
-                $('#sql_result').text(dataSet['message'])
-             }
-         });
-      });
 
 </script>
 

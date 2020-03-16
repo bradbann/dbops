@@ -17,8 +17,10 @@ from   web.model.t_sync import push_sync_task,run_sync_task,stop_sync_task,updat
 from   web.model.t_sync import query_sync_park,query_sync_park_real_time,query_sync_flow,query_sync_flow_real_time,query_sync_flow_device,query_sync_park_charge,query_sync_bi
 from   web.model.t_dmmx import get_dmm_from_dm,get_sync_server,get_sync_db_server,get_db_sync_tags,get_db_sync_tags_by_market_id,get_db_sync_ywlx,get_db_sync_ywlx_by_market_id
 from   web.utils.common import current_rq2,get_day_nday_ago,now
+from   web.utils.basehandler import basehandler
 
-class syncquery(tornado.web.RequestHandler):
+class syncquery(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./sync_query.html",
                     dm_proj_type = get_dmm_from_dm('05'),
@@ -26,7 +28,8 @@ class syncquery(tornado.web.RequestHandler):
                     dm_sync_data_type = get_dmm_from_dm('09'),
                     )
 
-class sync_query(tornado.web.RequestHandler):
+class sync_query(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         sync_tag   = self.get_argument("sync_tag")
@@ -37,7 +40,8 @@ class sync_query(tornado.web.RequestHandler):
         v_json   = json.dumps(v_list)
         self.write(v_json)
 
-class syncadd(tornado.web.RequestHandler):
+class syncadd(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./sync_add.html",
                     sync_server = get_sync_server(),
@@ -48,7 +52,8 @@ class syncadd(tornado.web.RequestHandler):
                     dm_sync_time_type = get_dmm_from_dm('10')
                     )
 
-class syncadd_save(tornado.web.RequestHandler):
+class syncadd_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         d_sync = {}
         d_sync['sync_server']          = self.get_argument("sync_server")
@@ -76,14 +81,16 @@ class syncadd_save(tornado.web.RequestHandler):
         result=save_sync(d_sync)
         self.write({"code": result['code'], "message": result['message']})
 
-class syncchange(tornado.web.RequestHandler):
+class syncchange(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./sync_change.html" ,
                     dm_proj_type = get_dmm_from_dm('05'),
                     dm_sync_ywlx = get_dmm_from_dm('08'),
                     dm_sync_data_type = get_dmm_from_dm('09'),)
 
-class syncedit(tornado.web.RequestHandler):
+class syncedit(basehandler):
+    @tornado.web.authenticated
     def get(self):
         sync_id   = self.get_argument("sync_id")
         d_sync    = get_sync_by_syncid(sync_id)
@@ -118,7 +125,8 @@ class syncedit(tornado.web.RequestHandler):
                     status               = d_sync['status'],
                     )
 
-class syncedit_save(tornado.web.RequestHandler):
+class syncedit_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         d_sync = {}
@@ -149,7 +157,8 @@ class syncedit_save(tornado.web.RequestHandler):
         self.write({"code": result['code'], "message": result['message']})
 
 
-class syncclone(tornado.web.RequestHandler):
+class syncclone(basehandler):
+    @tornado.web.authenticated
     def get(self):
         sync_id   = self.get_argument("sync_id")
         d_sync    = get_sync_by_syncid(sync_id)
@@ -183,7 +192,8 @@ class syncclone(tornado.web.RequestHandler):
                     status               = d_sync['status'],
                     )
 
-class syncclone_save(tornado.web.RequestHandler):
+class syncclone_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         d_sync = {}
@@ -213,14 +223,16 @@ class syncclone_save(tornado.web.RequestHandler):
         self.write({"code": result['code'], "message": result['message']})
 
 
-class syncedit_del(tornado.web.RequestHandler):
+class syncedit_del(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         syncid  = self.get_argument("syncid")
         result=del_sync(syncid)
         self.write({"code": result['code'], "message": result['message']})
 
-class synclogquery(tornado.web.RequestHandler):
+class synclogquery(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./sync_log_query.html",
                     dm_proj_type=get_dmm_from_dm('05'),
@@ -229,7 +241,8 @@ class synclogquery(tornado.web.RequestHandler):
                     end_date=current_rq2()
                     )
 
-class sync_log_query(tornado.web.RequestHandler):
+class sync_log_query(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         sync_tag    = self.get_argument("sync_tag")
@@ -242,7 +255,8 @@ class sync_log_query(tornado.web.RequestHandler):
         self.write(v_json)
 
 
-class sync_log_query_detail(tornado.web.RequestHandler):
+class sync_log_query_detail(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         sync_tag = self.get_argument("sync_tag")
@@ -254,7 +268,8 @@ class sync_log_query_detail(tornado.web.RequestHandler):
         self.write(v_json)
 
 
-class syncloganalyze(tornado.web.RequestHandler):
+class syncloganalyze(basehandler):
+    @tornado.web.authenticated
     def get(self):
         print('begin_date=',get_day_nday_ago(now(),15),get_day_nday_ago(now(),0))
         self.render("./sync_log_analyze.html",
@@ -264,7 +279,8 @@ class syncloganalyze(tornado.web.RequestHandler):
                       end_date=get_day_nday_ago(now(),0)
                     )
 
-class sync_log_analyze(tornado.web.RequestHandler):
+class sync_log_analyze(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         market_id  = self.get_argument("market_id")
@@ -279,7 +295,8 @@ class sync_log_analyze(tornado.web.RequestHandler):
         print('backup_log_analyze=',v_json)
         self.write(v_json)
 
-class syncloganalyze2(tornado.web.RequestHandler):
+class syncloganalyze2(basehandler):
+    @tornado.web.authenticated
     def get(self):
         print('begin_date=',get_day_nday_ago(now(),15),get_day_nday_ago(now(),0))
         self.render("./sync_log_analyze2.html",
@@ -289,7 +306,8 @@ class syncloganalyze2(tornado.web.RequestHandler):
                       end_date     = get_day_nday_ago(now(),0)
                     )
 
-class sync_log_analyze2(tornado.web.RequestHandler):
+class sync_log_analyze2(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         market_id  = self.get_argument("market_id")
@@ -304,7 +322,8 @@ class sync_log_analyze2(tornado.web.RequestHandler):
         print('backup_log_analyze=',v_json)
         self.write(v_json)
 
-class get_sync_tasks(tornado.web.RequestHandler):
+class get_sync_tasks(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         market_id = self.get_argument("market_id")
@@ -315,19 +334,20 @@ class get_sync_tasks(tornado.web.RequestHandler):
         print('get_sync_tasks=', v_json)
         self.write(v_json)
 
-class get_sync_ywlx(tornado.web.RequestHandler):
-    def post(self):
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
-        market_id = self.get_argument("market_id")
-        d_list  = {}
-        v_list  = get_db_sync_ywlx_by_market_id(market_id)
-        d_list['data'] = v_list
-        v_json  = json.dumps(d_list)
-        print('get_sync_tasks=', v_json)
-        self.write(v_json)
+# class get_sync_ywlx(basehandler):
+#     def post(self):
+#         self.set_header("Content-Type", "application/json; charset=UTF-8")
+#         market_id = self.get_argument("market_id")
+#         d_list  = {}
+#         v_list  = get_db_sync_ywlx_by_market_id(market_id)
+#         d_list['data'] = v_list
+#         v_json  = json.dumps(d_list)
+#         print('get_sync_tasks=', v_json)
+#         self.write(v_json)
 
 
-class syncedit_push(tornado.web.RequestHandler):
+class syncedit_push(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         tag    = self.get_argument("tag")
@@ -336,7 +356,8 @@ class syncedit_push(tornado.web.RequestHandler):
         v_json = json.dumps(v_list)
         self.write(v_json)
 
-class syncedit_run(tornado.web.RequestHandler):
+class syncedit_run(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         tag    = self.get_argument("tag")
@@ -345,7 +366,8 @@ class syncedit_run(tornado.web.RequestHandler):
         v_json = json.dumps(v_list)
         self.write(v_json)
 
-class syncedit_stop(tornado.web.RequestHandler):
+class syncedit_stop(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         tag    = self.get_argument("tag")
@@ -354,7 +376,8 @@ class syncedit_stop(tornado.web.RequestHandler):
         v_json = json.dumps(v_list)
         self.write(v_json)
 
-class syncedit_status(tornado.web.RequestHandler):
+class syncedit_status(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         v_list = update_sync_status()
@@ -363,49 +386,49 @@ class syncedit_status(tornado.web.RequestHandler):
         self.write(v_json)
 
 
-class get_sync_park(tornado.web.RequestHandler):
+class get_sync_park(basehandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         v_list     = query_sync_park()
         v_json     = json.dumps(v_list)
         self.write(v_json)
 
-class get_sync_park_real_time(tornado.web.RequestHandler):
+class get_sync_park_real_time(basehandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         v_list     = query_sync_park_real_time()
         v_json     = json.dumps(v_list)
         self.write(v_json)
 
-class get_sync_flow(tornado.web.RequestHandler):
+class get_sync_flow(basehandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         v_list     = query_sync_flow()
         v_json     = json.dumps(v_list)
         self.write(v_json)
 
-class get_sync_flow_real_time(tornado.web.RequestHandler):
+class get_sync_flow_real_time(basehandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         v_list     = query_sync_flow_real_time()
         v_json     = json.dumps(v_list)
         self.write(v_json)
 
-class get_sync_flow_device(tornado.web.RequestHandler):
+class get_sync_flow_device(basehandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         v_list     = query_sync_flow_device()
         v_json     = json.dumps(v_list)
         self.write(v_json)
 
-class get_sync_park_charge(tornado.web.RequestHandler):
+class get_sync_park_charge(basehandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         v_list     = query_sync_park_charge()
         v_json     = json.dumps(v_list)
         self.write(v_json)
 
-class get_sync_bi(tornado.web.RequestHandler):
+class get_sync_bi(basehandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         v_list     = query_sync_bi()

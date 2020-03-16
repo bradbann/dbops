@@ -30,7 +30,10 @@
 
        #example{
             width: 100% !important;
-        }
+            font-size:13px;
+       }
+
+
 
      .footer {
             border-top: 1px solid rgba(152, 166, 173, 0.2);
@@ -42,26 +45,59 @@
             left: 225px;
         }
 
+       #div-tree-panal{
+           height:770px;
+       }
+
        #div-tree{
-           height:670px;
+           height:750px;
            border:1px;
            overflow-x:auto;
            overflow-y:auto;
        }
 
+       #ace-editor-panal{
+           height:160px;
+       }
+
        #ace-editor{
            min-height: 160px;
-           height:150px;
+           height:95%;
            width:100%;
            border:1px;
            overflow-x:auto;
+       }
+
+       #div-table-panal{
+          height:560px;
        }
        #div-table{
-           height:460px;
+           height:95%;
            width:100%;
            border:1px;
            overflow-x:auto;
        }
+
+       /*#div-tree{*/
+           /*height:570px;*/
+           /*border:1px;*/
+           /*overflow-x:auto;*/
+           /*overflow-y:auto;*/
+       /*}*/
+
+       /*#ace-editor{*/
+           /*min-height: 140px;*/
+           /*height:150px;*/
+           /*width:100%;*/
+           /*border:1px;*/
+           /*overflow-x:auto;*/
+       /*}*/
+       /*#div-table{*/
+           /*height:360px;*/
+           /*width:100%;*/
+           /*border:1px;*/
+           /*overflow-x:auto;*/
+       /*}*/
     </style>
 
 </head>
@@ -72,9 +108,9 @@
        <div class="col-md-3">
             <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label">数据源：</label>
+                    <label class="col-md-3 control-label">数据源：</label>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-9">
                     <select class="form-control select" id="db_source">
                         <option value='' selected = "selected">...</option>
                         {% for var in dss %}
@@ -194,24 +230,82 @@
    <script type="text/javascript">
 
         function set_screen_size(){
-            n_height = $(document.body).height()
+            n_height = $(document.body).height()+30
+            console.log('n_height=',n_height)
 
             $("#div-tree-panal").height(n_height*0.75);
-            $("#div-tree").height(n_height*0.70);
+            $("#div-tree").height($("#div-tree-panal").height()*0.95);
 
             $("#ace-editor-panal").height(n_height*0.20);
             $("#ace-editor").height(n_height*0.15);
 
             $("#div-table-panal").height(n_height*0.525);
-            $("#div-table").height(n_height*0.5);
+            $("#div-table").height($("#div-table-panal").height()*0.95);
+        }
+
+        function set_styles() {
+            var n_height = $(document.body).height()
+            var n_page_rows = 0
+            if (n_height<1000) {
+                 n_page_rows = 8
+            } else {
+                 n_page_rows = 10
+            }
+
+           if (n_page_rows == 10) {
+               //set div_tree style
+               $("#div-tree").css("height",770);
+               $("#div-tree").css("border",1);
+               $("#div-tree").css("overflow-x","auto");
+               $("#div-tree").css("overflow-y","auto");
+
+               //set ace_editor style
+               $("#ace-editor").css("min-height",160);
+               $("#ace-editor").css("height",150);
+               $("#ace-editor").css("width","100%");
+               $("#ace-editor").css("border",1);
+               $("#ace-editor").css("overflow-x","auto");
+
+               //set div_table style
+               $("#div-table").css("height",560);
+               $("#div-table").css("width","100%");
+               $("#div-table").css("border",1);
+               $("#div-table").css("overflow-x","auto");
+
+           } else {
+               //set div_tree style
+               $("#div-tree").css("height",570);
+               $("#div-tree").css("border",1);
+               $("#div-tree").css("overflow-x","auto");
+               $("#div-tree").css("overflow-y","auto");
+
+               //set ace_editor style
+               $("#ace-editor").css("min-height",140);
+               $("#ace-editor").css("height",150);
+               $("#ace-editor").css("width","100%");
+               $("#ace-editor").css("border",1);
+               $("#ace-editor").css("overflow-x","auto");
+
+               //set div_table style
+               $("#div-table").css("height",360);
+               $("#div-table").css("width","100%");
+               $("#div-table").css("border",1);
+               $("#div-table").css("overflow-x","auto");
+           }
         }
 
         //当浏览器大小变化时
         $(window).resize(function () {
             set_screen_size()
-        });
+            //set_styles()
+        })
 
         $(document).ready(function() {
+
+              console.log('windows_main=>n_height=',$('#windows_main').height())
+              //set_screen_size()  //此时加载有问题，页面元素未加载完成
+              //set_styles()       //此时加载有问题，页面元素未加载完成，初始加载调用
+
               var table;
               var editor = ace.edit("ace-editor");
               editor.setTheme("ace/theme/xcode");
@@ -373,6 +467,14 @@
                 }});
 
               function query_table(sql){
+                // add by mafei 2020.3.4 support 1366*768
+                var n_height = $(document.body).height()
+                var n_page_rows = 0
+                if (n_height<900) {
+                    n_page_rows = 6
+                } else {
+                     n_page_rows = 10
+                }
                 $.ajax({
                     url     : "/sql/_query",
                     type    : "post",
@@ -402,10 +504,10 @@
                                 data          : dataSet.data,
                                 columns       : dataSet.column,
                                 scrollX       : true,
-                                scrollY       : true,
+                                scrollY       : "400px",
                                 scrollCollapse: true,
-                                paging        : true,
-                                iDisplayLength: 10,
+                                paging        : false,
+                                //iDisplayLength: n_page_rows,
                                 "language"    : {
                                      "search"         : "在表格中搜索:",
                                      "sProcessing"    : "处理中...",
@@ -437,7 +539,7 @@
                  });
               }
 
-             $('#beauty_btn').click(function(){
+              $('#beauty_btn').click(function(){
                 var editor = ace.edit("ace-editor");
                 v_sql=editor.session.getTextRange(editor.getSelectionRange())
                 $.ajax({
@@ -454,7 +556,7 @@
                          }
                      }
                  })
-            });
+              });
 
               $("#query_btn").click(function()
               {
@@ -462,6 +564,16 @@
                   v_sql=editor.session.getTextRange(editor.getSelectionRange())
                   console.log('v_sql=',v_sql)
                   console.log('db_source=',$('#db_source').val())
+
+                  // add by mafei 2020.3.4 support 1366*768
+                  var n_height = $(document.body).height()
+                  var n_page_rows = 0
+                  if (n_height<900) {
+                     n_page_rows = 6
+                  } else {
+                     n_page_rows = 10
+                  }
+
                   if($('#db_source').val()=='') {
                       showtips('info','请选择数据源!');
                       return false;
@@ -507,11 +619,11 @@
                                     async         : true,
                                     data          : dataSet.data,
                                     columns       : dataSet.column,
-                                    scrollX       : true,
-                                    scrollY       : true,
+                                    scrollX       : false,
+                                    scrollY       : "400px",
                                     scrollCollapse: true,
-                                    paging        : true,
-                                    iDisplayLength: 10,
+                                    paging        : false,
+                                    //iDisplayLength: n_page_rows,
                                     "language"    : {
                                          "search"         : "在表格中搜索:",
                                          "sProcessing"    : "处理中...",

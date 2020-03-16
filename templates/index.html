@@ -204,7 +204,7 @@
                                         <h5>你好, {{username}}</h5>
                                     </li>
                                     <li><a href="javascript:void(0)" onclick="userinfo()"><i class="ti-user m-r-5"></i>用户详情</a></li>
-                                    <li><a id='i_lock_screen' href="javascript:void(0)"><i class="ti-lock m-r-5"></i>锁定系统</a></li>
+                                    <li><a href="javascript:void(0)" onclick="lock_screen()"><i class="ti-lock m-r-5"></i>锁定系统</a></li>
                                     <li><a href="/logout"><i class="ti-power-off m-r-5"></i>系统注销</a></li>
                                 </ul>
                             </li>
@@ -604,7 +604,7 @@
                });
              }
 
-            $('#i_lock_screen').click(function (e) {
+            function lock_screen(e) {
                 console.log('lockscreen');
                 $('#unlock_password').val('')
                 Custombox.open({
@@ -616,7 +616,7 @@
                     overlayColor:"#36404a",
                     plugin:"custommodal"
                 });
-            });
+            }
 
             $('#unlock-btn').click(function () {
                 $.ajax({
@@ -788,6 +788,8 @@
                  $('#windows_main').click(function(){
                     $('#main-container-div').load("/main");
                  });
+
+                 //console.log('windows_main=>n_height=',$('#windows_main').height())
 
                   //Example 2
                   $('#user_detail_filer_input').filer({

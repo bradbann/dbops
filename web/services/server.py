@@ -15,12 +15,16 @@ import tornado.web
 from   web.model.t_server import get_server_by_serverid,query_server,save_server,upd_server,del_server,check_server_valid
 from   web.model.t_dmmx   import get_dmm_from_dm
 from   web.utils.common   import get_url_root
+from   web.utils.basehandler import basehandler
 
-class serverquery(tornado.web.RequestHandler):
+
+class serverquery(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./server_query.html")
 
-class server_query(tornado.web.RequestHandler):
+class server_query(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         qname  = self.get_argument("qname")
@@ -28,13 +32,15 @@ class server_query(tornado.web.RequestHandler):
         v_json = json.dumps(v_list)
         self.write(v_json)
 
-class serveradd(tornado.web.RequestHandler):
+class serveradd(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./server_add.html",
                     dm_proj_type=get_dmm_from_dm('05'),
                     dm_server_type= get_dmm_from_dm('06'))
 
-class serveradd_save(tornado.web.RequestHandler):
+class serveradd_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         d_server = {}
         d_server['market_id']   = self.get_argument("market_id")
@@ -52,11 +58,13 @@ class serveradd_save(tornado.web.RequestHandler):
         result=save_server(d_server)
         self.write({"code": result['code'], "message": result['message']})
 
-class serverchange(tornado.web.RequestHandler):
+class serverchange(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./server_change.html", url = get_url_root())
 
-class serveredit(tornado.web.RequestHandler):
+class serveredit(basehandler):
+    @tornado.web.authenticated
     def get(self):
         server_id = self.get_argument("serverid")
         d_server  = get_server_by_serverid(server_id)
@@ -78,7 +86,8 @@ class serveredit(tornado.web.RequestHandler):
                     status         = d_server['status']
                     )
 
-class serveredit_save(tornado.web.RequestHandler):
+class serveredit_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         d_server={}
@@ -97,7 +106,8 @@ class serveredit_save(tornado.web.RequestHandler):
         result=upd_server(d_server)
         self.write({"code": result['code'], "message": result['message']})
 
-class serveredit_del(tornado.web.RequestHandler):
+class serveredit_del(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         serverid  = self.get_argument("serverid")
@@ -105,9 +115,10 @@ class serveredit_del(tornado.web.RequestHandler):
         self.write({"code": result['code'], "message": result['message']})
 
 
-class server_check_valid(tornado.web.RequestHandler):
-       def post(self):
-           self.set_header("Content-Type", "application/json; charset=UTF-8")
-           id = self.get_argument("id")
-           result = check_server_valid(id)
-           self.write({"code": result['code'], "message": result['message']})
+class server_check_valid(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+       self.set_header("Content-Type", "application/json; charset=UTF-8")
+       id = self.get_argument("id")
+       result = check_server_valid(id)
+       self.write({"code": result['code'], "message": result['message']})

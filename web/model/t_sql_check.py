@@ -20,6 +20,16 @@ def check_mysql_tab_exists(db,tab):
    db.commit()
    return rs[0]
 
+def check_mysql_proc_exists(db,tab):
+   cr=db.cursor()
+   sql="""select count(0) from information_schema.tables
+            where table_schema=database() and table_name='{0}'""".format(tab )
+   cr.execute(sql)
+   rs=cr.fetchone()
+   cr.close()
+   db.commit()
+   return rs[0]
+
 def process_result(v):
     if isinstance(v, tuple):
         if len(v)==1:
@@ -86,7 +96,14 @@ def get_obj_type(p_sql):
               or p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("FUNCTION") > 0 \
                 or p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("PROCEDURE") > 0 \
                    or p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("INDEX") > 0 \
-                     or p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("TRIGGER") > 0:
+                       or p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("EVENT") > 0 \
+                          or p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("TRIGGER") > 0 \
+      or p_sql.upper().count("DROP") > 0 and p_sql.upper().count("VIEW") > 0 \
+        or p_sql.upper().count("DROP") > 0 and p_sql.upper().count("FUNCTION") > 0 \
+          or p_sql.upper().count("DROP") > 0 and p_sql.upper().count("PROCEDURE") > 0 \
+            or p_sql.upper().count("DROP") > 0 and p_sql.upper().count("INDEX") > 0 \
+              or p_sql.upper().count("DROP") > 0 and p_sql.upper().count("EVENT") > 0 \
+                or p_sql.upper().count("DROP") > 0 and p_sql.upper().count("TRIGGER") > 0:
 
        # if p_sql.upper().count("CREATE") > 0 and p_sql.upper().count("INDEX") > 0 and p_sql.upper().count("UNIQUE") > 0:
        #     obj = 'UNIQUE-INDEX'
@@ -107,6 +124,9 @@ def get_obj_type(p_sql):
 def get_obj_op(p_sql):
     if re.split(r'\s+', p_sql)[0].upper() in('CREATE','DROP') and re.split(r'\s+', p_sql)[1].upper() in('TABLE','INDEX'):
        return re.split(r'\s+', p_sql)[0].upper()+'_'+re.split(r'\s+', p_sql)[1].upper()
+    if re.split(r'\s+', p_sql)[0].upper() in('TRUNCATE'):
+       return 'TRUNCATE_TABLE'
+
     if re.split(r'\s+', p_sql)[0].upper()== 'ALTER' and re.split(r'\s+', p_sql)[1].upper()=='TABLE' and  re.split(r'\s+', p_sql)[3].upper() in('ADD','DROP'):
        return re.split(r'\s+', p_sql)[0].upper()+'_'+re.split(r'\s+', p_sql)[1].upper()+'_'+re.split(r'\s+', p_sql)[3].upper()
     if re.split(r'\s+', p_sql)[0].upper() in('INSERT','UPDATE','DELETE') :
@@ -184,6 +204,27 @@ def get_obj_privs_grammar(p_curdb,p_sql):
             except Exception as e:
                 cr.execute('drop table {0}'.format('dbops_' + get_obj_name(p_sql)))
                 return process_result(str(e))
+        return '0'
+    except Exception as e:
+        return process_result(str(e))
+
+def get_obj_privs_grammar_proc(p_curdb,p_sql):
+    try:
+        op = get_obj_op(p_sql)
+        cr  = p_curdb.cursor()
+        if op  in('CREATE_PROCEDURE','CREATE_FUNCTION','CREATE_TRIGGER','CREATE_EVENT'):
+            if check_mysql_proc_exists(p_curdb, get_obj_name(p_sql)) > 0:
+                return '过程:{0} 已存在!'.format(get_obj_name(p_sql))
+            else:
+                cr.execute(p_sql)
+            cr.execute('drop {0} {1}'.format(get_obj_type(p_sql),get_obj_name(p_sql)))
+        # 删除前备份过程数据
+        elif  op  in('DROP_PROCEDURE','DROP_FUNCTION','DROP_TRIGGER','DROP_EVENT'):
+            if check_mysql_proc_exists(p_curdb, get_obj_name(p_sql)) == 0:
+                return '过程:{0} 不存在!'.format(get_obj_name(p_sql))
+            else:
+                cr.execute(p_sql)
+            cr.execute('drop {0} {1}'.format(get_obj_type(p_sql),get_obj_name(p_sql)))
         return '0'
     except Exception as e:
         return process_result(str(e))
@@ -990,6 +1031,17 @@ def get_tab_has_fields(p_curdb,p_sql,rule):
         return process_result(str(e))
 
 
+def get_tab_rows(p_curdb,p_sql):
+    op  = get_obj_op(p_sql)
+    cr  = p_curdb.cursor()
+    if op in ('CREATE_TABLE', 'ALTER_TABLE_ADD', 'ALTER_TABLE_DROP'):
+        sql = "select count(0) from {0}".format(get_obj_name(p_sql))
+        cr.execute(sql)
+        rs=cr.fetchone()
+        return rs[0]
+    return 0
+
+
 def get_tab_has_fields_multi(p_curdb,p_sql,config):
     try:
         cr = p_curdb.cursor()
@@ -1419,7 +1471,8 @@ def process_single_ddl(p_dbid,p_cdb,p_sql,p_user):
     db_ops = get_connection_dict()
     cr_ops = db_ops.cursor()
     ops_sql = """select id,rule_code,rule_name,rule_value,error 
-                    from t_sql_audit_rule where rule_type='ddl' and status='1' order by id"""
+                    from t_sql_audit_rule
+                     where rule_type='ddl' and status='1' and id not in (27,28,29,30) order by id"""
     cr_ops.execute(ops_sql)
     rs_ops = cr_ops.fetchall()
 
@@ -1653,6 +1706,33 @@ def process_single_ddl(p_dbid,p_cdb,p_sql,p_user):
                     rule['error'] = rule['error'].format(get_obj_name(p_sql.strip()), rule['rule_value'])
                     save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
 
+        if rule['rule_code'] == 'switch_tab_ddl_max_rows' and get_obj_type(p_sql) == 'TABLE':
+            if get_obj_op(p_sql) in ('TRUNCATE_TABLE','ALTER_TABLE_ADD', 'ALTER_TABLE_DROP'):
+                print('DDL最大影响行数...')
+                r = get_tab_rows(db_cur, p_sql)
+                if r > int(rule['rule_value']):
+                    result = False
+                    rule['error'] = rule['error'].format(get_obj_name(p_sql.strip()),rule['rule_value'])
+                    save_check_results(db_ops, rule, p_user, p_sql, n_sxh)
+
+
+        if rule['rule_code'] == 'switch_disable_trigger' and rule['rule_value'] == 'true':
+            if get_obj_type(p_sql) == 'TRIGGER':
+               pass
+
+        if rule['rule_code'] == 'switch_disable_func' and rule['rule_value'] == 'true':
+            if get_obj_type(p_sql) == 'FUNCTION':
+               pass
+
+        if rule['rule_code'] == 'switch_disable_proc' and rule['rule_value'] == 'true':
+             if get_obj_type(p_sql) == 'PROCEDURE':
+                pass
+
+        if rule['rule_code'] == 'switch_disable_event' and rule['rule_value'] == 'true':
+             if get_obj_type(p_sql) == 'EVENT':
+                pass
+
+
         if rule['rule_code'] == 'switch_tab_name_check' \
                 and get_obj_type(p_sql.strip()) == 'TABLE'  and rule['rule_value'] == 'true' :
             if get_obj_op(p_sql) == 'CREATE_TABLE':
@@ -1674,6 +1754,72 @@ def process_single_ddl(p_dbid,p_cdb,p_sql,p_user):
         save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
     return result
 
+def process_single_ddl_proc(p_dbid,p_cdb,p_sql,p_user):
+    n_sxh  = 1
+    result = True
+    ds_cur = get_ds_by_dsid_by_cdb(p_dbid, p_cdb)
+    db_cur = get_connection_ds(ds_cur)
+    db_ops = get_connection_dict()
+    cr_ops = db_ops.cursor()
+    ops_sql = """select id,rule_code,rule_name,rule_value,error 
+                    from t_sql_audit_rule 
+                    where rule_type='ddl' and status='1' and id in(27,28,29,30) order by id"""
+    cr_ops.execute(ops_sql)
+    rs_ops = cr_ops.fetchall()
+
+    print('输出检测项...')
+    print('-'.ljust(150, '-'))
+    for r in rs_ops:
+        print(r)
+
+    #清空检查表
+    del_check_results(db_ops, p_user)
+
+    #检查语句
+    for rule in rs_ops:
+
+        rule['error'] = format_sql(rule['error'])
+
+        if rule['rule_code'] == 'switch_check_ddl' and rule['rule_value'] == 'true':
+            if get_obj_op(p_sql) in('CREATE_PROCEDURE','CREATE_FUNCTION','CREATE_TRIGGER','CREATE_EVENT'):
+                print('检测过程语法及权限...')
+                v = get_obj_privs_grammar_proc(db_cur, p_sql.strip())
+                if v != '0':
+                    if v.count('存在') >0 :
+                        rule['error'] = format_sql(format_exception(v))
+                        save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
+                        result = False
+                        break
+                    else:
+                        rule['error'] = format_sql(format_exception(v))
+                        save_check_results(db_ops, rule, p_user, p_sql.strip(),n_sxh)
+                        result = False
+
+        if rule['rule_code'] == 'switch_disable_trigger' and rule['rule_value'] == 'true':
+            if get_obj_type(p_sql) == 'TRIGGER':
+               save_check_results(db_ops, rule, p_user, p_sql.strip(), n_sxh)
+               result = False
+
+        if rule['rule_code'] == 'switch_disable_func' and rule['rule_value'] == 'true':
+            if get_obj_type(p_sql) == 'FUNCTION':
+               save_check_results(db_ops, rule, p_user, p_sql.strip(), n_sxh)
+               result = False
+
+        if rule['rule_code'] == 'switch_disable_proc' and rule['rule_value'] == 'true':
+             if get_obj_type(p_sql) == 'PROCEDURE':
+                save_check_results(db_ops, rule, p_user, p_sql.strip(), n_sxh)
+                result = False
+
+        if rule['rule_code'] == 'switch_disable_event' and rule['rule_value'] == 'true':
+             if get_obj_type(p_sql) == 'EVENT':
+                save_check_results(db_ops, rule, p_user, p_sql.strip(), n_sxh)
+                result = False
+
+    if result:
+        rule['id'] = '0'
+        rule['error'] = '检测通过!'
+        save_check_results(db_ops, rule, p_user, p_sql,n_sxh)
+    return result
 
 def get_dml_privs_grammar(p_curdb,p_sql):
     try:
@@ -1691,7 +1837,6 @@ def get_dml_privs_grammar(p_curdb,p_sql):
                 return process_result(str(e))
     except Exception as e:
         return process_result(str(e))
-
 
 def get_dml_rows(p_curdb,p_sql):
     try:
@@ -1717,7 +1862,6 @@ def get_dml_rows(p_curdb,p_sql):
     except Exception as e:
         return process_result(str(e))
 
-
 def is_number(str):
   try:
     if str=='NaN':
@@ -1726,7 +1870,6 @@ def is_number(str):
     return True
   except ValueError:
     return False
-
 
 def process_single_dml(p_dbid,p_cdb,p_sql,p_user):
     n_sxh  = 1
@@ -1855,7 +1998,8 @@ def process_multi_ddl(p_dbid,p_cdb,p_sql,p_user):
         print('check sql :',st.strip())
         cr_ops  = db_ops.cursor()
         ops_sql = """select id,rule_code,rule_name,rule_value,error 
-                       from t_sql_audit_rule where  rule_type='ddl' and status='1' order by id"""
+                       from t_sql_audit_rule
+                        where  rule_type='ddl' and status='1' and id not in (27,28,29,30) order by id"""
         cr_ops.execute(ops_sql)
         rs_ops  = cr_ops.fetchall()
 
@@ -2469,33 +2613,52 @@ def get_audit_rule(p_key):
 def check_mysql_ddl(p_dbid,p_cdb,p_sql,p_user,p_type):
     db_ops =  get_connection_dict()
     del_check_results(db_ops, p_user)
-
-    if p_sql.count(';') in(0,1):
-        if p_type == '1':
-           print('process_single_ddl....')
-           return process_single_ddl(p_dbid,p_cdb,p_sql.strip(),p_user)
-        elif p_type == '2':
-           print('process_single_dml....')
-           return process_single_dml(p_dbid, p_cdb, p_sql.strip(), p_user)
+    # 工单类型为为函数、过程、触发器、事件
+    if p_type == '4':
+        print('process_single_ddl....')
+        return process_single_ddl_proc(p_dbid, p_cdb, p_sql.strip(), p_user)
     else:
-        if p_type == '1':
-            rule = get_audit_rule('switch_ddl_batch')
-            if rule['rule_value'] == 'true':
-               print('process_multi_ddl....')
-               return process_multi_ddl(p_dbid, p_cdb, p_sql.strip(), p_user)
-            else:
-               rule['error'] = format_sql(rule['error'])
-               save_check_results(db_ops, rule, p_user, '---', 1)
-               return False
-        elif p_type == '2':
-            rule = get_audit_rule('switch_dml_batch')
-            if rule['rule_value'] == 'true':
-                print('process_multi_dml....')
-                return process_multi_dml(p_dbid, p_cdb, p_sql.strip(), p_user)
-            else:
-                rule['error'] = format_sql(rule['error'])
-                save_check_results(db_ops, rule, p_user, '---', 1)
-                return False
+        # 工单类型为为单个DDL、DML、DCL
+        if p_sql.count(';') == 0:
+            # 处理单个DDL
+            if p_type in('1','3'):
+               print('process_single_ddl....')
+               return process_single_ddl(p_dbid,p_cdb,p_sql.strip(),p_user)
+            #处理单个DML
+            elif p_type == '2':
+               print('process_single_dml....')
+               return process_single_dml(p_dbid, p_cdb, p_sql.strip(), p_user)
+        elif p_sql.count(';') == 1:
+            # 处理单个DDL
+            if p_type in('1','3'):
+                print('process_single_ddl....')
+                return process_single_ddl(p_dbid, p_cdb, p_sql.strip().replace(';',''), p_user)
+            # 处理单个DML
+            elif p_type == '2':
+                print('process_single_dml....')
+                return process_single_dml(p_dbid, p_cdb, p_sql.strip().replace(';',''), p_user)
+        # 工单类型为为多个DDL、DML、DCL
+        else:
+            # 处理多个DDL
+            if p_type in('1','3'):
+                rule = get_audit_rule('switch_ddl_batch')
+                if rule['rule_value'] == 'true':
+                   print('process_multi_ddl....')
+                   return process_multi_ddl(p_dbid, p_cdb, p_sql.strip(), p_user)
+                else:
+                   rule['error'] = format_sql(rule['error'])
+                   save_check_results(db_ops, rule, p_user, '---', 1)
+                   return False
+            # 处理多个DML
+            elif p_type == '2':
+                rule = get_audit_rule('switch_dml_batch')
+                if rule['rule_value'] == 'true':
+                    print('process_multi_dml....')
+                    return process_multi_dml(p_dbid, p_cdb, p_sql.strip(), p_user)
+                else:
+                    rule['error'] = format_sql(rule['error'])
+                    save_check_results(db_ops, rule, p_user, '---', 1)
+                    return False
 
 
 def save_check_results(db,rule,user,psql,sxh):

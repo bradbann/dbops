@@ -56,42 +56,62 @@ def query_ds(dsname,market_id,db_env,ds_type):
     db.commit()
     return v_list
 
-def query_project(p_name):
+def query_project(p_name,p_userid,is_grants):
     db = get_connection()
     cr = db.cursor()
+
+    if is_grants=='false':
+       v_where = ''' and not exists(select 1 from t_user_proj_privs d
+                                    where d.proj_id=a.id and d.user_id={0})'''.format(p_userid)
+    else:
+       v_where = ''' and  exists(select 1 from t_user_proj_privs d
+                                          where d.proj_id=a.id and d.user_id={0})'''.format(p_userid)
+
     if p_name == "":
         sql ="""SELECT  a.id,
-                        e.dmmc AS inst_name,
-                        d.dmmc AS market_name,
                         a.db_desc,
+                        concat(substr(CONCAT(b.dmmc,':/',ip,':',PORT,'/',service),1,30),'...') AS NAME,             
                         c.dmmc AS db_env,
-                        CONCAT(b.dmmc,':/',ip,':',PORT,'/',service) AS NAME,                   
-                        USER,
-                        CASE STATUS WHEN '1' THEN '是' WHEN '0' THEN '否' END  STATUS,                    
-                        updator,DATE_FORMAT(last_update_date,'%Y-%m-%d') last_update_date           
-                FROM t_db_source a,t_dmmx b,t_dmmx c,t_dmmx d,t_dmmx e
+                        updator,DATE_FORMAT(last_update_date,'%Y-%m-%d') last_update_date,
+                        (SELECT COUNT(0) FROM t_user_proj_privs 
+                           WHERE proj_id=a.id AND user_id='{0}' AND priv_id='1') AS query_priv,
+                        (SELECT COUNT(0) FROM t_user_proj_privs 
+                           WHERE proj_id=a.id AND user_id='{1}' AND priv_id='2') AS release_priv,
+                        (SELECT COUNT(0) FROM t_user_proj_privs 
+                           WHERE proj_id=a.id AND user_id='{2}' AND priv_id='3') AS audit_priv,
+                        (SELECT COUNT(0) FROM t_user_proj_privs 
+                           WHERE proj_id=a.id AND user_id='{3}' AND priv_id='4') AS execute_priv,
+                        (SELECT COUNT(0) FROM t_user_proj_privs 
+                           WHERE proj_id=a.id AND user_id='{4}' AND priv_id='5') AS order_priv                            
+                FROM t_db_source a,t_dmmx b,t_dmmx c
                 WHERE a.db_type=b.dmm AND b.dm='02'
                   AND a.db_env=c.dmm AND c.dm='03' 
-                  AND a.market_id=d.dmm AND d.dm='05'
-                  AND a.inst_type=e.dmm AND e.dm='07'
-                ORDER BY a.ip,PORT,a.service"""
+                  and a.status='1'
+                  {5}
+                ORDER BY a.ip,PORT,a.service""".format(p_userid,p_userid,p_userid,p_userid,p_userid,v_where)
     else:
-        sql = """SELECT  a.id,
-                         e.dmmc AS inst_name,
-                         d.dmmc AS market_name,
-                         a.db_desc,
-                         c.dmmc AS db_env,
-                         CONCAT(b.dmmc,':/',ip,':',PORT,'/',service) AS NAME,                   
-                         USER,
-                         CASE STATUS WHEN '1' THEN '是' WHEN '0' THEN '否' END  STATUS,                    
-                         updator,DATE_FORMAT(last_update_date,'%Y-%m-%d') last_update_date           
-                FROM t_db_source a,t_dmmx b,t_dmmx c,t_dmmx d,t_dmmx e
+        sql = """SELECT a.id,
+                        a.db_desc,
+                        concat(substr(CONCAT(b.dmmc,':/',ip,':',PORT,'/',service),1,30),'...') AS NAME, 
+                        c.dmmc AS db_env,
+                        updator,DATE_FORMAT(last_update_date,'%Y-%m-%d') last_update_date ,
+                         (SELECT COUNT(0) FROM t_user_proj_privs 
+                           WHERE proj_id=a.id AND user_id='{0}' AND priv_id='1') AS query_priv,
+                        (SELECT COUNT(0) FROM t_user_proj_privs 
+                           WHERE proj_id=a.id AND user_id='{1}' AND priv_id='2') AS release_priv,
+                        (SELECT COUNT(0) FROM t_user_proj_privs 
+                           WHERE proj_id=a.id AND user_id='{2}' AND priv_id='3') AS audit_priv,
+                        (SELECT COUNT(0) FROM t_user_proj_privs 
+                           WHERE proj_id=a.id AND user_id='{3}' AND priv_id='4') AS execute_priv,
+                        (SELECT COUNT(0) FROM t_user_proj_privs 
+                           WHERE proj_id=a.id AND user_id='{4}' AND priv_id='5') AS order_priv
+                FROM t_db_source a,t_dmmx b,t_dmmx c
                 WHERE a.db_type=b.dmm AND b.dm='02'
-                  AND a.db_env=c.dmm AND c.dm='03' 
-                  AND a.market_id=d.dmm AND d.dm='05'
-                  AND a.inst_type=e.dmm AND e.dm='07'
-                  AND binary concat(a.ip,':',a.port,'/',a.service)  like '%{0}%' 
-                order by a.ip,port,a.service""".format(p_name)
+                  AND a.db_env=c.dmm AND c.dm='03'
+                  and a.status='1'                
+                  AND (binary concat(a.ip,':',a.port,'/',a.service)  like '%{5}%'  or a.db_desc like '%{6}%')
+                  {7}
+                order by a.ip,port,a.service""".format(p_userid,p_userid,p_userid,p_userid,p_userid,p_name,p_name,v_where)
     print(sql)
     cr.execute(sql)
     v_list = []
@@ -215,25 +235,7 @@ def get_dss_sql_query(logon_name):
            from t_db_source a,t_dmmx b
            where a.db_type=b.dmm and b.dm='02' and a.status='1'
                and (select proj_id from t_user_proj_privs where proj_id=a.id and user_id='{0}' and priv_id='1')
-        """.format(d_user['userid'])
-    print(sql)
-    cr.execute(sql)
-    v_list = []
-    for r in cr.fetchall():
-        v_list.append(list(r))
-    cr.close()
-    db.commit()
-    return v_list
-
-def get_dss2_sql_query(logon_name):
-    db = get_connection()
-    cr = db.cursor()
-    d_user=get_user_by_loginame(logon_name)
-
-    sql="""select cast(id as char) as id,a.db_desc as name 
-           from t_db_source a,t_dmmx b
-           where a.db_type=b.dmm and b.dm='02' and a.status='1'
-               and (select proj_id from t_user_proj_privs where proj_id=a.id and user_id='{0}' and priv_id='1')
+               order by a.db_desc
         """.format(d_user['userid'])
     print(sql)
     cr.execute(sql)
@@ -253,6 +255,67 @@ def get_dss_sql_release(logon_name):
            from t_db_source a,t_dmmx b
            where a.db_type=b.dmm and b.dm='02' and a.status='1'
                and (select proj_id from t_user_proj_privs where proj_id=a.id and user_id='{0}' and priv_id='2')
+        """.format(d_user['userid'])
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+def get_dss_sql_audit(logon_name):
+    db = get_connection()
+    cr = db.cursor()
+    d_user=get_user_by_loginame(logon_name)
+
+    sql="""select cast(id as char) as id,a.db_desc as name
+                  -- concat(b.dmmc,':/',ip,':',port,'/',service) as name 
+           from t_db_source a,t_dmmx b
+           where a.db_type=b.dmm and b.dm='02' and a.status='1'
+               and (select proj_id from t_user_proj_privs where proj_id=a.id and user_id='{0}' and priv_id='3')
+               order by a.db_desc
+        """.format(d_user['userid'])
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+def get_dss_sql_run(logon_name):
+    db = get_connection()
+    cr = db.cursor()
+    d_user=get_user_by_loginame(logon_name)
+
+    sql="""select cast(id as char) as id,a.db_desc as name 
+           from t_db_source a,t_dmmx b
+           where a.db_type=b.dmm and b.dm='02' and a.status='1'
+               and (select proj_id from t_user_proj_privs where proj_id=a.id and user_id='{0}' and priv_id='4')
+               order by a.db_desc
+        """.format(d_user['userid'])
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+def get_dss_order(logon_name):
+    db = get_connection()
+    cr = db.cursor()
+    d_user=get_user_by_loginame(logon_name)
+
+    sql="""select cast(id as char) as id,a.db_desc as name 
+           from t_db_source a,t_dmmx b
+           where a.db_type=b.dmm and b.dm='02' and a.status='1'
+               and (select proj_id from t_user_proj_privs where proj_id=a.id and user_id='{0}' and priv_id='5')
+               order by a.db_desc
         """.format(d_user['userid'])
     print(sql)
     cr.execute(sql)

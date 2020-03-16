@@ -90,15 +90,17 @@
                           scrollX    :true,
                           scrollCollapse: true,
                           paging:     true,
-                          iDisplayLength: 15,
+                          iDisplayLength: 14,
                           data: dataSet,
                           columns: [
                             { "title": "用户ID" ,"visible":true},
                             { "title": "登陆名" },
+                            { "title": "头像"},
                             { "title": "姓名" },
                             { "title": "性别" },
                             { "title": "邮箱" },
                             { "title": "手机" },
+                            { "title": "项目组" },
                             { "title": "部门" },
                             { "title": "过期日期"},
                             { "title": "用户状态"},
@@ -108,10 +110,25 @@
                                 "title":"选择",
                                 "width": "25px",
                                 "render": function(data,type,row){
-                                     //console.log('row[0]=',row[0],row[1])
                                      return '<input type="radio" name="userid" onclick="isSelect();" >'; }
                             },
                           ],
+                          columnDefs: [
+                             {
+                                targets: 2,
+                                render: function(data, type, row, meta){
+                                    console.log('row[2]='+row[2]);
+                                    if (row[2]==null) {
+                                         msg ='&nbsp;'+'<image width="25px" src=""</image>'+'&nbsp;'
+                                         return msg
+                                    } else {
+                                         msg ='&nbsp;'+'<image width="25px" src="'+row[2]+'"</image>'+'&nbsp;'
+                                         return msg
+                                    }
+
+                                }
+                             }
+                         ],
                           "language": {
                                  "search"       : "在表格中搜索:",
                                  "sProcessing"  : "处理中...",
@@ -160,7 +177,7 @@
              $("#example tbody tr td input:checked").each( function() {
                   var row=$(($(this).parent().parent().html()));
                   userid=row[0].innerHTML;
-                  username=row[2].innerHTML;
+                  username=row[3].innerHTML;
                   console.log("userid=",userid,"username=",username)
              });
             swal({

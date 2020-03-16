@@ -107,6 +107,25 @@
             </div>
         </div>
 
+       <div class="row">
+           <div class="form-group col-md-6">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_proj_group">*</span>项目组</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="proj_group">
+                       {% for var in proj_groups %}
+                           {% if proj_group==var[0] %}
+                              <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
+                           {% else %}
+                              <option value={{var[0]}} >{{var[1]}}</option>
+                           {% end  %}
+                      {% end %}
+                    </select>
+               </div>
+            </div>
+        </div>
+
         <div class="row">
            <div class="form-group col-md-6">
                 <div>
@@ -250,6 +269,7 @@
             document.all['s_expire_date'].style.color="#ff0000";
             document.all['s_status'].style.color="#ff0000";
             document.all['s_ue_sele_role_priv'].style.color="#ff0000";
+            document.all['s_proj_group'].style.color="#ff0000";
         }
 
         $(document).ready(function() {
@@ -348,6 +368,7 @@
                                     gender     : $('#gender').val(),
                                     email      : $('#email').val(),
                                     phone      : $('#phone').val(),
+                                    proj_group : $('#proj_group').val(),
                                     dept       : $('#dept').val(),
                                     expire_date: $('#expire_date').val(),
                                     status     : $('#status').val(),
@@ -383,6 +404,7 @@
                         gender     : $('#gender').val(),
                         email      : $('#email').val(),
                         phone      : $('#phone').val(),
+                        proj_group : $('#proj_group').val(),
                         dept       : $('#dept').val(),
                         expire_date: $('#expire_date').val(),
                         status     : $('#status').val(),

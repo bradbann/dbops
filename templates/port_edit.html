@@ -12,6 +12,16 @@
     <link href="{{static_url('plugins/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
     <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>
     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
+     <style>
+        #develper {
+            height: 200px;
+            max-height: 290px;
+        }
+        #app_dev {
+            height: 100px;
+            max-height: 100px;
+        }
+    </style>
 </head>
 <body>
     <p></p>
@@ -34,21 +44,27 @@
                     <input id="app_port"  type="text" class="form-control" placeholder="请输端口号" value={{p_port['app_port']}} >
                 </div>
            </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">程序员</label>
+                </div>
+                <div class="col-md-10">
+                    <select multiple="multiple" class="form-control" id="develper" >
+                         {% for var in pros %}
+                          <option value={{var[0]}} >{{var[1]}}</option>
+                         {% end %}
+                    </select>
+                </div>
+           </div>
 
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_app_dev">*</span>开发者</label>
                 </div>
                <div class="col-md-10">
-                    <select class="form-control select" id="app_dev" >
-                        <option value='' selected = "selected">......</option>
-                         {% for var in developer %}
-                           <option value={{var[0]}} >{{var[1]}}</option>
-                           {% if p_port['app_dev']==var[0] %}
-                              <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
-                           {% else %}
+                    <select  multiple="multiple" class="form-control" id="app_dev" >
+                         {% for var in devs %}
                               <option value={{var[0]}} >{{var[1]}}</option>
-                           {% end  %}
                          {% end %}
                     </select>
                </div>
@@ -73,7 +89,7 @@
            <br>
            <div class="form-group m-b-0">
                 <div class="col-sm-offset-6 col-sm-9">
-                  <button id="add" type="button" class="btn btn-custom waves-effect waves-light btn-md">更新</button>
+                  <button id="port_save" type="button" class="btn btn-custom waves-effect waves-light btn-md">更新</button>
                   <button id="return" type="button" class="btn btn-custom waves-effect waves-light btn-md">返回</button>
                 </div>
            </div>
@@ -83,12 +99,55 @@
     <!-- Sweet-Alert  -->
     <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
     <script>
+         function set_selected(){
+            document.all['s_app_name'].style.color="#ff0000";
+            document.all['s_app_port'].style.color="#ff0000";
+            document.all['s_app_dev'].style.color="#ff0000";
+            document.all['s_app_desc'].style.color="#ff0000";
+         }
+
+         $("#develper").click(function () {
+               options=$('#develper option:selected');
+               if(options.length>0){
+                for (var i=0;i<options.length;i++){
+                      value=$(options[i]).val();
+                      text =$(options[i]).text();
+                      $('#app_dev').append("<option value='"+value+"'>"+text+"</option>");
+                }
+                $('#develper option:selected').remove();
+               }
+          });
+
+          $("#app_dev").click(function () {
+               options=$('#app_dev option:selected');
+               if(options.length>0){
+                for (var i=0;i<options.length;i++){
+                      value=$(options[i]).val();
+                      text =$(options[i]).text();
+                      $('#develper').append("<option value='"+value+"'>"+text+"</option>");
+                }
+                $('#app_dev option:selected').remove();
+               }
+          });
+
+          function get_developers(){
+             var tmp='';
+             var val='';
+             $('#app_dev option').each(function(){
+               val=$(this).val();
+               tmp=tmp+','+val;
+             });
+             return tmp.substr(1);
+          };
+
         $(document).ready(function() {
+            set_selected()
+
             $('#return').on('click', function () {
                 $('#main-container-div').load('/port/change');
             });
 
-            $("#save").click(function () {
+            $("#port_save").click(function () {
                 $.ajax({
                     url: "/port/edit/save",
                     type: "post",
@@ -97,7 +156,7 @@
                         port_id    : $('#port_id').val(),
                         app_name   : $('#app_name').val(),
                         app_port   : $('#app_port').val(),
-                        app_dev    : $('#app_dev').val(),
+                        app_dev    : get_developers(),
                         app_desc   : $('#app_desc').val(),
                         app_ext    : $('#app_ext').val()
                     },

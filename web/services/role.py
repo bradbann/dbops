@@ -12,20 +12,25 @@
 ######################################################################################
 import json
 import tornado.web
-from   web.model.t_role   import save_role,check_role,init_role,query_role,upd_role,del_role,get_role_by_roleid
+from   web.model.t_role   import save_role,check_role,query_role,upd_role,del_role,get_role_by_roleid
 from   web.model.t_xtqx   import get_privs,get_privs_role,get_privs_sys
 from   web.utils.common   import get_url_root
+from   web.utils.basehandler import basehandler
 
-class rolequery(tornado.web.RequestHandler):
+
+class rolequery(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./role_query.html")
 
-class roleadd(tornado.web.RequestHandler):
+class roleadd(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./role_add.html",
                     privs=get_privs())
 
-class roleadd_save(tornado.web.RequestHandler):
+class roleadd_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         d_role={}
         d_role['name']   =self.get_argument("name")
@@ -39,7 +44,8 @@ class roleadd_save(tornado.web.RequestHandler):
             self.write({"code": result['code'], "message": result['message']})
 
 
-class role_check(tornado.web.RequestHandler):
+class role_check(basehandler):
+    @tornado.web.authenticated
     def post(self):
         d_role = {}
         d_role['name']   = self.get_argument("name")
@@ -48,17 +54,8 @@ class role_check(tornado.web.RequestHandler):
         result = check_role(d_role)
         self.write({"code": result['code'], "message": result['message']})
 
-
-class role_init(tornado.web.RequestHandler):
-    def get(self):
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
-        v_list = init_role();
-        v_dict = {"data": v_list}
-        v_json = json.dumps(v_dict)
-        self.write(v_json)
-
-
-class role_query(tornado.web.RequestHandler):
+class role_query(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         qname  = self.get_argument("qname")
@@ -66,11 +63,13 @@ class role_query(tornado.web.RequestHandler):
         v_json = json.dumps(v_list)
         self.write(v_json)
 
-class rolechange(tornado.web.RequestHandler):
+class rolechange(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("./role_change.html", url=get_url_root())
 
-class roleedit(tornado.web.RequestHandler):
+class roleedit(basehandler):
+    @tornado.web.authenticated
     def get(self):
         roleid=self.get_argument("roleid")
         d_role=get_role_by_roleid(roleid)
@@ -83,7 +82,8 @@ class roleedit(tornado.web.RequestHandler):
                      url=get_url_root()
                     )
 
-class roleedit_save(tornado.web.RequestHandler):
+class roleedit_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         d_role={}
@@ -94,7 +94,8 @@ class roleedit_save(tornado.web.RequestHandler):
         result=upd_role(d_role)
         self.write({"code": result['code'], "message": result['message']})
 
-class roleedit_del(tornado.web.RequestHandler):
+class roleedit_del(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         roleid  = self.get_argument("roleid")

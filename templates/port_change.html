@@ -29,7 +29,7 @@
      <div class="col-md-12">
        <div class="col-md-3 input-group">
             <span class="input-group-addon"><i class="mdi mdi-server"></i></span>
-            <input type="text" id="appname" class="form-control" placeholder="请输入应用名">
+            <input type="text" id="appname" class="form-control" placeholder="请输入应用名、开发者">
             <span class="input-group-btn">
                <button type="button"  id='query_btn' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
             </span>
@@ -115,10 +115,10 @@
                       "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
                       destroy    :true,
                       async      :true,
-                      scrollY    :true,
+                      scrollY    :"600px",
                       scrollX    :true,
                       scrollCollapse: true,
-                      paging:     true,
+                      paging:     false,
                       iDisplayLength: 14,
                       data: dataSet,
                       columns: [
@@ -132,7 +132,7 @@
                             "title":"选择",
                             "width": "25px",
                             "render": function(data,type,row){
-                                 return '<input type="radio" name="userid" onclick="isSelect();" >'; }
+                                 return '<input type="radio" name="userid" >'; }
                         },
                       ],
                       "language": {
@@ -186,7 +186,7 @@
              });
             swal({
                 title: "确认要删除吗?",
-                text: "服务器["+portidame+"]不能使用了！",
+                text: "端口["+portidame+"]不能使用了！",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -203,10 +203,10 @@
                             success: function (dataSet) {
                                 //console.log(dataSet.code, dataSet.message);
                                 if (dataSet.code=='0') {
-                                    swal("已注销!", "服务器["+portidame+"]已删除!", "success");
+                                    swal("已删除!", "端口["+portidame+"]已删除!", "success");
                                     $("#query_btn").click();
                                 } else {
-                                    swal("注销失败!", "服务器["+portidame+"]"+dataSet.message+"!", "error");
+                                    swal("删除失败!", "端口["+portidame+"]"+dataSet.message+"!", "error");
                                 }
                             }
                        });

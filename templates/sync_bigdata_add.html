@@ -10,7 +10,6 @@
     <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/fixedColumns.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
-
     <style>
         #sour_tab_cols,#sele_sour_tab_cols {
             height: 290px;
@@ -516,11 +515,11 @@
                             "dom": '<"top"<"clear">>rt<"bottom"ip<"clear">>',
                             destroy: true,
                             async: true,
-                            scrollY: false,
+                            scrollY: "300px",
                             ordering: false,
                             bAutoWidth: true,
                             scrollX: true,
-                            paging: true,
+                            paging: false,
                             iDisplayLength: 10,
                             data: dataSet,
                             responsive: false,

@@ -17,8 +17,7 @@
             width:50%;
             height:60%;
             margin-left:340px;
-            margin-right:50px;
-            margin-top:80px;
+            margin-top:40px;
         }
 
     </style>
@@ -303,9 +302,9 @@
                           columns: [
                             { "title": "标识符"},
                             { "title": "传输标识号"},
+                            { "title": "传输标识号","visible":false},
                             { "title": "任务描述"},
                             { "title": "传输服务器" },
-                            { "title": "传输对象"},
                             { "title": "接口服务器"},
                             { "title": "任务状态"},
                             {
@@ -313,8 +312,7 @@
                              "width": "25px",
                              "render": function(data,type,row)
                              {
-                               p_val=row[0]+','+row[4].substring(0,10)
-                               return  '<button class="btn btn-xs waves-effect waves-light"  onclick=showdetail("'+p_val+'")><i class="ion-skip-forward"></i></button>'
+                               return  '<button class="btn btn-xs waves-effect waves-light"  onclick=showdetail("'+row[0]+'")><i class="ion-skip-forward"></i></button>'
                              }
                            },
                           ],

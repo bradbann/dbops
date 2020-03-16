@@ -41,12 +41,26 @@ def upd_menu(p_menu):
         result['message'] = '更新失败！'
     return result
 
+def get_child_count(menuid):
+    db = get_connection()
+    cr = db.cursor()
+    sql="select count(0) from t_xtqx  where parent_id='{0}'".format(menuid)
+    cr.execute(sql)
+    rs=cr.fetchone()
+    cr.close()
+    db.commit()
+    return rs[0]
 
 def del_menu(menuid):
     result={}
     try:
         db = get_connection()
         cr = db.cursor()
+        if get_child_count(menuid)>0:
+            result['code'] = '-1'
+            result['message'] = '父菜单下有子菜单，不能删除!'
+            return result
+
         sql="delete from t_xtqx  where id='{0}'".format(menuid)
         cr.execute(sql)
         cr.close()
@@ -54,10 +68,11 @@ def del_menu(menuid):
         result={}
         result['code']='0'
         result['message']='删除成功！'
+        return result
     except :
         result['code'] = '-1'
         result['message'] = '删除失败！'
-    return result
+        return result
 
 def get_menu_by_menuid(p_menuid):
     db = get_connection()
@@ -78,7 +93,7 @@ def get_menu_by_menuid(p_menuid):
 def get_url_by_userid(p_userid):
     db = get_connection()
     cr = db.cursor()
-    sql="""SELECT url
+    sql="""SELECT url_privs
             FROM t_xtqx
                WHERE STATUS='1'
              AND id IN(SELECT b.priv_id
@@ -91,12 +106,15 @@ def get_url_by_userid(p_userid):
     cr.close()
     db.commit()
     uris = []
-    for i in rs:
-        uris.append((rs[0][0]))
+    for i in range(len(rs)):
+        if rs[i][0] is not None:
+            for j in rs[i][0].split(','):
+               uris.append(j)
     return uris
 
 def check_url(userid,uri):
     uuri = get_url_by_userid(userid)
+    print('check_url=',uuri)
     if uri not in uuri:
         return False
     else:
@@ -239,9 +257,10 @@ def get_tree_by_userid(p_username):
                  where parent_id ='0' and status='1'
                   and  id in(select distinct parent_id from t_xtqx 
                              where id in(select b.priv_id 
-                                        from t_user_role a ,t_role_privs b
-                                         where a.role_id=b.role_id
-                                           and a.user_id='{0}'
+                                        from t_user_role a ,t_role_privs b,t_role c
+                                         where a.role_id=b.role_id                                          
+                                           and a.role_id=c.id and c.status='1'
+                                           and a.user_id='{0}' 
                                          ))
                 order by id""".format(d_user['userid'])
 
@@ -249,8 +268,9 @@ def get_tree_by_userid(p_username):
                     from t_xtqx 
                        where parent_id ='{0}' and status='1'
                          and id IN(select b.priv_id 
-                                   from t_user_role a ,t_role_privs b
+                                   from t_user_role a ,t_role_privs b,t_role c
                                    where a.role_id=b.role_id
+                                     and a.role_id=c.id and c.status='1'
                                      and a.user_id='{1}')
                         order by id"""
 

@@ -10,26 +10,6 @@ from web.utils.common import current_rq
 from web.utils.common import get_connection
 from web.model.t_role_privs import save_role_privs,upd_role_privs,del_role_privs
 
-def init_role():
-    db = get_connection()
-    cr = db.cursor()
-    sql = """select id,name,
-                 case status when '1' then '是'
-                             when '0' then '否'
-                 end  status,
-                 creator,date_format(creation_date,'%Y-%m-%d')    creation_date,
-                 updator,date_format(last_update_date,'%Y-%m-%d') last_update_date           
-              from t_role  order by name"""
-    cr.execute(sql)
-    print('查询成功！')
-    v_list = []
-    for r in cr.fetchall():
-        v_list.append(list(r))
-    cr.close()
-    cr.close()
-    db.commit()
-    return v_list
-
 
 def query_role(p_name):
     db = get_connection()
@@ -135,6 +115,9 @@ def is_dba(p_user):
 
 def save_role(p_role):
     result = {}
+    val = check_role(p_role)
+    if val['code'] == '-1':
+        return val
     try:
         db        = get_connection()
         cr        = db.cursor()
@@ -164,7 +147,11 @@ def save_role(p_role):
 
 
 def upd_role(p_role):
-    result={}
+    result = {}
+    # val = check_role(p_role)
+    # if val['code'] == '-1':
+    #     return val
+
     try:
         db = get_connection()
         cr = db.cursor()
@@ -219,7 +206,8 @@ def check_role(p_role):
         result['code']='-1'
         result['message']='角色名不能为空！'
         return result
-    if  if_exists_role(p_role["name"]):
+
+    if if_exists_role(p_role["name"]):
         result['code'] = '-1'
         result['message'] = '角色名已存在！'
         return result

@@ -32,11 +32,11 @@ def query_datax_sync(sync_tag,sync_ywlx,sync_type,sync_env):
         pass
 
     sql = """SELECT  a.id,
-                     -- concat(substr(sync_tag,1,40),'...') as sync_tag,
+                     concat(substr(sync_tag,1,40),'...') as sync_tag1,
                      sync_tag,
 		             CONCAT(SUBSTR(a.comments,1,30),'...'),
                      CONCAT(b.server_ip,':',b.server_port) AS sync_server,
-                     c.dmmc AS  sync_ywlx,
+                     -- c.dmmc AS  sync_ywlx,
                      d.dmmc AS  sync_type,
                      a.run_time,
                      a.api_server,
@@ -892,7 +892,6 @@ def stop_datax_sync_task(p_tag,p_api):
         v_cmd = "curl -XPOST {0}/stop_datax_remote_sync -d 'tag={1}'".format(p_api,p_tag)
         r = os.popen(v_cmd).read()
         d = json.loads(r)
-
         if d['code'] == 200:
             return result
         else:

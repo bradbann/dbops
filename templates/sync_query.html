@@ -79,7 +79,7 @@
          </div>
      </div>
    </div>
-   <script src="{{static_url('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+   <!--<script src="{{static_url('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>-->
    <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
    <script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
    <script src="{{static_url('plugins/datatables/dataTables.buttons.min.js')}}"></script>
@@ -87,7 +87,7 @@
    <script src="{{static_url('plugins/datatables/dataTables.responsive.min.js')}}"></script>
    <script src="{{static_url('plugins/datatables/responsive.bootstrap.min.js')}}"></script>
    <script src="{{static_url('plugins/datatables/dataTables.scroller.min.js')}}"></script>
-   <script src="{{static_url('assets/pages/jquery.form-pickers.init.js')}}"></script>
+   <!--<script src="{{static_url('assets/pages/jquery.form-pickers.init.js')}}"></script>-->
    <script>
         $(document).keydown(function(event){
             if (event.keyCode == 13) { //判断为Enter键
@@ -134,16 +134,17 @@
                       scrollX    :true,
                       scrollCollapse: true,
                       paging:     true,
-                      iDisplayLength: 15,
+                      iDisplayLength: 16,
                       //bAutoWidth: true,
                       data: dataSet,
                       columns: [
                         { "title": "标识符"},
-                        { "title": "标签名"},
+                        { "title": "同步标识号"},
+                        { "title": "同步标识号","visible":false},
                         { "title": "任务描述"},
                         { "title": "同步服务器" },
                         { "title": "业务类型" },
-                        { "title": "同步方向" },
+                        // { "title": "同步方向" },
                         { "title": "运行时间" },
                         { "title": "接口服务器"},
                         { "title": "任务状态"}

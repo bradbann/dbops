@@ -97,7 +97,22 @@
                    </div>
                </div>
            </div>
-          <div class="row">
+           <div class="row">
+               <div class="form-group col-md-6">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_proj_group">*</span>项目组</label>
+                    </div>
+                   <div class="col-md-10">
+                        <select class="form-control select" id="proj_group" name="dept">
+                            <option value='' selected = "selected">请选择项目组</option>
+                            {% for var in proj_group %}
+                              <option value={{var[0]}} >{{var[1]}}</option>
+                            {% end %}
+                        </select>
+                   </div>
+                </div>
+          </div>
+           <div class="row">
                <div class="form-group col-md-6">
                     <div>
                         <label class="col-md-2 control-label"><span id="s_dept">*</span>部门</label>
@@ -111,7 +126,7 @@
                         </select>
                    </div>
                 </div>
-             </div>
+          </div>
           <div class="row">
              <div class="form-group col-md-6">
                 <div>
@@ -152,8 +167,8 @@
                     </div>
                    <div class="col-md-10">
                         <select class="form-control select" id="status" name="status">
-                            <option value="0">启用</option>
-                            <option value="1">禁用</option>
+                            <option value="1">启用</option>
+                            <option value="0">禁用</option>
                         </select>
                    </div>
                 </div>
@@ -217,6 +232,7 @@
             document.all['s_expire_date'].style.color="#ff0000";
             document.all['s_status'].style.color="#ff0000";
             document.all['s_ua_sele_role_priv'].style.color="#ff0000";
+            document.all['s_proj_group'].style.color="#ff0000";
         }
 
         $(document).ready(function() {
@@ -260,61 +276,91 @@
           $('#expire_date').attr("readonly", "readonly");
 
           $("#add").click(function () {
-            var fd = new FormData();
-            files  = $("#filer_input1").get(0).files;
-            fd.append("file", files[0]);
-            fd.append("username", $('#login').val());
+            if ($("#filer_input1").get(0).files.length>0) {
+                var fd = new FormData();
+                files = $("#filer_input1").get(0).files;
+                fd.append("file", files[0]);
+                fd.append("username", $('#login').val());
+                $.ajax({
+                    url: "/user/add/uploadImage",
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    data: fd,
+                    async: false,
+                    dataType: 'JSON',
+                    success: function (dataSet) {
+                        if (dataSet.code == 0) {
+                            console.log('/user/add/uploadImage1=', dataSet);
+                            console.log('/user/add/uploadImage2=', dataSet.file_path + '/' + dataSet.file_name)
+                            $('#image_path').val(dataSet.file_path)
+                            $('#image_file').attr('src', dataSet.file_path + '/' + dataSet.file_name)
 
-            $.ajax({
-                url: "/user/add/uploadImage",
-                type: "POST",
-                processData: false,
-                contentType: false,
-                data : fd,
-                async:false,
-                dataType: 'JSON',
-                success: function (dataSet) {
-                    if (dataSet.code==0) {
-                        console.log('/user/add/uploadImage1=', dataSet);
-                        console.log('/user/add/uploadImage2=',dataSet.file_path+'/'+dataSet.file_name)
-                        $('#image_path').val(dataSet.file_path)
-                        $('#image_file').attr('src',dataSet.file_path+'/'+dataSet.file_name)
-
-                        $.ajax({
-                            url: "/user/add/save",
-                            type: "post",
-                            datatype: "json",
-                            data: {
-                                login      : $('#login').val(),
-                                user       : $('#user').val(),
-                                pass       : $('#pass').val(),
-                                gender     : $('#gender').val(),
-                                email      : $('#email').val(),
-                                phone      : $('#phone').val(),
-                                dept       : $('#dept').val(),
-                                expire_date: $('#expire_date').val(),
-                                status     : $('#status').val(),
-                                privs      : get_privs(),
-                                file_path  : dataSet.file_path,
-                                file_name  : dataSet.file_name,
-                            },
-                            success: function (dataSet) {
-                                console.log(dataSet.code, dataSet.message);
-                                if (dataSet.code==0) {
-                                   swal("保存成功", "", "success")
-                                } else {
-                                   swal(dataSet.message, "", "error")
+                            $.ajax({
+                                url: "/user/add/save",
+                                type: "post",
+                                datatype: "json",
+                                data: {
+                                    login: $('#login').val(),
+                                    user: $('#user').val(),
+                                    pass: $('#pass').val(),
+                                    gender: $('#gender').val(),
+                                    email: $('#email').val(),
+                                    phone: $('#phone').val(),
+                                    proj_group: $('#proj_group').val(),
+                                    dept: $('#dept').val(),
+                                    expire_date: $('#expire_date').val(),
+                                    status: $('#status').val(),
+                                    privs: get_privs(),
+                                    file_path: dataSet.file_path,
+                                    file_name: dataSet.file_name,
+                                },
+                                success: function (dataSet) {
+                                    console.log(dataSet.code, dataSet.message);
+                                    if (dataSet.code == 0) {
+                                        swal("保存成功", "", "success")
+                                    } else {
+                                        swal(dataSet.message, "", "error")
+                                    }
                                 }
-                            }
-                         });
+                            });
 
-                    } else {
-                        console.log('/user/add/uploadImage=', dataSet.message);
-                        return
+                        } else {
+                            console.log('/user/add/uploadImage=', dataSet.message);
+                            return
+                        }
                     }
-                }
-            });
-
+                });
+            } else {
+                   $.ajax({
+                        url: "/user/add/save",
+                        type: "post",
+                        datatype: "json",
+                        data: {
+                            login: $('#login').val(),
+                            user: $('#user').val(),
+                            pass: $('#pass').val(),
+                            gender: $('#gender').val(),
+                            email: $('#email').val(),
+                            phone: $('#phone').val(),
+                            proj_group: $('#proj_group').val(),
+                            dept: $('#dept').val(),
+                            expire_date: $('#expire_date').val(),
+                            status: $('#status').val(),
+                            privs: get_privs(),
+                            file_path: '',
+                            file_name: '',
+                        },
+                        success: function (dataSet) {
+                            console.log(dataSet.code, dataSet.message);
+                            if (dataSet.code == 0) {
+                                swal("保存成功", "", "success")
+                            } else {
+                                swal(dataSet.message, "", "error")
+                            }
+                        }
+                    });
+            }
 
           });
 

@@ -18,7 +18,9 @@ import redis
 from elasticsearch import Elasticsearch,RequestsHttpConnection
 
 def get_url_main():
-    return 'http://'+get_server_ip()+':'+get_server_port()+'/index'
+    # return 'http://'+get_server_ip()+':'+get_server_port()+'/index'
+    return 'http://'+get_server_ip()+':'+get_server_port()
+
 
 def get_url_root():
     return 'http://'+get_server_ip()+':'+get_server_port()
