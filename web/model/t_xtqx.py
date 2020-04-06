@@ -41,6 +41,34 @@ def upd_menu(p_menu):
         result['message'] = '更新失败！'
     return result
 
+def upd_func(p_func):
+    result={}
+    try:
+        db = get_connection()
+        cr = db.cursor()
+        funcid       = p_func['funcid']
+        func_name    = p_func['func_name']
+        func_url     = p_func['func_url']
+        priv_id      = p_func['priv_id']
+        status       = p_func['status']
+        sql="""update t_func 
+                  set  func_name  ='{0}',       
+                       func_url   ='{1}' ,    
+                       priv_id    ='{2}' ,        
+                       status     ='{3}' ,                  
+                       last_update_date ='{4}' ,
+                       updator='{5}'
+                where id='{6}'""".format(func_name,func_url,priv_id,status,current_rq(),'DBA',funcid)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result['code']='0'
+        result['message']='更新成功！'
+    except :
+        result['code'] = '-1'
+        result['message'] = '更新失败！'
+    return result
+
 def get_child_count(menuid):
     db = get_connection()
     cr = db.cursor()
@@ -74,6 +102,25 @@ def del_menu(menuid):
         result['message'] = '删除失败！'
         return result
 
+def del_func(funcid):
+    result={}
+    try:
+        db = get_connection()
+        cr = db.cursor()
+        sql="delete from t_func  where id='{0}'".format(funcid)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result={}
+        result['code']='0'
+        result['message']='删除成功！'
+        return result
+    except :
+        result['code'] = '-1'
+        result['message'] = '删除失败！'
+        return result
+
+
 def get_menu_by_menuid(p_menuid):
     db = get_connection()
     cr = db.cursor()
@@ -90,17 +137,51 @@ def get_menu_by_menuid(p_menuid):
     d_menu['parent_id'] = rs[0][4]
     return d_menu
 
+def get_func_by_funcid(p_funcid):
+    db = get_connection()
+    cr = db.cursor()
+    sql="select id,func_name,func_url,priv_id,status from t_func where id={0}".format(p_funcid)
+    print('get_func_by_funcid=',sql)
+    cr.execute(sql)
+    rs = cr.fetchall()
+    cr.close()
+    db.commit()
+    d_func = {}
+    d_func['funcid']     = rs[0][0]
+    d_func['func_name']  = rs[0][1]
+    d_func['func_url']   = rs[0][2]
+    d_func['priv_id']    = rs[0][3]
+    d_func['status']     = rs[0][4]
+    return d_func
+
 def get_url_by_userid(p_userid):
     db = get_connection()
     cr = db.cursor()
-    sql="""SELECT url_privs
-            FROM t_xtqx
-               WHERE STATUS='1'
-             AND id IN(SELECT b.priv_id
+    # sql="""SELECT url_privs
+    #         FROM t_xtqx
+    #            WHERE STATUS='1'
+    #          AND id IN(SELECT b.priv_id
+    #                FROM t_user_role a ,t_role_privs b
+    #                WHERE a.role_id=b.role_id
+    #                  AND a.user_id='{0}')
+    #         ORDER BY id""".format(p_userid)
+    sql ="""SELECT url
+             FROM t_xtqx
+              WHERE STATUS='1'
+                 AND id IN(SELECT b.priv_id
                    FROM t_user_role a ,t_role_privs b
                    WHERE a.role_id=b.role_id
                      AND a.user_id='{0}')
-            ORDER BY id""".format(p_userid)
+            UNION
+            SELECT func_url
+              FROM t_func
+                   WHERE STATUS='1'
+                 AND id IN(SELECT b.func_id
+                       FROM t_user_role a ,t_role_func_privs b
+                       WHERE a.role_id=b.role_id
+                         AND a.user_id='{1}')
+         """.format(p_userid,p_userid)
+    print('get_url_by_userid=',sql)
     cr.execute(sql)
     rs = cr.fetchall()
     cr.close()
@@ -156,6 +237,7 @@ def get_menuid(p_parent_id):
     else:
         return rs[1]
 
+
 def save_menu(p_menu):
     result = {}
     try:
@@ -183,6 +265,30 @@ def save_menu(p_menu):
         result['message'] = '保存失败！'
     return result
 
+def save_func(p_func):
+    result = {}
+    val = check_func(p_func)
+    if val['code'] == '-1':
+        return val
+    try:
+        db          = get_connection()
+        cr          = db.cursor()
+
+        sql="""insert into t_func(func_name,func_url,priv_id,status,creation_date,creator,last_update_date,updator) 
+                    values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}')
+            """.format(p_func['func_name'],p_func['func_url'],p_func['priv_id'],p_func['status'],current_rq(),'DBA',current_rq(),'DBA')
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result={}
+        result['code']='0'
+        result['message']='保存成功！'
+        return result
+    except:
+        print(traceback.format_exc())
+        result['code'] = '-1'
+        result['message'] = '保存失败！'
+    return result
 
 def get_privs():
     db = get_connection()
@@ -197,6 +303,19 @@ def get_privs():
     cr.close()
     db.commit()
     return v_list
+
+def get_func_privs():
+    db = get_connection()
+    cr = db.cursor()
+    sql="""SELECT  id,func_name AS NAME FROM t_func a WHERE a.status='1' ORDER BY id"""
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
 
 def get_privs_sys(p_roleid):
     db = get_connection()
@@ -223,6 +342,38 @@ def get_privs_role(p_roleid):
            from t_xtqx a
             where a.status='1'  AND url !=''
               AND a.id in(select priv_id from t_role_privs b where b.role_id='{0}')
+        """.format(p_roleid)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+def get_privs_func(p_roleid):
+    db = get_connection()
+    cr = db.cursor()
+    sql="""SELECT  id,func_name AS NAME 
+            FROM t_func a
+            WHERE a.status='1'
+            and a.id not in(select func_id from t_role_func_privs b where b.role_id='{0}')
+        """.format(p_roleid)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+def get_privs_func_role(p_roleid):
+    db = get_connection()
+    cr = db.cursor()
+    sql="""SELECT  id,func_name AS NAME 
+            FROM t_func a
+            WHERE a.status='1'
+            and a.id  in(select func_id from t_role_func_privs b where b.role_id='{0}')
         """.format(p_roleid)
     cr.execute(sql)
     v_list = []
@@ -293,7 +444,7 @@ def get_tree_by_userid(p_username):
                 v_node = """<li><a id="{0}" class="file" href="#">{1}</a></li>""".format(rs2[j][2],rs2[j][1])
                 v_html = v_html + "\n" + v_node;
             v_html=v_html+"\n"+v_menu_footer+"\n"
-        print('get_tree_by_userid=',v_html)
+        #print('get_tree_by_userid=',v_html)
         #sys.exit(0)
         cr.close()
         result['code'] = '0'
@@ -632,6 +783,39 @@ def query_menu(p_name):
     db.commit()
     return v_list
 
+def query_func(p_name):
+    db = get_connection()
+    cr = db.cursor()
+    sql=''
+    if p_name == "":
+        sql = """SELECT   id,
+                      func_name,
+                      func_url,
+                      CASE STATUS WHEN '1' THEN '是'  WHEN '0' THEN '否'  END  STATUS,
+                      creator,DATE_FORMAT(creation_date,'%Y-%m-%d')    creation_date,
+                      updator,DATE_FORMAT(last_update_date,'%Y-%m-%d') last_update_date 
+                 from t_func              
+                 order by id"""
+    else:
+        sql = """SELECT   id,
+                      func_name,
+                      func_url,
+                      CASE STATUS WHEN '1' THEN '是'  WHEN '0' THEN '否'  END  STATUS,
+                      creator,DATE_FORMAT(creation_date,'%Y-%m-%d')    creation_date,
+                      updator,DATE_FORMAT(last_update_date,'%Y-%m-%d') last_update_date 
+                 from t_func 
+                where  ( binary func_name like '%{0}%' or func_url like  '%{1}%')             
+                 order by id""".format(p_name,p_name)
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+
 def if_exists_menu(p_name):
     db = get_connection()
     cr = db.cursor()
@@ -658,5 +842,45 @@ def check_menu(p_menu):
         result['code'] = '-1'
         result['message'] = '菜单名称已存在！'
         return result
+    return result
+
+
+def if_exists_func(p_func):
+    db = get_connection()
+    cr = db.cursor()
+    sql="""select count(0) from t_func 
+            where func_url='{0}'""".format(p_func['func_url'])
+    cr.execute(sql)
+    rs = cr.fetchone()
+    cr.close()
+    if rs[0]==0:
+        return False
+    else:
+        return True
+
+def check_func(p_func):
+    result = {}
+    result['code'] = '0'
+    result['message'] = '验证通过'
+
+    if p_func["priv_id"]=="":
+        result['code']='-1'
+        result['message']='功能模块不能为空！'
+        return result
+
+    if p_func["func_name"]=="":
+        result['code']='-1'
+        result['message']='功能名称不能为空！'
+        return result
+
+    if p_func["func_url"] == "":
+        result['code'] = '-1'
+        result['message'] = '功能URL不能为空！'
+        return result
+
+    # if  if_exists_func(p_func):
+    #     result['code'] = '-1'
+    #     result['message'] = '功能链接已存在！'
+    #     return result
 
     return result

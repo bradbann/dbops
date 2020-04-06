@@ -72,11 +72,11 @@
 
         $("#query_btn").click(function() {
               $.ajax({
-                  url: "/role/_query",
-                  type: "post",
-                  datatype: "json",
-                  data:{
-                      qname: $('#rolename').val()
+                      url: "/role/_query",
+                      type: "post",
+                      datatype: "json",
+                      data:{
+                          qname: $('#rolename').val()
                   },
                   success: function (dataSet) {
                       $('#example').DataTable( {
@@ -134,7 +134,23 @@
                          });
                       $('#roleupd').attr("disabled",true);
                       $('#roledel').attr("disabled",true);
-                 }
+                 },
+                 error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                        setTimeout(" window.location.href='/login'",3000);
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
+                    }
+                }
              });
             });
 
@@ -144,8 +160,35 @@
                   var row=$(($(this).parent().parent().html()));
                   roleid=row[0].innerHTML;
                   console.log("roleid=",roleid)
-             });
-             $('#main-container-div').load("/role/edit?roleid="+roleid);
+             })
+
+             $.ajax({
+                url: "/role/edit",
+                type: "get",
+                datatype: "html",
+                data: {
+                    roleid:roleid
+                },
+                success: function () {
+                     $('#main-container-div').load("/role/edit?roleid="+roleid);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                        setTimeout(" window.location.href='/login'",3000);
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
+                    }
+                }
+             })
         });
 
          $('#roledel').on('click', function() {
@@ -174,12 +217,27 @@
                             type: "post",
                             datatype: "json",
                             success: function (dataSet) {
-                                //console.log(dataSet.code, dataSet.message);
                                 if (dataSet.code=='0') {
                                     swal("已注销!", "角色["+rolename+"]已注销!", "success");
                                     $("#query_btn").click();
                                 } else {
                                     swal("注销失败!", "角色["+rolename+"]"+dataSet.message+"!", "error");
+                                }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                console.log('jqXHR.responseText=',jqXHR.responseText);
+                                console.log('jqXHR.status=',jqXHR.status);
+                                console.log('jqXHR.readyState=',jqXHR.readyState);
+                                console.log('jqXHR.statusText=',jqXHR.statusText);
+                                console.log('textStatus=',textStatus);
+                                console.log('errorThrown=',errorThrown);
+                                if (jqXHR.status==403){
+                                    swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                                    setTimeout(" window.location.href='/login'",3000);
+                                } else if (jqXHR.status==502){
+                                    swal("用户无权访问权限此功能!", "", "error")
+                                } else {
+                                    swal("系统不可用,请稍后重试!", "", "error")
                                 }
                             }
                        });

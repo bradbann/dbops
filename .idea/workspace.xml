@@ -17,7 +17,7 @@
     <SUITE FILE_PATH="coverage/dbops$sync_bigdata.coverage" NAME="sync_bigdata Coverage Results" MODIFIED="1578902305418" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web/services" />
     <SUITE FILE_PATH="coverage/dbops$t_sync_datax.coverage" NAME="t_sync_datax Coverage Results" MODIFIED="1578905086745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web/model" />
     <SUITE FILE_PATH="coverage/dbops$t_sql_check.coverage" NAME="t_sql_check Coverage Results" MODIFIED="1575602827425" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web/model" />
-    <SUITE FILE_PATH="coverage/dbops$server.coverage" NAME="server Coverage Results" MODIFIED="1584368807339" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/dbops$server.coverage" NAME="server Coverage Results" MODIFIED="1586166902548" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/dbops$server__1_.coverage" NAME="server (1) Coverage Results" MODIFIED="1583585114511" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web/services" />
   </component>
   <component name="DatabaseView">
@@ -39,41 +39,62 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="server.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/web/controller/server.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="468">
-              <caret line="34" column="58" selection-start-line="34" selection-start-column="58" selection-end-line="34" selection-end-column="58" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web/utils/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="260" column="38" lean-forward="true" selection-start-line="260" selection-start-column="38" selection-end-line="260" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="basehandler.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/utils/basehandler.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="36">
-              <caret line="2" column="24" lean-forward="true" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+            <state relative-caret-position="3078">
+              <caret line="199" column="42" selection-start-line="199" selection-start-column="42" selection-end-line="199" selection-end-column="42" />
               <folding>
-                <element signature="e#133#151#0" expanded="true" />
+                <element signature="e#129#256#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="common.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/web/utils/common.py">
+      <file leaf-file-name="t_monitor.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/model/t_monitor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
+            <state relative-caret-position="8838">
+              <caret line="495" column="17" selection-start-line="495" selection-start-column="17" selection-end-line="495" selection-end-column="17" />
+              <folding>
+                <element signature="e#136#183#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="monitor.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/services/monitor.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="5130">
+              <caret line="291" column="16" selection-start-line="291" selection-start-column="16" selection-end-line="291" selection-end-column="16" />
+              <folding>
+                <element signature="e#557#568#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="monitor_index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/monitor_index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="6192">
+              <caret line="344" column="71" selection-start-line="335" selection-start-column="11" selection-end-line="344" selection-end-column="71" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="monitor_task.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/monitor_task.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="18">
+              <caret line="134" column="105" selection-start-line="134" selection-start-column="105" selection-end-line="134" selection-end-column="105" />
+              <folding>
+                <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
+                <element signature="n#div#0;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#div#2;n#body#0;n#html#0;n#!!top" />
+                <element signature="n#div#1;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#3;n#body#0;n#html#0;n#!!top" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -92,36 +113,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>db_server</find>
-      <find>sour_incr_col</find>
-      <find>archive_db_type</find>
-      <find>/ds/get/db/type</find>
-      <find>basehandler</find>
-      <find>/get/backup/task</find>
-      <find>/get/sync/park</find>
-      <find>/sql/_format</find>
-      <find>/get_tree</find>
-      <find>/get_tab_idx</find>
-      <find>/get_database</find>
-      <find>/get/sync/ywlx</find>
-      <find>get_backup_tasks</find>
-      <find>/sql/audit/query</find>
-      <find>/get_verify</find>
-      <find>centerModals</find>
-      <find>check_role</find>
-      <find>tornado.web</find>
-      <find>role_check</find>
-      <find>query_datax_sync_log_detail</find>
-      <find>tornado.web.RequestHandler</find>
-      <find>backup_case</find>
-      <find>mb</find>
-      <find>paging</find>
-      <find>menu</find>
-      <find>web.py</find>
-      <find>transfer_tag_tmp</find>
-      <find>stop</find>
-      <find>dm_archive</find>
-      <find>sync_tag_tmp</find>
+      <find>s_add_templete_code</find>
+      <find>s_add_templete_index</find>
+      <find>s_add_templete_status</find>
+      <find>s_upd_templete_name</find>
+      <find>s_upd_templete_code</find>
+      <find>upd_templete_index</find>
+      <find>templete_save_btn</find>
+      <find>templete_name</find>
+      <find>add_templete_name</find>
+      <find>add_templete_index</find>
+      <find>templete_index_table</find>
+      <find>/monitor/templete/edit/del</find>
+      <find>upd_templete_code</find>
+      <find>表名最大长度</find>
+      <find>add_index_val_type</find>
+      <find>add_index_threshold</find>
+      <find>isSelect</find>
+      <find>hidden</find>
+      <find>upd_index_threshold</find>
+      <find>monitorindexval_type</find>
+      <find>get_templete_names</find>
+      <find>get_sync_server()</find>
+      <find>multi</find>
+      <find>get_sync_db_server</find>
+      <find>task_save_btn</find>
+      <find>add_monitor_index</find>
+      <find>activeTabInput</find>
+      <find>add_task_templete_name</find>
+      <find>div_upd_index_threshold_percent</find>
+      <find>add_task_db_server</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -138,6 +159,7 @@
       <replace>ua_sele_role_priv</replace>
       <replace>ue_sele_role_priv</replace>
       <replace>basehandler</replace>
+      <replace>swal({title:&quot;您的登陆信息已过期，自动重新登陆!&quot;,timer: 3000,showConfirmButton: false});                         setTimeout(&quot; window.location.href='/login'&quot;,3000);</replace>
     </replaceStrings>
     <dirStrings>
       <dir>C:\dbops\web</dir>
@@ -146,57 +168,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/templates/sync_bigdata_add.html" />
-        <option value="$PROJECT_DIR$/templates/sync_bigdata_edit.html" />
-        <option value="$PROJECT_DIR$/templates/sync_bigdata_clone.html" />
-        <option value="$PROJECT_DIR$/templates/archive_add.html" />
-        <option value="$PROJECT_DIR$/web/model/t_archive.py" />
-        <option value="$PROJECT_DIR$/templates/projectquery.html" />
-        <option value="$PROJECT_DIR$/templates/page-logout.html" />
-        <option value="$PROJECT_DIR$/web/controller/server.py" />
-        <option value="$PROJECT_DIR$/templates/role_add.html" />
-        <option value="$PROJECT_DIR$/web/model/t_user.py" />
-        <option value="$PROJECT_DIR$/web/services/role.py" />
-        <option value="$PROJECT_DIR$/web/services/user.py" />
-        <option value="$PROJECT_DIR$/web/services/menu.py" />
-        <option value="$PROJECT_DIR$/web/services/ds.py" />
-        <option value="$PROJECT_DIR$/web/services/server.py" />
-        <option value="$PROJECT_DIR$/web/services/sql.py" />
-        <option value="$PROJECT_DIR$/web/services/sync.py" />
-        <option value="$PROJECT_DIR$/web/services/sync_bigdata.py" />
-        <option value="$PROJECT_DIR$/web/services/port.py" />
-        <option value="$PROJECT_DIR$/web/services/sys.py" />
-        <option value="$PROJECT_DIR$/web/services/archive.py" />
-        <option value="$PROJECT_DIR$/templates/order_query.html" />
-        <option value="$PROJECT_DIR$/web/model/t_xtqx.py" />
-        <option value="$PROJECT_DIR$/templates/server_add.html" />
-        <option value="$PROJECT_DIR$/web/model/t_server.py" />
-        <option value="$PROJECT_DIR$/templates/server_edit.html" />
-        <option value="$PROJECT_DIR$/templates/sql_query.html" />
-        <option value="$PROJECT_DIR$/templates/sql_release.html" />
-        <option value="$PROJECT_DIR$/web/model/t_role.py" />
-        <option value="$PROJECT_DIR$/templates/role_edit.html" />
-        <option value="$USER_HOME$/.PyCharm2018.1/system/remote_sources/-419118153/-1979280321/tornado/web.py" />
-        <option value="$PROJECT_DIR$/web/utils/basehandler.py" />
-        <option value="$PROJECT_DIR$/web/services/transfer.py" />
-        <option value="$PROJECT_DIR$/web/services/logon.py" />
-        <option value="$PROJECT_DIR$/templates/transfer_query.html" />
-        <option value="$PROJECT_DIR$/templates/transfer_edit.html" />
-        <option value="$PROJECT_DIR$/templates/transfer_clone.html" />
-        <option value="$PROJECT_DIR$/templates/transfer_add.html" />
-        <option value="$PROJECT_DIR$/web/model/t_backup.py" />
-        <option value="$PROJECT_DIR$/web/utils/urls.py" />
-        <option value="$PROJECT_DIR$/web/model/t_transfer.py" />
-        <option value="$PROJECT_DIR$/web/model/t_sync.py" />
-        <option value="$PROJECT_DIR$/templates/sync_query.html" />
-        <option value="$PROJECT_DIR$/templates/sync_bigdata_query.html" />
+        <option value="$PROJECT_DIR$/templates/port_query.html" />
+        <option value="$PROJECT_DIR$/templates/port_change.html" />
+        <option value="$PROJECT_DIR$/templates/func_add.html" />
+        <option value="$PROJECT_DIR$/templates/func_change.html" />
+        <option value="$PROJECT_DIR$/templates/func_edit.html" />
+        <option value="$PROJECT_DIR$/templates/func_query.html" />
         <option value="$PROJECT_DIR$/web/model/t_sync_datax.py" />
-        <option value="$PROJECT_DIR$/templates/sync_bigdata_change.html" />
+        <option value="$PROJECT_DIR$/templates/archive_query.html" />
         <option value="$PROJECT_DIR$/templates/sync_change.html" />
-        <option value="$PROJECT_DIR$/templates/transfer_change.html" />
-        <option value="$PROJECT_DIR$/web/services/backup.py" />
-        <option value="$PROJECT_DIR$/templates/sync_add.html" />
+        <option value="$PROJECT_DIR$/templates/server_edit.html" />
+        <option value="$PROJECT_DIR$/templates/ds_edit.html" />
+        <option value="$PROJECT_DIR$/templates/sql_run.html" />
+        <option value="$PROJECT_DIR$/templates/user_query.html" />
+        <option value="$PROJECT_DIR$/templates/sql_release.html" />
+        <option value="$PROJECT_DIR$/templates/order_query.html" />
+        <option value="$PROJECT_DIR$/web/model/t_user.py" />
+        <option value="$PROJECT_DIR$/templates/sql_query.html" />
+        <option value="$USER_HOME$/.PyCharm2018.1/system/remote_sources/-419118153/-1979280321/tornado/web.py" />
+        <option value="$PROJECT_DIR$/web/model/t_xtqx.py" />
+        <option value="$PROJECT_DIR$/web/services/logon.py" />
+        <option value="$PROJECT_DIR$/web/services/sql.py" />
+        <option value="$PROJECT_DIR$/templates/projectquery.html" />
+        <option value="$PROJECT_DIR$/templates/user_add.html" />
+        <option value="$PROJECT_DIR$/templates/user_change.html" />
+        <option value="$PROJECT_DIR$/templates/user_edit.html" />
+        <option value="$PROJECT_DIR$/web/utils/basehandler.py" />
         <option value="$PROJECT_DIR$/web/utils/common.py" />
+        <option value="$PROJECT_DIR$/web/model/t_sql_release.py" />
+        <option value="$PROJECT_DIR$/templates/archive_change.html" />
+        <option value="$PROJECT_DIR$/templates/sync_log_query.html" />
+        <option value="$PROJECT_DIR$/templates/archive_clone.html" />
+        <option value="$PROJECT_DIR$/templates/archive_edit.html" />
+        <option value="$PROJECT_DIR$/templates/archive_add.html" />
+        <option value="$PROJECT_DIR$/web/services/archive.py" />
+        <option value="$PROJECT_DIR$/templates/sql_audit.html" />
+        <option value="$PROJECT_DIR$/web/model/t_archive.py" />
+        <option value="$PROJECT_DIR$/templates/archive_log_query.html" />
+        <option value="$PROJECT_DIR$/templates/sys_setting.html" />
+        <option value="$PROJECT_DIR$/web/services/dbtools.py" />
+        <option value="$PROJECT_DIR$/web/services/role.py" />
+        <option value="$PROJECT_DIR$/web/model/t_sql.py" />
+        <option value="$PROJECT_DIR$/templates/audit_rule.html" />
+        <option value="$PROJECT_DIR$/templates/index.html" />
+        <option value="$PROJECT_DIR$/templates/monitor_templete.html" />
+        <option value="$PROJECT_DIR$/templates/sync_add.html" />
+        <option value="$PROJECT_DIR$/web/model/t_dmmx.py" />
+        <option value="$PROJECT_DIR$/web/utils/urls.py" />
+        <option value="$PROJECT_DIR$/templates/monitor_index.html" />
+        <option value="$PROJECT_DIR$/web/services/monitor.py" />
+        <option value="$PROJECT_DIR$/web/model/t_monitor.py" />
+        <option value="$PROJECT_DIR$/templates/monitor_task.html" />
       </list>
     </option>
   </component>
@@ -210,10 +232,10 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-7" />
-    <option name="y" value="2" />
-    <option name="width" value="1932" />
-    <option name="height" value="1045" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -266,6 +288,33 @@
               <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
               <item name="dbops" type="462c0819:PsiDirectoryNode" />
               <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="t_dmmx.py" type="8704e2dd:PyFileNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="t_monitor.py" type="8704e2dd:PyFileNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
+              <item name="t_sync.py" type="8704e2dd:PyFileNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
               <item name="services" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -273,7 +322,79 @@
               <item name="dbops" type="462c0819:PsiDirectoryNode" />
               <item name="web" type="462c0819:PsiDirectoryNode" />
               <item name="services" type="462c0819:PsiDirectoryNode" />
-              <item name="backup.py" type="8704e2dd:PyFileNode" />
+              <item name="monitor.py" type="8704e2dd:PyFileNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="monitor.py" type="8704e2dd:PyFileNode" />
+              <item name="monitorindexquery" type="dd8bbb05:PyElementNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="monitor.py" type="8704e2dd:PyFileNode" />
+              <item name="monitortask_query" type="dd8bbb05:PyElementNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="monitor.py" type="8704e2dd:PyFileNode" />
+              <item name="monitortask_stop" type="dd8bbb05:PyElementNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="monitor.py" type="8704e2dd:PyFileNode" />
+              <item name="monitortaskadd_save_gather" type="dd8bbb05:PyElementNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="monitor.py" type="8704e2dd:PyFileNode" />
+              <item name="monitortaskadd_save_monitor" type="dd8bbb05:PyElementNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="monitor.py" type="8704e2dd:PyFileNode" />
+              <item name="monitortaskquery" type="dd8bbb05:PyElementNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="monitor.py" type="8704e2dd:PyFileNode" />
+              <item name="monitortemplete_query" type="dd8bbb05:PyElementNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="monitor.py" type="8704e2dd:PyFileNode" />
+              <item name="monitortempleteadd_save" type="dd8bbb05:PyElementNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="monitor.py" type="8704e2dd:PyFileNode" />
+              <item name="monitortempletequery" type="dd8bbb05:PyElementNode" />
             </path>
             <path>
               <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
@@ -281,6 +402,14 @@
               <item name="web" type="462c0819:PsiDirectoryNode" />
               <item name="services" type="462c0819:PsiDirectoryNode" />
               <item name="sync.py" type="8704e2dd:PyFileNode" />
+            </path>
+            <path>
+              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dbops" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="sync.py" type="8704e2dd:PyFileNode" />
+              <item name="sync_query" type="dd8bbb05:PyElementNode" />
             </path>
             <path>
               <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
@@ -294,63 +423,15 @@
               <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
               <item name="dbops" type="462c0819:PsiDirectoryNode" />
               <item name="web" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
+              <item name="sync.py" type="8704e2dd:PyFileNode" />
+              <item name="syncclone" type="dd8bbb05:PyElementNode" />
             </path>
             <path>
               <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
               <item name="dbops" type="462c0819:PsiDirectoryNode" />
               <item name="web" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
-              <item name="common.py" type="8704e2dd:PyFileNode" />
-            </path>
-            <path>
-              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-            <path>
-              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Remote Python 3.6.0 (sftp://hopson@10.2.39.17:65508/home/hopson/apps/usr/webserver/dba/python3.6.0/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Remote Python 3.6.0 (sftp://hopson@10.2.39.17:65508/home/hopson/apps/usr/webserver/dba/python3.6.0/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="-419118153" type="d76c9d6b:PyRemoteLibrariesNode" />
-            </path>
-            <path>
-              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Remote Python 3.6.0 (sftp://hopson@10.2.39.17:65508/home/hopson/apps/usr/webserver/dba/python3.6.0/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="-419118153" type="d76c9d6b:PyRemoteLibrariesNode" />
-              <item name="-1979280321" type="788ab980:PyRemoteLibrariesNode$PyRemoteRootNode" />
-            </path>
-            <path>
-              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Remote Python 3.6.0 (sftp://hopson@10.2.39.17:65508/home/hopson/apps/usr/webserver/dba/python3.6.0/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="-419118153" type="d76c9d6b:PyRemoteLibrariesNode" />
-              <item name="-1979280321" type="788ab980:PyRemoteLibrariesNode$PyRemoteRootNode" />
-              <item name="tornado" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Remote Python 3.6.0 (sftp://hopson@10.2.39.17:65508/home/hopson/apps/usr/webserver/dba/python3.6.0/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="-419118153" type="d76c9d6b:PyRemoteLibrariesNode" />
-              <item name="-1979280321" type="788ab980:PyRemoteLibrariesNode$PyRemoteRootNode" />
-              <item name="tornado" type="462c0819:PsiDirectoryNode" />
-              <item name="web.py" type="8704e2dd:PyFileNode" />
-            </path>
-            <path>
-              <item name="dbops" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; Remote Python 3.6.0 (sftp://hopson@10.2.39.17:65508/home/hopson/apps/usr/webserver/dba/python3.6.0/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="-419118153" type="d76c9d6b:PyRemoteLibrariesNode" />
-              <item name="-1979280321" type="788ab980:PyRemoteLibrariesNode$PyRemoteRootNode" />
-              <item name="tornado" type="462c0819:PsiDirectoryNode" />
-              <item name="web.py" type="8704e2dd:PyFileNode" />
-              <item name="RequestHandler" type="dd8bbb05:PyElementNode" />
             </path>
           </expand>
           <select />
@@ -360,7 +441,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
-    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/dbops/templates/order_query.html" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/dbops/templates/index.html" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
@@ -375,16 +456,16 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\dbops\web\model\his" />
+      <recent name="C:\dbops\web\services\his" />
       <recent name="C:\dbops\templates\his" />
       <recent name="C:\dbops\static" />
       <recent name="C:\dbops\static\plugins\spin" />
-      <recent name="C:\dbops\templates" />
-      <recent name="C:\dbops\templates\main" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\dbops\web\model" />
-      <recent name="C:\dbops\templates" />
       <recent name="C:\dbops\web\services" />
+      <recent name="C:\dbops\templates" />
       <recent name="C:\dbops\static\assets\images\users" />
       <recent name="C:\dbops" />
     </key>
@@ -548,29 +629,56 @@
       <window_info anchor="bottom" id="TODO" order="5" weight="0.0" />
       <window_info anchor="bottom" id="Event Log" internal_type="SLIDING" order="12" sideWeight="0.5040486" side_tool="true" type="SLIDING" weight="0.3296582" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="File Transfer" order="8" sideWeight="0.4959514" weight="0.21786493" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Python Console" order="11" weight="0.30718955" />
-      <window_info anchor="bottom" id="Run" order="13" sideWeight="0.49517685" weight="0.41830066" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.32855567" />
-      <window_info anchor="right" id="Remote Host" order="3" sideWeight="0.503268" side_tool="true" visible="true" weight="0.0" />
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.58386075" visible="true" weight="0.1913646" />
+      <window_info anchor="bottom" id="Run" order="13" sideWeight="0.49517685" weight="0.42592594" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.3278867" />
+      <window_info anchor="right" id="Remote Host" order="7" sideWeight="0.503268" side_tool="true" visible="true" weight="0.0" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.58386075" visible="true" weight="0.19936034" />
       <window_info anchor="bottom" id="Docker" order="6" show_stripe_button="false" />
-      <window_info anchor="right" id="Database" order="5" side_tool="true" weight="0.32995737" />
-      <window_info anchor="right" id="SciView" order="4" sideWeight="0.73157895" side_tool="true" weight="0.32995737" />
+      <window_info anchor="right" id="Database" order="4" side_tool="true" weight="0.32995737" />
+      <window_info anchor="right" id="SciView" order="3" sideWeight="0.73157895" side_tool="true" weight="0.32995737" />
       <window_info id="Structure" order="1" sideWeight="0.41613925" side_tool="true" weight="0.20522387" />
       <window_info id="Favorites" order="2" sideWeight="0.36714977" side_tool="true" weight="0.20522387" />
       <window_info anchor="bottom" id="Debug" order="2" weight="0.2472767" />
-      <window_info anchor="right" id="R Graphics" order="6" />
+      <window_info anchor="right" id="R Packages" order="6" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" sideWeight="0.49673203" visible="true" weight="0.0" />
       <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" id="R Packages" order="7" />
+      <window_info anchor="right" id="R Graphics" order="5" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
+      <window_info anchor="bottom" id="File Transfer" order="8" sideWeight="0.4959514" weight="0.19825707" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3278867" />
     </layout>
+    <layout-to-restore>
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" sideWeight="0.49673203" visible="true" weight="0.0" />
+      <window_info anchor="bottom" id="Docker" order="6" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Run" order="13" sideWeight="0.49517685" visible="true" weight="0.25925925" />
+      <window_info anchor="right" id="Remote Host" order="3" sideWeight="0.503268" side_tool="true" visible="true" weight="0.0" />
+      <window_info anchor="right" id="SciView" order="4" sideWeight="0.73157895" side_tool="true" weight="0.32995737" />
+      <window_info id="Structure" order="1" sideWeight="0.41613925" side_tool="true" weight="0.20522387" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="TODO" order="5" weight="0.0" />
+      <window_info anchor="right" id="R Graphics" order="6" />
+      <window_info anchor="bottom" id="Python Console" order="11" weight="0.30718955" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.3278867" />
+      <window_info anchor="right" id="R Packages" order="7" />
+      <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="2" weight="0.2472767" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.32855567" />
+      <window_info anchor="bottom" id="Event Log" internal_type="SLIDING" order="12" sideWeight="0.5040486" side_tool="true" type="SLIDING" weight="0.3296582" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info id="Favorites" order="2" sideWeight="0.36714977" side_tool="true" weight="0.20522387" />
+      <window_info anchor="bottom" id="File Transfer" order="8" sideWeight="0.4959514" weight="0.0" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="right" id="Database" order="5" side_tool="true" weight="0.32995737" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.58386075" weight="0.20255864" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -587,423 +695,341 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="216" />
+      <option name="time" value="251" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/web/model/t_user.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2430">
-          <caret line="138" lean-forward="true" selection-start-line="138" selection-end-line="138" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/templates/backup_change.html">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/ds.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="20" column="30" lean-forward="true" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/port.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="19" selection-start-line="19" selection-end-line="19" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/sys.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="20" selection-start-line="20" selection-end-line="20" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/archive.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="233" lean-forward="true" selection-start-line="233" selection-end-line="233" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/order_query.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="554">
-          <caret line="855" column="65" lean-forward="true" selection-start-line="855" selection-start-column="65" selection-end-line="855" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/ds_add.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="92" selection-start-line="14" selection-start-column="58" selection-end-line="14" selection-end-column="92" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/server_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="121" column="86" selection-start-line="121" selection-start-column="86" selection-end-line="121" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/server_add.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="103" column="86" lean-forward="true" selection-start-line="103" selection-start-column="58" selection-end-line="103" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/model/t_server.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-406">
-          <caret line="217" column="32" selection-start-line="217" selection-start-column="32" selection-end-line="217" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sql_release.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="670">
-          <caret line="728" column="10" selection-start-line="728" selection-start-column="10" selection-end-line="728" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/sql.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="47" column="6" selection-start-line="47" selection-start-column="6" selection-end-line="47" selection-end-column="6" />
-          <folding>
-            <element signature="e#648#659#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sql_query.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1098">
-          <caret line="509" column="34" selection-start-line="509" selection-start-column="34" selection-end-line="509" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/server.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="49" column="66" selection-start-line="49" selection-start-column="66" selection-end-line="49" selection-end-column="66" />
-          <folding>
-            <element signature="e#555#566#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/plugins/bootstrap-sweetalert/sweet-alert.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="6044" selection-start-column="6044" selection-end-column="6044" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/model/t_role.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
-          <caret line="152" column="20" lean-forward="true" selection-start-line="150" selection-start-column="3" selection-end-line="152" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/page-login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="319">
-          <caret line="177" column="56" selection-start-line="177" selection-start-column="52" selection-end-line="177" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/menu.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="45" column="20" selection-start-line="45" selection-start-column="20" selection-end-line="45" selection-end-column="20" />
-          <folding>
-            <element signature="e#559#570#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/model/t_xtqx.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="114" column="4" selection-start-line="114" selection-start-column="4" selection-end-line="114" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2018.1/system/remote_sources/-419118153/-1979280321/tornado/web.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="2271" column="26" lean-forward="true" selection-start-line="2271" selection-start-column="26" selection-end-line="2271" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/role.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="193">
-          <caret line="71" column="23" selection-start-line="71" selection-start-column="23" selection-end-line="71" selection-end-column="23" />
-          <folding>
-            <element signature="e#562#573#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/user.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="23" column="6" selection-start-line="23" selection-start-column="6" selection-end-line="23" selection-end-column="6" />
-          <folding>
-            <element signature="e#563#574#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/role_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="142" column="43" lean-forward="true" selection-start-line="142" selection-start-column="43" selection-end-line="142" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/lib.es5.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="94" column="17" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/transfer_edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="298" column="65" lean-forward="true" selection-start-line="298" selection-start-column="12" selection-end-line="298" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/transfer_clone.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="298" column="65" selection-start-line="298" selection-start-column="65" selection-end-line="298" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/transfer_add.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="537">
-          <caret line="295" column="65" selection-start-line="295" selection-start-column="65" selection-end-line="295" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/logon.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="127" column="89" selection-start-line="127" selection-start-column="89" selection-end-line="127" selection-end-column="89" />
-          <folding>
-            <element signature="e#564#582#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/transfer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="177" selection-start-line="177" selection-end-line="177" />
-          <folding>
-            <element signature="e#557#568#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/model/t_backup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="539" lean-forward="true" selection-start-line="539" selection-end-line="539" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/model/t_transfer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="25" column="45" selection-start-line="25" selection-start-column="45" selection-end-line="25" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/model/t_sync.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11196">
-          <caret line="627" column="25" selection-start-line="627" selection-start-column="25" selection-end-line="627" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/backup_query.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1836" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/backup_log_query.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-128">
-          <caret line="174" column="86" lean-forward="true" selection-start-line="174" selection-start-column="22" selection-end-line="174" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/user_query.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1350">
-          <folding>
-            <element signature="e#0#6#0" expanded="true" />
-            <element signature="e#40#46#1" expanded="true" />
-            <element signature="e#0#6#0" expanded="true" />
-            <element signature="e#40#46#1" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/user_change.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="112" column="79" selection-start-line="112" selection-start-column="65" selection-end-line="112" selection-end-column="79" />
-          <folding>
-            <element signature="e#0#6#0" expanded="true" />
-            <element signature="e#40#46#1" expanded="true" />
-            <element signature="e#0#6#0" expanded="true" />
-            <element signature="e#40#46#1" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sync_bigdata_query.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2165">
-          <caret line="629" column="17" selection-start-line="629" selection-start-column="17" selection-end-line="629" selection-end-column="17" />
-          <folding>
-            <element signature="n#div#1;n#body#0;n#html#0;n#!!top" />
-            <element signature="n#div#2;n#body#0;n#html#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sync_query.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="76" column="147" selection-start-line="76" selection-start-column="39" selection-end-line="76" selection-end-column="147" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/transfer_query.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1949">
-          <caret line="404" column="16" selection-start-line="404" selection-start-column="16" selection-end-line="404" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/sync_bigdata.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="428" column="32" selection-start-line="428" selection-start-column="32" selection-end-line="428" selection-end-column="32" />
-          <folding>
-            <element signature="e#555#566#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/model/t_sync_datax.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="893" column="25" selection-start-line="893" selection-start-column="25" selection-end-line="893" selection-end-column="25" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/templates/backup_edit.html">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/sync_change.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/services/his/monitor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="226">
-          <caret line="192" column="36" lean-forward="true" selection-start-line="192" selection-start-column="36" selection-end-line="192" selection-end-column="36" />
-          <folding>
-            <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
-          </folding>
+        <state relative-caret-position="-300" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/services/backup.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/services/dbtools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/transfer_change.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="173" column="76" lean-forward="true" selection-start-line="173" selection-start-column="76" selection-end-line="173" selection-end-column="76" />
-          <folding>
-            <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
-          </folding>
+        <state relative-caret-position="401">
+          <caret line="83" column="15" lean-forward="true" selection-start-line="66" selection-start-column="8" selection-end-line="83" selection-end-column="15" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/services/backup.py">
+    <entry file="file://$PROJECT_DIR$/web/model/t_archive.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="15" column="107" selection-start-line="15" selection-start-column="107" selection-end-line="15" selection-end-column="107" />
+        <state relative-caret-position="162">
+          <caret line="15" column="4" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/services/menu.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/model/his/t_monitor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="22" column="17" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2018.1/system/remote_sources/-419118153/-1979280321/tornado/web.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="339" column="8" selection-start-line="339" selection-start-column="8" selection-end-line="339" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sync_edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3983" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/services/archive.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="16" selection-start-line="16" selection-end-line="16" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/ds_change.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="101" column="45" lean-forward="true" selection-start-line="100" selection-start-column="10" selection-end-line="101" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/order_query.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="1073" column="28" selection-start-line="1073" selection-start-column="28" selection-end-line="1073" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/role_edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="287" column="53" lean-forward="true" selection-start-line="286" selection-start-column="23" selection-end-line="287" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/user_add.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3474">
+          <caret line="213" column="93" lean-forward="true" selection-start-line="212" selection-start-column="3" selection-end-line="213" selection-end-column="93" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/role_query.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="88" column="51" lean-forward="true" selection-start-line="85" selection-start-column="31" selection-end-line="88" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/model/t_role_privs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="42" column="17" selection-start-line="21" selection-end-line="42" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/model/t_role.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="45" selection-start-line="45" selection-end-line="53" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/services/role.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="39" column="23" selection-start-line="39" selection-start-column="23" selection-end-line="39" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/model/t_sql.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="49" column="41" selection-start-line="49" selection-start-column="41" selection-end-line="49" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sync_log_analyze.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="158" column="45" lean-forward="true" selection-start-line="158" selection-start-column="45" selection-end-line="158" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/services/sql.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="267" column="29" selection-start-line="267" selection-start-column="17" selection-end-line="267" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/model/t_xtqx.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="605" column="4" selection-start-line="605" selection-start-column="4" selection-end-line="605" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sql_release.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-810" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sql_query.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-805" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/backup_log_analyze.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="263" lean-forward="true" selection-start-line="259" selection-end-line="263" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/audit_rule.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="347">
+          <caret line="1015" column="15" lean-forward="true" selection-start-line="1011" selection-start-column="11" selection-end-line="1015" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/backup_query.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1428" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/user_query.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="601">
+          <caret line="103" column="27" lean-forward="true" selection-start-line="88" selection-start-column="25" selection-end-line="103" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/user_change.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="61" column="17" selection-start-line="61" selection-start-column="17" selection-end-line="61" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sync_bigdata_change.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="332">
+          <caret line="171" column="17" selection-start-line="171" selection-start-column="17" selection-end-line="171" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/controller/server.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="26" column="23" selection-start-line="26" selection-start-column="23" selection-end-line="26" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/backup_add.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/monitor_graph.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sync_add.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="203" column="17" selection-start-line="203" selection-start-column="17" selection-end-line="203" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sync_bigdata_query.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="419" column="50" lean-forward="true" selection-start-line="419" selection-start-column="50" selection-end-line="419" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/sync_bigdata_add.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="26">
+          <caret line="642" column="19" lean-forward="true" selection-start-line="642" selection-start-column="19" selection-end-line="642" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="30" selection-start-line="30" selection-end-line="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/main.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="481" column="15" lean-forward="true" selection-start-line="469" selection-end-line="481" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/model/t_dmmx.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="56" column="32" selection-start-line="56" selection-start-column="21" selection-end-line="56" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/monitor_templete.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="146">
+          <caret line="305" selection-start-line="305" selection-end-line="314" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/utils/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3078">
+          <caret line="199" column="42" selection-start-line="199" selection-start-column="42" selection-end-line="199" selection-end-column="42" />
+          <folding>
+            <element signature="e#129#256#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/web/services/sync.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="51" column="37" selection-start-line="51" selection-start-column="20" selection-end-line="51" selection-end-column="37" />
+        <state relative-caret-position="374">
+          <caret line="38" column="24" lean-forward="true" selection-start-line="38" selection-start-column="24" selection-end-line="38" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/model/t_sync.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="34" column="74" lean-forward="true" selection-start-line="34" selection-start-column="21" selection-end-line="34" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/role_add.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2991">
+          <caret line="10" column="9" lean-forward="true" selection-start-line="7" selection-start-column="7" selection-end-line="10" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/model/t_monitor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8838">
+          <caret line="495" column="17" selection-start-line="495" selection-start-column="17" selection-end-line="495" selection-end-column="17" />
+          <folding>
+            <element signature="e#136#183#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/services/monitor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5130">
+          <caret line="291" column="16" selection-start-line="291" selection-start-column="16" selection-end-line="291" selection-end-column="16" />
           <folding>
             <element signature="e#557#568#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sync_add.html">
+    <entry file="file://$PROJECT_DIR$/templates/monitor_index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="196" column="41" selection-start-line="196" selection-start-column="41" selection-end-line="196" selection-end-column="41" />
+        <state relative-caret-position="6192">
+          <caret line="344" column="71" selection-start-line="335" selection-start-column="11" selection-end-line="344" selection-end-column="71" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/utils/urls.py">
+    <entry file="file://$PROJECT_DIR$/templates/monitor_task.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="260" column="38" lean-forward="true" selection-start-line="260" selection-start-column="38" selection-end-line="260" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/sync_bigdata_change.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="235" column="124" lean-forward="true" selection-start-line="235" selection-start-column="35" selection-end-line="235" selection-end-column="124" />
+        <state relative-caret-position="18">
+          <caret line="134" column="105" selection-start-line="134" selection-start-column="105" selection-end-line="134" selection-end-column="105" />
           <folding>
-            <element signature="e#6039#6358#0" />
-            <element signature="e#6424#6743#0" />
-            <element signature="e#6809#7128#0" />
-            <element signature="e#10135#11512#0" />
-            <element signature="e#12028#13976#0" />
-            <element signature="e#14018#15856#0" />
-            <element signature="e#15895#17434#0" />
-            <element signature="e#17474#19014#0" />
+            <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
+            <element signature="n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#2;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#div#1;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#3;n#body#0;n#html#0;n#!!top" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/utils/basehandler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="24" lean-forward="true" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
-          <folding>
-            <element signature="e#133#151#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/utils/common.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/controller/server.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="34" column="58" selection-start-line="34" selection-start-column="58" selection-end-line="34" selection-end-column="58" />
         </state>
       </provider>
     </entry>

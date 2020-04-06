@@ -161,7 +161,23 @@
                              }
                          }
                      });
-                 }
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                        setTimeout(" window.location.href='/login'",3000);
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
+                    }
+                }
              });
             });
 
@@ -172,7 +188,34 @@
                   portid=row[0].innerHTML;
                   console.log("portid=",portid)
              });
-             $('#main-container-div').load("/port/edit?port_id="+portid);
+
+             $.ajax({
+                url: "/port/edit",
+                type: "get",
+                datatype: "html",
+                data: {
+                    port_id:portid
+                },
+                success: function () {
+                   $('#main-container-div').load("/port/edit?port_id="+portid);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                        setTimeout(" window.location.href='/login'",3000);
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
+                    }
+                }
+             })
         });
 
         $('#portdel').on('click', function() {
@@ -208,6 +251,22 @@
                                 } else {
                                     swal("删除失败!", "端口["+portidame+"]"+dataSet.message+"!", "error");
                                 }
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                console.log('jqXHR.responseText=',jqXHR.responseText);
+                                console.log('jqXHR.status=',jqXHR.status);
+                                console.log('jqXHR.readyState=',jqXHR.readyState);
+                                console.log('jqXHR.statusText=',jqXHR.statusText);
+                                console.log('textStatus=',textStatus);
+                                console.log('errorThrown=',errorThrown);
+                                if (jqXHR.status==403){
+                                    swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                                    setTimeout(" window.location.href='/login'",3000);
+                                } else if (jqXHR.status==502){
+                                    swal("用户无权访问权限此功能!", "", "error")
+                                } else {
+                                    swal("系统不可用,请稍后重试!", "", "error")
+                                }
                             }
                        });
 
@@ -240,6 +299,22 @@
                     link.attr('name', 'download_name');
                     link.appendTo('body')
                     link[0].click();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                        setTimeout(" window.location.href='/login'",3000);
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
+                    }
                 }
             })
          })
@@ -270,6 +345,22 @@
                    } else {
                        swal("导入失败", "", "error")
                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                        setTimeout(" window.location.href='/login'",3000);
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
+                    }
                 }
             });
           });

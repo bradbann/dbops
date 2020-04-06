@@ -39,7 +39,7 @@
                         <label class="col-md-2 control-label"><span id="s_archive_tag">*</span>归档标识号</label>
                     </div>
                     <div class="col-md-10">
-                        <input id="archive_tag"  type="text" readonly class="form-control" placeholder="请输入归档标识号">
+                        <input id="archive_tag"  type="text" readonly class="form-control" placeholder="自动生成归档标识号">
                     </div>
                </div>
            </div>
@@ -51,7 +51,7 @@
                     <label class="col-md-2 control-label"><span id="s_task_desc">*</span>任务描述</label>
                 </div>
                 <div class="col-md-10">
-                    <input id="task_desc"  type="text"  readonly class="form-control"  placeholder="请输入任务描述">
+                    <input id="task_desc"  type="text"  readonly class="form-control"  placeholder="自动生成任务描述">
                 </div>
            </div>
           </div>
@@ -221,6 +221,21 @@
                </div>
             </div>
        </div>
+       <div class="row">
+         <div class="col-md-6">
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_if_cover">*</span>是否覆盖</label>
+                </div>
+                <div class="col-md-10">
+                    <select class="form-control select" id="if_cover" name="status">
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                    </select>
+                </div>
+            </div>
+          </div>
+       </div>
         <div class="row">
            <div class="col-md-6">
                <div class="form-group">
@@ -286,6 +301,21 @@
            </div>
           </div>
        </div>
+
+       <div class="row">
+         <div class="col-md-6">
+            <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_run_time">*</span>运行时间</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="run_time" type="text" class="form-control" placeholder="请输入运行时间">
+                </div>
+           </div>
+          </div>
+       </div>
+
+
        <div class="row">
          <div class="col-md-6">
             <div class="form-group">
@@ -384,16 +414,19 @@
             document.all['s_archive_server'].style.color="#ff0000";
             document.all['s_archive_db_type'].style.color="#ff0000";
             document.all['s_sour_db_server'].style.color="#ff0000";
+            document.all['s_sour_db_name'].style.color="#ff0000";
             document.all['s_sour_tab_name'].style.color="#ff0000";
+            document.all['s_archive_time_col'].style.color="#ff0000";
             document.all['s_archive_rentition'].style.color="#ff0000";
             document.all['s_rentition_time'].style.color="#ff0000";
-            document.all['s_archive_time_col'].style.color="#ff0000";
             document.all['s_archive_time_type'].style.color="#ff0000";
+            document.all['s_if_cover'].style.color="#ff0000";
             document.all['s_dest_db_server'].style.color="#ff0000";
             document.all['s_dest_db_name'].style.color="#ff0000";
             document.all['s_python3_home'].style.color="#ff0000";
             document.all['s_script_base'].style.color="#ff0000";
             document.all['s_script_name'].style.color="#ff0000";
+            document.all['s_run_time'].style.color="#ff0000";
             document.all['s_batch_size'].style.color="#ff0000";
             document.all['s_api_server'].style.color="#ff0000";
             document.all['s_status'].style.color="#ff0000";
@@ -425,40 +458,6 @@
                $('#sour_tab_where').attr("readonly",false);
            }
         });
-
-        $("#add").click(function () {
-            $.ajax({
-                url: "/archive/add/save",
-                type: "post",
-                datatype: "json",
-                data: {
-                    archive_tag          : $('#archive_tag').val(),
-                    task_desc            : $('#task_desc').val(),
-                    archive_server       : $('#archive_server').val(),
-                    archive_db_type      : $('#archive_db_type').val(),
-                    sour_db_server       : $('#sour_db_server').val(),
-                    sour_db_name         : $('#sour_db_name').val(),
-                    sour_tab_name        : $('#sour_tab_name').val(),
-                    sour_tab_where       : $('#sour_tab_where').val(),
-                    dest_db_server       : $('#dest_db_server').val(),
-                    dest_db_name         : $('#dest_db_name').val(),
-                    python3_home         : $('#python3_home').val(),
-                    script_base          : $('#script_base').val(),
-                    script_name          : $('#script_name').val(),
-                    batch_size           : $('#batch_size').val(),
-                    api_server           : $('#api_server').val(),
-                    status               : $('#status').val()
-                },
-                success: function (dataSet) {
-                    console.log(dataSet.code, dataSet.message);
-                    if (dataSet.code==0) {
-                       swal("新增成功", "", "success")
-                    } else {
-                       swal(dataSet.message, "", "error")
-                    }
-                }
-             });
-          });
 
         $('#archive_db_type').change(function() {
              if ($('#sour_db_server').val()!='...') {
@@ -711,11 +710,13 @@
                     archive_rentition    : $('#archive_rentition').val(),
                     rentition_time       : $('#rentition_time').val(),
                     rentition_time_type  : $('#rentition_time_type').val(),
+                    if_cover             : $('#if_cover').val(),
                     dest_db_server       : $('#dest_db_server').val(),
                     dest_db_name         : $('#dest_db_name').val(),
                     python3_home         : $('#python3_home').val(),
                     script_base          : $('#script_base').val(),
                     script_name          : $('#script_name').val(),
+                    run_time             : $('#run_time').val(),
                     batch_size           : $('#batch_size').val(),
                     api_server           : $('#api_server').val(),
                     status               : $('#status').val()
@@ -726,6 +727,22 @@
                        swal("新增成功", "", "success")
                     } else {
                        swal(dataSet.message, "", "error")
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal("登陆信息已过期，请重新登陆!", "", "error")
+                        window.location.href='/login'
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
                     }
                 }
              });

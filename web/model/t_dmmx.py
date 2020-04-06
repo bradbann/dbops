@@ -62,6 +62,29 @@ def get_sync_server():
     cr.close()
     return v_list
 
+def get_templete_names():
+    db = get_connection()
+    cr = db.cursor()
+    sql = "select id,name from t_monitor_templete WHERE status='1' order by id"
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list
+
+def get_gather_tasks():
+    db = get_connection()
+    cr = db.cursor()
+    sql = "select id,comments from t_monitor_task WHERE status='1' order by id"
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list
+
+
 def get_db_server():
     db = get_connection()
     cr = db.cursor()

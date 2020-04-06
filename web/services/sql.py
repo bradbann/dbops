@@ -25,7 +25,6 @@ from web.model.t_xtqx          import get_db_name,get_tab_name,get_tab_columns,g
 from web.model.t_dmmx          import get_dmm_from_dm,get_users_from_proj
 from web.utils.basehandler     import basehandler
 
-
 class sqlquery(basehandler):
    @tornado.web.authenticated
    def get(self):
@@ -407,8 +406,9 @@ class wtd_release(basehandler):
     @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
+        userid = str(self.get_secure_cookie("userid"), encoding="utf-8")
         wtd_no = self.get_argument("wtd_no")
-        v_list = release_order(wtd_no)
+        v_list = release_order(wtd_no,userid)
         v_json = json.dumps(v_list)
         self.write(v_json)
 

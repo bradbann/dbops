@@ -127,7 +127,7 @@ class sys_test(basehandler):
    @tornado.web.authenticated
    def get(self):
        logon_name = str(self.get_secure_cookie("username"), encoding="utf-8")
-       self.render("./his/backup_log_analyze.bak.html")
+       self.render("test.html")
 
 
 class sys_query_rule(basehandler):

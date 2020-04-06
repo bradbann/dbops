@@ -14,7 +14,7 @@ def query_datax_sync(sync_tag,sync_ywlx,sync_type,sync_env):
     cr = db.cursor()
     v_where=' and  1=1 '
     if sync_tag != '':
-        v_where = v_where + " and a.sync_tag='{0}'\n".format(sync_tag)
+        v_where = v_where + " and a.sync_tag like '%{0}%'\n".format(sync_tag)
 
     if sync_ywlx != '':
         v_where = v_where + " and a.sync_ywlx='{0}'\n".format(sync_ywlx)

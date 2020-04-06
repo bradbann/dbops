@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>数据源变更</title>
     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
-     <!-- Notification css (Toastr) -->
+    <!-- Notification css (Toastr) -->
     <link href="{{static_url('plugins/toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{static_url('assets/css/components.css')}}" rel="stylesheet" type="text/css" />
 </head>
@@ -180,9 +180,9 @@
             <div class="col-md-6">
                <div class="form-group">
                     <div>
-                        <span class="input-group-btn">
-                           <button type="button" id='query_password' class="btn btn-icon waves-effect btn-default m-b-5"><i class="ion-help"></i></button>
-                        </span>
+                          <button type="button" tabindex="0" id='query_password' class="btn btn-xs waves-effect waves-light" role="button" data-toggle="popover" data-trigger="focus" title="" data-content="支持多表传输，表间用逗号隔开！" data-original-title="小提示">
+                            <i class="ion-help"></i>
+                         </button>
                     </div>
                </div>
            </div>
@@ -227,31 +227,7 @@
      <!-- Sweet-Alert  -->
     <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
 
-    <!-- Toastr js -->
-    <script src="{{static_url('plugins/toastr/toastr.min.js')}}"></script>
-
     <script>
-
-        function showtips(flag,title,content){
-                toastr.options = {
-                      "closeButton": false,
-                      "debug": false,
-                      "newestOnTop": false,
-                      "progressBar": true,
-                      "positionClass": "toast-top-right",
-                      "preventDuplicates": false,
-                      "onclick": null,
-                      "showDuration": "3000",
-                      "hideDuration": "1000",
-                      "timeOut": "5000",
-                      "extendedTimeOut": "1000",
-                      "showEasing": "swing",
-                      "hideEasing": "linear",
-                      "showMethod": "fadeIn",
-                      "hideMethod": "fadeOut"
-                    }
-                    toastr[flag](content,title)
-        }
 
         function set_selected(){
             document.all['s_ds_market_id'].style.color="#ff0000";
@@ -270,10 +246,6 @@
 
         $('#return').on('click', function() {
            $('#main-container-div').load('/ds/change');
-        });
-
-        $('#query_password').click(function(){
-             showtips('info','','数据源口令：'+$('#pass').val());
         });
 
         $("#save").click(function () {
@@ -303,8 +275,30 @@
                 } else {
                    swal(dataSet.message, "", "error")
                 }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('jqXHR.responseText=',jqXHR.responseText);
+                console.log('jqXHR.status=',jqXHR.status);
+                console.log('jqXHR.readyState=',jqXHR.readyState);
+                console.log('jqXHR.statusText=',jqXHR.statusText);
+                console.log('textStatus=',textStatus);
+                console.log('errorThrown=',errorThrown);
+                if (jqXHR.status==403){
+                    swal("登陆信息已过期，请重新登陆!", "", "error")
+                    window.location.href='/login'
+                } else if (jqXHR.status==502){
+                    swal("用户无权访问权限此功能!", "", "error")
+                } else {
+                    swal("系统不可用,请稍后重试!", "", "error")
+                }
             }
          });
+      });
+
+      $('#query_password').tooltipster({
+         content: $('#pass').val(),
+         multiple: true,
+         position: 'right'
       });
 
    </script>

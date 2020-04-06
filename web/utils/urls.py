@@ -5,16 +5,17 @@
 # @File : urls.py.py
 # @Software: PyCharm
 
-from web.services.logon        import index,main,logon,logout,logon_check,get_tree,get_time,get_verify,error,forget_password_check,modify_password,modify_password_check,lockscreen,unlock,forget_password,check
+from web.services.logon        import index,main,logon,logout,logon_check,get_tree,get_time,get_verify,error, lockscreen,unlock
 from web.services.user         import userquery,useradd,useradd_save,useradd_save_uploadImage,userchange,useredit,useredit_save,useredit_del,user_query,projectquery,project_query,projectprivs_save
 from web.services.role         import rolequery,roleadd,roleadd_save,role_query,rolechange,roleedit,roleedit_save,roleedit_del
 from web.services.menu         import menuquery,menu_query,menuadd,menuadd_save,menuchange,menuedit,menuedit_save,menuedit_del
+from web.services.func         import funcquery,func_query,funcadd,funcadd_save,funcchange,funcedit,funcedit_save,funcedit_del
 from web.services.ds           import dsquery,ds_query,dsadd,dsadd_save,dschange,dsedit,dsedit_save,dsedit_del,dstest,ds_check_valid,dsclone,dsclone_save,get_db_by_type
-from web.services.server       import serverquery,server_query,serveradd,serveradd_save,serverchange,serveredit,serveredit_save,serveredit_del,server_check_valid
+from web.services.server       import serverquery,server_query,serveradd,serveradd_save,serverchange,serveredit,serveredit_save,serveredit_del
 from web.services.backup       import backupquery,backup_query,backup_case,backupadd,backupadd_save,backupchange,backupedit,backupedit_save,backupedit_del,backuplogquery
 from web.services.backup       import backup_log_query,backup_log_query_detail,backupedit_push,backupedit_run,backupedit_stop,backupedit_status,backuploganalyze,backup_log_analyze,get_backup_tasks
-from web.services.sync         import syncadd,syncadd_save,syncquery,sync_query,syncchange,syncedit,syncedit_save,syncclone,syncclone_save,syncedit_del,synclogquery,syncloganalyze2,sync_log_analyze2
-from web.services.sync         import sync_log_query,sync_log_query_detail,syncedit_push,syncedit_run,syncedit_stop,syncedit_status,syncloganalyze,sync_log_analyze,get_sync_tasks
+from web.services.sync         import syncadd,syncadd_save,syncquery,sync_query,syncchange,syncedit,syncedit_save,syncclone,syncclone_save,syncedit_del,synclogquery
+from web.services.sync         import sync_log_query,sync_log_query_detail,syncedit_push,syncedit_run,syncedit_stop,syncloganalyze,sync_log_analyze,get_sync_tasks
 from web.services.sync         import get_sync_park,get_sync_park_real_time,get_sync_flow,get_sync_flow_real_time,get_sync_flow_device,get_sync_park_charge,get_sync_bi
 from web.services.transfer     import transferadd,transferadd_save,transferchange,transferedit,transferedit_save,transferedit_del,transfer_query,transferedit_push,transferedit_run,transferedit_stop
 from web.services.transfer     import transferquery,transferclone,transferclone_save,transferlogquery,transfer_log_query,transfer_query_detail
@@ -26,56 +27,62 @@ from web.services.sync_bigdata import syncadd_bigdata,syncadd_bigdata_save,syncb
 from web.services.sync_bigdata import sync_bigdata_downloads_dataxTemplete,syncchange_bigdata,syncedit_bigdata,syncedit_save_bigdata,syncedit_del_bigdata,syncedit_push_bigdata
 from web.services.sync_bigdata import syncedit_pushall_bigdata,syncedit_run_bigdata,syncedit_stop_bigdata,syncclone_bigdata,syncclone_save_bigdata
 from web.services.port         import portadd,portadd_save,portchange,portedit,portedit_save,portedit_del,port_query,portquery,portedit_imp,portedit_exp
-from web.services.archive      import archiveadd,archiveadd_save
+from web.services.archive      import archiveadd,archiveadd_save,archivequery,archive_query,archive_query_detail,archivechange,archiveedit,archiveedit_save
+from web.services.archive      import archiveedit_del,archiveedit_push,archiveedit_run,archiveedit_stop,archiveclone,archiveclone_save,archivelogquery,archive_log_query
+from web.services.dbtools      import dict_gen,redis_migrate
+from web.services.monitor      import monitorindexquery,monitorindex_query,monitorindexadd_save,monitorindexedit_save,monitorindexedit_del
+from web.services.monitor      import monitortempletequery,monitortemplete_query,monitortempleteadd_save,monitortempleteedit_save,monitortempleteedit_del,monitor_sys_indexes,monitor_templete_indexes
+from web.services.monitor      import monitortaskquery,monitortask_query,monitortaskadd_save_gather,monitortaskadd_save_monitor,monitortaskedit_save,monitortaskedit_del,monitortaskedit_clone,monitortask_push,monitortask_run,monitortask_stop
+from web.services.monitor      import monitorgraphquery,monitorgraph_query
 
 urls=[
         #主页面
-        (r"/login", logon),
-        (r"/unlock", unlock),
-        (r"/logout", logout),
-        (r"/error", error),
-        (r"/lockscreen", lockscreen),
-        (r"/", index),
-        (r"/main",main),
-        (r"/tree",get_tree),
-        (r"/get_verify", get_verify),
-        (r"/logon_check", logon_check),
-        (r"/time", get_time),
+        (r"/login",        logon),
+        (r"/unlock",       unlock),
+        (r"/logout",       logout),
+        (r"/error",        error),
+        (r"/lockscreen",   lockscreen),
+        (r"/",             index),
+        (r"/main",         main),
+        (r"/tree",         get_tree),
+        (r"/get_verify",   get_verify),
+        (r"/logon_check",  logon_check),
+        (r"/time",         get_time),
 
         #公用API
-        (r"/get_tab_ddl", get_tab_ddl),
-        (r"/get_tab_idx", get_tab_idx),
-        (r"/get_database", get_database),
-        (r"/get_tables", get_tables),
-        (r"/get_columns", get_columns),
-        (r"/get_keys", get_keys),
-        (r"/get_incr_col", get_incr_col),
-        (r"/get_tab_stru", get_tab_stru),
-        (r"/alt_tab", alt_tab),
+        (r"/get_tab_ddl",        get_tab_ddl),
+        (r"/get_tab_idx",        get_tab_idx),
+        (r"/get_database",       get_database),
+        (r"/get_tables",         get_tables),
+        (r"/get_columns",        get_columns),
+        (r"/get_keys",           get_keys),
+        (r"/get_incr_col",       get_incr_col),
+        (r"/get_tab_stru",       get_tab_stru),
+        (r"/alt_tab",            alt_tab),
 
         #主面板
-        (r"/backup_case", backup_case),
-        (r"/get/sync/park", get_sync_park),
+        (r"/backup_case",            backup_case),
+        (r"/get/sync/park",          get_sync_park),
         (r"/get/sync/park/realtime", get_sync_park_real_time),
-        (r"/get/sync/flow", get_sync_flow),
+        (r"/get/sync/flow",          get_sync_flow),
         (r"/get/sync/flow/realtime", get_sync_flow_real_time),
-        (r"/get/sync/flow/device", get_sync_flow_device),
-        (r"/get/sync/park/charge", get_sync_park_charge),
-        (r"/get/sync/bi", get_sync_bi),
+        (r"/get/sync/flow/device",   get_sync_flow_device),
+        (r"/get/sync/park/charge",   get_sync_park_charge),
+        (r"/get/sync/bi",            get_sync_bi),
 
         #用户管理
-        (r"/user/query",    userquery),
-        (r"/user/_query",   user_query),
-        (r"/user/add",      useradd),
-        (r"/user/add/save", useradd_save),
+        (r"/user/query",           userquery),
+        (r"/user/_query",          user_query),
+        (r"/user/add",             useradd),
+        (r"/user/add/save",        useradd_save),
         (r"/user/add/uploadImage", useradd_save_uploadImage),
-        (r"/user/change",   userchange),
-        (r"/user/edit"  ,   useredit),
-        (r"/user/edit/save", useredit_save),
-        (r"/user/edit/del",  useredit_del),
-        (r"/project/query",  projectquery),
-        (r"/project/_query", project_query),
-        (r"/project/privs/save" , projectprivs_save),
+        (r"/user/change",          userchange),
+        (r"/user/edit"  ,          useredit),
+        (r"/user/edit/save",       useredit_save),
+        (r"/user/edit/del",        useredit_del),
+        (r"/project/query",        projectquery),
+        (r"/project/_query",       project_query),
+        (r"/project/privs/save" ,  projectprivs_save),
 
         #角色管理
         (r"/role/query",     rolequery),
@@ -96,6 +103,16 @@ urls=[
         (r"/menu/edit",      menuedit),
         (r"/menu/edit/save", menuedit_save),
         (r"/menu/edit/del",  menuedit_del),
+
+        #功能管理
+        (r"/func/query",     funcquery),
+        (r"/func/_query",    func_query),
+        (r"/func/add",       funcadd),
+        (r"/func/add/save",  funcadd_save),
+        (r"/func/change",    funcchange),
+        (r"/func/edit",      funcedit),
+        (r"/func/edit/save", funcedit_save),
+        (r"/func/edit/del",  funcedit_del),
 
         #数据源管理
         (r"/ds/query",       dsquery),
@@ -123,21 +140,21 @@ urls=[
         (r"/server/edit/del",  serveredit_del),
 
         #数据库操作
-        (r"/sql/query",        sqlquery),
-        (r"/sql/_query",       sql_query),
-        (r"/sql/release",      sqlrelease),
-        (r"/sql/_release",     sql_release),
-        (r"/sql/_check",       sql_check),
+        (r"/sql/query",         sqlquery),
+        (r"/sql/_query",        sql_query),
+        (r"/sql/release",       sqlrelease),
+        (r"/sql/_release",      sql_release),
+        (r"/sql/_check",        sql_check),
         (r"/sql/_check/result", sql_check_result),
-        (r"/sql/audit",        sqlaudit),
-        (r"/sql/_audit",       sql_audit),
-        (r"/sql/audit/query",  sql_audit_query),
-        (r"/sql/audit/detail", sql_audit_detail),
-        (r"/sql/_format",      sql_format),
-        (r"/sql/run",          sqlrun),
-        (r"/sql/_run",         sql_run),
-        (r"/sql/run/query",    sql_run_query),
-        (r"/get_tree",         get_tree_by_sql),
+        (r"/sql/audit",         sqlaudit),
+        (r"/sql/_audit",        sql_audit),
+        (r"/sql/audit/query",   sql_audit_query),
+        (r"/sql/audit/detail",  sql_audit_detail),
+        (r"/sql/_format",       sql_format),
+        (r"/sql/run",           sqlrun),
+        (r"/sql/_run",          sql_run),
+        (r"/sql/run/query",     sql_run_query),
+        (r"/get_tree",          get_tree_by_sql),
 
         #我的工單
         (r"/order/query",      orderquery),
@@ -200,8 +217,8 @@ urls=[
         (r"/get/sync/task",          get_sync_tasks),
 
         #数据库传输
-        (r"/transfer/query",      transferquery),
-        (r"/transfer/_query",     transfer_query),
+        (r"/transfer/query",         transferquery),
+        (r"/transfer/_query",        transfer_query),
         (r"/transfer/_query/detail", transfer_query_detail),
         (r"/transfer/add",        transferadd),
         (r"/transfer/add/save",   transferadd_save),
@@ -218,10 +235,10 @@ urls=[
         (r"/transfer/log/_query", transfer_log_query),
 
         # 大数据管理
-        (r"/bigdata/add",      syncadd_bigdata),
-        (r"/bigdata/add/save", syncadd_bigdata_save),
-        (r"/bigdata/query",    syncbigdataquery),
-        (r"/bigdata/_query",   sync_bigdata_query),
+        (r"/bigdata/add",                  syncadd_bigdata),
+        (r"/bigdata/add/save",             syncadd_bigdata_save),
+        (r"/bigdata/query",                syncbigdataquery),
+        (r"/bigdata/_query",               sync_bigdata_query),
         (r"/bigdata/_query/detail",        sync_bigdata_query_detail),
         (r"/bigdata/_query/dataxTemplete", sync_bigdata_query_dataxTemplete),
         (r"/bigdata/_query/dataxTemplete/downloads", sync_bigdata_downloads_dataxTemplete),
@@ -249,16 +266,66 @@ urls=[
         (r"/port/edit/exp",  portedit_exp),
 
         # 系统设置
-        (r"/sys/audit_rule", audit_rule),
-        (r"/sys/query_rule", sys_query_rule),
+        (r"/sys/audit_rule",      audit_rule),
+        (r"/sys/query_rule",      sys_query_rule),
         (r"/sys/audit_rule/save", audit_rule_save),
-        (r"/sys/setting", sys_setting),
-        (r"/sys/code", sys_code),
-        (r"/sys/code/_query", sys_code_query),
-        (r"/sys/test", sys_test),
+        (r"/sys/setting",         sys_setting),
+        (r"/sys/code",            sys_code),
+        (r"/sys/code/_query",     sys_code_query),
+        (r"/sys/test",            sys_test),
 
         # 数据库归档
-        (r"/archive/add", archiveadd),
-        (r"/archive/add/save", archiveadd_save),
+        (r"/archive/add",           archiveadd),
+        (r"/archive/add/save",      archiveadd_save),
+        (r"/archive/query",         archivequery),
+        (r"/archive/_query",        archive_query),
+        (r"/archive/_query/detail", archive_query_detail),
+        (r"/archive/change",        archivechange),
+        (r"/archive/edit",          archiveedit),
+        (r"/archive/edit/save",     archiveedit_save),
+        (r"/archive/edit/del",      archiveedit_del),
+        (r"/archive/edit/push",     archiveedit_push),
+        (r"/archive/edit/run",      archiveedit_run),
+        (r"/archive/edit/stop",     archiveedit_stop),
+        (r"/archive/clone",         archiveclone),
+        (r"/archive/clone/save",    archiveclone_save),
+        (r"/archive/log/query",     archivelogquery),
+        (r"/archive/log/_query",    archive_log_query),
+
+        # 数据库工具
+        (r"/dict/gen", dict_gen),
+        (r"/redis/migrate", redis_migrate),
+
+        # 数据库监控-指标管理
+        (r"/monitor/index/query",        monitorindexquery),
+        (r"/monitor/index/_query",       monitorindex_query),
+        (r"/monitor/index/add/save",     monitorindexadd_save),
+        (r"/monitor/index/edit/save",    monitorindexedit_save),
+        (r"/monitor/index/edit/del",     monitorindexedit_del),
+
+        # 数据库监控-模板管理
+        (r"/monitor/templete/query",       monitortempletequery),
+        (r"/monitor/templete/_query",      monitortemplete_query),
+        (r"/monitor/templete/add/save",    monitortempleteadd_save),
+        (r"/monitor/templete/edit/save",   monitortempleteedit_save),
+        (r"/monitor/templete/edit/del",    monitortempleteedit_del),
+        (r"/monitor/sys/indexes",          monitor_sys_indexes),
+        (r"/monitor/templete/indexes",     monitor_templete_indexes),
+
+        # 数据库监控-任务管理
+        (r"/monitor/task/query",            monitortaskquery),
+        (r"/monitor/task/_query",           monitortask_query),
+        (r"/monitor/task/add/save/gather",  monitortaskadd_save_gather),
+        (r"/monitor/task/add/save/monitor", monitortaskadd_save_monitor),
+        (r"/monitor/task/edit/save",        monitortaskedit_save),
+        (r"/monitor/task/edit/del",         monitortaskedit_del),
+        (r"/monitor/task/edit/clone",       monitortaskedit_clone),
+        (r"/monitor/task/push/save",        monitortask_push),
+        (r"/monitor/task/run/save" ,        monitortask_run),
+        (r"/monitor/task/stop/del" ,        monitortask_stop),
+
+        # 数据库监控-图表展示
+        (r"/monitor/graph/query",        monitorgraphquery),
+        (r"/monitor/graph/_query",       monitorgraph_query),
 
 ]

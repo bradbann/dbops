@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <!-- App title -->
-    <title>用户查询</title>
+    <title>项目授权</title>
     <!-- DataTables -->
     <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
@@ -204,22 +204,63 @@
                          });
                       $('#userupd').attr("disabled",true);
                       $('#userdel').attr("disabled",true);
-                 }
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal("登陆信息已过期，请重新登陆!", "", "error")
+                        window.location.href='/login'
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
+                    }
+                }
              });
             });
 
         function project_privs(p_row){
             console.log('project_privs=',p_row)
-            // $('.modal').on('show.bs.modal', centerModals);
-            // $(window).on('resize', centerModals);
-            $('#con-close-modal').modal({
-                 keyboard: false,
-                 backdrop:false
-             });
-
-            $('#ds_query_title').text('项目授权 - '+p_row.split(',')[3])
-            $('#ds_user_id').val(p_row.split(',')[0])
-            project_query()
+            $.ajax({
+                  url: "/project/_query",
+                  type: "post",
+                  datatype: "json",
+                  data:{
+                      qname:$("#ds_name").val(),
+                      userid:p_row.split(',')[0],
+                      is_grants: $('#switch_have_grants').is(":checked"),
+                  },
+                  success: function (dataSet) {
+                        $('#con-close-modal').modal({
+                             keyboard: false,
+                             backdrop:false
+                         })
+                        $('#ds_query_title').text('项目授权 - '+p_row.split(',')[3])
+                        $('#ds_user_id').val(p_row.split(',')[0])
+                        project_query()
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal("登陆信息已过期，请重新登陆!", "", "error")
+                        window.location.href='/login'
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
+                    }
+                }
+             })
 
         }
 
@@ -351,9 +392,24 @@
                                  }
                              }
                          }).columns.adjust();
-                 }
-             });
-
+                 },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal("登陆信息已过期，请重新登陆!", "", "error")
+                        window.location.href='/login'
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
+                    }
+                }
+             })
          }
 
         $('#query_btn_ds').click(function(){
@@ -451,12 +507,26 @@
                              } else {
                                 swal(dataSet.message, "", "error")
                              }
-                         }
-                  });
-
-              });
-         });
-
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log('jqXHR.responseText=',jqXHR.responseText);
+                            console.log('jqXHR.status=',jqXHR.status);
+                            console.log('jqXHR.readyState=',jqXHR.readyState);
+                            console.log('jqXHR.statusText=',jqXHR.statusText);
+                            console.log('textStatus=',textStatus);
+                            console.log('errorThrown=',errorThrown);
+                            if (jqXHR.status==403){
+                                swal("登陆信息已过期，请重新登陆!", "", "error")
+                                window.location.href='/login'
+                            } else if (jqXHR.status==502){
+                                swal("用户无权访问权限此功能!", "", "error")
+                            } else {
+                                swal("系统不可用,请稍后重试!", "", "error")
+                            }
+                        }
+                  })
+              })
+         })
 
    </script>
 </body>

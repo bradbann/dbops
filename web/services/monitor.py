@@ -1,242 +1,313 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time : 2018/9/19 16:19
+# @Time : 2019/9/5 16:08
 # @Author : 马飞
-# @File : monitor.py
+# @File : ds.py
 # @Software: PyCharm
+######################################################################################
+#                                                                                    #
+#                                   数据库备份管理                                        #
+#                                                                                    #
+######################################################################################
 
-######################################################################################
-#                                                                                    #
-#                                   数据库监控                                         #
-#                                                                                    #
-######################################################################################
-import json,os
-import random
+import json
 import tornado.web
-from   web.model.t_monitor  import query_monitor,get_projs,save_sys_usage,query_monitor_image
-import base64
-from   reportlab.lib.pagesizes import A4, portrait, landscape
-from   reportlab.pdfgen import canvas
-from   web.model.t_ds       import get_dss_sql_query
+from   web.model.t_monitor   import query_monitor_index,save_index,upd_index,del_index
+from   web.model.t_monitor   import get_monitor_indexes,query_monitor_templete,save_templete,upd_templete,del_templete
+from   web.model.t_monitor   import get_monitor_sys_indexes,get_monitor_templete_indexes,save_gather_task,query_task
+from   web.utils.basehandler import basehandler
+from   web.model.t_dmmx import get_dmm_from_dm,get_sync_server,get_templete_names,get_sync_db_server,get_gather_tasks
 
-class monitor_query(tornado.web.RequestHandler):
+'''指标管理'''
+class monitorindexquery(basehandler):
+    @tornado.web.authenticated
     def get(self):
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
-        self.render("./monitor/monitor_query.html",proj=get_projs())
+        self.render("./monitor_index.html",
+                    index_types= get_dmm_from_dm('23'),
+                    index_val_types=get_dmm_from_dm('24'),
+                    index_db_types= get_dmm_from_dm('02'),
+                    )
 
-class monitor_avg_data_0(tornado.web.RequestHandler):
+class monitorindex_query(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        start_date=self.get_argument("start_date_input")
-        end_date  =self.get_argument("end_date_input")
-        proj_id   =self.get_argument("proj_id")
-        """
-       arr = [['2018-08-28',6.0756],['2018-08-29',2.9922],['2018-08-30',6.0577],
-               ['2018-08-31',1.0045], ['2018-09-01',4.1774],['2018-09-02',2.1051], ['2018-09-03',5.2285]]
-       """
-        arr=query_monitor('avg_0',proj_id,start_date,end_date)
-        v_json = json.dumps(arr)
-        print("monitor_query=", v_json)
-        self.write(v_json)
-
-class monitor_avg_data_7(tornado.web.RequestHandler):
-    def post(self):
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
-        start_date = self.get_argument("start_date_input")
-        end_date = self.get_argument("end_date_input")
-        proj_id = self.get_argument("proj_id")
-        arr=query_monitor('avg_7',proj_id,start_date,end_date)
-        v_json = json.dumps(arr)
-        print("monitor_query=", v_json)
-        self.write(v_json)
-
-class monitor_avg_data_20(tornado.web.RequestHandler):
-    def post(self):
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
-        start_date = self.get_argument("start_date_input")
-        end_date = self.get_argument("end_date_input")
-        proj_id = self.get_argument("proj_id")
-        arr=query_monitor('avg_20',proj_id,start_date,end_date)
-        v_json = json.dumps(arr)
-        print("monitor_query=", v_json)
-        self.write(v_json)
-
-class monitor_max_data_0(tornado.web.RequestHandler):
-    def post(self):
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
-        start_date = self.get_argument("start_date_input")
-        end_date   = self.get_argument("end_date_input")
-        proj_id = self.get_argument("proj_id")
-        arr=query_monitor('max_0',proj_id,start_date,end_date)
-        v_json = json.dumps(arr)
-        print("monitor_query=", v_json)
-        self.write(v_json)
-
-class monitor_max_data_7(tornado.web.RequestHandler):
-    def post(self):
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
-        start_date = self.get_argument("start_date_input")
-        end_date = self.get_argument("end_date_input")
-        proj_id = self.get_argument("proj_id")
-        arr=query_monitor('max_7',proj_id,start_date,end_date)
-        v_json = json.dumps(arr)
-        print("monitor_query=", v_json)
-        self.write(v_json)
-
-class monitor_max_data_20(tornado.web.RequestHandler):
-    def post(self):
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
-        start_date = self.get_argument("start_date_input")
-        end_date = self.get_argument("end_date_input")
-        proj_id = self.get_argument("proj_id")
-        arr=query_monitor('max_20',proj_id,start_date,end_date)
-        v_json = json.dumps(arr)
-        print("monitor_query=", v_json)
-        self.write(v_json)
-
-class monitor_picBase64Info(tornado.web.RequestHandler):
-    def post(self):
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
-        #self.set_header("Content-Type", "text/html; charset=UTF-8")
-        static_path = self.get_template_path().replace("templates", "static")
-        proj_name            = self.get_argument("proj_name")
-        picBase64Info_avg_0  = self.get_argument("picBase64Info_avg_0")
-        picBase64Info_avg_7  = self.get_argument("picBase64Info_avg_7")
-        picBase64Info_avg_20 = self.get_argument("picBase64Info_avg_20")
-        picBase64Info_max_0  = self.get_argument("picBase64Info_max_0")
-        picBase64Info_max_7  = self.get_argument("picBase64Info_max_7")
-        picBase64Info_max_20 = self.get_argument("picBase64Info_max_20")
-
-        #删除以前生成的图片及PDF文件
-        img_path = static_path + '/images/monitor/pdf'
-        pdf_path = static_path + '/downloads'
-        os.system("rm -rf  {0}".format(img_path + '/pic_*.jpg'))
-        os.system("rm -rf  {0}".format(pdf_path + '/*.pdf'))
-
-        #读取前端图片base64码
-        pic_avg_0  = base64.b64decode(picBase64Info_avg_0.split("base64,")[1])
-        pic_avg_7  = base64.b64decode(picBase64Info_avg_7.split("base64,")[1])
-        pic_avg_20 = base64.b64decode(picBase64Info_avg_20.split("base64,")[1])
-        pic_max_0  = base64.b64decode(picBase64Info_max_0.split("base64,")[1])
-        pic_max_7  = base64.b64decode(picBase64Info_max_7.split("base64,")[1])
-        pic_max_20 = base64.b64decode(picBase64Info_max_20.split("base64,")[1])
-
-        #将base64码写入二进制文件
-        os.system("rm -rf  {0}".format(static_path + '/images/monitor/pdf/pic_*.jpg'))
-        file_avg_0  = open(static_path+'/images/monitor/pdf/pic_avg_0.jpg', 'wb')
-        file_avg_7  = open(static_path+'/images/monitor/pdf/pic_avg_7.jpg', 'wb')
-        file_avg_20 = open(static_path+'/images/monitor/pdf/pic_avg_20.jpg', 'wb')
-        file_max_0  = open(static_path+'/images/monitor/pdf/pic_max_0.jpg', 'wb')
-        file_max_7  = open(static_path+'/images/monitor/pdf/pic_max_7.jpg', 'wb')
-        file_max_20 = open(static_path+'/images/monitor/pdf/pic_max_20.jpg', 'wb')
-        file_avg_0.write(pic_avg_0)
-        file_avg_7.write(pic_avg_7)
-        file_avg_20.write(pic_avg_20)
-        file_max_0.write(pic_max_0)
-        file_max_7.write(pic_max_7)
-        file_max_20.write(pic_max_20)
-        file_avg_0.close()
-        file_avg_7.close()
-        file_avg_20.close()
-        file_max_0.close()
-        file_max_7.close()
-        file_max_20.close()
-
-        #后续将以上生成六张图片，合为一个PDF文件，并提供下载链接
-        rand = random.randint(1000, 99999)
-        pdf_file=pdf_path+'/'+proj_name+str(rand) + '.pdf'
-        pages = 0
-        x = 100
-        (w, h) = portrait(A4)
-        print("w=", w, "h=", h)
-        c = canvas.Canvas(pdf_file, pagesize=portrait(A4))
-        l = os.listdir(img_path)
-        f = img_path + os.sep + 'pic_avg_0.jpg'
-        c.drawImage(f, x, 600, 400, 200)
-        f = img_path + os.sep + 'pic_avg_7.jpg'
-        c.drawImage(f, x, 350, 400, 200)
-        f = img_path + os.sep + 'pic_avg_20.jpg'
-        c.drawImage(f, x, 100, 400, 200)
-        c.showPage()
-        pages = pages + 1
-        f = img_path + os.sep + 'pic_max_0.jpg'
-        c.drawImage(f, x, 600, 400, 200)
-        f = img_path + os.sep + 'pic_max_7.jpg'
-        c.drawImage(f, x, 350, 400, 200)
-        f = img_path + os.sep + 'pic_max_20.jpg'
-        c.drawImage(f, x, 100, 400, 200)
-        c.showPage()
-        c.save()
-
-        #将生成pdf文件路径返回前端
-        v_json = json.dumps(pdf_file.split('/')[-1])
-        print("pdf_file=", v_json)
+        index_code   = self.get_argument("index_code")
+        v_list       = query_monitor_index(index_code)
+        v_json       = json.dumps(v_list)
         self.write(v_json)
 
 
-class monitor_mail(tornado.web.RequestHandler):
+class monitorindexadd_save(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        d_index = {}
+        d_index['index_name']            = self.get_argument("index_name")
+        d_index['index_code']            = self.get_argument("index_code")
+        d_index['index_type']            = self.get_argument("index_type")
+        d_index['index_db_type']         = self.get_argument("index_db_type")
+        d_index['index_val_type']        = self.get_argument("index_val_type")
+        d_index['index_threshold']       = self.get_argument("index_threshold")
+        d_index['index_threshold_day']   = self.get_argument("index_threshold_day")
+        d_index['index_threshold_times'] = self.get_argument("index_threshold_times")
+        d_index['index_status']          = self.get_argument("index_status")
+        print('monitorindexadd_save=',d_index)
+        result=save_index(d_index)
+        self.write({"code": result['code'], "message": result['message']})
+
+# class archivechange(basehandler):
+#     @tornado.web.authenticated
+#     def get(self):
+#         self.render("./archive_change.html")
+
+class monitorindexedit_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        static_path = self.get_template_path().replace("templates", "static");
-        print("static_path=",static_path)
-        pdf_path=static_path.replace("static","downloads/monitor")
-        print("pdf_path=",pdf_path)
+        d_index = {}
+        d_index['index_name']            = self.get_argument("index_name")
+        d_index['index_code']            = self.get_argument("index_code")
+        d_index['index_type']            = self.get_argument("index_type")
+        d_index['index_db_type']         = self.get_argument("index_db_type")
+        d_index['index_val_type']        = self.get_argument("index_val_type")
+        d_index['index_threshold']       = self.get_argument("index_threshold")
+        d_index['index_threshold_day']   = self.get_argument("index_threshold_day")
+        d_index['index_threshold_times'] = self.get_argument("index_threshold_times")
+        d_index['index_status']          = self.get_argument("index_status")
+        print(d_index)
+        result=upd_index(d_index)
+        self.write({"code": result['code'], "message": result['message']})
 
-        #1.定义PDF文伴保存路径
-        #2.准备数据
-        #3.拷贝模板文件，替换相应的变量，存命 名为新的文件
-        #4.调用操作系统命令在指定位置生成图片，共六张。
-        #5.将图片生成PDF文件，并增加同比，环比分析。
-
-class monitor_mail2(tornado.web.RequestHandler):
+class monitorindexedit_del(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        static_path    = self.get_template_path().replace("templates", "static");
-        phantomjs_path = static_path + '/../plugin'
-        echart_template= phantomjs_path+'/js/options_echart_template.js'
-        echart_imgfile = static_path+'/images/monitor/img/echarts.png'
-        print("static_path=", static_path)
-        print("phantomjs_path=", phantomjs_path)
-        print("echart_template=", echart_template)
-        cmd="""{0}/bin/phantomjs {1}/js/echarts-convert.js -infile {2}/js/options_echart.js -outfile {3}""".format(phantomjs_path,phantomjs_path,phantomjs_path,echart_imgfile)
-        a=os.system(cmd)
-        print(cmd,a)
-
-        # 1.准备数据,查询数据库，超过阀值则进行下一步
-        # 2.拷贝模板文件，替换相应的变量，存命 名为新的文件，模板文件中定义变化
-        # 3.调用操作系统命令在指定位置生成图片
+        index_code  = self.get_argument("index_code")
+        result=del_index(index_code)
+        self.write({"code": result['code'], "message": result['message']})
 
 
-        v_json = json.dumps({'phantomjs_path':phantomjs_path})
-        print("pdf_file=", v_json)
+'''模板管理'''
+class monitortempletequery(basehandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("./monitor_templete.html",
+                    monitor_indexes=get_monitor_indexes(),
+                    templete_types=get_dmm_from_dm('23'),
+                    )
+
+class monitortemplete_query(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        templete_code  = self.get_argument("templete_code")
+        v_list         = query_monitor_templete(templete_code)
+        v_json         = json.dumps(v_list)
         self.write(v_json)
 
 
+class monitortempleteadd_save(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        d_templete = {}
+        d_templete['templete_name']    = self.get_argument("templete_name")
+        d_templete['templete_code']    = self.get_argument("templete_code")
+        d_templete['templete_type']    = self.get_argument("templete_type")
+        d_templete['templete_indexes'] = self.get_argument("templete_indexes")
+        d_templete['templete_status']  = self.get_argument("templete_status")
+        print('monitortempleteadd_save=',d_templete)
+        result=save_templete(d_templete)
+        self.write({"code": result['code'], "message": result['message']})
 
-class monitor_agent(tornado.web.RequestHandler):
+class monitortempleteedit_save(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        host = json.loads(self.get_argument("host"))
-        print("host=",host)
-        d_list=save_sys_usage(host)
-        v_json = json.dumps(d_list)
-        print("v_json=",v_json)
-        #curl http://192.168.1.161:80/monitor_cpu -d "ip=192.168.1.48&port=3306&rq=2018-10-16 10:23:22&cpu_usage=82.56"
+        d_templete = {}
+        d_templete['templete_name']    = self.get_argument("templete_name")
+        d_templete['templete_code']    = self.get_argument("templete_code")
+        d_templete['templete_type'] = self.get_argument("templete_type")
+        d_templete['templete_indexes'] = self.get_argument("templete_indexes")
+        d_templete['templete_status']  = self.get_argument("templete_status")
+        print('monitortempleteedit_save=', d_templete)
+        result=upd_templete(d_templete)
+        self.write({"code": result['code'], "message": result['message']})
 
-class monitor_image(tornado.web.RequestHandler):
-            def get(self):
-                self.set_header("Content-Type", "application/json; charset=UTF-8")
-                logon_name = str(self.get_secure_cookie("username"), encoding="utf-8")
-                self.render("./monitor/monitor_image.html", dss=get_dss_sql_query(logon_name))
-
-class monitor_image_data(tornado.web.RequestHandler):
+class monitortempleteedit_del(basehandler):
+    @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        period = self.get_argument("period")
-        type   = self.get_argument("type")
-        proj_id=self.get_argument("proj_id")
-        print('period=',period,'type=',type)
-        arr=query_monitor_image(proj_id,period,type)
-        v_json = json.dumps(arr)
-        print("monitor_query=", v_json)
+        templete_code  = self.get_argument("templete_code")
+        result=del_templete(templete_code)
+        self.write({"code": result['code'], "message": result['message']})
+
+
+class monitor_sys_indexes(basehandler):
+    def post(self):
+        templete_code = self.get_argument("templete_code")
+        result = get_monitor_sys_indexes(templete_code)
+        v_json = json.dumps(result)
+        self.write(v_json)
+
+class monitor_templete_indexes(basehandler):
+    def post(self):
+        templete_code = self.get_argument("templete_code")
+        result = get_monitor_templete_indexes(templete_code)
+        v_json = json.dumps(result)
+        self.write(v_json)
+
+
+'''任务管理'''
+class monitortaskquery(basehandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("./monitor_task.html",
+                    gather_servers  = get_sync_server(),
+                    templete_names  = get_templete_names(),
+                    task_db_servers = get_sync_db_server(),
+                    gather_tasks    = get_gather_tasks()
+                    )
+
+class monitortask_query(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        task_tag     = self.get_argument("task_tag")
+        v_list       = query_task(task_tag)
+        v_json       = json.dumps(v_list)
+        self.write(v_json)
+
+
+class monitortaskadd_save_gather(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        d_task = {}
+        d_task['add_gather_task_tag']           = self.get_argument("add_gather_task_tag")
+        d_task['add_gather_task_desc']          = self.get_argument("add_gather_task_desc")
+        d_task['add_gather_server']             = self.get_argument("add_gather_server")
+        d_task['add_gather_task_db_server']     = self.get_argument("add_gather_task_db_server")
+        d_task['add_gather_task_templete_name'] = self.get_argument("add_gather_task_templete_name")
+        d_task['add_gather_task_run_time']      = self.get_argument("add_gather_task_run_time")
+        d_task['add_gather_task_python3_home']  = self.get_argument("add_gather_task_python3_home")
+        d_task['add_gather_task_script_base']   = self.get_argument("add_gather_task_script_base")
+        d_task['add_gather_task_script_name']   = self.get_argument("add_gather_task_script_name")
+        d_task['add_gather_task_api_server']    = self.get_argument("add_gather_task_api_server")
+        d_task['add_gather_task_status']        = self.get_argument("add_gather_task_status")
+        print('monitortaskadd_save_gather=',d_task)
+        result=save_gather_task(d_task)
+        self.write({"code": result['code'], "message": result['message']})
+
+class monitortaskadd_save_monitor(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        d_archive = {}
+        d_archive['archive_tag']          = self.get_argument("archive_tag")
+        d_archive['task_desc']            = self.get_argument("task_desc")
+        d_archive['archive_server']       = self.get_argument("archive_server")
+        d_archive['archive_db_type']      = self.get_argument("archive_db_type")
+        d_archive['sour_db_server']       = self.get_argument("sour_db_server")
+        d_archive['sour_db_name']         = self.get_argument("sour_db_name")
+        d_archive['sour_tab_name']        = self.get_argument("sour_tab_name")
+        d_archive['archive_time_col']     = self.get_argument("archive_time_col")
+        d_archive['archive_rentition']    = self.get_argument("archive_rentition")
+        d_archive['rentition_time']       = self.get_argument("rentition_time")
+        d_archive['rentition_time_type']  = self.get_argument("rentition_time_type")
+        d_archive['if_cover']             = self.get_argument("if_cover")
+        d_archive['dest_db_server']       = self.get_argument("dest_db_server")
+        d_archive['dest_db_name']         = self.get_argument("dest_db_name")
+        d_archive['python3_home']         = self.get_argument("python3_home")
+        d_archive['script_base']          = self.get_argument("script_base")
+        d_archive['script_name']          = self.get_argument("script_name")
+        d_archive['run_time']             = self.get_argument("run_time")
+        d_archive['batch_size']           = self.get_argument("batch_size")
+        d_archive['api_server']           = self.get_argument("api_server")
+        d_archive['status']               = self.get_argument("status")
+        print('archiveadd_save=',d_archive)
+        result=save_archive(d_archive)
+        self.write({"code": result['code'], "message": result['message']})
+
+class monitortaskedit_save(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        d_archive = {}
+        d_archive['archive_id']          = self.get_argument("archive_id")
+        d_archive['archive_tag']         = self.get_argument("archive_tag")
+        d_archive['task_desc']           = self.get_argument("task_desc")
+        d_archive['archive_server']      = self.get_argument("archive_server")
+        d_archive['archive_db_type']     = self.get_argument("archive_db_type")
+        d_archive['sour_db_server']      = self.get_argument("sour_db_server")
+        d_archive['sour_db_name']        = self.get_argument("sour_db_name")
+        d_archive['sour_tab_name']       = self.get_argument("sour_tab_name")
+        d_archive['archive_time_col']    = self.get_argument("archive_time_col")
+        d_archive['archive_rentition']   = self.get_argument("archive_rentition")
+        d_archive['rentition_time']      = self.get_argument("rentition_time")
+        d_archive['rentition_time_type'] = self.get_argument("rentition_time_type")
+        d_archive['if_cover']            = self.get_argument("if_cover")
+        d_archive['dest_db_server']      = self.get_argument("dest_db_server")
+        d_archive['dest_db_name']        = self.get_argument("dest_db_name")
+        d_archive['python3_home']        = self.get_argument("python3_home")
+        d_archive['script_base']         = self.get_argument("script_base")
+        d_archive['script_name']         = self.get_argument("script_name")
+        d_archive['run_time']            = self.get_argument("run_time")
+        d_archive['batch_size']          = self.get_argument("batch_size")
+        d_archive['api_server']          = self.get_argument("api_server")
+        d_archive['status']              = self.get_argument("status")
+        print(d_archive)
+        result=upd_archive(d_archive)
+        self.write({"code": result['code'], "message": result['message']})
+
+class monitortaskedit_del(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        archive_id  = self.get_argument("archiveid")
+        result=del_archive(archive_id)
+        self.write({"code": result['code'], "message": result['message']})
+
+class monitortaskedit_clone(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        archive_id  = self.get_argument("archiveid")
+        result=del_archive(archive_id)
+        self.write({"code": result['code'], "message": result['message']})
+
+class monitortask_push(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        archive_id  = self.get_argument("archiveid")
+        result=del_archive(archive_id)
+        self.write({"code": result['code'], "message": result['message']})
+
+class monitortask_run(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        archive_id  = self.get_argument("archiveid")
+        result=del_archive(archive_id)
+        self.write({"code": result['code'], "message": result['message']})
+
+class monitortask_stop(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        archive_id  = self.get_argument("archiveid")
+        result=del_archive(archive_id)
+        self.write({"code": result['code'], "message": result['message']})
+
+#图表展示
+class monitorgraphquery(basehandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("./monitor_task.html")
+
+class monitorgraph_query(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        archive_tag  = self.get_argument("archive_tag")
+        v_list       = query_archive(archive_tag)
+        v_json       = json.dumps(v_list)
         self.write(v_json)

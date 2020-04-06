@@ -10,7 +10,8 @@ import sqlparse
 from web.utils.common           import current_time,format_sql
 from web.model.t_ds             import get_ds_by_dsid
 from web.model.t_sql_check      import  check_mysql_ddl
-from web.utils.common           import get_connection_ds,get_connection,get_connection_dict,get_connection_ds_write_limit
+from web.utils.common           import get_connection_ds,get_connection,get_connection_dict,send_mail,send_mail587,get_connection_ds_write_limit
+from web.model.t_user           import get_user_by_userid
 from web.model.t_sql_check      import get_audit_rule
 
 def get_sqlid():
@@ -353,21 +354,30 @@ def delete_order(order_number):
         return result
 
 
-def release_order(p_order_no):
+def release_order(p_order_no,p_userid):
     result = {}
     try:
-        db = get_connection()
-        cr = db.cursor()
-        sql = """update t_wtd set order_status='2' where order_no='{0}'""".format(p_order_no)
+        db   = get_connection()
+        cr   = db.cursor()
+        user = get_user_by_userid(p_userid)
+        sql  = """update t_wtd set order_status='2' where order_no='{0}'""".format(p_order_no)
         print('release_order=',sql)
         cr.execute(sql)
         cr.close()
         db.commit()
+
+        #send mail
+        v_handle  = query_wtd_detail(p_order_no,p_userid)['order_handler']
+        v_email   = get_user_by_userid(v_handle)['email']
+        print('release_order=',v_handle,v_email)
+        v_content ='{}发布了问题单，编号：{},请尽时处理!'.format(user['username'],p_order_no)
+        send_mail('190343@lifeat.cn', 'Hhc5HBtAuYTPGHQ8',v_email , '发布工单', v_content)
+
         result['code']='0'
         result['message']='发布成功!'
         return result
     except Exception as e:
-        print(e)
+        print(traceback.format_exc())
         result['code'] = '-1'
         result['message'] = '发布失败!'
         return result

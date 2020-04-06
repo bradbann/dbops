@@ -47,7 +47,7 @@ def check_sql(p_dbid,p_sql,curdb):
                or p_sql.upper().count("UPDATE") >= 1 or p_sql.upper().count("DELETE") >= 1 \
                  or p_sql.upper().count("INSERT") >= 1:
         result['status'] = '1'
-        result['msg']    = '不允许进行DDL、DML操作!'
+        result['msg']    = '不允许进行DDL、DCL、DML操作!'
         result['data']   = ''
         result['column'] = ''
         return result
@@ -111,18 +111,14 @@ def get_mysql_result(p_ds,p_sql,curdb):
     if p_sql.find('.') > 0:
         db = get_connection_ds_read_limit(p_ds,read_timeout)
         cr = db.cursor()
-        print('db1=', db)
     else:
         p_ds['service'] = curdb
-        print('p_ds=', p_ds)
         db = get_connection_ds_read_limit(p_ds,read_timeout)
         cr = db.cursor()
-        print('db2=', db)
 
     try:
         cr.execute(p_sql)
         rs = cr.fetchall()
-        #print('rs=',rs)
 
         #get sensitive column
         c_sensitive = get_audit_rule('switch_sensitive_columns')['rule_value'].split(',')
@@ -150,7 +146,6 @@ def get_mysql_result(p_ds,p_sql,curdb):
         for i in rs:
             tmp = []
             for j in range(len(desc)):
-                #col_type = str(desc[j][1])
                 if i[j] is None:
                    tmp.append('')
                 else:

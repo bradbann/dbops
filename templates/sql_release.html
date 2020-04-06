@@ -25,6 +25,7 @@
     <!-- Notification css (Toastr) -->
     <link href="{{static_url('plugins/toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{static_url('assets/css/components.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{static_url('plugins/tooltipster/tooltipster.bundle.min.css')}}" rel="stylesheet" >
 
     <style>
 
@@ -42,39 +43,23 @@
             left: 225px;
         }
 
-       #div-tree{
-           padding-right:20px;
-           height:655px;
-           border:1px;
-           overflow-x:auto;
-           overflow-y:auto;
-       }
+       #div-tree-panal,#ace-editor-panal,#div-table-panal {
+          display:none;
+      }
 
-       #ace-editor{
-           min-height: 150px;
-           height:250px;
-           width:100%;
-           border:1px;
-           overflow-x:auto;
-           overflow-y:auto;
-       }
-       #div-table{
-           height:450px;
-           border:1px;
-           overflow-x:auto;
-       }
     </style>
 </head>
 
 <body>
    <p></p>
+   <input type='hidden' id='check_status'>
    <form class="form-horizontal" role="form">
        <div class="col-md-3">
             <div class="form-group">
-                <div class="col-md-3 text-right">
-                    <label class="control-label"><span id="s_db_source">*</span>数据源:</label>
+                <div>
+                    <label class="col-md-3 control-label"><span id="s_db_source">*</span>数据源:</label>
                 </div>
-                <div class="col-md-9 text-left">
+                <div class="col-md-8">
                     <select class="form-control select" id="db_source">
                         <option value='' selected = "selected">...</option>
                         {% for var in dss %}
@@ -85,18 +70,7 @@
              </div>
        </div>
 
-       <div class="col-md-2">
-            <div class="form-group">
-               <div>
-                    <label class="col-md-3 control-label text-right">当前库:</label>
-               </div>
-               <div>
-                    <label class="col-md-9 control-label text-left"><span class='h5 text-danger' id="curr_db"></span></label>
-               </div>
-             </div>
-       </div>
-
-       <div class="col-md-2">
+       <div class="col-md-5">
            <div class="form-group">
                 <div id="div_sql_desc">
                     <div>
@@ -108,12 +82,13 @@
                 </div>
            </div>
        </div>
-       <div class="col-md-3">
+
+        <div class="col-md-2">
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label"><span id="s_order_type">*</span>类型:</label>
+                    <label class="col-md-4 control-label"><span id="s_order_type">*</span>类型:</label>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-8">
                     <select class="form-control select" id="db_order_type">
                         <option value='' selected = "selected">...</option>
                         {% for var in orders %}
@@ -121,10 +96,14 @@
                         {% end %}
                     </select>
                 </div>
+           </div>
+       </div>
+       <div class="col-md-2">
+           <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label"><span id="s_sql_ver">*</span>版本:</label>
+                    <label class="col-md-4 control-label"><span id="s_sql_ver">*</span>版本:</label>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-8">
                     <select class="form-control select" id="db_ver">
                         <option value='' selected = "selected">...</option>
                         {% for var in vers %}
@@ -134,23 +113,6 @@
                 </div>
            </div>
        </div>
-
-      <div class="col-md-2">
-           <div class="form-group">
-               <div  class="col-md-3">
-                    <input class="btn btn-custom waves-effect waves-light btn-md" type='button' value="检测" id='check_btn'/>
-               </div>
-               <div  class="col-md-3">
-                    <input class="btn btn-custom waves-effect waves-light btn-md" type='button' value="发布" id='release_btn'/>
-               </div>
-               <div  class="col-md-3">
-                    <input class="btn btn-custom waves-effect waves-light btn-md" type='button' value="美化" id='beauty_btn'/>
-               </div>
-               <div  class="col-md-3">
-                    <input class="btn btn-custom waves-effect waves-light btn-md" type='button' value="查找" id='find_btn'/>
-               </div>
-           </div>
-      </div>
   </form>
    <div class="row">
        <div class="col-lg-3">
@@ -171,6 +133,17 @@
        <div class="col-lg-9">
             <div id='ace-editor-panal' class="panel panel-border panel-primary" style="height:300px;">
                 <div class="panel-heading">
+                   <div class='row'>
+                        <div  class="col-md-4">
+                             <label class="control-label text-left"><i class="mdi mdi-database"></i>&nbsp;<span class='h5 text-danger' id="curr_db"></span></label>
+                        </div>
+                        <div  class="col-md-8">
+                            <button type="button" id='check_btn'   class="btn btn-xs waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="检测"><i class="mdi mdi-spellcheck"></i></button>
+                            <button type="button" id='release_btn' class="btn btn-xs waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="发布"><i class="mdi mdi-transfer"></i></button>
+                            <button type="button" id='beauty_btn'  class="btn btn-xs waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="美化"><i class="mdi mdi-yelp"></i></button>
+                            <button type="button" id='find_btn'    class="btn btn-xs waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="查询"><i class="fa fa-search"></i></button>
+                       </div>
+                   </div>
                 </div>
                 <div class="panel-body">
                     <div id="ace-editor" ></div>
@@ -200,13 +173,25 @@
      </div>
    </div><!-- /.modal -->
 
-  <div class="contextMenu" id="myMenu1">
-  <ul>
-    <li id="tab_definition"><img  src="{{static_url('assets/images/add.png')}}" /> 表定义</li>
-    <li id="idx_definition"><img  src="{{static_url('assets/images/edit.gif')}}"/> 索引定义</li>
-    <li id="tab_alter"> <img src="{{static_url('assets/images/edit.gif')}}" /> 表变更</li>
-  </ul>
-</div>
+   <div id="con-close-modal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">正在加载中，请稍候...</h4>
+            </div>
+
+        </div>
+     </div>
+   </div><!-- /.modal -->
+
+   <div class="contextMenu" id="myMenu1">
+      <ul>
+        <li id="tab_definition"><img  src="{{static_url('assets/images/add.png')}}" /> 表定义</li>
+        <li id="idx_definition"><img  src="{{static_url('assets/images/edit.gif')}}"/> 索引定义</li>
+        <li id="tab_alter"> <i class="mdi mdi-auto-fix"></i>&nbsp;&nbsp;&nbsp;表变更</li>
+      </ul>
+  </div>
+   <input type='hidden' id='h_tab_height'>
 
    <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
    <script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
@@ -218,31 +203,290 @@
 
    <!-- Toastr js -->
    <script src="{{static_url('plugins/toastr/toastr.min.js')}}"></script>
+   <script src="{{static_url('plugins/tooltipster/tooltipster.bundle.min.js')}}"></script>
+   <script src="{{static_url('assets/pages/jquery.tooltipster.js')}}"></script>
+   <script src="{{static_url('assets/js/jquery.core.js')}}"></script>
+   <script src="{{static_url('assets/js/jquery.app.js')}}"></script>
 
    <script type="text/javascript">
+
+        function set_screen_size(n_height){
+
+             console.log('height:'+n_height)
+
+             //1366*768(100%)
+             if (n_height <= 657)
+             {
+                   console.log('1366*768(100%):'+n_height)
+                   //set div_tree style
+                   $("#div-tree-panal").css("height",n_height*0.68);
+                   $("#div-tree").css("height",$("#div-tree-panal").height()*0.93);
+                   $("#div-tree").css("border",1);
+                   $("#div-tree").css("overflow-x","auto");
+                   $("#div-tree").css("overflow-y","auto");
+
+                   //set ace_editor style
+                   $("#ace-editor-panal").css("height",n_height*0.30);
+                   $("#ace-editor").css("height",$("#ace-editor-panal").height()*0.65);
+                   $("#ace-editor").css("width","100%");
+                   $("#ace-editor").css("border",1);
+                   $("#ace-editor").css("overflow-x","auto");
+
+                   //set div_table style
+                   $("#div-table-panal").css("height",n_height*0.35);
+                   $("#div-table").css("height",$("#div-table-panal").height()*1);
+                   $("#div-table").css("width","100%");
+                   $("#div-table").css("border",1);
+                   $("#div-table").css("overflow-x","auto");
+                   $("#h_tab_height").val(Math.trunc($("#div-table-panal").height()*0.55)+'px')
+                   console.log('h_tab_height=',$("#h_tab_height").val())
+                   return
+             }
+              //1366*768(80%)
+             if (n_height ==821)
+             {
+                   console.log('1366*768(80%):'+n_height)
+                   //set div_tree style
+                   $("#div-tree-panal").css("height",n_height*0.725);
+                   $("#div-tree").css("height",$("#div-tree-panal").height()*0.93);
+                   $("#div-tree").css("border",1);
+                   $("#div-tree").css("overflow-x","auto");
+                   $("#div-tree").css("overflow-y","auto");
+
+                   //set ace_editor style
+                   $("#ace-editor-panal").css("height",n_height*0.3);
+                   $("#ace-editor").css("height",$("#ace-editor-panal").height()*0.7);
+                   $("#ace-editor").css("width","100%");
+                   $("#ace-editor").css("border",1);
+                   $("#ace-editor").css("overflow-x","auto");
+
+                   //set div_table style
+                   $("#div-table-panal").css("height",n_height*0.4);
+                   $("#div-table").css("height",$("#div-table-panal").height()*1);
+                   $("#div-table").css("width","100%");
+                   $("#div-table").css("border",1);
+                   $("#div-table").css("overflow-x","auto");
+                   $("#h_tab_height").val(Math.trunc($("#div-table-panal").height()*0.6)+'px')
+                   console.log('h_tab_height=',$("#h_tab_height").val())
+                   return
+             }
+
+             //1440*1050(100%)、1680*1050（100%）
+             if (n_height==939)
+             {
+                   console.log('1440*1050(100%):'+n_height)
+                   //set div_tree style
+                   $("#div-tree-panal").css("height",n_height*0.775);
+                   $("#div-tree").css("height",$("#div-tree-panal").height()*0.93);
+                   $("#div-tree").css("border",1);
+                   $("#div-tree").css("overflow-x","auto");
+                   $("#div-tree").css("overflow-y","auto");
+
+                   //set ace_editor style
+                   $("#ace-editor-panal").css("height",n_height*0.3);
+                   $("#ace-editor").css("height",$("#ace-editor-panal").height()*0.7);
+                   $("#ace-editor").css("width","100%");
+                   $("#ace-editor").css("border",1);
+                   $("#ace-editor").css("overflow-x","auto");
+
+                   //set div_table style
+                   $("#div-table-panal").css("height",n_height*0.455);
+                   $("#div-table").css("height",$("#div-table-panal").height()*1);
+                   $("#div-table").css("width","100%");
+                   $("#div-table").css("border",1);
+                   $("#div-table").css("overflow-x","auto");
+                   $("#h_tab_height").val(Math.trunc($("#div-table-panal").height()*0.7)+'px')
+                   console.log('h_tab_height=',$("#h_tab_height").val())
+                   return
+             }
+
+             //1440*1050(80%)、1680*1050（100%）
+             if (n_height==1174) {
+                   console.log('1440*1050(80%):'+n_height)
+                   //set div_tree style
+                   $("#div-tree-panal").css("height",n_height*0.8);
+                   $("#div-tree").css("height",$("#div-tree-panal").height()*0.93);
+                   $("#div-tree").css("border",1);
+                   $("#div-tree").css("overflow-x","auto");
+                   $("#div-tree").css("overflow-y","auto");
+
+                   //set ace_editor style
+                   $("#ace-editor-panal").css("height",n_height*0.3);
+                   $("#ace-editor").css("height",$("#ace-editor-panal").height()*0.7);
+                   $("#ace-editor").css("width","100%");
+                   $("#ace-editor").css("border",1);
+                   $("#ace-editor").css("overflow-x","auto");
+
+                   //set div_table style
+                   $("#div-table-panal").css("height",n_height*0.482);
+                   $("#div-table").css("height",$("#div-table-panal").height()*1);
+                   $("#div-table").css("width","100%");
+                   $("#div-table").css("border",1);
+                   $("#div-table").css("overflow-x","auto");
+                   $("#h_tab_height").val(Math.trunc($("#div-table-panal").height()*0.75)+'px')
+                   console.log('h_tab_height=',$("#h_tab_height").val())
+                   return
+             }
+
+            //1440*900(100%)、1680*1050（100%）
+             if (n_height == 789 )
+             {
+                   console.log('1440*900(80%):'+n_height)
+                   //set div_tree style
+                   $("#div-tree-panal").css("height",n_height*0.74);
+                   $("#div-tree").css("height",$("#div-tree-panal").height()*0.93);
+                   $("#div-tree").css("border",1);
+                   $("#div-tree").css("overflow-x","auto");
+                   $("#div-tree").css("overflow-y","auto");
+
+                   //set ace_editor style
+                   $("#ace-editor-panal").css("height",n_height*0.3);
+                   $("#ace-editor").css("height",$("#ace-editor-panal").height()*0.73);
+                   $("#ace-editor").css("width","100%");
+                   $("#ace-editor").css("border",1);
+                   $("#ace-editor").css("overflow-x","auto");
+
+                   //set div_table style
+                   $("#div-table-panal").css("height",n_height*0.415);
+                   $("#div-table").css("height",$("#div-table-panal").height()*1);
+                   $("#div-table").css("width","100%");
+                   $("#div-table").css("border",1);
+                   $("#div-table").css("overflow-x","auto");
+                   $("#h_tab_height").val(Math.trunc($("#div-table-panal").height()*0.7)+'px')
+                   console.log('h_tab_height=',$("#h_tab_height").val())
+                   return
+             }
+
+             //1440*900(80%)、1680*1050（80%）
+             if (n_height == 986 )
+             {
+                   console.log('1440*900(80%):'+n_height)
+                   //set div_tree style
+                   $("#div-tree-panal").css("height",n_height*0.78);
+                   $("#div-tree").css("height",$("#div-tree-panal").height()*0.93);
+                   $("#div-tree").css("border",1);
+                   $("#div-tree").css("overflow-x","auto");
+                   $("#div-tree").css("overflow-y","auto");
+
+                   //set ace_editor style
+                   $("#ace-editor-panal").css("height",n_height*0.3);
+                   $("#ace-editor").css("height",$("#ace-editor-panal").height()*0.7);
+                   $("#ace-editor").css("width","100%");
+                   $("#ace-editor").css("border",1);
+                   $("#ace-editor").css("overflow-x","auto");
+
+                   //set div_table style
+                   $("#div-table-panal").css("height",n_height*0.46);
+                   $("#div-table").css("height",$("#div-table-panal").height()*1);
+                   $("#div-table").css("width","100%");
+                   $("#div-table").css("border",1);
+                   $("#div-table").css("overflow-x","auto");
+                   $("#h_tab_height").val(Math.trunc($("#div-table-panal").height()*0.75)+'px')
+                   console.log('h_tab_height=',$("#h_tab_height").val())
+                   return
+             }
+
+             //1920*1080(100%)
+             if (n_height == 969 )
+             {
+                   console.log('1920*1080(100%):'+n_height)
+                   //set div_tree style
+                   $("#div-tree-panal").css("height",n_height*0.77);
+                   $("#div-tree").css("height",$("#div-tree-panal").height()*0.93);
+                   $("#div-tree").css("border",1);
+                   $("#div-tree").css("overflow-x","auto");
+                   $("#div-tree").css("overflow-y","auto");
+
+                   //set ace_editor style
+                   $("#ace-editor-panal").css("height",n_height*0.3);
+                   $("#ace-editor").css("height",$("#ace-editor-panal").height()*0.7);
+                   $("#ace-editor").css("width","100%");
+                   $("#ace-editor").css("border",1);
+                   $("#ace-editor").css("overflow-x","auto");
+
+                   //set div_table style
+                   $("#div-table-panal").css("height",n_height*0.45);
+                   $("#div-table").css("height",$("#div-table-panal").height()*1);
+                   $("#div-table").css("width","100%");
+                   $("#div-table").css("border",1);
+                   $("#div-table").css("overflow-x","auto");
+                   $("#h_tab_height").val(Math.trunc($("#div-table-panal").height()*0.75)+'px')
+                   console.log('h_tab_height=',$("#h_tab_height").val())
+                   return
+             }
+
+             //1920*1080(80%)
+             if (n_height == 1211 )
+             {
+                   console.log('1920*1080(100%):'+n_height)
+                   //set div_tree style
+                   $("#div-tree-panal").css("height",n_height*0.81);
+                   $("#div-tree").css("height",$("#div-tree-panal").height()*0.93);
+                   $("#div-tree").css("border",1);
+                   $("#div-tree").css("overflow-x","auto");
+                   $("#div-tree").css("overflow-y","auto");
+
+                   //set ace_editor style
+                   $("#ace-editor-panal").css("height",n_height*0.3);
+                   $("#ace-editor").css("height",$("#ace-editor-panal").height()*0.7);
+                   $("#ace-editor").css("width","100%");
+                   $("#ace-editor").css("border",1);
+                   $("#ace-editor").css("overflow-x","auto");
+
+                   //set div_table style
+                   $("#div-table-panal").css("height",n_height*0.493);
+                   $("#div-table").css("height",$("#div-table-panal").height()*1);
+                   $("#div-table").css("width","100%");
+                   $("#div-table").css("border",1);
+                   $("#div-table").css("overflow-x","auto");
+                   $("#h_tab_height").val(Math.trunc($("#div-table-panal").height()*0.75)+'px')
+                   console.log('h_tab_height=',$("#h_tab_height").val())
+                   return
+             }
+
+            //set div_tree style
+            $("#div-tree-panal").css("height",n_height*0.725);
+            $("#div-tree").css("height",$("#div-tree-panal").height()*0.93);
+            $("#div-tree").css("border",1);
+            $("#div-tree").css("overflow-x","auto");
+            $("#div-tree").css("overflow-y","auto");
+
+            //set ace_editor style
+            $("#ace-editor-panal").css("height",n_height*0.25);
+            $("#ace-editor").css("height",$("#ace-editor-panal").height()*0.8);
+            $("#ace-editor").css("width","100%");
+            $("#ace-editor").css("border",1);
+            $("#ace-editor").css("overflow-x","auto");
+
+            //set div_table style
+            $("#div-table-panal").css("height",n_height*0.45);
+            $("#div-table").css("height",$("#div-table-panal").height()*1);
+            $("#div-table").css("width","100%");
+            $("#div-table").css("border",1);
+            $("#div-table").css("overflow-x","auto");
+            $("#h_tab_height").val(Math.trunc($("#div-table-panal").height()*0.7)+'px')
+            console.log('h_tab_height=',$("#h_tab_height").val())
+
+        }
+
+        function set_styles() {
+             set_screen_size($(window).height())
+             $('#div-tree-panal').show()
+             $('#ace-editor-panal').show()
+             $('#div-table-panal').show()
+             $('#con-close-modal2').modal('hide');
+        }
 
         function set_selected(){
             document.all['s_sql_desc'].style.color="#ff0000";
             document.all['s_db_source'].style.color="#ff0000";
             document.all['s_order_type'].style.color="#ff0000";
-        }
-
-        function set_screen_size(){
-            n_height = $(document.body).height()
-
-            $("#div-tree-panal").height(n_height*0.75);
-            $("#div-tree").height(n_height*0.70);
-
-            $("#ace-editor-panal").height(n_height*0.30);
-            $("#ace-editor").height(n_height*0.25);
-
-            $("#div-table-panal").height(n_height*0.425);
-            $("#div-table").height(n_height*0.4);
+            document.all['s_sql_ver'].style.color="#ff0000";
         }
 
         //当浏览器大小变化时
         $(window).resize(function () {
-            set_screen_size()
+            set_styles()
         });
 
         $(document).ready(function() {
@@ -322,7 +566,7 @@
                     editor.execCommand('find');
               });
 
-              $("#release_btn").attr("disabled", true);
+              //$("#release_btn").attr("disabled", true);
 
               $("#db_source").bind("input propertychange",function(){
                    if ($('#db_source').val()!='') {
@@ -467,7 +711,7 @@
                                     { "title": "检测结果" }
                                 ],
                                 scrollX       : true,
-                                scrollY       : "250px",
+                                scrollY       : $("#h_tab_height").val(),
                                 scrollCollapse: true,
                                 paging        : false,
                                 iDisplayLength: 6,
@@ -536,25 +780,31 @@
                       showtips('error','工单类型不能为空!');
                       return false;
                   }
+
+                  if ($('#db_ver').val()=='') {
+                      showtips('error','版本不能为空!');
+                      return false;
+                  }
+
                   if (v_sql=='') {
                       showtips('error','请选中发布语句!');
                       return false;
                   }
 
                   //工单类型为DDL检测
-                  if (v_type  == '1'){
+                  if (v_type  == '1') {
 
-                      if (v_sql.match(/^update/s+$) !=null || v_sql.match(/^insert/s+$) !=null || v_sql.match(/^delete/s+$) !=null )
+                      if (v_sql.match(/^update\s*/) !=null || v_sql.match(/^insert\s*/) !=null || v_sql.match(/^delete\s*/) !=null )
                       {
                           showtips('error','不允许执行DML语句!');
                           return false;
                       }
-                      if (v_sql.match(/^grant/s+$) !=null || v_sql.match(/^remoke/s+$) !=null)
+                     if (v_sql.match(/^grant\s*/) !=null || v_sql.match(/^remoke\s*/) !=null)
                       {
                           showtips('error','不允许执行DCL语句!');
                           return false;
                       }
-                      if (v_sql.match(/^procedure/s+$) !=null || v_sql.match(/^function/s+$) !=null || v_sql.match(/^trigger/s+$) !=null || v_sql.match(/^event/s+$) !=null )
+                      if (v_sql.match(/^procedure\s*/) !=null || v_sql.match(/^function\s*/) !=null || v_sql.match(/^trigger\s*/) !=null || v_sql.match(/^event\s*/) !=null )
                       {
                           showtips('error','不允许执行过程、函数、触发器、事件!');
                           return false;
@@ -562,63 +812,74 @@
                   }
 
                    //工单类型为DML检测
-                  if (v_type  == '2'){
+                  if (v_type  == '2') {
 
-                      if (v_sql.indexOf('create ')!= -1 ||  v_sql.indexOf('alter ')!= -1 || v_sql.indexOf('drop ')!= -1  || v_sql.indexOf('truncate ')!= -1) {
+                      if (v_sql.match(/^create\s*/) !=null || v_sql.match(/^alter\s*/) !=null || v_sql.match(/^drop\s*/) !=null || v_sql.match(/^truncate\s*/) !=null )
+                      {
                           showtips('error','不允许执行DDL语句!');
                           return false;
                       }
-                      if (v_sql.indexOf('grant ')!= -1 ||  v_sql.indexOf('remoke ')!= -1  ) {
+                      if (v_sql.match(/^grant\s*/) !=null || v_sql.match(/^remoke\s*/) !=null)
+                      {
                           showtips('error','不允许执行DCL语句!');
                           return false;
                       }
-                      if (v_sql.indexOf('procedure ')!= -1 ||  v_sql.indexOf('function ')!= -1 ||v_sql.indexOf('trigger ')!= -1 ||  v_sql.indexOf('event ')!= -1 ) {
+                      if (v_sql.match(/^procedure\s*/) !=null || v_sql.match(/^function\s*/) !=null || v_sql.match(/^trigger\s*/) !=null || v_sql.match(/^event\s*/) !=null )
+                      {
                           showtips('error','不允许执行过程、函数、触发器、事件!');
                           return false;
                       }
                   }
 
                   //工单类型为DCL检测
-                  if (v_type  == '3'){
+                  if (v_type  == '3') {
 
-                      if (v_sql.indexOf('update ')!= -1 ||  v_sql.indexOf('insert ')!= -1 || v_sql.indexOf('delete ')!= -1 ) {
+                      if (v_sql.match(/^update\s*/) !=null || v_sql.match(/^insert\s*/) !=null || v_sql.match(/^delete\s*/) !=null )
+                      {
                           showtips('error','不允许执行DML语句!');
                           return false;
                       }
 
-                      if (v_sql.indexOf('create ')!= -1 ||  v_sql.indexOf('alter ')!= -1 || v_sql.indexOf('drop ')!= -1  || v_sql.indexOf('truncate ')!= -1) {
+                     if (v_sql.match(/^create\s*/) !=null || v_sql.match(/^alter\s*/) !=null || v_sql.match(/^drop\s*/) !=null || v_sql.match(/^truncate\s*/) !=null )
+                     {
                           showtips('error','不允许执行DDL语句!');
                           return false;
                       }
 
-                      if (v_sql.indexOf('procedure ')!= -1 ||  v_sql.indexOf('function ')!= -1 ||v_sql.indexOf('trigger ')!= -1 ||  v_sql.indexOf('event ')!= -1 ) {
+                     if (v_sql.match(/^procedure\s*/) !=null || v_sql.match(/^function\s*/) !=null || v_sql.match(/^trigger\s*/) !=null || v_sql.match(/^event\s*/) !=null )
+                     {
                           showtips('error','不允许执行过程、函数、触发器、事件!');
                           return false;
-                      }
+                     }
                   }
 
                   //工单类型为存储过程
-                  if (v_type  == '4'){
+                  if (v_type  == '4') {
 
-                     if (count(v_sql,'procedure ')==0 && count(v_sql,'function ')==0 && count(v_sql,'trigger ')==0  && count(v_sql,'event ')==0 ) {
+                     if (v_sql.match(/^procedure\s*/) ==null || v_sql.match(/^function\s*/) ==null || v_sql.match(/^trigger\s*/) ==null || v_sql.match(/^event\s*/) ==null )
+                     {
 
-                          if (v_sql.indexOf('update')!= -1 ||  v_sql.indexOf('insert')!= -1 || v_sql.indexOf('delete')!= -1 ) {
+                          if (v_sql.match(/^update\s*/) !=null || v_sql.match(/^insert\s*/) !=null || v_sql.match(/^delete\s*/) !=null )
+                          {
                               showtips('error','不允许执行DML语句!');
                               return false;
                           }
 
-                          if (v_sql.indexOf('create ')!= -1 ||  v_sql.indexOf('alter ')!= -1 || v_sql.indexOf('drop ')!= -1  || v_sql.indexOf('truncate ')!= -1) {
+                          if (v_sql.match(/^create\s*/) !=null || v_sql.match(/^alter\s*/) !=null || v_sql.match(/^drop\s*/) !=null || v_sql.match(/^truncate\s*/) !=null )
+                          {
                               showtips('error','不允许执行DDL语句!');
                               return false;
                           }
 
-                          if (v_sql.indexOf('grant ')!= -1 ||  v_sql.indexOf('remoke ')!= -1  ) {
+                          if (v_sql.match(/^grant\s*/) !=null || v_sql.match(/^remoke\s*/) !=null)
+                          {
                               showtips('error','不允许执行DCL语句!');
                               return false;
                           }
-                     }
+                      }
 
-                      if (count(v_sql,'procedure ')>1 || count(v_sql,'function ')>1 || count(v_sql,'trigger ')>1  || count(v_sql,'event ')>1 ) {
+                      if (count(v_sql,'procedure ')>1 || count(v_sql,'function ')>1 || count(v_sql,'trigger ')>1  || count(v_sql,'event ')>1 )
+                      {
                           showtips('error','一次只能发部一个过程、函数、触发器、事件对象!');
                           return false;
                       }
@@ -630,14 +891,14 @@
               $("#check_btn").click(function()
               {
                   var editor = ace.edit("ace-editor");
-                  var v_sql=editor.session.getTextRange(editor.getSelectionRange())
-                  var v_type =  $('#db_order_type').val()
+                  var v_sql  = editor.session.getTextRange(editor.getSelectionRange())
+                  var v_type = $('#db_order_type').val()
 
                   console.log('v_type=',v_type)
                   console.log('v_sql=',v_sql)
                   console.log('db_source=',$('#db_source').val())
 
-                  if (sql_check(v_type,v_sql.toLowerCase())) {
+                  if (sql_check(v_type,v_sql.toLowerCase().replace(/(^\s*)|(\s*$)/g, ""))) {
                       $.ajax({
                           url: "/sql/_check",
                           type: "post",
@@ -671,13 +932,32 @@
                                   console.log(dataSet.code, dataSet.message);
                                   if (dataSet.code == '0') {
                                       showtips('success', '检测通过!');
-                                      $("#release_btn").attr("disabled", false);
+                                      // $("#release_btn").attr("disabled", false);
+                                      $('#check_status').val('success')
+
                                   } else {
-                                      $("#release_btn").attr("disabled", true);
+                                      // $("#release_btn").attr("disabled", true);
+                                      $('#check_status').val('failure')
                                   }
                                   query_release_result(editor.session.getTextRange(editor.getSelectionRange()))
                               }
-                          }
+                          },
+                          error: function (jqXHR, textStatus, errorThrown) {
+                            console.log('jqXHR.responseText=',jqXHR.responseText);
+                            console.log('jqXHR.status=',jqXHR.status);
+                            console.log('jqXHR.readyState=',jqXHR.readyState);
+                            console.log('jqXHR.statusText=',jqXHR.statusText);
+                            console.log('textStatus=',textStatus);
+                            console.log('errorThrown=',errorThrown);
+                            if (jqXHR.status==403){
+                                swal("登陆信息已过期，请重新登陆!", "", "error")
+                                window.location.href='/login'
+                            } else if (jqXHR.status==502){
+                                swal("用户无权访问权限此功能!", "", "error")
+                            } else {
+                                swal("系统不可用,请稍后重试!", "", "error")
+                            }
+                         }
                       });
                   }
               });
@@ -689,9 +969,10 @@
                   console.log('v_sql=',v_sql)
                   console.log('db_source=',$('#db_source').val())
 
-                  //sql_check()
+                  $("#check_btn").click()
 
-                  $.ajax({
+                  if ($('#check_status').val() == 'success') {
+                      $.ajax({
                         url     : "/sql/_release",
                         type    : "post",
                         datatype: "json",
@@ -716,16 +997,39 @@
                                 console.log(dataSet.code, dataSet.message);
                                 if (dataSet.code == '0') {
                                     showtips('success','发布成功!');
-                                    $("#release_btn").attr("disabled", true);
+                                    // $("#release_btn").attr("disabled", true);
 
                                 } else {
                                     showtips('error',dataSet.message);
                                 }
                                 query_release_result(editor.session.getTextRange(editor.getSelectionRange()))
                             }
-                         }
+                         },
+                         error: function (jqXHR, textStatus, errorThrown) {
+                            console.log('jqXHR.responseText=',jqXHR.responseText);
+                            console.log('jqXHR.status=',jqXHR.status);
+                            console.log('jqXHR.readyState=',jqXHR.readyState);
+                            console.log('jqXHR.statusText=',jqXHR.statusText);
+                            console.log('textStatus=',textStatus);
+                            console.log('errorThrown=',errorThrown);
+                            if (jqXHR.status==403){
+                                swal("登陆信息已过期，请重新登陆!", "", "error")
+                                window.location.href='/login'
+                            } else if (jqXHR.status==502){
+                                swal("用户无权访问权限此功能!", "", "error")
+                            } else {
+                                swal("系统不可用,请稍后重试!", "", "error")
+                            }
+                        }
                   });
+                  }
               });
+
+              $('.modal').on('show.bs.modal', centerModals);
+              $(window).on('resize', centerModals);
+              $('#con-close-modal2').modal({ keyboard: false,backdrop:false});
+              setTimeout("set_styles()",1000);
+
           });
     </script>
 

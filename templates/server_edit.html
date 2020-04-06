@@ -2,167 +2,207 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ static_url('assets/images/favicon.ico')}}">
     <!-- App title -->
     <title>服务器变更</title>
-    <link rel="stylesheet" href="{{static_url('plugins/morris/morris.css')}}">
-    <link href="{{static_url('plugins/timepicker/bootstrap-timepicker.min.css')}}" rel="stylesheet">
-    <link href="{{static_url('plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css')}}" rel="stylesheet">
-    <link href="{{static_url('plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
-    <link href="{{static_url('plugins/clockpicker/css/bootstrap-clockpicker.min.css')}}" rel="stylesheet">
-    <link href="{{static_url('plugins/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
-    <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>
+    <!-- Notification css (Toastr) -->
+    <link href="{{static_url('plugins/toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{static_url('assets/css/components.css')}}" rel="stylesheet" type="text/css" />
     <!-- Sweet Alert -->
     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
 </head>
 <body>
     <p></p>
-   <div class="col-md-6">
-       <form class="form-horizontal" role="form">
-           <input  id="server_id" type="hidden" name="userid" value={{server_id}} >
-            <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_server_desc">*</span>服务器描述</label>
-                </div>
-                <div class="col-md-10">
-                    <input id="server_desc"  type="text" class="form-control" value={{server_desc}}>
-                </div>
-           </div>
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_market_id">*</span>项目编码名</label>
-                </div>
-                <div class="col-md-10">
-                    <select class="form-control select" id="market_id" >
-                       {% for var in markets %}
-                           {% if market_id==var[0] %}
-                              <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
-                           {% else %}
-                              <option value={{var[0]}} >{{var[1]}}</option>
-                           {% end  %}
-                      {% end %}
-                    </select>
+    <form class="form-horizontal" role="form">
+        <input  id="server_id" type="hidden" name="userid" value={{server_id}} >
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_server_desc">*</span>服务器描述</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input id="server_desc"  type="text" class="form-control" value={{server_desc}}>
+                    </div>
                </div>
             </div>
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_server_type">*</span>服务器类型</label>
+        </div>
+         <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_market_id">*</span>项目编码名</label>
+                    </div>
+                    <div class="col-md-10">
+                        <select class="form-control select" id="market_id" >
+                           {% for var in markets %}
+                               {% if market_id==var[0] %}
+                                  <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
+                               {% else %}
+                                  <option value={{var[0]}} >{{var[1]}}</option>
+                               {% end  %}
+                          {% end %}
+                        </select>
+                   </div>
                 </div>
-                <div class="col-md-10">
-                    <select class="form-control select" id="server_type" >
-                       {% for var in dm_server_type %}
-                           {% if server_type==var[0] %}
-                              <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
-                           {% else %}
-                              <option value={{var[0]}} >{{var[1]}}</option>
-                           {% end  %}
-                      {% end %}
-                    </select>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_server_type">*</span>服务器类型</label>
+                    </div>
+                    <div class="col-md-10">
+                        <select class="form-control select" id="server_type" >
+                           {% for var in dm_server_type %}
+                               {% if server_type==var[0] %}
+                                  <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
+                               {% else %}
+                                  <option value={{var[0]}} >{{var[1]}}</option>
+                               {% end  %}
+                          {% end %}
+                        </select>
+                   </div>
+               </div>
+             </div>
+          </div>
+
+         <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_server_ip">*</span>服务器地址</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input id="server_ip"  type="text" class="form-control" placeholder="请输入服务器地址" value={{server_ip}}>
+                    </div>
+               </div>
+            </div>
+         </div>
+
+         <div class="row">
+            <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_server_port">*</span>服务器端口</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input id="server_port"  type="text" class="form-control" placeholder="请输入服务器端口" value={{server_port}}>
+                    </div>
+               </div>
+            </div>
+         </div>
+
+         <div class="row">
+            <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_server_user">*</span>服务器用户</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input id="server_user"  type="text" class="form-control" placeholder="请输入服务器用户" value={{server_user}}>
+                    </div>
+               </div>
+            </div>
+        </div>
+
+         <div class="row">
+            <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_server_pass">*</span>服务器密码</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input id="server_pass"  type="password" class="form-control" placeholder="请输入服务器密码" value={{server_pass}}>
+                    </div>
+               </div>
+            </div>
+             <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                          <button type="button" tabindex="0" id='query_password' class="btn btn-xs waves-effect waves-light" role="button" data-toggle="popover" data-trigger="focus" title="" data-content="支持多表传输，表间用逗号隔开！" data-original-title="小提示">
+                            <i class="ion-help"></i>
+                         </button>
+                    </div>
                </div>
            </div>
-            <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_server_ip">*</span>服务器地址</label>
-                </div>
-                <div class="col-md-10">
-                    <input id="server_ip"  type="text" class="form-control" placeholder="请输入服务器地址" value={{server_ip}}>
-                </div>
-           </div>
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_server_port">*</span>服务器端口</label>
-                </div>
-                <div class="col-md-10">
-                    <input id="server_port"  type="text" class="form-control" placeholder="请输入服务器端口" value={{server_port}}>
-                </div>
-           </div>
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_server_user">*</span>服务器用户</label>
-                </div>
-                <div class="col-md-10">
-                    <input id="server_user"  type="text" class="form-control" placeholder="请输入服务器用户" value={{server_user}}>
-                </div>
-           </div>
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_server_pass">*</span>服务器密码</label>
-                </div>
-                <div class="col-md-10">
-                    <input id="server_pass"  type="password" class="form-control" placeholder="请输入服务器密码" value={{server_pass}}>
-                </div>
-           </div>
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_server_os">*</span>服务器系统</label>
-                </div>
-                <div class="col-md-10">
-                    <input id="server_os"  type="text" class="form-control" placeholder="请输入服务器系统"  value={{server_os}}>
-                </div>
-           </div>
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_server_cpu">*</span>服务器CPU</label>
-                </div>
-                <div class="col-md-10">
-                    <input id="server_cpu"  type="text" class="form-control" placeholder="请输入服务器CPU" value={{server_cpu}}>
-                </div>
-           </div>
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_server_mem">*</span>服务器内存</label>
-                </div>
-                <div class="col-md-10">
-                    <input id="server_mem"  type="text" class="form-control" placeholder="请输入服务器内存" value={{server_mem}}>
-                </div>
-           </div>
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_status">*</span>服务器状态</label>
-                </div>
-               <div class="col-md-10">
-                    <select class="form-control select" id="status" name="status" value={{status}} >
-                        {% if status=='1' %}
-                            <option value="1" selected = "selected">启用</option>
-                            <option value="0">禁用</option>
-                        {% end %}
-                        {% if status=='0' %}
-                            <option value="0" selected = "selected">禁用</option>
-                            <option value="1" >启用</option>
-                        {% end %}
-                    </select>
+         </div>
+
+         <div class="row">
+            <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_server_os">*</span>服务器系统</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input id="server_os"  type="text" class="form-control" placeholder="请输入服务器系统"  value={{server_os}}>
+                    </div>
                </div>
-           </div>
-           <br>
-           <div class="form-group m-b-0">
-                <div class="col-sm-offset-6 col-sm-9">
-                     <button id="save" type="button" class="btn btn-custom waves-effect waves-light btn-md">变更</button>
-                     <button id="return" type="button" class="btn btn-custom waves-effect waves-light btn-md">返回</button>
-                </div>
-           </div>
-       </form>
-    </div>
+            </div>
+         </div>
 
-    <!-- jQuery  -->
-    <script src="{{static_url('plugins/moment/moment.js')}}"></script>
-    <script src="{{static_url('plugins/timepicker/bootstrap-timepicker.js')}}"></script>
-    <script src="{{static_url('plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js')}}"></script>
-    <script src="{{static_url('plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js')}}"></script>
-    <script src="{{static_url('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
-    <script src="{{static_url('plugins/clockpicker/js/bootstrap-clockpicker.min.js')}}"></script>
-    <script src="{{static_url('plugins/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
+         <div class="row">
+            <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_server_cpu">*</span>服务器CPU</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input id="server_cpu"  type="text" class="form-control" placeholder="请输入服务器CPU" value={{server_cpu}}>
+                    </div>
+               </div>
+            </div>
+         </div>
 
-    <!-- Counter js  -->
-    <script src="{{static_url('plugins/waypoints/jquery.waypoints.min.js')}}"></script>
-    <script src="{{static_url('plugins/counterup/jquery.counterup.min.js')}}"></script>
-    <script src="{{static_url('plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+         <div class="row">
+            <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_server_mem">*</span>服务器内存</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input id="server_mem"  type="text" class="form-control" placeholder="请输入服务器内存" value={{server_mem}}>
+                    </div>
+               </div>
+            </div>
+         </div>
+
+         <div class="row">
+            <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_status">*</span>服务器状态</label>
+                    </div>
+                   <div class="col-md-10">
+                        <select class="form-control select" id="status" name="status" value={{status}} >
+                            {% if status=='1' %}
+                                <option value="1" selected = "selected">启用</option>
+                                <option value="0">禁用</option>
+                            {% end %}
+                            {% if status=='0' %}
+                                <option value="0" selected = "selected">禁用</option>
+                                <option value="1" >启用</option>
+                            {% end %}
+                        </select>
+                   </div>
+               </div>
+            </div>
+         </div>
+
+         <div class="row">
+            <div class="col-md-6">
+               <div class="form-group m-b-0">
+                    <div class="col-sm-offset-6 col-sm-9">
+                         <button id="save" type="button" class="btn btn-custom waves-effect waves-light btn-md">变更</button>
+                         <button id="return" type="button" class="btn btn-custom waves-effect waves-light btn-md">返回</button>
+                    </div>
+               </div>
+             </div>
+         </div>
+    </form>
 
     <!-- Sweet-Alert  -->
     <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
-
-    <!-- Init js -->
-    <script src="{{static_url('assets/pages/jquery.form-pickers.init.js')}}"></script>
 
     <script>
         function set_selected(){
@@ -211,10 +251,33 @@
                         } else {
                             swal(dataSet.message, "", "error")
                         }
-                    }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log('jqXHR.responseText=',jqXHR.responseText);
+                        console.log('jqXHR.status=',jqXHR.status);
+                        console.log('jqXHR.readyState=',jqXHR.readyState);
+                        console.log('jqXHR.statusText=',jqXHR.statusText);
+                        console.log('textStatus=',textStatus);
+                        console.log('errorThrown=',errorThrown);
+                        if (jqXHR.status==403){
+                            swal("登陆信息已过期，请重新登陆!", "", "error")
+                            window.location.href='/login'
+                        } else if (jqXHR.status==502){
+                            swal("用户无权访问权限此功能!", "", "error")
+                        } else {
+                            swal("系统不可用,请稍后重试!", "", "error")
+                        }
+                     }
                 });
             });
         });
+
+         $('#query_password').tooltipster({
+             content: $('#server_pass').val(),
+             multiple: true,
+             position: 'right'
+        });
+
    </script>
 </body>
 

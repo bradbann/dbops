@@ -352,7 +352,8 @@ def get_user_by_loginame(p_login_name):
                 date_format(expire_date,'%Y-%m-%d') as expire_date,
                 status,
                 file_path,
-                file_name
+                file_name,
+                project_group
          from t_user where login_name='{0}'
         """.format(p_login_name)
     cr.execute(sql)
@@ -374,6 +375,7 @@ def get_user_by_loginame(p_login_name):
     d_user['status']      = rs[0][9]
     d_user['file_path']   = rs[0][10]
     d_user['file_name']   = rs[0][11]
+    d_user['project_group'] = rs[0][12]
     return d_user
 
 def check_user(p_user):

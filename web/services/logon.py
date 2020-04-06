@@ -29,11 +29,12 @@ class logon(tornado.web.RequestHandler):
 class index(basehandler):
     @tornado.web.authenticated
     def get(self):
-        username  = str(self.get_secure_cookie("username"), encoding="utf-8")
-        userid    = str(self.get_secure_cookie("userid"), encoding="utf-8")
-        d_user    = get_user_by_loginame(username)
-        genders   = get_dmm_from_dm('04')
-        depts     = get_dmm_from_dm('01')
+        username    = str(self.get_secure_cookie("username"), encoding="utf-8")
+        userid      = str(self.get_secure_cookie("userid"), encoding="utf-8")
+        d_user      = get_user_by_loginame(username)
+        genders     = get_dmm_from_dm('04')
+        depts       = get_dmm_from_dm('01')
+        proj_groups = get_dmm_from_dm('18')
         print('index->userid=',userid)
         if username:
            self.render("index.html",
@@ -48,6 +49,7 @@ class index(basehandler):
                        gender      = d_user['gender'],
                        email       = d_user['email'],
                        phone       = d_user['phone'],
+                       proj_group  = d_user['project_group'],
                        dept        = d_user['dept'],
                        expire_date = d_user['expire_date'],
                        status      = d_user['status'],
@@ -57,7 +59,9 @@ class index(basehandler):
                        user_roles  = get_user_roles(userid),
                        genders     = genders,
                        depts       = depts,
-                       d_user      = d_user
+                       d_user      = d_user,
+                       proj_groups = proj_groups,
+                       view_url    = self.get_secure_cookie("view_url")
                        )
         else:
            self.render("page-404.html")

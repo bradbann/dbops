@@ -164,33 +164,33 @@
             }
          });
 
-        $("#tagname").bind("input propertychange",function(){
-           $("#query_btn").click();
-        });
-
-        $("#market_id").bind("input propertychange",function(){
-           $("#query_btn").click();
-        });
-
-        $("#sync_ywlx").bind("input propertychange",function(){
-           $("#query_btn").click();
-        });
-
-        $("#begin_date").click(function(){
-           $("#query_btn").click();
-        });
-
-        $("#end_date").click(function(){
-           $("#query_btn").click();
-        });
-
-        $("#begin_date").change(function(){
-           $("#query_btn").click();
-        });
-
-        $("#end_date").change(function(){
-           $("#query_btn").click();
-        });
+        // $("#tagname").bind("input propertychange",function(){
+        //    $("#query_btn").click();
+        // });
+        //
+        // $("#market_id").bind("input propertychange",function(){
+        //    $("#query_btn").click();
+        // });
+        //
+        // $("#sync_ywlx").bind("input propertychange",function(){
+        //    $("#query_btn").click();
+        // });
+        //
+        // $("#begin_date").click(function(){
+        //    $("#query_btn").click();
+        // });
+        //
+        // $("#end_date").click(function(){
+        //    $("#query_btn").click();
+        // });
+        //
+        // $("#begin_date").change(function(){
+        //    $("#query_btn").click();
+        // });
+        //
+        // $("#end_date").change(function(){
+        //    $("#query_btn").click();
+        // });
 
         $("#query_btn2").click(function() {
               $.ajax({
@@ -203,53 +203,74 @@
                       sync_rqz   : $('#sync_rqz').val(),
                   },
                   success: function (dataSet) {
+                       $('#con-close-modal').modal({
+                         keyboard: false,
+                         backdrop:false
+                       });
+
                       $('#example2').DataTable( {
-                      "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
-                      "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
-                      destroy    :true,
-                      async      :true,
-                      scrollY    :false,
-                      ordering   :true,
-                      bAutoWidth :true,
-                      scrollX    :true,
-                      paging:     true,
-                      iDisplayLength: 12,
-                      data: dataSet,
-                      columns: [
-                        { "title": "任务描述"},
-                        { "title": "标签名" },
-                        { "title": "同步表名" },
-                        { "title": "同步时间" },
-                        { "title": "同步记录数" },
-                        { "title": "同步耗时(s)" }
-                      ],
-                      "language": {
-                             "search"       : "在表格中搜索:",
-                             "sProcessing"  : "处理中...",
-                             "sLengthMenu"  : "显示 _MENU_ 项结果",
-                             "sZeroRecords" : "没有匹配结果",
-                             "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
-                             "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
-                             "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
-                             "sInfoPostFix" : "",
-                             "sSearch"      : "搜索:",
-                             "sUrl"         : "",
-                             "sEmptyTable"  : "表中数据为空",
-                             "sLoadingRecords": "载入中...",
-                             "sInfoThousands": ",",
-                             "oPaginate": {
-                                 "sFirst"   : "首页",
-                                 "sPrevious": "上页",
-                                 "sNext"    : "下页",
-                                 "sLast"    : "末页"
-                             },
-                             "oAria": {
-                                 "sSortAscending" : ": 以升序排列此列",
-                                 "sSortDescending": ": 以降序排列此列"
+                          "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                          "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                          destroy    :true,
+                          async      :true,
+                          scrollY    :false,
+                          ordering   :true,
+                          bAutoWidth :true,
+                          scrollX    :true,
+                          paging:     true,
+                          iDisplayLength: 12,
+                          data: dataSet,
+                          columns: [
+                            { "title": "任务描述"},
+                            { "title": "标签名" },
+                            { "title": "同步表名" },
+                            { "title": "同步时间" },
+                            { "title": "同步记录数" },
+                            { "title": "同步耗时(s)" }
+                          ],
+                          "language": {
+                                 "search"       : "在表格中搜索:",
+                                 "sProcessing"  : "处理中...",
+                                 "sLengthMenu"  : "显示 _MENU_ 项结果",
+                                 "sZeroRecords" : "没有匹配结果",
+                                 "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                 "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                                 "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                 "sInfoPostFix" : "",
+                                 "sSearch"      : "搜索:",
+                                 "sUrl"         : "",
+                                 "sEmptyTable"  : "表中数据为空",
+                                 "sLoadingRecords": "载入中...",
+                                 "sInfoThousands": ",",
+                                 "oPaginate": {
+                                     "sFirst"   : "首页",
+                                     "sPrevious": "上页",
+                                     "sNext"    : "下页",
+                                     "sLast"    : "末页"
+                                 },
+                                 "oAria": {
+                                     "sSortAscending" : ": 以升序排列此列",
+                                     "sSortDescending": ": 以降序排列此列"
+                                 }
                              }
-                         }
-                     });
-                 }
+                      });
+                 },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                        console.log('jqXHR.responseText=',jqXHR.responseText);
+                        console.log('jqXHR.status=',jqXHR.status);
+                        console.log('jqXHR.readyState=',jqXHR.readyState);
+                        console.log('jqXHR.statusText=',jqXHR.statusText);
+                        console.log('textStatus=',textStatus);
+                        console.log('errorThrown=',errorThrown);
+                        if (jqXHR.status==403){
+                            swal("登陆信息已过期，请重新登陆!", "", "error")
+                            window.location.href='/login'
+                        } else if (jqXHR.status==502){
+                            swal("用户无权访问权限此功能!", "", "error")
+                        } else {
+                            swal("系统不可用,请稍后重试!", "", "error")
+                        }
+                    }
              });
             });
 
@@ -331,26 +352,36 @@
                              }
                          }
                      });
-                 }
-             });
+                 },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                        console.log('jqXHR.responseText=',jqXHR.responseText);
+                        console.log('jqXHR.status=',jqXHR.status);
+                        console.log('jqXHR.readyState=',jqXHR.readyState);
+                        console.log('jqXHR.statusText=',jqXHR.statusText);
+                        console.log('textStatus=',textStatus);
+                        console.log('errorThrown=',errorThrown);
+                        if (jqXHR.status==403){
+                            swal("登陆信息已过期，请重新登陆!", "", "error")
+                            window.location.href='/login'
+                        } else if (jqXHR.status==502){
+                            swal("用户无权访问权限此功能!", "", "error")
+                        } else {
+                            swal("系统不可用,请稍后重试!", "", "error")
+                        }
+                    }
+               });
             });
 
-            $("#query_btn").click();
+            //$("#query_btn").click();
 
         });
 
         function isSelect(v) {
             console.log('isSelect=',v)
-            $('#con-close-modal').modal({
-              keyboard: false,
-              backdrop:false
-            });
-
-            console.log('isSelect=',v,v.split(','),v.split(',')[0])
             $('#sync_tag2').val(v.split(',')[0])
             $('#sync_rqq').val(v.split(',')[1])
             $('#sync_rqz').val(v.split(',')[1])
-            //console.log('isSelect=',$('#sync_tag2').val(),$('#sync_rqq').val(),$('#sync_rqz').val())
+            $('#example2').empty();
             $("#query_btn2").click()
         }
 

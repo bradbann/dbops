@@ -37,9 +37,9 @@
                 <span class="input-group-addon">任务</span>
                 <select class="form-control select" id="tagname" >
                         <option value='' selected = "selected">请选择任务..</option>
-                        {% for var in db_backup_tags %}
-                             <option value={{var[0]}} >{{var[1]}}</option>
-                        {% end %}
+                        <!--{% for var in db_backup_tags %}-->
+                             <!--<option value={{var[0]}} >{{var[1]}}</option>-->
+                        <!--{% end %}-->
                 </select>
              </div>
          </div>
@@ -179,7 +179,23 @@
                          }
                          createBarChart('db-backup-size',  $barData_db_backup_size, 'y', ['a'], ['备份大小'], ['#59aed5'],'s');
                          createLineChart('db-backup-time', $barData_db_backup_time, 'y', ['a','b'], ['备份时长','压缩时长'],['0.9'],['#ffffff'],['#999999'], ['#FFBD33','#88A110']);
-                      }
+                      },
+                     error: function (jqXHR, textStatus, errorThrown) {
+                        console.log('jqXHR.responseText=',jqXHR.responseText);
+                        console.log('jqXHR.status=',jqXHR.status);
+                        console.log('jqXHR.readyState=',jqXHR.readyState);
+                        console.log('jqXHR.statusText=',jqXHR.statusText);
+                        console.log('textStatus=',textStatus);
+                        console.log('errorThrown=',errorThrown);
+                        if (jqXHR.status==403){
+                            swal("登陆信息已过期，请重新登陆!", "", "error")
+                            window.location.href='/login'
+                        } else if (jqXHR.status==502){
+                            swal("用户无权访问权限此功能!", "", "error")
+                        } else {
+                            swal("系统不可用,请稍后重试!", "", "error")
+                        }
+                    }
                  });
 
               });
@@ -221,6 +237,22 @@
                               console.log('option:',"<option value='"+val+"'>"+text+"</option>")
                               $("#tagname").append("<option value='"+val+"'>"+text+"</option>");
                          }
+                      },
+                      error: function (jqXHR, textStatus, errorThrown) {
+                            console.log('jqXHR.responseText=',jqXHR.responseText);
+                            console.log('jqXHR.status=',jqXHR.status);
+                            console.log('jqXHR.readyState=',jqXHR.readyState);
+                            console.log('jqXHR.statusText=',jqXHR.statusText);
+                            console.log('textStatus=',textStatus);
+                            console.log('errorThrown=',errorThrown);
+                            if (jqXHR.status==403){
+                                swal("登陆信息已过期，请重新登陆!", "", "error")
+                                window.location.href='/login'
+                            } else if (jqXHR.status==502){
+                                swal("用户无权访问权限此功能!", "", "error")
+                            } else {
+                                swal("系统不可用,请稍后重试!", "", "error")
+                            }
                       }
                  });
          }

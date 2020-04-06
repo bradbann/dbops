@@ -5,8 +5,8 @@
 # @File    : t_user.py
 # @Software: PyCharm
 
-from web.utils.common     import exception_info,current_rq,aes_encrypt,aes_decrypt,format_sql
-from web.utils.common     import get_connection,get_connection_ds,get_connection_ds_sqlserver,get_connection_ds_oracle,get_connection_ds_pg
+from web.utils.common     import exception_info,format_sql
+from web.utils.common     import get_connection,get_connection_dict
 from web.model.t_ds       import get_ds_by_dsid
 from web.model.t_user     import get_user_by_loginame
 import re
@@ -18,19 +18,19 @@ def query_archive(sync_tag):
     cr = db.cursor()
     v_where=' and  1=1 '
     if sync_tag != '':
-        v_where = v_where + " and a.transfer_tag='{0}'\n".format(sync_tag)
+        v_where = v_where + " and a.archive_tag='{0}'\n".format(sync_tag)
 
     sql = """SELECT  a.id,
-                 -- concat(substr(a.transfer_tag,1,40),'...') as transfer_tag,
-                 a.transfer_tag,
+                 CONCAT(SUBSTR(a.archive_tag,1,40),'...') AS archive_tag,
+                 a.archive_tag,
                  a.comments,
                  b.server_desc,
-                 concat(substr(concat(sour_schema,'.',sour_table),1,40),'...') as transfer_obj,
+                 -- CONCAT(SUBSTR(CONCAT(sour_schema,'.',sour_table),1,40),'...') AS archive_obj,
                  a.api_server,
                  CASE a.STATUS WHEN '1' THEN '启用' WHEN '0' THEN '禁用' END  AS  flag
-            FROM t_db_transfer_config a,t_server b 
-            WHERE a.server_id=b.id AND b.status='1' 
-              {0}
+                FROM t_db_archive_config a,t_server b 
+                WHERE a.server_id=b.id AND b.status='1' 
+                 {0}
           """.format(v_where)
     print(sql)
     cr.execute(sql)
@@ -41,18 +41,20 @@ def query_archive(sync_tag):
     db.commit()
     return v_list
 
-def query_archive_detail(transfer_id):
-    db = get_connection()
+def query_archive_detail(archive_id):
+    db = get_connection_dict()
     cr = db.cursor()
-    sql = """SELECT   a.transfer_tag,
+    sql = """SELECT   a.archive_tag,
                       a.comments,
                       b.server_desc,
-                      e.dmmc  AS transfer_type,
-                      CONCAT(c.ip,':',c.port,'/',a.sour_schema) AS transfer_db_sour,
-                      a.sour_schema,
+                      e.dmmc  AS db_type,
+                      CONCAT(c.ip,':',c.port,'/',a.sour_schema) AS archive_db_sour,
                       LOWER(a.sour_table) AS sour_table,
-                      a.sour_where,            
-                      CONCAT(d.ip,':',d.port,'/',a.dest_schema) AS transfer_db_dest,
+                      a.archive_time_col,
+                      a.archive_rentition,
+                      a.rentition_time,
+                      f.dmmc  AS rentition_time_type,
+                      CONCAT(d.ip,':',d.port,'/',a.dest_schema) AS archive_db_dest,
                       a.`dest_schema`,
                       a.python3_home,
                       a.script_path,
@@ -60,30 +62,32 @@ def query_archive_detail(transfer_id):
                       a.batch_size,
                       a.api_server,
                       a.status	                        
-                FROM t_db_transfer_config a,t_server b,t_db_source c,t_db_source d,t_dmmx e
-                WHERE a.server_id=b.id 
+            FROM t_db_archive_config a,t_server b,t_db_source c,t_db_source d,t_dmmx e,t_dmmx f
+            WHERE a.server_id=b.id 
                 AND a.sour_db_id=c.id
                 AND a.dest_db_id=d.id
-                AND a.transfer_type=e.dmm
-                AND e.dm='09'
+                AND a.archive_db_type=e.dmm
+                AND e.dm='02'
+                AND f.dm= '20'
                 AND a.id='{0}'
-                ORDER BY a.id
-             """.format(transfer_id)
+            ORDER BY a.id
+             """.format(archive_id)
     print(sql)
     cr.execute(sql)
     rs=cr.fetchone()
-    v_list=list(rs)
+    print('query_archive_detail=>rs=',rs)
+    # v_list=list(rs)
     cr.close()
     db.commit()
-    return v_list
+    return rs
 
-def query_archive_log(transfer_tag,begin_date,end_date,task_status):
+def query_archive_log(transfer_tag,begin_date,end_date):
     db = get_connection()
     cr = db.cursor()
 
     v_where=' and 1=1 '
     if transfer_tag != '':
-        v_where = v_where + " and a.transfer_tag='{0}'\n".format(transfer_tag)
+        v_where = v_where + " and a.archive_tag='{0}'\n".format(transfer_tag)
 
     if begin_date != '':
         v_where = v_where + " and a.create_date>='{0}'\n".format(begin_date+' 0:0:0')
@@ -93,29 +97,24 @@ def query_archive_log(transfer_tag,begin_date,end_date,task_status):
     if end_date != '':
         v_where = v_where + " and a.create_date<='{0}'\n".format(end_date+' 23:59:59')
 
-    if task_status == 'running':
-        v_where = v_where + " and a.percent!=100.00 \n"
-
-    if task_status == 'history':
-        v_where = v_where + " and a.percent=100.00 \n"
-
     sql = """SELECT 
                   a.id,
-                  concat(substr(a.transfer_tag,1,40),'...'),
+                  CONCAT(SUBSTR(a.archive_tag,1,40),'...'),
                   b.comments,
                   a.table_name,               
-                  cast(a.create_date as char),
-                  cast(a.amount as char),
-                  cast(a.duration as char),
-                  cast(a.percent as char)              
+                  CAST(a.create_date AS CHAR),
+                  CAST(a.amount AS CHAR),
+                  CAST(a.duration AS CHAR),
+                  a.message,
+                  CAST(a.percent AS CHAR) 
                 FROM
-                  t_db_transfer_log a,
-                  t_db_transfer_config b 
-                WHERE a.transfer_tag = b.transfer_tag 
-                 and b.status='1'
-                 {0}
-             order by a.create_date desc,a.transfer_tag 
-        """.format(v_where)
+                  t_db_archive_log a,
+                  t_db_archive_config b 
+                WHERE a.archive_tag = b.archive_tag 
+                 AND b.status='1'
+                  {0}
+                ORDER BY a.create_date DESC,a.archive_tag 
+         """.format(v_where)
     print(sql)
     cr.execute(sql)
     v_list = []
@@ -140,16 +139,18 @@ def save_archive(p_archive):
                          sour_table,archive_time_col,archive_rentition,
                          rentition_time,rentition_time_type,dest_db_id,
                          dest_schema,python3_home,script_path,
-                         script_file,batch_size,api_server,status)
+                         script_file,batch_size,api_server,
+                         status,if_cover,run_time)
                values('{0}','{1}','{2}','{3}','{4}','{5}',
                       '{6}','{7}','{8}','{9}','{10}','{11}',
-                      '{12}','{13}','{14}','{15}','{16}','{17}','{18}')
+                      '{12}','{13}','{14}','{15}','{16}','{17}','{18}','{19}','{20}')
             """.format(p_archive['archive_tag'],p_archive['task_desc'],p_archive['archive_db_type'],
                        p_archive['archive_server'],p_archive['sour_db_server'],p_archive['sour_db_name'],
                        p_archive['sour_tab_name'],p_archive['archive_time_col'], p_archive['archive_rentition'],
                        p_archive['rentition_time'], p_archive['rentition_time_type'],p_archive['dest_db_server'],
                        p_archive['dest_db_name'],p_archive['python3_home'],p_archive['script_base'],
-                       p_archive['script_name'], p_archive['batch_size'], p_archive['api_server'],p_archive['status'])
+                       p_archive['script_name'], p_archive['batch_size'], p_archive['api_server'],p_archive['status'],
+                       p_archive['if_cover'], p_archive['run_time'])
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -164,53 +165,46 @@ def save_archive(p_archive):
         result['message'] = '保存失败！'
     return result
 
-def upd_archive(p_transfer):
+def upd_archive(p_archive):
     result={}
-    val = check_transfer(p_transfer)
+    val = check_archive(p_archive)
     if  val['code'] == '-1':
         return val
     try:
-        db              = get_connection()
-        cr              = db.cursor()
-        transfer_id     = p_transfer['transfer_id']
-        transfer_tag    = p_transfer['transfer_tag']
-        task_desc       = p_transfer['task_desc']
-        transfer_server = p_transfer['transfer_server']
-        transfer_type   = p_transfer['transfer_type']
-        sour_db_server  = p_transfer['sour_db_server']
-        sour_db_name    = p_transfer['sour_db_name']
-        sour_tab_name   = p_transfer['sour_tab_name']
-        sour_tab_where  = p_transfer['sour_tab_where']
-        dest_db_server  = p_transfer['dest_db_server']
-        dest_db_name    = p_transfer['dest_db_name']
-        script_base     = p_transfer['script_base']
-        script_name     = p_transfer['script_name']
-        python3_home    = p_transfer['python3_home']
-        batch_size      = p_transfer['batch_size']
-        api_server      = p_transfer['api_server']
-        status          = p_transfer['status']
+        db   = get_connection()
+        cr   = db.cursor()
 
-        sql="""update t_db_transfer_config 
+        sql="""update t_db_archive_config 
                   set  
-                      transfer_tag      ='{0}',
-                      server_id         ='{1}', 
-                      comments          ='{2}', 
-                      sour_db_id        ='{3}', 
-                      sour_schema       ='{4}',
-                      sour_table        ='{5}',
-                      sour_where        ='{6}',
-                      dest_db_id        ='{7}',
-                      dest_schema       ='{8}',                    
-                      script_path       ='{9}',
-                      script_file       ='{10}',
-                      python3_home      ='{11}',
-                      api_server        ='{12}',                   
-                      status            ='{13}',
-                      batch_size        ='{14}',
-                      transfer_type     ='{15}'
-                where id={16}""".format(transfer_tag,transfer_server,task_desc,sour_db_server,sour_db_name,
-                                        sour_tab_name,format_sql(sour_tab_where),dest_db_server,dest_db_name,script_base,
-                                        script_name,python3_home,api_server,status,batch_size,transfer_type,transfer_id)
+                      archive_tag         ='{0}',
+                      comments            ='{1}', 
+                      server_id           ='{2}',
+                      archive_db_type     ='{3}', 
+                      sour_db_id          ='{4}', 
+                      sour_schema         ='{5}',
+                      sour_table          ='{6}',
+                      archive_time_col    ='{7}',
+                      archive_rentition   ='{8}',
+                      rentition_time      ='{9}',
+                      rentition_time_type ='{10}',
+                      dest_db_id          ='{11}',
+                      dest_schema         ='{12}', 
+                      python3_home        ='{13}',
+                      script_path         ='{14}',
+                      script_file         ='{15}',
+                      batch_size          ='{16}',
+                      api_server          ='{17}',
+                      status              ='{18}',
+                      if_cover            ='{19}',
+                      run_time            ='{20}'
+                where id={21}
+            """.format(p_archive['archive_tag'],p_archive['task_desc'],p_archive['archive_server'],
+                       p_archive['archive_db_type'],p_archive['sour_db_server'],p_archive['sour_db_name'],
+                       p_archive['sour_tab_name'],p_archive['archive_time_col'], p_archive['archive_rentition'],
+                       p_archive['rentition_time'], p_archive['rentition_time_type'],p_archive['dest_db_server'],
+                       p_archive['dest_db_name'],p_archive['python3_home'],p_archive['script_base'],
+                       p_archive['script_name'], p_archive['batch_size'], p_archive['api_server'],p_archive['status'],
+                       p_archive['if_cover'], p_archive['run_time'],p_archive['archive_id'])
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -224,12 +218,12 @@ def upd_archive(p_transfer):
         result['message'] = '更新失败！'
     return result
 
-def del_archive(p_transferid):
+def del_archive(p_archiveid):
     result={}
     try:
         db = get_connection()
         cr = db.cursor()
-        sql="delete from t_db_transfer_config  where id='{0}'".format(p_transferid)
+        sql="delete from t_db_archive_config  where id='{0}'".format(p_archiveid)
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -319,46 +313,28 @@ def check_archive(p_archive):
     result['message'] = '验证通过'
     return result
 
-def get_archive_by_archiveid(p_transferid):
-    db = get_connection()
+def get_archive_by_archiveid(p_archiveid):
+    db = get_connection_dict()
     cr = db.cursor()
-    sql = """select   id,transfer_tag,server_id,comments,sour_db_id,sour_schema,
-                      sour_table,sour_where,dest_db_id,dest_schema,script_path,
-                      script_file,python3_home,api_server,status,batch_size,transfer_type
-             from t_db_transfer_config where id={0}
-          """.format(p_transferid)
+    sql = """SELECT   id,archive_tag,server_id,comments,archive_db_type,sour_db_id,sour_schema,
+                      sour_table,archive_time_col,archive_rentition,rentition_time,rentition_time_type,dest_db_id,dest_schema,script_path,
+                      script_file,python3_home,api_server,status,batch_size,if_cover,run_time
+             FROM t_db_archive_config where id={0}
+          """.format(p_archiveid)
     cr.execute(sql)
     rs = cr.fetchall()
-    d_transfer = {}
-    d_transfer['server_id']      = rs[0][0]
-    d_transfer['transfer_tag']   = rs[0][1]
-    d_transfer['server_id']      = rs[0][2]
-    d_transfer['task_desc']      = rs[0][3]
-    d_transfer['sour_db_id']     = rs[0][4]
-    d_transfer['sour_schema']    = rs[0][5]
-    d_transfer['sour_table']     = rs[0][6]
-    d_transfer['sour_where']     = rs[0][7]
-    d_transfer['dest_db_id']     = rs[0][8]
-    d_transfer['dest_schema']    = rs[0][9]
-    d_transfer['script_path']    = rs[0][10]
-    d_transfer['script_file']    = rs[0][11]
-    d_transfer['python3_home']   = rs[0][12]
-    d_transfer['api_server']     = rs[0][13]
-    d_transfer['status']         = rs[0][14]
-    d_transfer['batch_size']     = rs[0][15]
-    d_transfer['transfer_type']  = rs[0][16]
     cr.close()
     db.commit()
-    print(d_transfer)
-    return d_transfer
+    print('get_archive_by_archiveid->rs=',rs)
+    return rs[0]
 
 def push_archive_task(p_tag,p_api):
     try:
         result = {}
         result['code'] = '0'
         result['message'] = '推送成功！'
-        v_cmd="curl -XPOST {0}/push_script_remote_transfer -d 'tag={1}'".format(p_api,p_tag)
-        print('push_transfer_task=',v_cmd)
+        v_cmd="curl -XPOST {0}/push_script_remote_archive -d 'tag={1}'".format(p_api,p_tag)
+        print('push_archive_task=',v_cmd)
         r=os.popen(v_cmd).read()
         d=json.loads(r)
 
@@ -369,7 +345,7 @@ def push_archive_task(p_tag,p_api):
            result['message'] = '{0}!'.format(d['msg'])
            return result
     except Exception as e:
-        print('push_transfer_task.error:',traceback.format_exc())
+        print('push_archive_task.error:',traceback.format_exc())
         result['code'] = '-1'
         result['message'] = '{0!'.format(traceback.format_exc())
         return result
@@ -379,7 +355,7 @@ def run_archive_task(p_tag,p_api):
         result = {}
         result['code'] = '0'
         result['message'] = '执行成功！'
-        v_cmd = "curl -XPOST {0}/run_script_remote_transfer -d 'tag={1}'".format(p_api,p_tag)
+        v_cmd = "curl -XPOST {0}/run_script_remote_archive -d 'tag={1}'".format(p_api,p_tag)
         print('v_cmd=', v_cmd)
         r = os.popen(v_cmd).read()
         d = json.loads(r)
@@ -400,7 +376,7 @@ def stop_archive_task(p_tag,p_api):
         result = {}
         result['code'] = '0'
         result['message'] = '停止成功！'
-        v_cmd = "curl -XPOST {0}/stop_script_remote_transfer -d 'tag={1}'".format(p_api,p_tag)
+        v_cmd = "curl -XPOST {0}/stop_script_remote_archive -d 'tag={1}'".format(p_api,p_tag)
         r = os.popen(v_cmd).read()
         d = json.loads(r)
 

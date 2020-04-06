@@ -165,6 +165,14 @@ def current_rq2():
     day  =str(datetime.datetime.now().day).rjust(2,'0')
     return year+'-'+month+'-'+day
 
+def current_rq3(n_days):
+    rq= datetime.datetime.now() + datetime.timedelta(days=n_days)
+    year =str(rq.year)
+    month=str(rq.month).rjust(2,'0')
+    day  =str(rq.day).rjust(2,'0')
+    return year+'-'+month+'-'+day
+
+
 def now():
     year =str(datetime.datetime.now().year)
     month=str(datetime.datetime.now().month).rjust(2,'0')
@@ -354,7 +362,7 @@ def send_mail(p_from_user,p_from_pass,p_to_user,p_title,p_content):
         msg["Subject"] = p_title
         msg["From"]    = p_from_user
         msg["To"]      = ",".join(to_user)
-        server = smtplib.SMTP("smtp.163.com", 25)
+        server = smtplib.SMTP("smtp.exmail.qq.com", 25)
         server.set_debuglevel(0)
         server.login(p_from_user, p_from_pass)
         server.sendmail(p_from_user, to_user, msg.as_string())
@@ -362,6 +370,36 @@ def send_mail(p_from_user,p_from_pass,p_to_user,p_title,p_content):
         return 0
     except smtplib.SMTPException as e:
         return -1
+
+def send_mail465(p_from_user,p_from_pass,p_to_user,p_title,p_content):
+    to_user=p_to_user.split(",")
+    try:
+        msg = MIMEText(p_content,'html','utf-8')
+        msg["Subject"] = p_title
+        msg["From"]    = p_from_user
+        msg["To"]      = ",".join(to_user)
+        server = smtplib.SMTP_SSL("smtp.exmail.qq.com", 465)
+        server.set_debuglevel(0)
+        server.login(p_from_user, p_from_pass)
+        server.sendmail(p_from_user, to_user, msg.as_string())
+        server.quit()
+    except smtplib.SMTPException as e:
+        print(e)
+
+def send_mail587(p_from_user,p_from_pass,p_to_user,p_title,p_content):
+    to_user=p_to_user.split(",")
+    try:
+        msg = MIMEText(p_content,'html','utf-8')
+        msg["Subject"] = p_title
+        msg["From"]    = p_from_user
+        msg["To"]      = ",".join(to_user)
+        server = smtplib.SMTP_SSL("smtp.exmail.qq.com", 587)
+        server.set_debuglevel(0)
+        server.login(p_from_user, p_from_pass)
+        server.sendmail(p_from_user, to_user, msg.as_string())
+        server.quit()
+    except smtplib.SMTPException as e:
+        print(e)
 
 def get_file_contents(filename):
     file_handle = open(filename, 'r')

@@ -15,7 +15,7 @@ import tornado.web
 from   web.model.t_backup import query_backup,query_backup_case,save_backup,get_backup_by_backupid,upd_backup,del_backup,query_backup_log,query_backup_log_detail
 from   web.model.t_backup import push_backup_task,run_backup_task,stop_backup_task,query_backup_log_analyze
 from   web.model.t_dmmx   import get_dmm_from_dm,get_backup_server,get_db_backup_server,get_db_backup_tags,get_db_backup_tags_by_env_type
-from   web.utils.common   import get_day_nday_ago,now
+from   web.utils.common   import get_day_nday_ago,now,current_rq2,current_rq3
 from   web.utils.basehandler import basehandler
 
 class backupquery(basehandler):
@@ -150,7 +150,11 @@ class backupedit_del(basehandler):
 class backuplogquery(basehandler):
     @tornado.web.authenticated
     def get(self):
-        self.render("./backup_log_query.html",dm_env_type=get_dmm_from_dm('03'))
+        self.render("./backup_log_query.html",
+                    dm_env_type=get_dmm_from_dm('03'),
+                    begin_date=current_rq3(-1),
+                    end_date=current_rq2()
+                    )
 
 class backup_log_query(basehandler):
     @tornado.web.authenticated

@@ -13,7 +13,7 @@
 import json
 import tornado.web
 from   web.model.t_role   import save_role,check_role,query_role,upd_role,del_role,get_role_by_roleid
-from   web.model.t_xtqx   import get_privs,get_privs_role,get_privs_sys
+from   web.model.t_xtqx   import get_privs,get_privs_role,get_privs_sys,get_func_privs,get_privs_func,get_privs_func_role
 from   web.utils.common   import get_url_root
 from   web.utils.basehandler import basehandler
 
@@ -27,7 +27,7 @@ class roleadd(basehandler):
     @tornado.web.authenticated
     def get(self):
         self.render("./role_add.html",
-                    privs=get_privs())
+                    privs=get_privs(),func_privs=get_func_privs())
 
 class roleadd_save(basehandler):
     @tornado.web.authenticated
@@ -36,13 +36,9 @@ class roleadd_save(basehandler):
         d_role['name']   =self.get_argument("name")
         d_role['status'] = self.get_argument("status")
         d_role['privs']  = self.get_argument("privs").split(",")
-        result = check_role(d_role)
-        if result['code'] == '0':
-            result = save_role(d_role)
-            self.write({"code": result['code'], "message": result['message']})
-        else:
-            self.write({"code": result['code'], "message": result['message']})
-
+        d_role['func_privs'] = self.get_argument("func_privs").split(",")
+        result = save_role(d_role)
+        self.write({"code": result['code'], "message": result['message']})
 
 class role_check(basehandler):
     @tornado.web.authenticated
@@ -77,8 +73,10 @@ class roleedit(basehandler):
                      roleid    = d_role['roleid'],
                      name      = d_role['name'],
                      status    = d_role['status'],
+                     priv_sys  =get_privs_sys(roleid),
                      priv_role = get_privs_role(roleid),
-                     priv_sys  = get_privs_sys(roleid),
+                     func_privs= get_privs_func(roleid),
+                     func_privs_role  = get_privs_func_role(roleid),
                      url=get_url_root()
                     )
 
@@ -91,6 +89,8 @@ class roleedit_save(basehandler):
         d_role['name']     = self.get_argument("name")
         d_role['status']   = self.get_argument("status")
         d_role['privs']    = self.get_argument("privs").split(",")
+        d_role['func_privs'] = self.get_argument("func_privs").split(",")
+        print('roleedit_save=',roleedit_save)
         result=upd_role(d_role)
         self.write({"code": result['code'], "message": result['message']})
 

@@ -8,7 +8,7 @@
 import traceback
 from web.utils.common import current_rq
 from web.utils.common import get_connection
-from web.model.t_role_privs import save_role_privs,upd_role_privs,del_role_privs
+from web.model.t_role_privs import save_role_privs,upd_role_privs,del_role_privs,save_role_func_privs,upd_role_func_privs
 
 
 def query_role(p_name):
@@ -111,21 +111,19 @@ def is_dba(p_user):
     else:
         return True
 
-
-
 def save_role(p_role):
     result = {}
     val = check_role(p_role)
     if val['code'] == '-1':
         return val
     try:
-        db        = get_connection()
-        cr        = db.cursor()
-        role_id   = get_roleid()
-        role_name = p_role['name']
-        status    = p_role['status']
-        privs     = p_role['privs']
-
+        db         = get_connection()
+        cr         = db.cursor()
+        role_id    = get_roleid()
+        role_name  = p_role['name']
+        status     = p_role['status']
+        privs      = p_role['privs']
+        func_privs = p_role['func_privs']
         print('privs=',privs)
 
         sql="""insert into t_role(id,name,status,creation_date,creator,last_update_date,updator) 
@@ -134,6 +132,7 @@ def save_role(p_role):
         print(sql)
         cr.execute(sql)
         save_role_privs(role_id,privs)
+        save_role_func_privs(role_id,func_privs)
         cr.close()
         db.commit()
         result={}
@@ -148,10 +147,6 @@ def save_role(p_role):
 
 def upd_role(p_role):
     result = {}
-    # val = check_role(p_role)
-    # if val['code'] == '-1':
-    #     return val
-
     try:
         db = get_connection()
         cr = db.cursor()
@@ -159,7 +154,10 @@ def upd_role(p_role):
         rolename = p_role['name']
         status   = p_role['status']
         privs    = p_role['privs']
+        func_privs= p_role['func_privs']
         print("upd_role=",roleid,rolename,status)
+        print("privs=", privs)
+        print("func_privs=", func_privs)
         sql="""update t_role 
                   set  name    ='{0}',                      
                        status  ='{1}' ,
@@ -168,7 +166,8 @@ def upd_role(p_role):
                 where id='{4}'""".format(rolename,status,current_rq(),'DBA',roleid)
         print(sql)
         cr.execute(sql)
-        upd_role_privs(roleid,privs);
+        upd_role_privs(roleid,privs)
+        upd_role_func_privs(roleid,func_privs)
         cr.close()
         db.commit()
         result={}
