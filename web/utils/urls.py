@@ -25,7 +25,7 @@ from web.services.sql          import wtd_save,wtd_release,wtd_update,wtd_delete
 from web.services.sys          import audit_rule,audit_rule_save,sys_setting,sys_code,sys_code_query,sys_test,sys_query_rule
 from web.services.sync_bigdata import syncadd_bigdata,syncadd_bigdata_save,syncbigdataquery,sync_bigdata_query,sync_bigdata_query_detail,sync_bigdata_query_dataxTemplete
 from web.services.sync_bigdata import sync_bigdata_downloads_dataxTemplete,syncchange_bigdata,syncedit_bigdata,syncedit_save_bigdata,syncedit_del_bigdata,syncedit_push_bigdata
-from web.services.sync_bigdata import syncedit_pushall_bigdata,syncedit_run_bigdata,syncedit_stop_bigdata,syncclone_bigdata,syncclone_save_bigdata
+from web.services.sync_bigdata import syncedit_pushall_bigdata,syncedit_run_bigdata,syncedit_stop_bigdata,syncclone_bigdata,syncclone_save_bigdata,syncloganalyze_bigdata,sync_log_analyze_bigdata,get_bigdata_sync_tasks
 from web.services.port         import portadd,portadd_save,portchange,portedit,portedit_save,portedit_del,port_query,portquery,portedit_imp,portedit_exp
 from web.services.archive      import archiveadd,archiveadd_save,archivequery,archive_query,archive_query_detail,archivechange,archiveedit,archiveedit_save
 from web.services.archive      import archiveedit_del,archiveedit_push,archiveedit_run,archiveedit_stop,archiveclone,archiveclone_save,archivelogquery,archive_log_query
@@ -252,6 +252,9 @@ urls=[
         (r"/bigdata/edit/pushall", syncedit_pushall_bigdata),
         (r"/bigdata/edit/run",     syncedit_run_bigdata),
         (r"/bigdata/edit/stop",    syncedit_stop_bigdata),
+        (r"/bigdata/log/analyze",  syncloganalyze_bigdata),
+        (r"/bigdata/log/_analyze", sync_log_analyze_bigdata),
+        (r"/get/bigdata/sync/task", get_bigdata_sync_tasks),
 
         #端口管理
         (r"/port/query",     portquery),
@@ -320,9 +323,9 @@ urls=[
         (r"/monitor/task/edit/save",        monitortaskedit_save),
         (r"/monitor/task/edit/del",         monitortaskedit_del),
         (r"/monitor/task/edit/clone",       monitortaskedit_clone),
-        (r"/monitor/task/push/save",        monitortask_push),
-        (r"/monitor/task/run/save" ,        monitortask_run),
-        (r"/monitor/task/stop/del" ,        monitortask_stop),
+        (r"/monitor/task/push",             monitortask_push),
+        (r"/monitor/task/run" ,             monitortask_run),
+        (r"/monitor/task/stop",             monitortask_stop),
 
         # 数据库监控-图表展示
         (r"/monitor/graph/query",        monitorgraphquery),

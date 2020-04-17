@@ -348,6 +348,17 @@
                                         <div class="col-md-2"></div>
                                     </div>
                                 </div>
+                               <div class="row">
+                                    <div class="form-group">
+                                        <div>
+                                            <label class="col-md-2 control-label">工号</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                           <input id="wkno" name="wkno" type="text" class="form-control" placeholder="请输入工号" value={{wkno}} disabled>
+                                        </div>
+                                        <div class="col-md-2"></div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="form-group">
                                         <div>
@@ -386,7 +397,7 @@
                                             <label class="col-md-2 control-label">项目组</label>
                                         </div>
                                        <div class="col-md-8">
-                                            <select class="form-control select" id="proj_group">
+                                            <select class="form-control select" id="proj_group" disabled>
                                                {% for var in proj_groups %}
                                                    {% if proj_group==var[0] %}
                                                       <option value={{var[0]}} selected = "selected">{{var[1]}}</option>

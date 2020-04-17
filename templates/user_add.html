@@ -71,6 +71,16 @@
                 </div>
             </div>
          </div>
+        <div class="row">
+           <div class="form-group col-md-6">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_wkno">*</span>工号</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="wkno" name="user" type="text" class="form-control" placeholder="请输入工号">
+                </div>
+            </div>
+         </div>
          <div class="row">
            <div class="form-group col-md-6">
                 <div>
@@ -224,6 +234,7 @@
        function set_selected(){
             document.all['s_login'].style.color="#ff0000";
             document.all['s_user'].style.color="#ff0000";
+            document.all['s_wkno'].style.color="#ff0000";
             document.all['s_pass'].style.color="#ff0000";
             document.all['s_gender'].style.color="#ff0000";
             document.all['s_dept'].style.color="#ff0000";
@@ -301,12 +312,13 @@
                                 type: "post",
                                 datatype: "json",
                                 data: {
-                                    login: $('#login').val(),
-                                    user: $('#user').val(),
-                                    pass: $('#pass').val(),
-                                    gender: $('#gender').val(),
-                                    email: $('#email').val(),
-                                    phone: $('#phone').val(),
+                                    login  : $('#login').val(),
+                                    wkno   : $('#wkno').val(),
+                                    user   : $('#user').val(),
+                                    pass   : $('#pass').val(),
+                                    gender : $('#gender').val(),
+                                    email  : $('#email').val(),
+                                    phone  : $('#phone').val(),
                                     proj_group: $('#proj_group').val(),
                                     dept: $('#dept').val(),
                                     expire_date: $('#expire_date').val(),
@@ -369,12 +381,13 @@
                         type: "post",
                         datatype: "json",
                         data: {
-                            login: $('#login').val(),
-                            user: $('#user').val(),
-                            pass: $('#pass').val(),
-                            gender: $('#gender').val(),
-                            email: $('#email').val(),
-                            phone: $('#phone').val(),
+                            login  : $('#login').val(),
+                            wkno   : $('#wkno').val(),
+                            user   : $('#user').val(),
+                            pass   : $('#pass').val(),
+                            gender : $('#gender').val(),
+                            email  : $('#email').val(),
+                            phone  : $('#phone').val(),
                             proj_group: $('#proj_group').val(),
                             dept: $('#dept').val(),
                             expire_date: $('#expire_date').val(),

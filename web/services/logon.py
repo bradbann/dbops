@@ -44,6 +44,7 @@ class index(basehandler):
                        welcome     = welcome(d_user['username']),
                        userid      = d_user['userid'],
                        loginname   = d_user['loginname'],
+                       wkno        = d_user['wkno'],
                        username    = d_user['username'],
                        password    = d_user['password'],
                        gender      = d_user['gender'],

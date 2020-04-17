@@ -30,7 +30,7 @@ def get_dmmc_from_dm(p_dm,p_dmm):
 def get_users_from_proj(p_userid):
     db = get_connection()
     cr = db.cursor()
-    sql = """select id,name from t_user 
+    sql = """select id,concat(name,'(',wkno,')') from t_user 
               where project_group=(select project_group from t_user where id='{0}')""".format(p_userid)
     cr.execute(sql)
     v_list = []
@@ -134,6 +134,17 @@ def get_db_sync_tags():
     cr.close()
     return v_list
 
+def get_datax_sync_tags():
+    db = get_connection()
+    cr = db.cursor()
+    sql = """SELECT sync_tag,comments FROM t_datax_sync_config  WHERE STATUS=1  ORDER BY comments 
+          """
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list
 
 def get_db_sync_tags_by_market_id(market_id):
     db = get_connection()

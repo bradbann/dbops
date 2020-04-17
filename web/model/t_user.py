@@ -143,6 +143,7 @@ def query_user(p_name):
     if p_name == "":
         sql = """select a.id,a.login_name,
                      CONCAT(a.file_path,'/',a.file_name) as user_image,
+                     a.wkno,
                      a.name,
                      (select dmmc from t_dmmx where dm='04' and dmm=a.gender) as gender,
                      a.email,a.phone,
@@ -159,6 +160,7 @@ def query_user(p_name):
     else:
         sql = """select a.id,a.login_name,
                      CONCAT(a.file_path,'/',a.file_name) as user_image,
+                     a.wkno, 
                      name,
                      (select dmmc from t_dmmx where dm='04' and dmm=a.gender) as gender,
                      a.email,a.phone,
@@ -280,7 +282,7 @@ def get_user_by_userid(p_userid):
     db = get_connection()
     cr = db.cursor()
     sql="""select cast(id as char) as id,login_name,name,password,gender,email,phone,dept,
-                  date_format(expire_date,'%Y-%m-%d') as expire_date,status,file_path,file_name,project_group 
+                  date_format(expire_date,'%Y-%m-%d') as expire_date,status,file_path,file_name,project_group,wkno
         from t_user where id={0}""".format(p_userid)
 
     cr.execute(sql)
@@ -301,6 +303,7 @@ def get_user_by_userid(p_userid):
     d_user['image_path'] = rs[0][10] if rs[0][10] else ''
     d_user['image_name'] = rs[0][11] if rs[0][11] else ''
     d_user['project_group'] = rs[0][12]
+    d_user['wkno']          = rs[0][13]
     print("get_user_by_userid=",d_user,rs[0][3],rs[0][1])
     return d_user
 
@@ -353,7 +356,8 @@ def get_user_by_loginame(p_login_name):
                 status,
                 file_path,
                 file_name,
-                project_group
+                project_group,
+                wkno
          from t_user where login_name='{0}'
         """.format(p_login_name)
     cr.execute(sql)
@@ -376,6 +380,7 @@ def get_user_by_loginame(p_login_name):
     d_user['file_path']   = rs[0][10]
     d_user['file_name']   = rs[0][11]
     d_user['project_group'] = rs[0][12]
+    d_user['wkno']          = rs[0][13]
     return d_user
 
 def check_user(p_user):
@@ -456,6 +461,7 @@ def save_user(p_user):
         cr = db.cursor()
         userid       = get_userid()
         loginname    = p_user['login']
+        wkno         = p_user['wkno']
         username     = p_user['user']
         password     = aes_encrypt(p_user['pass'],loginname)
         gender       = p_user['gender']
@@ -478,10 +484,10 @@ def save_user(p_user):
             else:
                 file_name = 'girl.png'
 
-        print(username,password,gender,email,phone,proj_group,dept,expire_date,file_path,file_name)
-        sql="""insert into t_user(id,login_name,name,password,gender,email,phone,project_group,dept,expire_date,status,file_path,file_name,creation_date,creator,last_update_date,updator) 
-                    values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}')
-            """.format(userid,loginname,username,password,gender,email,phone,proj_group,dept,expire_date,status,file_path,file_name,current_rq(),'DBA',current_rq(),'DBA');
+        print(username,wkno,password,gender,email,phone,proj_group,dept,expire_date,file_path,file_name)
+        sql="""insert into t_user(id,login_name,wkno,name,password,gender,email,phone,project_group,dept,expire_date,status,file_path,file_name,creation_date,creator,last_update_date,updator) 
+                    values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}')
+            """.format(userid,loginname,wkno,username,password,gender,email,phone,proj_group,dept,expire_date,status,file_path,file_name,current_rq(),'DBA',current_rq(),'DBA');
         print(sql)
         cr.execute(sql)
 
@@ -596,6 +602,7 @@ def upd_user(p_user):
         cr = db.cursor()
         userid      = p_user['userid']
         loginname   = p_user['loginname']
+        wkno        = p_user['wkno']
         username    = p_user['username']
         password    = aes_encrypt(p_user['password'],loginname)
         gender      = p_user['gender']
@@ -632,9 +639,10 @@ def upd_user(p_user):
                        updator   ='{10}',
                        file_path ='{11}',
                        file_name = '{12}',
-                       project_group = '{13}'
-                where id='{14}'""".format(username,loginname,password,gender,email,phone,dept,expire_date,status,
-                                          current_rq(),'DBA',file_path,file_name,proj_group,userid)
+                       project_group = '{13}',
+                       wkno          = '{14}'
+                where id='{15}'""".format(username,loginname,password,gender,email,phone,dept,expire_date,status,
+                                          current_rq(),'DBA',file_path,file_name,proj_group,wkno,userid)
         print("upd_user=",sql)
         cr.execute(sql)
         upd_user_role(userid,roles)

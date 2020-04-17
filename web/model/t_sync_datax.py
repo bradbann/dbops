@@ -453,7 +453,6 @@ def get_mysql_columns(p_sync):
     print('get_mysql_columns=',v)
     return v[0:-1]
 
-
 def get_hbase_columns(p_sync):
     print('p_sync=',p_sync)
     p_ds = get_ds_by_dsid(p_sync['sour_db_server'])
@@ -922,8 +921,92 @@ def update_datax_sync_status():
         result['message'] = '执行失败！'
         return result
 
-def sync_datax_log_query(p_param):
-    pass
+def query_sync_log_analyze(sync_env,tagname,begin_date,end_date):
+    db  = get_connection()
+    cr  = db.cursor()
+    v_where = ' where 1=1 '
+    if sync_env == 'prod':
+        v_where = v_where + """  and exists(SELECT 1 FROM t_datax_sync_config 
+                                        where zk_hosts='192.168.100.63:2181,192.168.100.64:2181,192.168.100.69:2181'
+                                         and  sync_tag='{0}' 
+                                        ) 
+                            """.format(tagname)
+    elif sync_env == "dev":
+        v_where = v_where + """  and exists(SELECT 1 FROM t_datax_sync_config 
+                                        where zk_hosts='10.2.39.165:2181,10.2.39.166:2181,10.2.39.182:2181'
+                                         and  sync_tag='{0}' 
+                                        ) 
+                            """.format(tagname)
+    elif sync_env == "uat":
+        v_where = v_where + """  and exists(SELECT 1 FROM t_datax_sync_config 
+                                        where zk_hosts='10.2.39.84:2181,10.2.39.89:2181,10.2.39.67:2181'
+                                         and  sync_tag='{0}' 
+                                        ) 
+                            """.format(tagname)
+    else:
+        pass
 
-def sync_datax_log_query_detail(p_param):
-    pass
+    if tagname != '':
+        v_where = v_where + " and a.sync_tag='{0}'\n".format(tagname)
+
+    if begin_date != '':
+        v_where = v_where + " and a.create_date>='{0}'\n".format(begin_date+' 0:0:0')
+
+    if end_date != '':
+        v_where = v_where + " and a.create_date<='{0}'\n".format(end_date+' 23:59:59')
+
+    sql1 = """SELECT 
+                  cast(a.create_date as char) as create_date,a.duration
+              FROM t_datax_sync_log a
+              {0}
+              ORDER BY a.create_date
+             """.format(v_where)
+
+    sql2 = """SELECT 
+                  cast(a.create_date as char) as create_date,a.amount
+              FROM t_datax_sync_log a 
+              {0}
+              ORDER BY a.create_date
+             """.format(v_where)
+
+    print(sql1)
+    print(sql2)
+
+    cr.execute(sql1)
+    v_list1 = []
+    for r in cr.fetchall():
+        v_list1.append(list(r))
+
+    cr.execute(sql2)
+    v_list2 = []
+    for r in cr.fetchall():
+        v_list2.append(list(r))
+
+    cr.close()
+    db.commit()
+    return v_list1,v_list2
+
+def get_datax_sync_tags_by_env(p_env):
+    db = get_connection()
+    cr = db.cursor()
+    v_where=''
+    if p_env == 'prod':
+        v_where = v_where + " and a.zk_hosts='192.168.100.63:2181,192.168.100.64:2181,192.168.100.69:2181'\n"
+    elif p_env == "dev":
+        v_where = v_where + " and a.zk_hosts='10.2.39.165:2181,10.2.39.166:2181,10.2.39.182:2181'\n"
+    elif p_env == "uat":
+        v_where = v_where + " and a.zk_hosts='10.2.39.84:2181,10.2.39.89:2181,10.2.39.67:2181'\n"
+    else:
+        pass
+
+    if p_env=='':
+        sql = """SELECT a.sync_tag,a.comments FROM t_datax_sync_config a  WHERE STATUS=1   ORDER BY comments"""
+    else:
+        sql = """SELECT a.sync_tag,a.comments FROM t_datax_sync_config a  WHERE STATUS=1 {0}  ORDER BY comments""".format(v_where)
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list

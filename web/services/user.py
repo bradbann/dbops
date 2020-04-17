@@ -44,6 +44,7 @@ class useradd_save(basehandler):
     def post(self):
         d_user={}
         d_user['login']        = self.get_argument("login")
+        d_user['wkno']         = self.get_argument("wkno")
         d_user['user']         = self.get_argument("user")
         d_user['pass']         = self.get_argument("pass")
         d_user['gender']       = self.get_argument("gender")
@@ -100,6 +101,7 @@ class useredit(basehandler):
         self.render("./user_edit.html",
                      userid      = d_user['userid'],
                      loginname   = d_user['loginname'],
+                     wkno        = d_user['wkno'],
                      username    = d_user['username'],
                      password    = d_user['password'],
                      gender      = d_user['gender'],
@@ -127,6 +129,7 @@ class useredit_save(basehandler):
         d_user={}
         d_user['userid']      = self.get_argument("userid")
         d_user['loginname']   = self.get_argument("loginname")
+        d_user['wkno']        = self.get_argument("wkno")
         d_user['username']    = self.get_argument("username")
         d_user['password']    = self.get_argument("password")
         d_user['gender']      = self.get_argument("gender")

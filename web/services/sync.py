@@ -334,17 +334,6 @@ class get_sync_tasks(basehandler):
         print('get_sync_tasks=', v_json)
         self.write(v_json)
 
-# class get_sync_ywlx(basehandler):
-#     def post(self):
-#         self.set_header("Content-Type", "application/json; charset=UTF-8")
-#         market_id = self.get_argument("market_id")
-#         d_list  = {}
-#         v_list  = get_db_sync_ywlx_by_market_id(market_id)
-#         d_list['data'] = v_list
-#         v_json  = json.dumps(d_list)
-#         print('get_sync_tasks=', v_json)
-#         self.write(v_json)
-
 
 class syncedit_push(basehandler):
     @tornado.web.authenticated

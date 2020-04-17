@@ -12,11 +12,13 @@
 
 import json
 import tornado.web
-from   web.model.t_sync_datax import query_datax_sync,save_datax_sync,query_datax_by_id,upd_datax_sync,del_datax_sync,query_datax_sync_log,query_datax_sync_detail,query_datax_sync_dataxTemplete,downloads_datax_sync_dataxTemplete
-from   web.model.t_sync_datax import push_datax_sync_task,pushall_datax_sync_task,run_datax_sync_task,stop_datax_sync_task,update_datax_sync_status,query_datax_sync_log_analyze,query_datax_sync_log_detail
-from   web.model.t_dmmx import get_dmm_from_dm,get_sync_server,get_datax_sync_db_server,get_db_sync_tags,get_db_sync_tags_by_market_id,get_db_sync_ywlx,get_db_sync_ywlx_by_market_id
-from   web.utils.common import current_rq2,get_day_nday_ago,now
-from   web.utils.basehandler import basehandler
+from   web.model.t_sync_datax import query_datax_sync,save_datax_sync,query_datax_by_id,upd_datax_sync,del_datax_sync,query_datax_sync_log
+from   web.model.t_sync_datax import query_datax_sync_detail,query_datax_sync_dataxTemplete,downloads_datax_sync_dataxTemplete,get_datax_sync_tags_by_env
+from   web.model.t_sync_datax import push_datax_sync_task,pushall_datax_sync_task,run_datax_sync_task,stop_datax_sync_task,update_datax_sync_status
+from   web.model.t_sync_datax import query_datax_sync_log_analyze,query_datax_sync_log_detail,query_sync_log_analyze
+from   web.model.t_dmmx       import get_dmm_from_dm,get_sync_server,get_datax_sync_db_server,get_db_sync_tags,get_db_sync_tags_by_market_id,get_db_sync_ywlx_by_market_id,get_datax_sync_tags
+from   web.utils.common       import current_rq2,get_day_nday_ago,now
+from   web.utils.basehandler  import basehandler
 
 class syncbigdataquery(basehandler):
     @tornado.web.authenticated
@@ -437,4 +439,42 @@ class syncedit_status(basehandler):
         v_list = update_datax_sync_status()
         v_json = json.dumps(v_list)
         print('backupedit_status=',v_json)
+        self.write(v_json)
+
+class syncloganalyze_bigdata(basehandler):
+    @tornado.web.authenticated
+    def get(self):
+        print('begin_date=',get_day_nday_ago(now(),15),get_day_nday_ago(now(),0))
+        self.render("./sync_bigdata_log_analyze.html",
+                      db_sync_tags = get_datax_sync_tags(),
+                      begin_date=get_day_nday_ago(now(),0),
+                      end_date=get_day_nday_ago(now(),0)
+                    )
+
+class sync_log_analyze_bigdata(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        sync_env   = self.get_argument("sync_env")
+        tagname    = self.get_argument("tagname")
+        begin_date = self.get_argument("begin_date")
+        end_date   = self.get_argument("end_date")
+        d_list     = {}
+        v_list1,v_list2 = query_sync_log_analyze(sync_env,tagname,begin_date,end_date)
+        d_list['data1'] = v_list1
+        d_list['data2'] = v_list2
+        v_json = json.dumps(d_list)
+        print('backup_log_analyze=',v_json)
+        self.write(v_json)
+
+class get_bigdata_sync_tasks(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        sync_env = self.get_argument("sync_env")
+        d_list  = {}
+        v_list  = get_datax_sync_tags_by_env(sync_env)
+        d_list['data'] = v_list
+        v_json  = json.dumps(d_list)
+        print('get_bigdata_sync_tasks=', v_json)
         self.write(v_json)

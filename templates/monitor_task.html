@@ -55,11 +55,13 @@
     </div>
      <!--功能按钮 -->
     <div class="row">
-          <div class="col-md-offset-5 col-lg-offset-5 col-xl-offset-5">
-               <input  id='task_add_win' type='button' class="btn waves-effect waves-light btn-primary" value="新增"/>
-               <input  id='task_upd_win' type='button' class="btn waves-effect waves-light btn-primary" value="变更"/>
-               <input  id='task_del_btn' type='button' class="btn waves-effect waves-light btn-primary" value="删除"/>
-               <input  id='task_clone_win' type='button' class="btn waves-effect waves-light btn-primary" value="克隆"/>
+          <div class="col-md-offset-4 col-lg-offset-4 col-xl-offset-4">
+               <input  id='task_add_win'   type='button' class="btn waves-effect waves-light btn-primary"  value="新增"/>
+               <input  id='task_upd_win'   type='button' class="btn waves-effect waves-light btn-primary"  value="变更"/>
+               <input  id='task_del_btn'   type='button' class="btn waves-effect waves-light btn-primary"  value="删除"/>
+               <input  id='task_push_btn'  type='button' class="btn waves-effect waves-light btn-primary"  value="推送"/>
+               <input  id='task_run_btn'   type='button' class="btn waves-effect waves-light btn-primary"  value="运行"/>
+               <input  id='task_stop_btn'  type='button' class="btn waves-effect waves-light btn-primary"  value="停止"/>
          </div>
     </div>
 
@@ -372,17 +374,23 @@
 
       function isSelect() {
            var rec=0;
-           $("#monitor_index_table tbody tr td input:checked").each( function() {
+           $("#monitor_task_table tbody tr td input:checked").each( function() {
               rec=rec+1;
            });
            if ( rec==1 ){
               $('#task_upd_win').attr("disabled",false);
-              $('#task_clone_win').attr("disabled",false);
               $('#task_del_btn').attr("disabled",false);
+              $('#task_clone_btn').attr("disabled",false);
+              $('#task_push_btn').attr("disabled",false);
+              $('#task_run_btn').attr("disabled",false);
+              $('#task_stop_btn').attr("disabled",false);
            } else {
                $('#task_upd_win').attr("disabled", true);
-               $('#task_clone_win').attr("disabled", true);
                $('#task_del_btn').attr("disabled", true);
+               $('#task_clone_win').attr("disabled", true);
+               $('#task_push_btn').attr("disabled",true);
+               $('#task_run_btn').attr("disabled",true);
+               $('#task_stop_btn').attr("disabled",true);
            }
       }
 
@@ -413,7 +421,7 @@
                           destroy    :true,
                           async      :true,
                           ordering   :false,
-                          scrollY    :"400px",
+                          scrollY    :"800px",
                           scrollX    :false,
                           scrollCollapse: true,
                           paging:     false,
@@ -462,8 +470,11 @@
                              }
                          });
                       $('#task_upd_win').attr("disabled",true);
-                      $('#task_clone_win').attr("disabled",true);
                       $('#task_del_btn').attr("disabled",true);
+                      $('#task_clone_btn').attr("disabled",true);
+                      $('#task_push_btn').attr("disabled",true);
+                      $('#task_run_btn').attr("disabled",true);
+                      $('#task_stop_btn').attr("disabled",true);
                    }
              })
         }
@@ -581,16 +592,16 @@
                     type: "post",
                     datatype: "json",
                     data: {
-                        add_monitor_task_tag: $('#add_gather_task_tag').val(),
-                        add_monitor_task_desc: $('#add_gather_task_desc').val(),
-                        add_monitor_server: $('#add_gather_server').val(),
-                        add_task_templete_name: '',
-                        add_gather_task_run_time: $('#add_gather_task_run_time').val(),
-                        add_gather_task_python3_home: $('#add_gather_task_python3_home').val(),
-                        add_gather_task_script_base: $('#add_gather_task_script_base').val(),
-                        add_gather_task_script_name: $('#add_gather_task_script_name').val(),
-                        add_gather_task_api_server: $('#add_gather_task_api_server').val(),
-                        add_gather_task_status: $('#add_gather_task_status').val(),
+                        add_monitor_task_tag         : $('#add_gather_task_tag').val(),
+                        add_monitor_task_desc        : $('#add_gather_task_desc').val(),
+                        add_monitor_server           : $('#add_gather_server').val(),
+                        add_task_templete_name       : '',
+                        add_gather_task_run_time     : $('#add_gather_task_run_time').val(),
+                        add_gather_task_python3_home : $('#add_gather_task_python3_home').val(),
+                        add_gather_task_script_base  : $('#add_gather_task_script_base').val(),
+                        add_gather_task_script_name  : $('#add_gather_task_script_name').val(),
+                        add_gather_task_api_server   : $('#add_gather_task_api_server').val(),
+                        add_gather_task_status       : $('#add_gather_task_status').val(),
                     },
                     success: function (dataSet) {
                         console.log(dataSet.code, dataSet.message);
@@ -673,6 +684,67 @@
                       }
               })
         })
+
+        $("#task_push_btn").click(function() {
+              var v_tag='';
+              var v_desc='';
+              $("#monitor_task_table tbody tr td input:checked").each( function() {
+                  var row=$(($(this).parent().parent().html()));
+                  v_tag  = row[0].innerHTML;
+                  v_desc = row[1].innerHTML.replace(/&gt;/g,'>');
+                  v_api  = row[5].innerHTML;
+                  console.log("v_tag=",v_tag,"v_api=",v_api)
+                  $.ajax({
+                          url: "/monitor/task/push",
+                          type: "post",
+                          datatype: "json",
+                          data:{
+                              tag: v_tag,
+                              api: v_api
+                          },
+                          beforeSend: function () {
+                              swal({
+                                    title: "正在推送中...",
+                                    text: "任务["+v_desc+"]正在推送中...",
+                                    type: "info",
+                                    showConfirmButton: false
+                               });
+                          },
+                          success: function (dataSet) {
+                              console.log(dataSet.code, dataSet.message);
+                              if (dataSet.code=='0') {
+                                     swal("推送成功!", "任务["+v_desc+"]已推送成功!", "success");
+                                     $("#query_btn").click();
+                              } else {
+                                     swal("推送失败!", "任务["+v_desc+"]"+dataSet.message+"!", "error");
+                              }
+                              $('#task_upd_win').attr("disabled",true);
+                              $('#task_clone_win').attr("disabled",true);
+                              $('#task_del_btn').attr("disabled",true);
+                              $('#task_push_btn').attr("disabled",true);
+                              $('#task_run_btn').attr("disabled",true);
+                              $('#task_stop_btn').attr("disabled",true);
+                          },
+                         error: function (jqXHR, textStatus, errorThrown) {
+                            console.log('jqXHR.responseText=',jqXHR.responseText);
+                            console.log('jqXHR.status=',jqXHR.status);
+                            console.log('jqXHR.readyState=',jqXHR.readyState);
+                            console.log('jqXHR.statusText=',jqXHR.statusText);
+                            console.log('textStatus=',textStatus);
+                            console.log('errorThrown=',errorThrown);
+                            if (jqXHR.status==403){
+                                swal("登陆信息已过期，请重新登陆!", "", "error")
+                                window.location.href='/login'
+                            } else if (jqXHR.status==502){
+                                swal("用户无权访问权限此功能!", "", "error")
+                            } else {
+                                swal("系统不可用,请稍后重试!", "", "error")
+                            }
+                        }
+                  });
+              });
+
+        });
 
         $("#query_btn").click(function() {
              query_task()

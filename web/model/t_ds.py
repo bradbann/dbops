@@ -4,8 +4,7 @@
 # @Author  : 马飞
 # @File    : t_user.py
 # @Software: PyCharm
-
-from web.utils.common     import exception_info,current_rq,aes_encrypt,aes_decrypt
+from web.utils.common     import exception_info,current_rq,aes_encrypt,aes_decrypt,format_sql
 from web.utils.common     import get_connection,get_connection_ds,get_connection_ds_sqlserver,get_connection_ds_oracle
 from web.utils.common     import get_connection_ds_pg,get_connection_ds_mongo,get_connection_ds_redis,get_connection_ds_es
 from web.model.t_user     import get_user_by_loginame
@@ -340,7 +339,7 @@ def save_ds(p_ds):
         ds_db_type     = p_ds['db_type']
         ds_db_env      = p_ds['db_env']
         ds_db_desc     = p_ds['db_desc']
-        ds_ip          = p_ds['ip']
+        ds_ip          = format_sql(p_ds['ip'])
         ds_port        = p_ds['port']
         ds_service     = p_ds['service']
         ds_user        = p_ds['user']
@@ -384,7 +383,7 @@ def upd_ds(p_ds):
         ds_db_type     = p_ds['db_type']
         ds_db_env      = p_ds['db_env']
         ds_db_desc     = p_ds['db_desc']
-        ds_ip          = p_ds['ip']
+        ds_ip          = format_sql(p_ds['ip'])
         ds_port        = p_ds['port']
         ds_service     = p_ds['service']
         ds_user        = p_ds['user']

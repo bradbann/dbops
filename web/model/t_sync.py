@@ -20,7 +20,7 @@ def query_sync(sync_tag,market_id,sync_ywlx,sync_type):
         v_where = v_where + " and a.sync_tag='{0}'\n".format(sync_tag)
 
     if market_id != '':
-        v_where = v_where + " and a.sync_col_val='{0}'\n".format(market_id)
+        v_where = v_where + " and instr(a.sync_col_val,'{0}')>0\n".format(market_id)
 
     if sync_ywlx != '':
         v_where = v_where + " and a.sync_ywlx='{0}'\n".format(sync_ywlx)
@@ -261,7 +261,7 @@ def save_sync(p_backup):
         sync_gap             = p_backup['sync_gap']
         sync_col_name        = p_backup['sync_col_name']
         sync_col_val         = p_backup['sync_col_val']
-        sync_time_type       = p_backup['sync_time_type']
+        sync_time_type       = format_sql(p_backup['sync_time_type'])
         api_server           = p_backup['api_server']
         status               = p_backup['status']
 
@@ -323,7 +323,7 @@ def upd_sync(p_sync):
         sync_batch_size_incr = p_sync['sync_batch_size_incr']
         sync_gap        = p_sync['sync_gap']
         sync_col_name   = p_sync['sync_col_name']
-        sync_col_val    = p_sync['sync_col_val']
+        sync_col_val    = format_sql(p_sync['sync_col_val'])
         sync_time_type  = p_sync['sync_time_type']
         api_server      = p_sync['api_server']
         status          = p_sync['status']

@@ -18,7 +18,8 @@ def query_monitor_index(index_code):
     if index_code != '':
         v_where = " where a.index_code like '%{0}%' or a.index_name like '%{1}%'".format(index_code,index_code)
 
-    sql = """SELECT  
+    sql = """SELECT
+                 id,  
                  index_code,
                  index_name,                 
                  (SELECT dmmc FROM t_dmmx b 
@@ -30,8 +31,9 @@ def query_monitor_index(index_code):
                  case when a.index_threshold_type='1' or a.index_threshold_type='3' then
                     index_threshold
                  else
-                    concat(index_threshold_day,',',index_threshold_times)                   
+                    concat(index_threshold_day,'^',index_threshold_times)                   
                  end as    index_threshold,
+                 concat(trigger_time,'^',trigger_times),
                  CASE a.STATUS WHEN '1' THEN '启用' WHEN '0' THEN '禁用' END  AS  flag
             FROM t_monitor_index a
             {0}
@@ -57,11 +59,12 @@ def save_index(p_index):
         result  = {}
         sql="""insert into t_monitor_index(
                            index_name,index_code,index_type,index_db_type,index_threshold_type,
-                           index_threshold_day,index_threshold_times,index_threshold,status)
-               values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}')
+                           index_threshold_day,index_threshold_times,index_threshold,status,trigger_time,trigger_times)
+               values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}')
             """.format(p_index['index_name'],p_index['index_code'],p_index['index_type'],p_index['index_db_type'],
                        p_index['index_val_type'],p_index['index_threshold_day'],p_index['index_threshold_times'],
-                       p_index['index_threshold'],p_index['index_status']
+                       p_index['index_threshold'],p_index['index_status'],
+                       p_index['index_trigger_time'],p_index['index_trigger_times']
                      )
         print(sql)
         cr.execute(sql)
@@ -88,17 +91,21 @@ def upd_index(p_index):
 
         sql="""update t_monitor_index  set  
                       index_name            ='{0}',
-                      index_type            ='{1}', 
-                      index_db_type         ='{2}',
-                      index_threshold_type  ='{3}',
-                      index_threshold       ='{4}', 
-                      index_threshold_day   ='{5}',
-                      index_threshold_times ='{6}',
-                      status                ='{7}'
-                where index_code='{8}'
-            """.format(p_index['index_name'],p_index['index_type'], p_index['index_db_type'],
+                      index_code            ='{1}',
+                      index_type            ='{2}', 
+                      index_db_type         ='{3}',
+                      index_threshold_type  ='{4}',
+                      index_threshold       ='{5}', 
+                      index_threshold_day   ='{6}',
+                      index_threshold_times ='{7}',
+                      status                ='{8}',                      
+                      trigger_time          ='{9}',
+                      trigger_times         ='{10}'                      
+                where id='{11}'
+            """.format(p_index['index_name'],p_index['index_code'],p_index['index_type'], p_index['index_db_type'],
                        p_index['index_val_type'], p_index['index_threshold'],p_index['index_threshold_day'],
-                       p_index['index_threshold_times'],p_index['index_status'],p_index['index_code'])
+                       p_index['index_threshold_times'],p_index['index_status'],
+                       p_index['index_trigger_time'],p_index['index_trigger_times'],p_index['index_id'])
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -194,13 +201,43 @@ def get_index_by_index_code(p_index_code):
     rs = cr.fetchall()
     cr.close()
     db.commit()
-    print('get_archive_by_archiveid->rs=',rs)
+    print('get_index_by_index_code->rs=',rs)
+    return rs[0]
+
+def get_index_by_index_id(p_id):
+    db = get_connection_dict()
+    cr = db.cursor()
+    sql = """SELECT  index_name,index_code,index_type,index_db_type,index_threshold,status
+             FROM t_monitor_index where id='{0}'
+          """.format(p_id)
+    cr.execute(sql)
+    rs = cr.fetchall()
+    cr.close()
+    db.commit()
+    print('get_index_by_index_id->rs=',rs)
     return rs[0]
 
 def get_monitor_indexes():
     db = get_connection()
     cr = db.cursor()
     sql = """SELECT  id,index_name FROM t_monitor_index WHERE STATUS='1'"""
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list
+
+def get_monitor_indexes2(p_type):
+    db = get_connection()
+    cr = db.cursor()
+    sql=''
+    if p_type=='':
+        sql = """SELECT  index_code,index_name FROM t_monitor_index
+                          WHERE STATUS='1' order by index_type,id"""
+    else:
+        sql = """SELECT  index_code,index_name FROM t_monitor_index 
+                     WHERE STATUS='1' and index_type='{0}' order by index_type,id """.format(p_type)
     cr.execute(sql)
     v_list = []
     for r in cr.fetchall():
@@ -513,9 +550,9 @@ def save_gather_task(p_task):
                         p_task['add_gather_task_db_server'],
                         p_task['add_gather_task_templete_name'],
                         p_task['add_gather_task_run_time'],
-                        p_task['add_gather_task_python3_home'],
                         p_task['add_gather_task_script_base'],
                         p_task['add_gather_task_script_name'],
+                        p_task['add_gather_task_python3_home'],
                         p_task['add_gather_task_api_server'],
                         p_task['add_gather_task_status']
                         )
@@ -533,13 +570,12 @@ def save_gather_task(p_task):
         result['message'] = '保存失败！'
     return result
 
-
-def push_archive_task(p_tag,p_api):
+def push_monitor_task(p_tag,p_api):
     try:
         result = {}
         result['code'] = '0'
         result['message'] = '推送成功！'
-        v_cmd="curl -XPOST {0}/push_script_remote_archive -d 'tag={1}'".format(p_api,p_tag)
+        v_cmd="curl -XPOST {0}/push_script_remote_monitor -d 'tag={1}'".format(p_api,p_tag)
         print('push_archive_task=',v_cmd)
         r=os.popen(v_cmd).read()
         d=json.loads(r)
@@ -551,12 +587,12 @@ def push_archive_task(p_tag,p_api):
            result['message'] = '{0}!'.format(d['msg'])
            return result
     except Exception as e:
-        print('push_archive_task.error:',traceback.format_exc())
+        print('push_script_remote_monitor.error:',traceback.format_exc())
         result['code'] = '-1'
         result['message'] = '{0!'.format(traceback.format_exc())
         return result
 
-def run_archive_task(p_tag,p_api):
+def run_monitor_task(p_tag,p_api):
     try:
         result = {}
         result['code'] = '0'
@@ -577,7 +613,7 @@ def run_archive_task(p_tag,p_api):
           result['message'] = '{0}!'.format(str(e))
           return result
 
-def stop_archive_task(p_tag,p_api):
+def stop_monitor_task(p_tag,p_api):
     try:
         result = {}
         result['code'] = '0'
@@ -598,3 +634,69 @@ def stop_archive_task(p_tag,p_api):
          result['message'] = '{0!'.format(str(e))
          return result
 
+
+def query_monitor_log_analyze(server_id,index_code,begin_date,end_date):
+    db  = get_connection()
+    cr  = db.cursor()
+    v_where    = ' where 1=1 '
+
+    if server_id != '':
+        v_where = v_where + " and a.server_id='{0}'\n".format(server_id)
+
+    if begin_date != '':
+        v_where = v_where + " and a.create_date>='{0}'\n".format(begin_date+' 0:0:0')
+
+    if end_date != '':
+        v_where = v_where + " and a.create_date<='{0}'\n".format(end_date+' 23:59:59')
+
+    if index_code=='cpu_usage':
+       sql = """SELECT cast(a.create_date as char) as create_date,a.cpu_usage 
+                 FROM t_monitor_task_server_log a {0} ORDER BY a.create_date
+             """.format(v_where)
+    elif index_code=='mem_usage':
+       sql = """SELECT cast(a.create_date as char) as create_date,a.mem_usage 
+                 FROM t_monitor_task_server_log a {0} ORDER BY a.create_date
+             """.format(v_where)
+    elif index_code == 'disk_usage':
+        sql = """SELECT cast(a.create_date as char) as create_date,a.disk_usage 
+                    FROM t_monitor_task_server_log a {0} ORDER BY a.create_date
+              """.format(v_where)
+    elif index_code == 'disk_read':
+        sql = """SELECT cast(a.create_date as char) as create_date,a.disk_read 
+                    FROM t_monitor_task_server_log a {0} ORDER BY a.create_date
+              """.format(v_where)
+    elif index_code == 'disk_write':
+        sql = """SELECT cast(a.create_date as char) as create_date,a.disk_write
+                    FROM t_monitor_task_server_log a {0} ORDER BY a.create_date
+              """.format(v_where)
+    elif index_code == 'net_out':
+        sql = """SELECT cast(a.create_date as char) as create_date,a.net_out 
+                      FROM t_monitor_task_server_log a {0} ORDER BY a.create_date
+                """.format(v_where)
+    elif index_code == 'net_in':
+        sql = """SELECT cast(a.create_date as char) as create_date,a.net_in
+                      FROM t_monitor_task_server_log a {0} ORDER BY a.create_date
+                """.format(v_where)
+    elif index_code == 'mysql_total_connect':
+        sql = """SELECT cast(a.create_date as char) as create_date,a.total_connect
+                      FROM t_monitor_task_db_log a {0} ORDER BY a.create_date
+                """.format(v_where)
+    elif index_code == 'mysql_active_connect':
+        sql = """SELECT cast(a.create_date as char) as create_date,a.active_connect
+                         FROM t_monitor_task_db_log a {0} ORDER BY a.create_date
+                   """.format(v_where)
+    elif index_code == 'mysql_available':
+        sql = """SELECT cast(a.create_date as char) as create_date,a.db_available
+                            FROM t_monitor_task_db_log a {0} ORDER BY a.create_date
+                      """.format(v_where)
+    else:
+        pass
+
+    print(sql)
+    cr.execute(sql)
+    v_list1 = []
+    for r in cr.fetchall():
+        v_list1.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list1
