@@ -338,15 +338,18 @@ def aes_encrypt(p_password,p_key):
     return rs[0]
 
 def aes_decrypt(p_password,p_key):
-    db = get_connection()
-    cr = db.cursor()
-    sql="""select aes_decrypt(unhex('{0}'),'{1}')""".format(p_password,p_key[::-1])
-    cr.execute(sql)
-    rs=cr.fetchone()
-    db.commit()
-    cr.close()
-    db.close()
-    return str(rs[0],encoding = "utf-8")
+    try:
+        db = get_connection()
+        cr = db.cursor()
+        sql="""select aes_decrypt(unhex('{0}'),'{1}')""".format(p_password,p_key[::-1])
+        cr.execute(sql)
+        rs=cr.fetchone()
+        db.commit()
+        cr.close()
+        db.close()
+        return str(rs[0],encoding = "utf-8")
+    except:
+        return ''
 
 def get_rand_str(p_len):
     rand=''

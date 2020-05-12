@@ -4,7 +4,7 @@
 # @Author : 马飞
 # @File : t_sys.py.py
 # @Software: PyCharm
-
+import traceback
 from web.utils.common import get_connection
 
 def check_rule(rule):
@@ -21,6 +21,24 @@ def check_rule(rule):
               result['message'] ='字符字段最大长度不是整数!'
               return result
     return result
+
+
+def check_code(code):
+    result = {}
+    if code["type_name"]=="":
+        result['code']='-1'
+        result['message']='类型名称不能为空！'
+        return result
+
+    if code["type_code"]=="":
+        result['code']='-1'
+        result['message']='类型代码不能为空！'
+        return result
+
+    result['code'] = '0'
+    result['message'] = '验证通过'
+    return result
+
 
 def save_audit_rule(rule):
     result = check_rule(rule)
@@ -45,19 +63,203 @@ def save_audit_rule(rule):
         result['message'] = '保存失败！'
     return result
 
+def save_sys_code_type(code):
+    result = check_code(code)
+    if result['code']=='-1':
+       return result
+    try:
+        db = get_connection()
+        cr = db.cursor()
+        sql= "insert into t_dmlx(dm,mc,flag,create_time,update_time) values('{}','{}','{}',now(),now())".\
+             format(code['type_name'],code['type_code'],code['type_status'])
+        print('save_sys_code_type=',sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result={}
+        result['code']='0'
+        result['message']='保存成功！'
+        return result
+    except Exception as e:
+        print(traceback.format_exc())
+        result['code'] = '-1'
+        result['message'] = '保存失败！'
+    return result
+
+def upd_sys_code_type(code):
+    result = check_code(code)
+    if result['code']=='-1':
+       return result
+    try:
+        db = get_connection()
+        cr = db.cursor()
+        sql= """update t_dmlx set  mc ='{}',flag = '{}',update_time=now() where   dm  = '{}'
+             """.format(code['type_name'],code['type_status'],code['type_code'])
+        print('upd_sys_code_type=',sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result={}
+        result['code']='0'
+        result['message']='更新成功！'
+        return result
+    except Exception as e:
+        print(traceback.format_exc())
+        result['code'] = '-1'
+        result['message'] = '更新失败！'
+    return result
+
+
+def del_sys_code(code):
+    result = {}
+    try:
+        db = get_connection()
+        cr = db.cursor()
+        cr.execute("select count(0) from t_dmmx where dm='{}'".format(code))
+        rs=cr.fetchone()
+        if  rs[0]>0:
+            result['code'] = '-1'
+            result['message'] = '存在代码明细数据不能删除！'
+            return result
+        sql= "delete from t_dmlx where dm  = '{}'".format(code)
+        print('del_sys_code=',sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result={}
+        result['code']='0'
+        result['message']='删除成功！'
+        return result
+    except Exception as e:
+        print(traceback.format_exc())
+        result['code'] = '-1'
+        result['message'] = '删除失败！'
+    return result
+
+def save_sys_code_detail(code):
+    result = check_code(code)
+    if result['code']=='-1':
+       return result
+    try:
+        db = get_connection()
+        cr = db.cursor()
+        sql= "insert into t_dmmx(dm,dmm,dmmc,flag,create_time,update_time) values('{}','{}','{}','{}',now(),now())".\
+             format(code['type_code'],code['detail_code'],code['detail_name'],code['type_status'])
+        print('save_sys_code_detail=',sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result={}
+        result['code']='0'
+        result['message']='保存成功！'
+        return result
+    except Exception as e:
+        print(traceback.format_exc())
+        result['code'] = '-1'
+        result['message'] = '保存失败！'
+    return result
+
+def upd_sys_code_detail(code):
+    result = check_code(code)
+    if result['code']=='-1':
+       return result
+    try:
+        db = get_connection()
+        cr = db.cursor()
+        sql= """update t_dmmx set  dmm='{}' dmmc ='{}',flag = '{}',update_time=now() where   dm  = '{}'
+             """.format(code['type_name'],code['type_status'],code['type_code'])
+        print('upd_sys_code_type=',sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result={}
+        result['code']='0'
+        result['message']='更新成功！'
+        return result
+    except Exception as e:
+        print(traceback.format_exc())
+        result['code'] = '-1'
+        result['message'] = '更新失败！'
+    return result
+
+
+def del_sys_code_detail(code):
+    result = {}
+    try:
+        db = get_connection()
+        cr = db.cursor()
+        cr.execute("select count(0) from t_dmmx where dm='{}'".format(code))
+        rs=cr.fetchone()
+        if  rs[0]>0:
+            result['code'] = '-1'
+            result['message'] = '存在代码明细数据不能删除！'
+            return result
+        sql= "delete from t_dmlx where dm  = '{}'".format(code)
+        print('del_sys_code=',sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result={}
+        result['code']='0'
+        result['message']='删除成功！'
+        return result
+    except Exception as e:
+        print(traceback.format_exc())
+        result['code'] = '-1'
+        result['message'] = '删除失败！'
+    return result
+
+
+
+
+
+
 
 def query_dm(p_code):
     db = get_connection()
     cr = db.cursor()
-    v_where=' and  1=1 '
+    v_where=' '
     if p_code != '':
-        v_where = """ and (a.dm like '%{0}%' or a.mc like '%{1}%' 
-                             or b.dmm like '%{2}%' or b.dmmc like '%{3}%')
-                  """.format(p_code,p_code,p_code,p_code)
+        v_where = " where  (a.dm like '%{0}%' or a.mc like '%{1}%')".format(p_code,p_code,p_code,p_code)
 
-    sql = """SELECT a.dm,a.mc,b.dmm,b.dmmc  FROM t_dmlx a LEFT JOIN t_dmmx b ON a.dm=b.`dm`
+    sql = """SELECT 
+                  a.dm,
+                  a.mc,
+                  case a.flag when '1' then '启用'  when '0' then '禁用' end  as flag,
+                  date_format(a.create_time,'%Y-%m-%d %H:%i:%s')  as  create_time,
+                  date_format(a.update_time,'%Y-%m-%d %H:%i:%s')  as  update_time
+             FROM t_dmlx a
+                {0}
+             ORDER BY a.dm,a.create_time
+          """.format(v_where)
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+def query_dm_detail(p_code):
+    db = get_connection()
+    cr = db.cursor()
+    v_where=' '
+    if p_code != '':
+        v_where = "  and b.dm='{0}'".format(p_code,p_code)
+
+    sql = """SELECT 
+                  a.dm,
+                  a.mc,  
+                  b.dmm,
+                  b.dmmc,                
+                  case b.flag when '1' then '启用'  when '0' then '禁用' end  as flag,
+                  date_format(b.create_time,'%Y-%m-%d %H:%i:%s')  as  create_time,
+                  date_format(b.update_time,'%Y-%m-%d %H:%i:%s')  as  update_time
+             FROM t_dmlx a,t_dmmx b
+             where  a.dm=b.dm  
                {0}
-             ORDER BY a.dm,b.dmm
+             ORDER BY b.dm,b.dmm,a.create_time
           """.format(v_where)
     print(sql)
     cr.execute(sql)

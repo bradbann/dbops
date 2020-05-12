@@ -1,0 +1,603 @@
+ <head>
+    <meta charset="utf-8">
+
+    <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+
+      <!-- Notification css (Toastr) -->
+    <link href="{{static_url('plugins/toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{static_url('assets/css/components.css')}}" rel="stylesheet" type="text/css" />
+
+    <!-- Tooltipster css -->
+    <link rel="stylesheet" href="{{static_url('plugins/tooltipster/tooltipster.bundle.min.css')}}">
+
+    <style>
+        #tab-sys-monitor，tab-svr-monitor{
+            width: 100% !important;
+        }
+        .table_td_center {
+            text-align: left;
+        }
+
+        /* dataTables表头居中 */
+        .table > thead:first-child > tr:first-child > th {
+            text-align: center;
+        }
+        .color-warning {
+            color:red;
+            font-size: 30px;
+        }
+         .color-success {
+            color: #44d954;
+            font-size: 30px;
+        }
+
+        .progress-bar-success {
+            background-color: #2196f3b0;
+            line-height: 20px;
+        }
+
+        .progress-bar-warning {
+            background-color: #f06292;
+            line-height: 20px;
+        }
+
+        .progress-success {
+             background-color: #7fc1fc;
+             font-size: 10.8px;
+             line-height: 20px;
+        }
+
+        .progress-warning {
+             background-color: #fc7fb0a1;
+             font-size: 10.8px;
+             line-height: 20px;
+        }
+
+    </style>
+
+ </head>
+ <body>
+    <!--数据库监控情况 -->
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <ul class="nav nav-pills m-b-30 pull-left">
+                <li class="active">
+                    <a href="#sys-monitor" data-toggle="tab" aria-expanded="true">系统监控</a>
+                </li>
+                <li id='incr_li' class="">
+                    <a href="#svr-monitor" data-toggle="tab" aria-expanded="false">服务监控</a>
+                </li>
+            </ul>
+            <div class="tab-content br-n pn">
+                <div id="sys-monitor" class="tab-pane active">
+                    <div class="row">
+                        <div id='div-sys-monitor' class="col-md-12">
+                           <table id="tab-sys-monitor" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                    </div>
+                </div>
+                <div id="svr-monitor" class="tab-pane">
+                    <div class="row">
+                        <div id='div-svr-monitor' class="col-md-12">
+                            <table id="tab-svr-monitor" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <input id='current_tab_hidden' type='hidden'>
+
+    <i id='query_password3' class="ion-help"></i>
+
+    <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+    <script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
+    <script src="{{static_url('plugins/datatables/dataTables.buttons.min.js')}}"></script>
+    <script src="{{static_url('plugins/datatables/buttons.bootstrap.min.js')}}"></script>
+    <script src="{{static_url('plugins/datatables/dataTables.responsive.min.js')}}"></script>
+    <script src="{{static_url('plugins/datatables/responsive.bootstrap.min.js')}}"></script>
+    <script src="{{static_url('plugins/datatables/dataTables.scroller.min.js')}}"></script>
+
+    <!-- Toastr js -->
+    <script src="{{static_url('plugins/toastr/toastr.min.js')}}"></script>
+
+    <!-- Tooltipster js -->
+    <script src="{{static_url('plugins/tooltipster/tooltipster.bundle.min.js')}}"></script>
+    <script src="{{static_url('assets/pages/jquery.tooltipster.js')}}"></script>
+
+    <script>
+
+          //警告提醒
+          function showtips(flag,title,content){
+                toastr.options = {
+                      "closeButton": false,
+                      "debug": false,
+                      "newestOnTop": false,
+                      "progressBar": true,
+                      "positionClass": "toast-top-right",
+                      "preventDuplicates": false,
+                      "onclick": null,
+                      "showDuration": "3000",
+                      "hideDuration": "1000",
+                      "timeOut": "5000",
+                      "extendedTimeOut": "1000",
+                      "showEasing": "swing",
+                      "hideEasing": "linear",
+                      "showMethod": "fadeIn",
+                      "hideMethod": "fadeOut"
+                    }
+                    toastr[flag](content,title)
+        }
+
+          //获取系统监控数据
+          function get_sys_monitor(){
+              $.ajax({
+              url: "/monitor/view/sys",
+              type: "post",
+              datatype: "json",
+              success: function (dataSet) {
+                 $('#tab-sys-monitor').DataTable( {
+                          "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                          "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                          destroy    :true,
+                          async      :true,
+                          ordering   :false,
+                          scrollY    :"600px",
+                          scrollX    :false,
+                          paging     : false,
+                          data       : dataSet.data,
+                          autoFill   : false,
+                          bAutoWidth : false,
+                          info       : true,
+                          // fixedHeader: false,
+                          columns: [
+                            { "title": "服务器描述","width":"15%"},
+                            { "title": "服务器地址","width":"15%"},
+                            { "title": "CPU使用率","className"  : 'table_td_center'},
+                            { "title": "内存使用率","className"  : 'table_td_center'},
+                            { "title": "磁盘使用率","className"  : 'table_td_center'},
+                            { "title": "磁盘读","className"     : 'table_td_center'},
+                            { "title": "磁盘写","className"     : 'table_td_center'},
+                            { "title": "网络流入","className"   : 'table_td_center'},
+                            { "title": "网络流出","className"   : 'table_td_center'},
+                            { "title": "采集时间","className"   : 'table_td_center'},
+                            { "title": "系统状态","className"   : 'table_td_center'},
+                          ],
+                          columnDefs: [
+                              {
+                                    targets: 2,
+                                    render: function(data, type, row, meta){
+                                        var process=row[2].replace('%','')
+                                        if (process>=dataSet.index['cpu_total_usage']*100) {
+                                            msg ='<div class=\"progress progress-md progress-warning \">'+
+                                                     '<div class=\"progress-bar progress-bar-striped progress-bar-warning\" role=\"progressbar\" aria-valuenow=\"'+process+'\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:'+process+'%;">'+
+                                                        process+'%'+
+                                                     '</div>'+
+                                                  '</div>'
+                                            return msg;
+
+                                        } else {
+                                            msg ='<div class=\"progress progress-success progress-md\">'+
+                                                     '<div class=\"progress-bar progress-bar-striped progress-bar-success\" role=\"progressbar\" aria-valuenow=\"'+process+'\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:'+process+'%;">'+
+                                                        process+'%'+
+                                                     '</div>'+
+                                                  '</div>'
+                                            return msg;
+                                        }
+                                     }
+                              },
+                              {
+                                    targets: 3,
+                                    render: function(data, type, row, meta){
+                                        var process=row[3].replace('%','')
+                                        if (process>=dataSet.index['mem_usage']*100) {
+                                            msg ='<div class=\"progress progress-md progress-warning \">'+
+                                                     '<div class=\"progress-bar progress-bar-striped progress-bar-warning\" role=\"progressbar\" aria-valuenow=\"'+process+'\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:'+process+'%;">'+
+                                                        process+'%'+
+                                                     '</div>'+
+                                                  '</div>'
+                                            return msg;
+
+                                        } else {
+                                            msg ='<div class=\"progress progress-success progress-md\">'+
+                                                     '<div class=\"progress-bar progress-bar-striped progress-bar-success\" role=\"progressbar\" aria-valuenow=\"'+process+'\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:'+process+'%;">'+
+                                                        process+'%'+
+                                                     '</div>'+
+                                                  '</div>'
+                                            return msg;
+                                        }
+                                     }
+                              },
+                              {
+                                   targets: 4,
+                                    render: function(data, type, row, meta){
+                                        var process=row[4].replace('%','')
+                                        if (process>=dataSet.index['disk_usage']*100) {
+                                            msg ='<div class=\"progress progress-md progress-warning \">'+
+                                                     '<div class=\"progress-bar progress-bar-striped progress-bar-warning\" role=\"progressbar\" aria-valuenow=\"'+process+'\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:'+process+'%;">'+
+                                                        process+'%'+
+                                                     '</div>'+
+                                                  '</div>'
+                                            return msg;
+
+                                        } else {
+                                            msg ='<div class=\"progress progress-success progress-md\">'+
+                                                     '<div class=\"progress-bar progress-bar-striped progress-bar-success\" role=\"progressbar\" aria-valuenow=\"'+process+'\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:'+process+'%;">'+
+                                                        process+'%'+
+                                                     '</div>'+
+                                                  '</div>'
+                                            return msg;
+                                        }
+                                     }
+                              },
+                              {
+                                  targets: 10,
+                                  render: function (data, type, row, meta) {
+                                      if (row[10] == '100') {
+                                          b = '<i class="ion-ios7-lightbulb color-success"></i>'
+                                          return b
+                                      } else {
+                                          b = '<i class="ion-ios7-bell color-warning"></i>'
+                                          return b
+                                      }
+                                      return  '<i class="ion-ios7-bell color-warning"></i>'
+                                  }
+                              }
+                          ],
+                         "language": {
+                                     "search"       : "在表格中搜索:",
+                                     "sProcessing"  : "处理中...",
+                                     "sLengthMenu"  : "显示 _MENU_ 项结果",
+                                     "sZeroRecords" : "没有匹配结果",
+                                     "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                     "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                                     "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                     "sInfoPostFix" : "",
+                                     "sSearch"      : "搜索:",
+                                     "sUrl"         : "",
+                                     "sEmptyTable"  : "表中数据为空",
+                                     "sLoadingRecords": "载入中...",
+                                     "sInfoThousands": ",",
+                                     "oPaginate": {
+                                         "sFirst"   : "首页",
+                                         "sPrevious": "上页",
+                                         "sNext"    : "下页",
+                                         "sLast"    : "末页"
+                                     },
+                                     "oAria": {
+                                         "sSortAscending" : ": 以升序排列此列",
+                                         "sSortDescending": ": 以降序排列此列"
+                                     }
+                                 }
+                     });
+
+                  console.log('dataSet.data=',dataSet.data,dataSet.data.length)
+                  if (dataSet.data.length>0){
+
+                     for (i=0;i<dataSet.data.length;i++) {
+
+                         if (dataSet.data[i][2].replace('%','')>=dataSet.index['cpu_total_usage']*100) {
+                             showtips('error',dataSet.data[i][0],'CPU使用率'+dataSet.data[i][2]+'异常!');
+                         }
+                         if (dataSet.data[i][3].replace('%','')>=dataSet.index['mem_usage']*100) {
+                             showtips('error',dataSet.data[i][0],'内存使用率'+dataSet.data[i][3]+'异常!');
+                         }
+                         if (dataSet.data[i][4].replace('%','')>=dataSet.index['disk_usage']*100) {
+                             showtips('error',dataSet.data[i][0],'磁盘使用率'+dataSet.data[i][4]+'异常!');
+                         }
+                         if (dataSet.data[i][10]=='0') {
+                             showtips('error',dataSet.data[i][0],'系统不可用!');
+                         }
+                     }
+                  }
+              }
+
+             });
+
+          }
+
+          //获取系统服务监控数据
+          function get_svr_mon_data(){
+              $.ajax({
+              url: "/monitor/view/svr",
+              type: "post",
+              datatype: "json",
+              success: function (dataSet) {
+                 $('#tab-svr-monitor').DataTable( {
+                      "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
+                      "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
+                      destroy    :true,
+                      async      :true,
+                      ordering   :false,
+                      scrollY    :"600px",
+                      scrollX    : false,
+                      paging     : false,
+                      data       : dataSet.data,
+                      autoFill   : false,
+                      bAutoWidth : false,
+                      info       : true,
+                      columns: [
+                        { "title": "服务器描述","width":"10%"},
+                        {
+                             "title":"MySQL服务",
+                             "className" : 'table_td_center',
+                             "render": function(data,type,row,meta) {
+                               var  tmp='';
+                               var  result='';
+                               for (i=0;i<row[1].split(',').length;i++) {
+                                   var  status = row[1].split(',')[i].split('@')[0]
+                                   var  dbid   = row[1].split(',')[i].split('@')[1]
+                                   if (status=='1') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-lightbulb color-success"></i>'
+                                   } else if (status=='0') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-bell color-warning"></i>'
+                                   } else {
+                                      tmp=''
+                                   }
+                                   result=result+'&nbsp;&nbsp;'+tmp+'&nbsp;&nbsp;';
+                               }
+                               return result
+                            }
+                         },
+                         {
+                             "title":"MSSQL捷顺车流",
+                             "className" : 'table_td_center',
+                             "render": function(data,type,row,meta) {
+                               var  tmp='';
+                               var  result='';
+                               for (i=0;i<row[2].split(',').length;i++) {
+                                   var  status = row[2].split(',')[i].split('@')[0]
+                                   var  dbid   = row[2].split(',')[i].split('@')[1]
+                                   if (status=='1') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-lightbulb color-success"></i>'
+                                   } else if (status=='0') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-bell color-warning"></i>'
+                                   } else {
+                                      tmp=''
+                                   }
+                                   result=result+'&nbsp;&nbsp;'+tmp+'&nbsp;&nbsp;';
+                               }
+                               return result
+                            }
+                          },
+                          {
+                             "title":"MSSQL汇纳客流",
+                             "className" : 'table_td_center',
+                             "render": function(data,type,row,meta) {
+                               var  tmp='';
+                               var  result='';
+                               for (i=0;i<row[3].split(',').length;i++) {
+                                   var  status = row[3].split(',')[i].split('@')[0]
+                                   var  dbid   = row[3].split(',')[i].split('@')[1]
+                                   if (status=='1') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-lightbulb color-success"></i>'
+                                   } else if (status=='0') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-bell color-warning"></i>'
+                                   } else {
+                                      tmp=''
+                                   }
+                                   result=result+'&nbsp;&nbsp;'+tmp+'&nbsp;&nbsp;';
+                               }
+                               return result
+                            }
+                         },
+                         {
+                             "title":"MSSQL捷顺寻车",
+                             "className" : 'table_td_center',
+                             "render": function(data,type,row,meta) {
+                               var  tmp='';
+                               var  result='';
+                               for (i=0;i<row[4].split(',').length;i++) {
+                                   var  status = row[4].split(',')[i].split('@')[0]
+                                   var  dbid   = row[4].split(',')[i].split('@')[1]
+                                   if (status=='1') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-lightbulb color-success"></i>'
+                                   } else if (status=='0') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-bell color-warning"></i>'
+                                   } else {
+                                      tmp=''
+                                   }
+                                   result=result+'&nbsp;&nbsp;'+tmp+'&nbsp;&nbsp;';
+                               }
+                               return result
+                            }
+                         },
+                         {
+                             "title":"Redis服务",
+                             "className" : 'table_td_center',
+                             "render": function(data,type,row,meta) {
+                               var  tmp='';
+                               var  result='';
+                               for (i=0;i<row[5].split(',').length;i++) {
+                                   var  status = row[5].split(',')[i].split('@')[0]
+                                   var  dbid   = row[5].split(',')[i].split('@')[1]
+                                   if (status=='1') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-lightbulb color-success"></i>'
+                                   } else if (status=='0') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-bell color-warning"></i>'
+                                   } else {
+                                      tmp=''
+                                   }
+                                   result=result+'&nbsp;&nbsp;'+tmp+'&nbsp;&nbsp;';
+                               }
+                               return result
+                            }
+                         },
+                         {
+                             "title":"Mongo服务",
+                             "className" : 'table_td_center',
+                             "render": function(data,type,row,meta) {
+                               var  tmp='';
+                               var  result='';
+                               for (i=0;i<row[6].split(',').length;i++) {
+                                   var  status = row[6].split(',')[i].split('@')[0]
+                                   var  dbid   = row[6].split(',')[i].split('@')[1]
+                                   if (status=='1') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-lightbulb color-success"></i>'
+                                   } else if (status=='0') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-bell color-warning"></i>'
+                                   } else {
+                                      tmp=''
+                                   }
+                                   result=result+'&nbsp;&nbsp;'+tmp+'&nbsp;&nbsp;';
+                               }
+                               return result
+                            }
+                         },
+                         {
+                             "title":"ElasticSearch服务",
+                             "className" : 'table_td_center',
+                             "render": function(data,type,row,meta) {
+                               var  tmp='';
+                               var  result='';
+                               for (i=0;i<row[7].split(',').length;i++) {
+                                   var  status = row[7].split(',')[i].split('@')[0]
+                                   var  dbid   = row[7].split(',')[i].split('@')[1]
+                                   if (status=='1') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-lightbulb color-success"></i>'
+                                   } else if (status=='0') {
+                                      tmp='<i id="db'+dbid+'" class="ion-ios7-bell color-warning"></i>'
+                                   } else {
+                                      tmp=''
+                                   }
+                                   result=result+'&nbsp;&nbsp;'+tmp+'&nbsp;&nbsp;';
+                               }
+                               return result
+                            }
+                         },
+                      ],
+                     "language": {
+                                 "search"       : "在表格中搜索:",
+                                 "sProcessing"  : "处理中...",
+                                 "sLengthMenu"  : "显示 _MENU_ 项结果",
+                                 "sZeroRecords" : "没有匹配结果",
+                                 "sInfo"        : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                                 "sInfoEmpty"   : "显示第 0 至 0 项结果，共 0 项",
+                                 "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                                 "sInfoPostFix" : "",
+                                 "sSearch"      : "搜索:",
+                                 "sUrl"         : "",
+                                 "sEmptyTable"  : "表中数据为空",
+                                 "sLoadingRecords": "载入中...",
+                                 "sInfoThousands": ",",
+                                 "oPaginate": {
+                                     "sFirst"   : "首页",
+                                     "sPrevious": "上页",
+                                     "sNext"    : "下页",
+                                     "sLast"    : "末页"
+                                 },
+                                 "oAria": {
+                                     "sSortAscending" : ": 以升序排列此列",
+                                     "sSortDescending": ": 以降序排列此列"
+                                 }
+                             }
+                 });
+
+                 console.log('warning=',dataSet.warning,dataSet.warning.length)
+                 if (dataSet.warning.length>0){
+                     for (i=0;i<dataSet.warning.length;i++) {
+
+                         if (dataSet.warning[i]['mysql_proj'].split('@')[0]=='0') {
+                             showtips('error',dataSet.warning[i]['server_desc'],'MySQL(项目)数据库服务异常!');
+                         }
+                         if (dataSet.warning[i]['mssql_park'].split('@')[0]=='0') {
+                             showtips('error',dataSet.warning[i]['server_desc'],'MSSQL(车流)数据库服务异常!');
+                         }
+                         if (dataSet.warning[i]['mssql_flow'].split('@')[0]=='0') {
+                             showtips('error',dataSet.warning[i]['server_desc'],'MSSQL(客流)数据库服务异常!');
+                         }
+                         if (dataSet.warning[i]['mssql_car'].split('@')[0]=='0') {
+                             showtips('error',dataSet.warning[i]['server_desc'],'MSSQL(反向寻车)服务异常!');
+                         }
+                         if (dataSet.warning[i]['redis'].split('@')[0]=='0') {
+                             showtips('error',dataSet.warning[i]['server_desc'],'redis服务异常!');
+                         }
+                         if (dataSet.warning[i]['mongo'].split('@')[0]=='0') {
+                             showtips('error',dataSet.warning[i]['server_desc'],'mongo服务异常!');
+                         }
+                         if (dataSet.warning[i]['es'].split('@')[0]=='0') {
+                             showtips('error',dataSet.warning[i]['server_desc'],'ElasticSearch服务异常!');
+                         }
+                     }
+                 }
+              }
+           });
+          }
+
+          //标签页事件监听
+          $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+              var activeTab = $(e.target).text();
+              var previousTab = $(e.relatedTarget).text();
+              $('#current_tab_hidden').val(activeTab)
+              console.log(activeTab,previousTab)
+              if (activeTab=='系统监控') {
+                  console.log('系统监控')
+                  get_sys_monitor()
+              }
+
+              if (activeTab=='服务监控') {
+                 console.log('服务监控')
+                 get_svr_mon_data()
+              }
+           })
+
+          //查询当前活动页内容
+          function updateMonData() {
+              if ($('#current_tab_hidden').val()=='系统监控') {
+                  console.log('updateMonData...query...sys_monitor!')
+                  get_sys_monitor()
+              }
+              if ($('#current_tab_hidden').val()=='服务监控') {
+                  console.log('updateMonData...query...svr_monitor!')
+                  get_svr_mon_data()
+              }
+          }
+
+          $(document).ready(function() {
+               var timer = null;
+
+               //首次加载系统监控
+               get_sys_monitor()
+
+               //当前当活页设置为系统监控
+               $('#current_tab_hidden').val('系统监控')
+
+               //通每10秒刷新一次
+               setInterval("updateMonData()",20000);
+
+               $('#query_password3').tooltipster({
+                 content: 'xxxxxxxxxxxxx',
+                 multiple: true,
+                 position: 'right'
+               });
+
+          })
+
+         $("#tab-svr-monitor").on("click","td i",function(){
+             $.ajax({
+                  url: "/get_ds",
+                  type: "post",
+                  datatype: "json",
+                  data: {
+                    dsid: $(this).attr('id').split('db')[1], //$(this).find('i').attr('id').split('db')[1],
+                },
+                  success: function (dataSet) {
+                      console.log('tab-svr-monitor=>message=',dataSet.message,'code=',dataSet.code);
+                      if (dataSet.code=='0') {
+                          showtips('info',
+                               dataSet.message['db_desc']+'<br>'+
+                               '地址:'+dataSet.message['ip']+'<br>'+
+                               '端口:'+dataSet.message['port']
+                          );
+                      }
+                  }
+             })
+         })
+
+    </script>
+
+ </body>

@@ -19,9 +19,26 @@
         <style>
             .modal-lg {
                 width:650px;
-                height:600px;
+                height:500px;
                 margin-left:35%;
                 margin-top:5%;
+            }
+
+            .logo {
+                color: #ffffff !important;
+                font-size: 25px !important;
+                text-transform: capitalize !important;
+                font-family: 'Hind Madurai', sans-serif;
+                font-weight: 500 !important;
+                letter-spacing: 1px;
+                line-height: 50px !important;
+            }
+            .logo i {
+                display: block !important;
+            }
+            .logo_span {
+                color: #59aed5 !important;
+                font-size: 25px;
             }
         </style>
 
@@ -37,7 +54,7 @@
 
                 <!-- LOGO -->
                 <div class="topbar-left">
-                    <a id="windows_main" href="#" class="logo"><span>HOP<span>SON</span></span><i class="mdi mdi-layers"></i></a>
+                        <a id="windows_main" href="#" class="logo"><span class="logo_span ion-coffee"></span><span>&nbsp;Ease<span>Base</span></span></a>
                 </div>
 
                 <!-- Button mobile view to collapse sidebar menu -->
@@ -216,7 +233,7 @@
                     <!--- Sidemenu -->
                     <div id="sidebar-menu">
                         <ul id="ul-menu">
-                        	<li class="menu-title">好生活数据库运维平台</li>
+                        	<li class="menu-title">数据库自动化运维平台</li>
                         </ul>
                     </div>
                 </div>
@@ -552,7 +569,7 @@
             </div>
         </div>
 
-        <input type="'hidden" id="view_url" value="{{view_url}}">
+        <!--<input type="'hidden" id="view_url" value="{{view_url}}">-->
 
         <script>
             var resizefunc = [];
@@ -613,8 +630,8 @@
 
         <script>
             $(document).bind("keydown", function(e) {//文档绑定键盘按下事件
-                e = window.event || e;//解决浏览器兼容的问题
-                if(e.keyCode == 116) {//F5按下
+                e = window.event || e;  //解决浏览器兼容的问题
+                if(e.keyCode == 116) {  //F5按下
                 　　e.keyCode = 0;
                 　　return false;
                 }
@@ -808,36 +825,36 @@
                   $("#span_time").text(currentTime);
             }
 
-            function skipUrl(){
-                console.log('view_url=',$('#view_url').val())
-                if ($('#view_url').val()!='None') {
-                      $.ajax({
-                        url: $('#view_url').val(),
-                        type: "get",
-                        datatype: "html",
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.log('jqXHR.responseText=',jqXHR.responseText);
-                            console.log('jqXHR.status=',jqXHR.status);
-                            console.log('jqXHR.readyState=',jqXHR.readyState);
-                            console.log('jqXHR.statusText=',jqXHR.statusText);
-                            console.log('textStatus=',textStatus);
-                            console.log('errorThrown=',errorThrown);
-                            if (jqXHR.status==403){
-                                swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
-                                setTimeout(" window.location.href='/login'",3000);
-                            } else if (jqXHR.status==502){
-                                swal("用户无权访问权限此功能!", "", "error")
-                                return
-                            } else {
-                                swal("系统不可用,请稍后重试!", "", "error")
-                                return
-                            }
-                        }
-                     })
-                     $('#main-container-div').load($('#view_url').val());
-
-                }
-            }
+            // function skipUrl(){
+            //     console.log('view_url=',$('#view_url').val())
+            //     if ($('#view_url').val()!='None') {
+            //           $.ajax({
+            //             url: $('#view_url').val(),
+            //             type: "get",
+            //             datatype: "html",
+            //             error: function (jqXHR, textStatus, errorThrown) {
+            //                 console.log('jqXHR.responseText=',jqXHR.responseText);
+            //                 console.log('jqXHR.status=',jqXHR.status);
+            //                 console.log('jqXHR.readyState=',jqXHR.readyState);
+            //                 console.log('jqXHR.statusText=',jqXHR.statusText);
+            //                 console.log('textStatus=',textStatus);
+            //                 console.log('errorThrown=',errorThrown);
+            //                 if (jqXHR.status==403){
+            //                     swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+            //                     setTimeout(" window.location.href='/login'",3000);
+            //                 } else if (jqXHR.status==502){
+            //                     swal("用户无权访问权限此功能!", "", "error")
+            //                     return
+            //                 } else {
+            //                     swal("系统不可用,请稍后重试!", "", "error")
+            //                     return
+            //                 }
+            //             }
+            //          })
+            //          $('#main-container-div').load($('#view_url').val());
+            //
+            //     }
+            // }
 
             $(document).ready(function() {
 

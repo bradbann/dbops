@@ -137,6 +137,39 @@ def del_index(p_index_code):
         result['message'] = '删除失败！'
     return result
 
+
+def query_threshold():
+    db = get_connection()
+    cr = db.cursor()
+    sql = "SELECT index_code,index_threshold FROM t_monitor_index WHERE index_threshold_type IN(1,3)"
+    print(sql)
+    cr.execute(sql)
+    v_dict = {}
+    for r in cr.fetchall():
+        v_dict[r[0]]=r[1]
+    cr.close()
+    db.commit()
+    print('query_threshold=',v_dict)
+    return v_dict
+
+def del_task(p_task_tag):
+    result={}
+    try:
+        db = get_connection()
+        cr = db.cursor()
+        sql="delete from t_monitor_task  where task_tag='{0}'".format(p_task_tag)
+        print(sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result={}
+        result['code']='0'
+        result['message']='删除成功！'
+    except :
+        result['code'] = '-1'
+        result['message'] = '删除失败！'
+    return result
+
 def check_index(p_index):
     result = {}
 
@@ -281,6 +314,27 @@ def get_monitor_sys_indexes(p_templete_code):
               WHERE STATUS='1' and id not in(select index_id from t_monitor_templete_index 
                                              where templete_id=(select id from t_monitor_templete where code='{0}'))
           """.format(p_templete_code)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list
+
+def get_monitor_indexes_by_type(p_index_type,p_db_id):
+    db = get_connection()
+    cr = db.cursor()
+    sql=''
+    if p_db_id =='':
+        sql = """SELECT  index_code,index_name FROM t_monitor_index 
+                  WHERE STATUS='1' AND  index_type = '{0}'
+              """.format(p_index_type)
+    else:
+        sql = """SELECT  index_code,index_name FROM t_monitor_index 
+                  WHERE STATUS='1' AND  index_type = '{0}'
+                    AND index_db_type =(SELECT db_type FROM t_db_source WHERE id='{1}') 
+              """.format(p_index_type,p_db_id)
+    print('get_monitor_indexes=',sql)
     cr.execute(sql)
     v_list = []
     for r in cr.fetchall():
@@ -501,12 +555,25 @@ def get_templetes_by_templete_id(p_templeteid):
     db.commit()
     return t[0:-1]
 
+def get_monitor_task_by_tag(p_tag):
+    db = get_connection_dict()
+    cr = db.cursor()
+    sql = """SELECT  * FROM t_monitor_task where task_tag='{0}'
+          """.format(p_tag)
+    cr.execute(sql)
+    rs = cr.fetchone()
+    cr.close()
+    db.commit()
+    print('get_task_by_tag->rs=',rs)
+    return rs
+
 def query_task(p_task_tag):
     db = get_connection()
     cr = db.cursor()
     v_where=' '
     if p_task_tag != '':
-        v_where = " and a.task_tag like '%{0}%'".format(p_task_tag)
+        v_where = " and ( a.task_tag like '%{0}%' or a.comments like '%{1}%' or b.server_ip like '%{2}%')".\
+                   format(p_task_tag,p_task_tag,p_task_tag)
 
     sql = """SELECT  
                  task_tag,
@@ -569,6 +636,142 @@ def save_gather_task(p_task):
         result['code'] = '-1'
         result['message'] = '保存失败！'
     return result
+
+def save_monitor_task(p_task):
+    result = {}
+    val=check_task(p_task)
+    if val['code']=='-1':
+        return val
+    try:
+        db      = get_connection()
+        cr      = db.cursor()
+        result  = {}
+
+        sql ="""insert into t_monitor_task
+                  (task_tag,comments,server_id,run_time,script_path,script_file,python3_home,api_server,status)
+                values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}')
+            """.format(p_task['add_monitor_task_tag'],
+                        p_task['add_monitor_task_desc'],
+                        p_task['add_monitor_server'],
+                        p_task['add_monitor_task_run_time'],
+                        p_task['add_monitor_task_script_base'],
+                        p_task['add_monitor_task_script_name'],
+                        p_task['add_monitor_task_python3_home'],
+                        p_task['add_monitor_task_api_server'],
+                        p_task['add_monitor_task_status']
+                        )
+        print(sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result['code']='0'
+        result['message']='保存成功！'
+        return result
+    except:
+        e_str = exception_info()
+        print(e_str)
+        result['code'] = '-1'
+        result['message'] = '保存失败！'
+    return result
+
+
+
+def upd_gather_task(p_task):
+    result = {}
+    val=check_task(p_task)
+    if val['code']=='-1':
+        return val
+    try:
+        db      = get_connection()
+        cr      = db.cursor()
+        result  = {}
+        sql ="""update t_monitor_task
+                  set  run_time='{}',
+                       script_path='{}',
+                       script_file='{}',
+                       python3_home='{}',
+                       api_server='{}',
+                       status='{}'
+                 where task_tag='{}'
+             """.format(
+                        p_task['upd_gather_task_run_time'],
+                        p_task['upd_gather_task_script_base'],
+                        p_task['upd_gather_task_script_name'],
+                        p_task['upd_gather_task_python3_home'],
+                        p_task['upd_gather_task_api_server'],
+                        p_task['upd_gather_task_status'],
+                        p_task['upd_gather_task_tag']
+                        )
+        print(sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result['code']='0'
+        result['message']='保存成功！'
+        return result
+    except:
+        e_str = exception_info()
+        print(e_str)
+        result['code'] = '-1'
+        result['message'] = '保存失败！'
+    return result
+
+def upd_monitor_task(p_task):
+    result = {}
+    val = check_task(p_task)
+    if val['code'] == '-1':
+        return val
+    try:
+        db = get_connection()
+        cr = db.cursor()
+        result = {}
+        sql = """update t_monitor_task
+                     set  run_time='{}',
+                          script_path='{}',
+                          script_file='{}',
+                          python3_home='{}',
+                          api_server='{}',
+                          status='{}'
+                    where task_tag='{}'
+                """.format(
+            p_task['upd_monitor_task_run_time'],
+            p_task['upd_monitor_task_script_base'],
+            p_task['upd_monitor_task_script_name'],
+            p_task['upd_monitor_task_python3_home'],
+            p_task['upd_monitor_task_api_server'],
+            p_task['upd_monitor_task_status'],
+            p_task['upd_monitor_task_tag']
+        )
+        print(sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result['code'] = '0'
+        result['message'] = '保存成功！'
+        return result
+    except:
+        e_str = exception_info()
+        print(e_str)
+        result['code'] = '-1'
+        result['message'] = '保存失败！'
+    return result
+
+
+
+def query_monitor_templete_type(p_templete_id):
+    db = get_connection()
+    cr = db.cursor()
+    sql = """select dmm,dmmc
+            from t_dmmx 
+               where dm='23' 
+                 and dmm=(select type from t_monitor_templete where id='{0}')""".format(p_templete_id)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list
+
 
 def push_monitor_task(p_tag,p_api):
     try:
@@ -635,13 +838,17 @@ def stop_monitor_task(p_tag,p_api):
          return result
 
 
-def query_monitor_log_analyze(server_id,index_code,begin_date,end_date):
+def query_monitor_log_analyze(server_id,db_id,index_code,begin_date,end_date):
+    print('query_monitor_log_analyze=',server_id,db_id,index_code,begin_date,end_date)
     db  = get_connection()
     cr  = db.cursor()
     v_where    = ' where 1=1 '
-
+    sql = ''
     if server_id != '':
         v_where = v_where + " and a.server_id='{0}'\n".format(server_id)
+
+    if db_id != '':
+        v_where = v_where + " and a.db_id='{0}'\n".format(db_id)
 
     if begin_date != '':
         v_where = v_where + " and a.create_date>='{0}'\n".format(begin_date+' 0:0:0')
@@ -649,8 +856,12 @@ def query_monitor_log_analyze(server_id,index_code,begin_date,end_date):
     if end_date != '':
         v_where = v_where + " and a.create_date<='{0}'\n".format(end_date+' 23:59:59')
 
-    if index_code=='cpu_usage':
-       sql = """SELECT cast(a.create_date as char) as create_date,a.cpu_usage 
+    if index_code=='cpu_total_usage':
+       sql = """SELECT cast(a.create_date as char) as create_date,a.cpu_total_usage 
+                 FROM t_monitor_task_server_log a {0} ORDER BY a.create_date
+             """.format(v_where)
+    elif index_code=='cpu_core_usage':
+       sql = """SELECT cast(a.create_date as char) as create_date,a.cpu_core_usage 
                  FROM t_monitor_task_server_log a {0} ORDER BY a.create_date
              """.format(v_where)
     elif index_code=='mem_usage':
@@ -677,15 +888,15 @@ def query_monitor_log_analyze(server_id,index_code,begin_date,end_date):
         sql = """SELECT cast(a.create_date as char) as create_date,a.net_in
                       FROM t_monitor_task_server_log a {0} ORDER BY a.create_date
                 """.format(v_where)
-    elif index_code == 'mysql_total_connect':
+    elif index_code in('mysql_total_connect','mssql_total_connect'):
         sql = """SELECT cast(a.create_date as char) as create_date,a.total_connect
                       FROM t_monitor_task_db_log a {0} ORDER BY a.create_date
                 """.format(v_where)
-    elif index_code == 'mysql_active_connect':
+    elif index_code in ('mysql_active_connect','mssql_active_connect') :
         sql = """SELECT cast(a.create_date as char) as create_date,a.active_connect
                          FROM t_monitor_task_db_log a {0} ORDER BY a.create_date
                    """.format(v_where)
-    elif index_code == 'mysql_available':
+    elif index_code in('mysql_available','mssql_available','es_available','redis_available','mongo_available'):
         sql = """SELECT cast(a.create_date as char) as create_date,a.db_available
                             FROM t_monitor_task_db_log a {0} ORDER BY a.create_date
                       """.format(v_where)
@@ -700,3 +911,101 @@ def query_monitor_log_analyze(server_id,index_code,begin_date,end_date):
     cr.close()
     db.commit()
     return v_list1
+
+
+def get_max_disk_usage(d_disk):
+    n_max_val =0.0
+    for key in d_disk:
+        if n_max_val <= float (d_disk[key]):
+           n_max_val = float (d_disk[key])
+    result = str(n_max_val)+'%'
+    return result
+
+
+def query_monitor_sys():
+    result = {}
+    db     = get_connection()
+    cr     = db.cursor()
+    sql    = """SELECT b.server_desc,
+                    concat(b.server_ip,':',b.server_port) as server,
+                    concat(a.cpu_total_usage,'%') as cpu_total_usage,
+                    concat(a.mem_usage,'%')  as mem_usage,
+                    a.disk_usage,
+                    CONCAT(ROUND(a.disk_read/1000,1),'kb/s')  AS disk_read,
+                    CONCAT(ROUND(a.disk_write/1000,1),'kb/s') AS disk_write,
+                    CONCAT(ROUND(a.net_in/1000,1),'kb/s')     AS net_in,
+                    CONCAT(ROUND(a.net_out/1000,1),'kb/s')    AS net_out,
+                    DATE_FORMAT(a.create_date,'%Y-%m-%d %H:%i:%s')     AS cjrq,
+                    CASE WHEN TIMESTAMPDIFF(MINUTE, a.create_date, NOW())>3 THEN '0' ELSE '100' END  AS STATUS
+            FROM t_monitor_task_server_log a
+               LEFT JOIN t_server b ON a.server_id=b.id
+            WHERE (a.server_id,a.create_date) IN(
+            SELECT server_id,MAX(create_date) FROM `t_monitor_task_server_log` GROUP BY server_id )
+            -- ORDER BY STATUS,a.cpu_total_usage+0 DESC,a.mem_usage+0, b.server_desc
+            ORDER BY STATUS, b.server_desc
+          """
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_temp =list(r)
+        v_temp[4] =get_max_disk_usage(json.loads(v_temp[4]))
+        v_list.append(v_temp)
+
+    result['data']=v_list
+    result['index'] = query_threshold()
+    cr.close()
+    db.commit()
+    return result
+
+
+def query_monitor_svr():
+    result = {}
+    db  = get_connection()
+    cr  = db.cursor()
+    sql = """SELECT 
+                  server_desc,
+                  mysql_proj,
+                  mssql_park,
+                  mssql_flow,
+                  mssql_car,
+                  redis,
+                  mongo,
+                  es
+                FROM t_monitor_service
+                WHERE (mysql_proj<>'' OR mssql_park<>''  OR mssql_flow<>''  OR mssql_car<>''  OR redis<>''  OR mongo<>''  OR es<>'') 
+                ORDER BY sxh,server_desc
+          """
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    result['data']=v_list
+    cr.close()
+    db.commit()
+
+    db2 = get_connection_dict()
+    cr2 = db2.cursor()
+    sql2= """SELECT 
+                     server_desc,
+                     mysql_proj,
+                     mssql_park,
+                     mssql_flow,
+                     mssql_car,
+                     redis,
+                     mongo,
+                     es
+                   FROM t_monitor_service
+                    where instr(mysql_proj,'0@')>0 or instr(mssql_park,'0@')>0   or instr(mssql_flow,'0@')>0 
+                     or instr(mssql_car,'0@')>0 or instr(redis,'0@')>0  or instr(mongo,'0@')>0 or instr(es,'0@')>0 ORDER BY sxh,server_desc
+             """
+    print(sql2)
+    cr2.execute(sql2)
+    v_list = []
+    for r in cr2.fetchall():
+        v_list.append(r)
+    result['warning'] = v_list
+    cr2.close()
+    db2.commit()
+    return result

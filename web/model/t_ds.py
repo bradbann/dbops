@@ -44,7 +44,9 @@ def query_ds(dsname,market_id,db_env,ds_type):
             and a.db_env=c.dmm  and c.dm='03' 
             and a.market_id=d.dmm  and d.dm='05' 
             {0}
-        order by d.dmmc,c.dmmc""".format(v_where)
+        -- order by d.dmmc,c.dmmc
+        order by a.db_desc
+        """.format(v_where)
 
     print(sql)
     cr.execute(sql)
@@ -223,6 +225,32 @@ def get_ds_by_dsid_by_cdb(p_dsid,p_cdb):
     print(d_ds)
     return d_ds
 
+def get_dss(p_server_id):
+    db = get_connection()
+    cr = db.cursor()
+    sql=''
+    if p_server_id=='':
+        sql = """select cast(id as char) as id,a.db_desc as name
+                  from t_db_source a,t_dmmx b
+                   where a.db_type=b.dmm and b.dm='02' and a.status='1'  order by a.db_desc
+              """
+    else:
+        sql = """select cast(id as char) as id,a.db_desc as name
+                   from t_db_source a,t_dmmx b
+                      where a.db_type=b.dmm 
+                        and b.dm='02' 
+                        and a.status='1' 
+                        and a.market_id=(select market_id from t_server where id='{0}')
+                        order by a.db_desc
+              """.format(p_server_id)
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
 
 def get_dss_sql_query(logon_name):
     db = get_connection()

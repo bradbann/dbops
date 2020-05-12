@@ -164,6 +164,14 @@
            </div>
            <div class="form-group">
                 <div>
+                    <label class="col-md-2 control-label">目标数据库名</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="sync_schema_dest"  type="text" class="form-control" placeholder="请输入目标数据库名"  value="{{sync_schema_dest}}">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
                     <label class="col-md-2 control-label"><span id="s_sync_tables">*</span>同步表列表</label>
                 </div>
                 <div class="col-md-10">
@@ -325,6 +333,7 @@
                     task_desc            : $('#task_desc').val(),
                     python3_home         : $('#python3_home').val(),
                     sync_schema          : $('#sync_schema').val(),
+                    sync_schema_dest     : $('#sync_schema_dest').val(),
                     sync_tables          : $('#sync_tables').val(),
                     sync_batch_size      : $('#sync_batch_size').val(),
                     sync_batch_size_incr : $('#sync_batch_size_incr').val(),

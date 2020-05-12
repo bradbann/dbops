@@ -20,12 +20,12 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = urls
         settings = dict(
-            static_path=os.path.join(os.path.dirname(__file__), "../../static"),
-            template_path=os.path.join(os.path.dirname(__file__), "../../templates"),
-            xsrf_cookies=False,
-            cookie_secret="2379874hsdhf0234990sdhsaiuofyasop977djdj",
-            debug=True,
-            login_url="/login"
+            static_path   = os.path.join(os.path.dirname(__file__), "../../static"),
+            template_path = os.path.join(os.path.dirname(__file__), "../../templates"),
+            cookie_secret = "2379874hsdhf0234990sdhsaiuofyasop977djdj",
+            xsrf_cookies  = False,
+            debug         = True,
+            login_url     = "/login"
         )
         tornado.web.Application.__init__(self, handlers, **settings)
 

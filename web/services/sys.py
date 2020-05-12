@@ -13,7 +13,8 @@
 
 import json
 import tornado.web
-from web.model.t_sys  import save_audit_rule,query_dm,query_rule
+from web.model.t_sys  import save_audit_rule,query_dm,query_rule,query_dm_detail,save_sys_code_type,upd_sys_code_type,del_sys_code
+from web.model.t_sys  import save_sys_code_detail,upd_sys_code_detail,del_sys_code_detail
 from web.utils.basehandler import basehandler
 
 
@@ -114,7 +115,7 @@ class sys_code(basehandler):
        logon_name = str(self.get_secure_cookie("username"), encoding="utf-8")
        self.render("./sys_code.html")
 
-class sys_code_query(basehandler):
+class sys_code_type_query(basehandler):
     @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
@@ -122,6 +123,88 @@ class sys_code_query(basehandler):
         v_list   = query_dm(code)
         v_json   = json.dumps(v_list)
         self.write(v_json)
+
+class sys_code_detail_query(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        code     = self.get_argument("code")
+        v_list   = query_dm_detail(code)
+        v_json   = json.dumps(v_list)
+        self.write(v_json)
+
+class sys_code_type_add_save(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        code = {}
+        code['type_name']   = self.get_argument("type_name")
+        code['type_code']   = self.get_argument("type_code")
+        code['type_status'] = self.get_argument("type_status")
+        print('sys_code_type_add_save=', code)
+        result = save_sys_code_type(code)
+        self.write({"code": result['code'], "message": result['message']})
+
+class sys_code_type_upd_save(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        code = {}
+        code['type_name']   = self.get_argument("type_name")
+        code['type_code']   = self.get_argument("type_code")
+        code['type_status'] = self.get_argument("type_status")
+        print('sys_code_type_upd_save=', code)
+        result = upd_sys_code_type(code)
+        self.write({"code": result['code'], "message": result['message']})
+
+
+class sys_code_type_del(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        code  = self.get_argument("type_code")
+        print('sys_code_type_del=', code)
+        result = del_sys_code(code)
+        self.write({"code": result['code'], "message": result['message']})
+
+
+class sys_code_detail_add_save(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        code = {}
+        code['type_code']     = self.get_argument("type_code")
+        code['detail_name']   = self.get_argument("detail_name")
+        code['detail_code']   = self.get_argument("detail_code")
+        code['detail_status'] = self.get_argument("detail_status")
+        print('sys_code_detail_add_save=', code)
+        result = save_sys_code_detail(code)
+        self.write({"code": result['code'], "message": result['message']})
+
+class sys_code_detail_upd_save(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        code = {}
+        code['type_code']      = self.get_argument("type_code")
+        code['detail_name']    = self.get_argument("detail_name")
+        code['detail_code']    = self.get_argument("detail_code")
+        code['detail_status']  = self.get_argument("detail_status")
+        print('sys_code_detail_upd_save=', code)
+        result = upd_sys_code_detail(code)
+        self.write({"code": result['code'], "message": result['message']})
+
+
+class sys_code_detail_del(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        code    = self.get_argument("type_code")
+        detail  = self.get_argument("detail_code")
+        print('sys_code_detail_del=', code,detail)
+        result = del_sys_code_detail(code)
+        self.write({"code": result['code'], "message": result['message']})
+
 
 class sys_test(basehandler):
    @tornado.web.authenticated

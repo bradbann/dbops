@@ -62,6 +62,17 @@ def get_sync_server():
     cr.close()
     return v_list
 
+def get_gather_server():
+    db = get_connection()
+    cr = db.cursor()
+    sql = "select id,server_desc from t_server WHERE status='1' order by market_id,server_desc"
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list
+
 def get_templete_names():
     db = get_connection()
     cr = db.cursor()
@@ -152,7 +163,7 @@ def get_db_sync_tags_by_market_id(market_id):
     if market_id=='':
         sql = """SELECT sync_tag,comments FROM t_db_sync_config  WHERE STATUS=1   ORDER BY sync_col_val,comments"""
     else:
-        sql = """SELECT sync_tag,comments FROM t_db_sync_config  WHERE STATUS=1  and sync_col_val='{0}' ORDER BY sync_col_val,comments 
+        sql = """SELECT sync_tag,comments FROM t_db_sync_config  WHERE STATUS=1  and INSTR(sync_col_val,'{0}')>0  ORDER BY sync_col_val,comments 
               """.format(market_id)
     print(sql)
     cr.execute(sql)
@@ -229,9 +240,9 @@ def get_sync_db_server():
     cr = db.cursor()
     sql = """SELECT id,db_desc
               FROM t_db_source 
-            WHERE  db_type in(0,2,6) and db_env in(1,2,3,4) 
+            WHERE  db_type in(0,2,4,5,6) and db_env in(1,2,3,4) 
                 and STATUS=1 
-                and user!='puppet'
+                -- and user!='puppet'
               ORDER BY db_desc,db_type"""
     cr.execute(sql)
     v_list = []

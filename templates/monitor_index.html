@@ -177,7 +177,7 @@
                                        <input type="text" id="add_index_trigger_time" value="10">
                                    </div>
                                    <div class="col-md-3">
-                                       <label class="control-label text-left">分钟内超过</label>
+                                       <label class="control-label text-left">分钟内连续超过</label>
                                    </div>
                                    <div class="col-md-3">
                                         <input type="text" id="add_index_trigger_times"  value="3">
@@ -319,7 +319,7 @@
                                        <input type="hidden" id="upd_index_trigger_time_hidden">
                                    </div>
                                    <div class="col-md-3">
-                                       <label class="control-label text-left">分钟内超过</label>
+                                       <label class="control-label text-left">分钟内连续超过</label>
                                    </div>
                                    <div class="col-md-3">
                                         <input type="text" id="upd_index_trigger_times"  value="3">
@@ -481,10 +481,10 @@
                           destroy    :true,
                           async      :true,
                           ordering   :false,
-                          scrollY    :"500px",
+                          scrollY    :false,
                           scrollX    :false,
                           scrollCollapse: true,
-                          paging:     false,
+                          paging:     true,
                           iDisplayLength: 14,
                           data: dataSet,
                           columns: [
@@ -525,7 +525,7 @@
                                 render: function(data, type, row, meta){
                                     console.log('row[7]=',row[7])
                                     if (row[7] !=null ) {
-                                        msg =row[7].split('^')[0]+'分钟超过'+row[7].split('^')[1]+'次阀值'
+                                        msg =row[7].split('^')[0]+'分钟连续超过'+row[7].split('^')[1]+'次阀值'
                                         return msg
                                     } else {
                                         return ''
@@ -741,8 +741,8 @@
              var index_name='';
              $("#monitor_index_table tbody tr td input:checked").each( function() {
                   var row=$(($(this).parent().parent().html()));
-                  index_code=row[0].innerHTML;
-                  index_name=row[1].innerHTML;
+                  index_code=row[1].innerHTML;
+                  index_name=row[2].innerHTML;
                   console.log("index_code=",index_code,"index_name=",index_name)
              });
 

@@ -80,14 +80,14 @@
                     <div class="panel-body">
                         <ul class="nav nav-pills m-b-30 pull-left">
                             <li class="active">
-                                <a href="#add_gather-task" data-toggle="tab" aria-expanded="true">采集任务</a>
+                                <a href="#gather-task" data-toggle="tab" aria-expanded="true">采集任务</a>
                             </li>
                             <li id='incr_li' class="">
-                                <a href="#add_monitor-task" data-toggle="tab" aria-expanded="false">监控任务</a>
+                                <a href="#monitor-task" data-toggle="tab" aria-expanded="false">监控任务</a>
                             </li>
                         </ul>
                         <div class="tab-content br-n pn">
-                            <div id="add_gather-task" class="tab-pane active">
+                            <div id="gather-task" class="tab-pane active">
                                  <form class="form-horizontal" role="form">
                                    <div class="form-group">
                                    </div>
@@ -122,14 +122,22 @@
                                    </div>
                                    <div class="form-group">
                                         <div>
-                                            <label class="col-md-2 control-label"><span id="s_add_gather_task_templete_name">*</span>任务模板</label>
+                                            <label class="col-md-2 control-label">系统模板</label>
                                         </div>
                                         <div class="col-md-10">
-                                            <select  class="form-control select" id="add_gather_task_templete_name" >
-                                                <option value='' selected = "selected">......</option>
+                                            <select multiple="multiple"  class="form-control select" id="add_gather_sys_templete_name" >
                                                 {% for var in templete_names %}
                                                  <option value={{var[0]}} >{{var[1]}}</option>
                                                 {% end %}
+                                            </select>
+                                        </div>
+                                   </div>
+                                   <div class="form-group">
+                                        <div>
+                                            <label class="col-md-2 control-label"><span id="s_add_gather_task_templete_name">*</span>任务模板</label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <select multiple="multiple"  class="form-control select" id="add_gather_task_templete_name" >
                                             </select>
                                         </div>
                                    </div>
@@ -199,7 +207,7 @@
                                     </div>
                                  </form>
                             </div>
-                            <div id="add_monitor-task" class="tab-pane">
+                            <div id="monitor-task" class="tab-pane">
                                 <form class="form-horizontal" role="form">
                                    <div class="form-group">
                                    </div>
@@ -311,225 +319,12 @@
                <div class="panel panel-flat">
                   <form class="form-horizontal" role="form">
                     <div class="panel-body">
-                        <div class="panel panel-default">
-                          <div class="panel-body">
-                              <ul class="nav nav-pills m-b-30 pull-left">
-                                <li id='upd_gather_task_tab' class="active">
-                                    <a href="#upd_gather_task" data-toggle="tab" aria-expanded="true">采集任务</a>
-                                </li>
-                                <li id='upd_monitor_task_tab' class="">
-                                    <a href="#upd_monitor_task" data-toggle="tab" aria-expanded="false">监控任务</a>
-                                </li>
-                             </ul>
-                             <div class="tab-content br-n pn">
-                                <div id="upd_gather_task" class="tab-pane active">
-                                     <form class="form-horizontal" role="form">
-                                       <div class="form-group">
-                                       </div>
-                                       <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_gather_task_tag">*</span>任务标识</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_gather_task_tag"  type="text" readonly class="form-control" placeholder="请输入任务标识">
-                                            </div>
-                                       </div>
-                                       <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_gather_task_desc">*</span>任务描述</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_gather_task_desc"  type="text" readonly class="form-control"  placeholder="请输入任务描述">
-                                            </div>
-                                       </div>
-                                       <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_gather_server">*</span>采集服务器</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <select class="form-control select" id="upd_gather_server" >
-                                                    <option value='' selected = "selected">......</option>
-                                                    {% for var in gather_servers %}
-                                                     <option value={{var[0]}} >{{var[1]}}</option>
-                                                    {% end %}
-                                                </select>
-                                           </div>
-                                       </div>
-                                       <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_gather_task_templete_name">*</span>任务模板</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <select  class="form-control select" id="upd_gather_task_templete_name" >
-                                                    <option value='' selected = "selected">......</option>
-                                                    {% for var in templete_names %}
-                                                     <option value={{var[0]}} >{{var[1]}}</option>
-                                                    {% end %}
-                                                </select>
-                                            </div>
-                                       </div>
-                                       <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label">采集数据库</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <select  class="form-control select" id="upd_gather_task_db_server" >
-                                                    <option value='' selected = "selected">......</option>
-                                                    {% for var in task_db_servers %}
-                                                      <option value={{var[0]}} >{{var[1]}}</option>
-                                                    {% end %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                       <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_gather_task_run_time">*</span>运行时间</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_gather_task_run_time"  type="text" class="form-control" placeholder="请输入备份运行时间">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_gather_task_python3_home">*</span>PYTHON目录</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_gather_task_python3_home"  type="text" class="form-control" placeholder="请输入PYTHON3目录">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_gather_task_script_base">*</span>脚本目录</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_gather_task_script_base"  type="text" class="form-control" placeholder="请输入脚本目录">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_gather_task_script_name">*</span>脚本名称</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_gather_task_script_name"  type="text" class="form-control" placeholder="请输入脚本名称">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_gather_task_api_server">*</span>API服务器</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_gather_task_api_server"  type="text" class="form-control" placeholder="请输入API服务器">
-                                            </div>
-                                       </div>
-                                       <div class="form-group">
-                                            <div >
-                                                <label class="col-md-2 control-label"><span id="s_upd_gather_task_status">*</span>任务状态</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <select class="form-control select" id="upd_gather_task_status">
-                                                     <option value="1">启用</option>
-                                                     <option value="0">禁用</option>
-                                                </select>
-                                           </div>
-                                        </div>
-                                     </form>
-                                </div>
-                                <div id="upd_monitor_task" class="tab-pane">
-                                    <form class="form-horizontal" role="form">
-                                       <div class="form-group">
-                                       </div>
-                                       <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_monitor_task_tag">*</span>任务标识</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_monitor_task_tag"  type="text" readonly class="form-control" placeholder="请输入任务标识">
-                                            </div>
-                                       </div>
-                                       <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_monitor_task_desc">*</span>任务描述</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_monitor_task_desc"  type="text" readonly class="form-control"  placeholder="请输入任务描述">
-                                            </div>
-                                       </div>
-                                       <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_monitor_server">*</span>监控服务器</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <select class="form-control select" id="upd_monitor_server" >
-                                                    <option value='' selected = "selected">......</option>
-                                                    {% for var in monitor_servers %}
-                                                     <option value={{var[0]}} >{{var[1]}}</option>
-                                                    {% end %}
-                                                </select>
-                                           </div>
-                                       </div>
-                                       <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_monitor_task_run_time">*</span>运行时间</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_monitor_task_run_time"  type="text" class="form-control" placeholder="请输入备份运行时间">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_monitor_task_python3_home">*</span>PYTHON目录</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_monitor_task_python3_home"  type="text" class="form-control" placeholder="请输入PYTHON3目录">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_monitor_task_script_base">*</span>脚本目录</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_monitor_task_script_base"  type="text" class="form-control" placeholder="请输入脚本目录">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_monitor_task_script_name">*</span>脚本名称</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_monitor_task_script_name"  type="text" class="form-control" placeholder="请输入脚本名称">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div>
-                                                <label class="col-md-2 control-label"><span id="s_upd_monitor_task_api_server">*</span>API服务器</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <input id="upd_monitor_task_api_server"  type="text" class="form-control" placeholder="请输入API服务器">
-                                            </div>
-                                       </div>
-
-                                       <div class="form-group">
-                                            <div >
-                                                <label class="col-md-2 control-label"><span id="s_upd_monitor_task_status">*</span>任务状态</label>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <select class="form-control select" id="upd_monitor_task_status">
-                                                     <option value="1">启用</option>
-                                                     <option value="0">禁用</option>
-                                                </select>
-                                           </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                      </div>
                     </div>
                   </form>
             </div>
                <div class="modal-footer">
                     <div class="col-sm-offset-3 col-sm-4">
-                       <button type="button" class="btn btn-custom waves-effect waves-light btn-md" id="task_upd_btn" >变更</button>
+                       <button type="button" class="btn btn-custom waves-effect waves-light btn-md" id="index_upd_btn" >变更</button>
                        <button type="button" class="btn btn-custom waves-effect waves-light btn-md" data-dismiss="modal">关闭</button>
                     </div>
                </div>
@@ -537,7 +332,6 @@
          </div>
       </div>
      </div>
-     <input type='hidden' id='upd_task_tag_hidden'>
 
 </body>
 
@@ -576,30 +370,6 @@
             document.all['s_add_monitor_task_script_name'].style.color="#ff0000";
             document.all['s_add_monitor_task_api_server'].style.color="#ff0000";
             document.all['s_add_monitor_task_status'].style.color="#ff0000";
-
-
-            //upd gather task
-            document.all['s_upd_gather_task_tag'].style.color="#ff0000";
-            document.all['s_upd_gather_task_desc'].style.color="#ff0000";
-            document.all['s_upd_gather_server'].style.color="#ff0000";
-            document.all['s_upd_gather_task_templete_name'].style.color="#ff0000";
-            document.all['s_upd_gather_task_run_time'].style.color="#ff0000";
-            document.all['s_upd_gather_task_python3_home'].style.color="#ff0000";
-            document.all['s_upd_gather_task_script_base'].style.color="#ff0000";
-            document.all['s_upd_gather_task_script_name'].style.color="#ff0000";
-            document.all['s_upd_gather_task_api_server'].style.color="#ff0000";
-            document.all['s_upd_gather_task_status'].style.color="#ff0000";
-
-            //upd monitor task
-            document.all['s_upd_monitor_task_tag'].style.color="#ff0000";
-            document.all['s_upd_monitor_task_desc'].style.color="#ff0000";
-            document.all['s_upd_monitor_server'].style.color="#ff0000";
-            document.all['s_upd_monitor_task_run_time'].style.color="#ff0000";
-            document.all['s_upd_monitor_task_python3_home'].style.color="#ff0000";
-            document.all['s_upd_monitor_task_script_base'].style.color="#ff0000";
-            document.all['s_upd_monitor_task_script_name'].style.color="#ff0000";
-            document.all['s_upd_monitor_task_api_server'].style.color="#ff0000";
-            document.all['s_upd_monitor_task_status'].style.color="#ff0000";
       }
 
       function centerModals() {
@@ -612,14 +382,37 @@
               });
       }
 
-      function isSelect(row) {
-          $('#upd_task_tag_hidden').val(row)
-          $('#task_upd_win').attr("disabled",false);
-          $('#task_del_btn').attr("disabled",false);
-          $('#task_push_btn').attr("disabled",false);
-          $('#task_run_btn').attr("disabled",false);
-          $('#task_stop_btn').attr("disabled",false);
+      function isSelect() {
+           var rec=0;
+           $("#monitor_task_table tbody tr td input:checked").each( function() {
+              rec=rec+1;
+           });
+           if ( rec==1 ){
+              $('#task_upd_win').attr("disabled",false);
+              $('#task_del_btn').attr("disabled",false);
+              $('#task_clone_btn').attr("disabled",false);
+              $('#task_push_btn').attr("disabled",false);
+              $('#task_run_btn').attr("disabled",false);
+              $('#task_stop_btn').attr("disabled",false);
+           } else {
+               $('#task_upd_win').attr("disabled", true);
+               $('#task_del_btn').attr("disabled", true);
+               $('#task_clone_win').attr("disabled", true);
+               $('#task_push_btn').attr("disabled",true);
+               $('#task_run_btn').attr("disabled",true);
+               $('#task_stop_btn').attr("disabled",true);
+           }
       }
+
+      function get_add_gather_task_templetes(){
+         var tmp='';
+         var val='';
+         $('#add_gather_task_templete_name option').each(function(){
+           val=$(this).val();
+           tmp=tmp+','+val;
+         });
+         return tmp.substr(1);
+     }
 
      $(document).ready(function() {
 
@@ -638,11 +431,11 @@
                           destroy    :true,
                           async      :true,
                           ordering   :false,
-                          scrollY    :false,
+                          scrollY    :"800px",
                           scrollX    :false,
                           scrollCollapse: true,
-                          paging:     true,
-                          iDisplayLength: 12,
+                          paging:     false,
+                          iDisplayLength: 14,
                           data: dataSet,
                           columns: [
                              { "title": "任务标识" },
@@ -654,11 +447,10 @@
                              { "title": "接口服务" },
                              { "title": "任务状态" },
                              {
-                                  "title": "选择",
-                                  "width": "25px",
-                                  "render": function (data, type, row) {
-                                      return '<input type="radio"  onclick=isSelect("'+row[0]+'")>'
-                                  }
+                                    "title":"选择",
+                                    "width": "25px",
+                                    "render": function(data,type,row){
+                                         return '<input type="radio" name="indexid" onclick="isSelect();" >'; }
                               },
                            ],
                           "language": {
@@ -697,58 +489,41 @@
              })
         }
 
-        $("#add_gather_task_templete_name").change(function () {
-            var options=$('#add_gather_task_templete_name option:selected');
-            var templete_id   = $(options[0]).val()
-            console.log('add_gather_task_templete_name.templete_id=',templete_id)
-            if (templete_id!='' ) {
-                $.ajax({
-                      url: "/get/monitor/templete/type",
-                      async:false,
-                      type: "post",
-                      datatype: "text",
-                      data: {
-                            templete_id: templete_id
-                        },
-                      success: function (dataSet) {
-                         var templete_type=dataSet['message'][0][0]
-                         if (templete_type == '1') {
-                             $('#add_gather_task_db_server').val('')
-                             $('#add_gather_task_db_server').attr('disabled','disabled')
-                         } else {
-                             $('#add_gather_task_db_server').removeAttr('disabled')
-                         }
-                         set_gather_title()
-                      }
-                });
-            } else {
-                $('#add_gather_task_db_server').val('')
-                set_gather_title()
+        $("#add_gather_sys_templete_name").click(function () {
+           options=$('#add_gather_sys_templete_name option:selected');
+           if(options.length>0){
+            for (var i=0;i<options.length;i++){
+                  value=$(options[i]).val();
+                  text =$(options[i]).text();
+                  $('#add_gather_task_templete_name').append("<option value='"+value+"'>"+text+"</option>");
             }
+            $('#add_gather_sys_templete_name option:selected').remove();
+           }
+        });
+
+        $("#add_gather_task_templete_name").click(function () {
+               options=$('#add_gather_task_templete_name option:selected');
+               if(options.length>0){
+                for (var i=0;i<options.length;i++){
+                      value=$(options[i]).val();
+                      text =$(options[i]).text();
+                      $('#add_gather_sys_templete_name').append("<option value='"+value+"'>"+text+"</option>");
+                }
+                $('#add_gather_task_templete_name option:selected').remove();
+               }
          });
 
-        function set_gather_title(){
-            if ($('#add_gather_task_db_server').val()!=''){
-                var options=$('#add_gather_task_db_server option:selected');
-                $("#add_gather_task_tag").val('gather_task_db_'+$(options[0]).val());
-                $("#add_gather_task_desc").val('采集任务['+$(options[0]).text()+']');
-            } else if($('#add_gather_server').val()!='' ){
+        $('#add_gather_server').change(function() {
+            if ($('#add_gather_server').val()!=''){
                 var options=$('#add_gather_server option:selected');
-                $("#add_gather_task_tag").val('gather_task_server_'+$(options[0]).val());
+                $("#add_gather_task_tag").val('gather_task_'+$(options[0]).val());
                 $("#add_gather_task_desc").val('采集任务['+$(options[0]).text()+']');
             } else {
                 $("#add_gather_task_tag").val('');
                 $("#add_gather_task_desc").val('');
             }
-        }
-
-        $('#add_gather_server').change(function() {
-           set_gather_title()
         });
 
-        $('#add_gather_task_db_server').change(function() {
-            set_gather_title()
-        });
 
         $('#add_monitor_server').change(function() {
             if ($('#add_monitor_server').val()!=''){
@@ -762,18 +537,20 @@
         });
 
         $('#task_add_win').click(function(){
-            $('#add_gather_task_tag').val('')
-            $('#add_gather_task_desc').val('')
-            $('#add_gather_server').val('')
-            $('#add_gather_task_db_server').val('')
-            $('#add_gather_task_templete_name').val('')
-            $('#add_gather_task_run_time').val('')
-            $('#add_gather_task_python3_home').val('')
-            $('#add_gather_task_script_base').val('')
-            $('#add_gather_task_script_name').val('')
-            $('#add_gather_task_api_server').val('')
-            $('#add_gather_task_status').val('1')
+            // $('#add_gather_task_tag').val()
+            // $('#add_gather_task_desc').val()
+            // $('#add_gather_server').val()
+            // $('#add_task_db_server').val()
+            // $('#add_task_templete_name').val()
+            // $('#add_gather_task_run_time').val()
+            // $('#add_gather_task_python3_home').val()
+            // $('#add_gather_task_script_base').val()
+            // $('#add_gather_task_script_name').val()
+            // $('#add_gather_task_api_server').val()
+            // $('#add_gather_task_status').val()
+
             $('#activeTabInputHidden').val('采集任务')
+
             $('.modal').on('show.bs.modal', centerModals);
             $(window).on('resize', centerModals);
             $('#con-close-modal-add').modal({
@@ -783,64 +560,6 @@
         })
 
         $('#task_upd_win').click(function(){
-            var task_tag = $('#upd_task_tag_hidden').val()
-            $.ajax({
-                  url: "/get/monitor/task",
-                  type: "post",
-                  data:{
-                      task_tag : task_tag,
-                  },
-                  datatype: "json",
-                  async:false,
-                  success: function (dataSet) {
-                      console.log(dataSet);
-                      if (task_tag.indexOf('gather')!=-1) {
-                          console.log('gather')
-                          $('#upd_monitor_task_tab').hide()
-                          $('#upd_monitor_task').hide()
-                          $('#upd_gather_task_tab').show()
-                          $('#upd_gather_task').show()
-                          $('#upd_gather_task_tab').addClass("active")
-                          $('#upd_monitor_task_tab').removeClass("active")
-                          $('#upd_gather_task_tag').val(dataSet['task_tag'])
-                          $('#upd_gather_task_desc').val(dataSet['comments'])
-                          $('#upd_gather_server').val(dataSet['server_id'])
-                          $('#upd_gather_task_db_server').val(dataSet['db_id'])
-                          $('#upd_gather_task_templete_name').val(dataSet['templete_id'])
-                          $('#upd_gather_task_run_time').val(dataSet['run_time'])
-                          $('#upd_gather_task_python3_home').val(dataSet['python3_home'])
-                          $('#upd_gather_task_script_base').val(dataSet['script_path'])
-                          $('#upd_gather_task_script_name').val(dataSet['script_file'])
-                          $('#upd_gather_task_api_server').val(dataSet['api_server'])
-                          $('#upd_gather_task_status').val(dataSet['status'])
-                          $('#upd_gather_task_templete_name').attr('disabled','disabled')
-                          $('#upd_gather_server').attr('disabled','disabled')
-                          // $('#upd_gather_task_db_server').attr('disabled','disabled')
-                          $('#activeTabInputHidden').val('采集任务')
-
-                      } else {
-                          console.log('monitor')
-                          $('#upd_gather_task_tab').hide()
-                          $('#upd_gather_task').hide()
-                          $('#upd_monitor_task_tab').show()
-                          $('#upd_monitor_task').show()
-                          $('#upd_monitor_task_tab').addClass("active")
-                          $('#upd_gather_task_tab').removeClass("active")
-                          $('#upd_monitor_task_tag').val(dataSet['task_tag'])
-                          $('#upd_monitor_task_desc').val(dataSet['comments'])
-                          $('#upd_monitor_server').val(dataSet['server_id'])
-                          $('#upd_monitor_task_run_time').val(dataSet['run_time'])
-                          $('#upd_monitor_task_python3_home').val(dataSet['python3_home'])
-                          $('#upd_monitor_task_script_base').val(dataSet['script_path'])
-                          $('#upd_monitor_task_script_name').val(dataSet['script_file'])
-                          $('#upd_monitor_task_api_server').val(dataSet['api_server'])
-                          $('#upd_monitor_task_status').val(dataSet['status'])
-                          $('#upd_monitor_server').attr('disabled','disabled')
-                          $('#activeTabInputHidden').val('监控任务')
-                      }
-                  }
-            });
-
             $('.modal').on('show.bs.modal', centerModals);
             $(window).on('resize', centerModals);
             $('#con-close-modal-upd').modal({
@@ -869,7 +588,7 @@
                             add_gather_task_desc          : $('#add_gather_task_desc').val(),
                             add_gather_server             : $('#add_gather_server').val(),
                             add_gather_task_db_server     : $('#add_gather_task_db_server').val(),
-                            add_gather_task_templete_name : $('#add_gather_task_templete_name').val(),
+                            add_gather_task_templete_name : get_add_gather_task_templetes(),
                             add_gather_task_run_time      : $('#add_gather_task_run_time').val(),
                             add_gather_task_python3_home  : $('#add_gather_task_python3_home').val(),
                             add_gather_task_script_base   : $('#add_gather_task_script_base').val(),
@@ -885,23 +604,7 @@
                             } else {
                                 swal(dataSet.message, "", "error")
                             }
-                        },
-                       error: function (jqXHR, textStatus, errorThrown) {
-                            console.log('jqXHR.responseText=',jqXHR.responseText);
-                            console.log('jqXHR.status=',jqXHR.status);
-                            console.log('jqXHR.readyState=',jqXHR.readyState);
-                            console.log('jqXHR.statusText=',jqXHR.statusText);
-                            console.log('textStatus=',textStatus);
-                            console.log('errorThrown=',errorThrown);
-                            if (jqXHR.status==403){
-                                swal("登陆信息已过期，请重新登陆!", "", "error")
-                                window.location.href='/login'
-                            } else if (jqXHR.status==502){
-                                swal("用户无权访问权限此功能!", "", "error")
-                            } else {
-                                swal("系统不可用,请稍后重试!", "", "error")
-                            }
-                       }
+                        }
                     })
             }
 
@@ -929,91 +632,23 @@
                         } else {
                             swal(dataSet.message, "", "error")
                         }
-                    },
-                   error: function (jqXHR, textStatus, errorThrown) {
-                        console.log('jqXHR.responseText=',jqXHR.responseText);
-                        console.log('jqXHR.status=',jqXHR.status);
-                        console.log('jqXHR.readyState=',jqXHR.readyState);
-                        console.log('jqXHR.statusText=',jqXHR.statusText);
-                        console.log('textStatus=',textStatus);
-                        console.log('errorThrown=',errorThrown);
-                        if (jqXHR.status==403){
-                            swal("登陆信息已过期，请重新登陆!", "", "error")
-                            window.location.href='/login'
-                        } else if (jqXHR.status==502){
-                            swal("用户无权访问权限此功能!", "", "error")
-                        } else {
-                            swal("系统不可用,请稍后重试!", "", "error")
-                        }
-                   }
+                    }
                 })
             }
         });
 
         $('#task_upd_btn').click(function(){
-            activeTab=$('#activeTabInputHidden').val()
-            console.log('task_save_btn=>',activeTab)
-            if (activeTab == '采集任务') {
-                $.ajax({
-                        url: "/monitor/task/edit/save/gather",
-                        type: "post",
-                        datatype: "json",
-                        data: {
-                            upd_gather_task_tag           : $('#upd_gather_task_tag').val(),
-                            upd_gather_task_desc          : $('#upd_gather_task_desc').val(),
-                            upd_gather_server             : $('#upd_gather_server').val(),
-                            upd_gather_task_db_server     : $('#upd_gather_task_db_server').val(),
-                            upd_gather_task_templete_name : $('#upd_gather_task_templete_name').val(),
-                            upd_gather_task_run_time      : $('#upd_gather_task_run_time').val(),
-                            upd_gather_task_python3_home  : $('#upd_gather_task_python3_home').val(),
-                            upd_gather_task_script_base   : $('#upd_gather_task_script_base').val(),
-                            upd_gather_task_script_name   : $('#upd_gather_task_script_name').val(),
-                            upd_gather_task_api_server    : $('#upd_gather_task_api_server').val(),
-                            upd_gather_task_status        : $('#upd_gather_task_status').val(),
-                        },
-                        success: function (dataSet) {
-                            console.log(dataSet.code, dataSet.message);
-                            if (dataSet.code == 0) {
-                                swal("更新成功", "", "success")
-                                query_task()
-                            } else {
-                                swal(dataSet.message, "", "error")
-                            }
-                        },
-                       error: function (jqXHR, textStatus, errorThrown) {
-                            console.log('jqXHR.responseText=',jqXHR.responseText);
-                            console.log('jqXHR.status=',jqXHR.status);
-                            console.log('jqXHR.readyState=',jqXHR.readyState);
-                            console.log('jqXHR.statusText=',jqXHR.statusText);
-                            console.log('textStatus=',textStatus);
-                            console.log('errorThrown=',errorThrown);
-                            if (jqXHR.status==403){
-                                swal("登陆信息已过期，请重新登陆!", "", "error")
-                                window.location.href='/login'
-                            } else if (jqXHR.status==502){
-                                swal("用户无权访问权限此功能!", "", "error")
-                            } else {
-                                swal("系统不可用,请稍后重试!", "", "error")
-                            }
-                       }
-                    })
-            }
-
-            if (activeTab == '监控任务') {
-                $.ajax({
-                    url: "/monitor/task/edit/save/monitor",
+            $.ajax({
+                    url: "/monitor/index/edit/save",
                     type: "post",
                     datatype: "json",
                     data: {
-                        upd_monitor_task_tag          : $('#upd_monitor_task_tag').val(),
-                        upd_monitor_task_desc         : $('#upd_monitor_task_desc').val(),
-                        upd_monitor_server            : $('#upd_monitor_server').val(),
-                        upd_monitor_task_run_time     : $('#upd_monitor_task_run_time').val(),
-                        upd_monitor_task_python3_home : $('#upd_monitor_task_python3_home').val(),
-                        upd_monitor_task_script_base  : $('#upd_monitor_task_script_base').val(),
-                        upd_monitor_task_script_name  : $('#upd_monitor_task_script_name').val(),
-                        upd_monitor_task_api_server   : $('#upd_monitor_task_api_server').val(),
-                        upd_monitor_task_status       : $('#upd_monitor_task_status').val(),
+                        index_name      : $('#upd_index_name').val(),
+                        index_code      : $('#upd_index_code').val(),
+                        index_type      : $('#upd_index_type').val(),
+                        index_db_type   : $('#upd_index_db_type').val(),
+                        index_threshold : $('#upd_index_threshold').val(),
+                        index_status    : $('#upd_index_status').val(),
                     },
                     success: function (dataSet) {
                         console.log(dataSet.code, dataSet.message);
@@ -1023,40 +658,24 @@
                         } else {
                             swal(dataSet.message, "", "error")
                         }
-                    },
-                   error: function (jqXHR, textStatus, errorThrown) {
-                        console.log('jqXHR.responseText=',jqXHR.responseText);
-                        console.log('jqXHR.status=',jqXHR.status);
-                        console.log('jqXHR.readyState=',jqXHR.readyState);
-                        console.log('jqXHR.statusText=',jqXHR.statusText);
-                        console.log('textStatus=',textStatus);
-                        console.log('errorThrown=',errorThrown);
-                        if (jqXHR.status==403){
-                            swal("登陆信息已过期，请重新登陆!", "", "error")
-                            window.location.href='/login'
-                        } else if (jqXHR.status==502){
-                            swal("用户无权访问权限此功能!", "", "error")
-                        } else {
-                            swal("系统不可用,请稍后重试!", "", "error")
-                        }
-                   }
-                })
-            }
+                    }
+            })
+
         })
 
         $('#task_del_btn').click(function(){
-             var task_tag ='';
-             var task_desc='';
-             $("#monitor_task_table tbody tr td input:checked").each( function() {
+             var index_code='';
+             var index_name='';
+             $("#monitor_index_table tbody tr td input:checked").each( function() {
                   var row=$(($(this).parent().parent().html()));
-                  task_tag=row[0].innerHTML;
-                  task_desc=row[1].innerHTML;
-                  console.log("task_tag=",task_tag,"task_desc=",task_desc)
+                  index_code=row[0].innerHTML;
+                  index_name=row[1].innerHTML;
+                  console.log("index_code=",index_code,"index_name=",index_name)
              });
 
             swal({
                     title: "确认要删除吗?",
-                    text: "指标["+task_desc+"]将被删除！",
+                    text: "指标["+index_name+"]将被删除！",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
@@ -1067,22 +686,22 @@
                    }, function (isConfirm) {
                        if (isConfirm) {
                              $.ajax({
-                                    url: "/monitor/task/edit/del",
+                                    url: "/monitor/index/edit/del",
                                     type: "post",
                                     datatype: "json",
-                                    data:{task_tag: task_tag},
+                                    data:{index_code: index_code},
                                     success: function (dataSet) {
                                         if (dataSet.code=='0') {
-                                             swal("已删除!", "指标["+task_desc+"]已删除!", "success");
-                                             query_task()
+                                             swal("已删除!", "指标["+index_name+"]已删除!", "success");
+                                             query_index()
                                         } else {
-                                             swal("已取消!", "指标["+task_desc+"]"+dataSet.message+"!", "error");
+                                             swal("已取消!", "指标["+index_name+"]"+dataSet.message+"!", "error");
                                         }
                                     }
                                 });
 
                       } else {
-                          swal("已取消", "问题单[" + task_desc + "]已取消删除！", "error");
+                          swal("已取消", "问题单[" + index_name + "]已取消删除！", "error");
                       }
               })
         })
@@ -1152,17 +771,9 @@
              query_task()
         });
 
-        $("#query_btn").click()
-
         set_selected()
-
-       $("#name").bind("input propertychange",function(){
-          query_task()
-       });
+        $("#query_btn").click()
     });
-
-
-
 
 
 </script>

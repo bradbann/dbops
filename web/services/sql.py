@@ -21,7 +21,7 @@ from web.model.t_sql_release   import query_order_no,save_order,delete_order,que
 from web.model.t_ds            import get_dss_sql_query,get_dss_sql_run,get_dss_order,get_dss_sql_release,get_dss_sql_audit
 from web.model.t_user          import get_user_by_loginame,get_user_by_userid
 from web.model.t_xtqx          import get_tab_ddl_by_tname,get_tab_idx_by_tname,get_tree_by_dbid,alt_tab_desc
-from web.model.t_xtqx          import get_db_name,get_tab_name,get_tab_columns,get_tab_structure,get_tab_keys,get_tab_incr_col
+from web.model.t_xtqx          import get_db_name,get_tab_name,get_tab_columns,get_tab_structure,get_tab_keys,get_tab_incr_col,query_ds
 from web.model.t_dmmx          import get_dmm_from_dm,get_users_from_proj
 from web.utils.basehandler     import basehandler
 
@@ -239,6 +239,15 @@ class get_columns(basehandler):
         result = get_tab_columns(dbid,db_name,tab_name)
         self.write({"code": result['code'], "message": result['message']})
 
+
+class get_ds(basehandler):
+    def post(self):
+        dsid   = self.get_argument("dsid")
+        print('get_ds=',dsid)
+        result = query_ds(dsid)
+        self.write({"code": result['code'], "message": result['message']})
+
+
 class get_keys(basehandler):
     def post(self):
         dbid     = self.get_argument("dbid")
@@ -269,6 +278,8 @@ class get_tab_stru(basehandler):
         print('get_tab_stru=',v_list)
         v_json = json.dumps(v_list)
         self.write(v_json)
+
+
 
 class orderquery(basehandler):
     @tornado.web.authenticated

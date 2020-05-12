@@ -68,6 +68,7 @@ class syncadd_save(basehandler):
         d_sync['task_desc']            = self.get_argument("task_desc")
         d_sync['python3_home']         = self.get_argument("python3_home")
         d_sync['sync_schema']          = self.get_argument("sync_schema")
+        d_sync['sync_schema_dest']     = self.get_argument("sync_schema_dest")
         d_sync['sync_tables']          = self.get_argument("sync_tables")
         d_sync['sync_batch_size']      = self.get_argument("sync_batch_size")
         d_sync['sync_batch_size_incr'] = self.get_argument("sync_batch_size_incr")
@@ -114,6 +115,7 @@ class syncedit(basehandler):
                     task_desc            = d_sync['task_desc'],
                     python3_home         = d_sync['python3_home'],
                     sync_schema          = d_sync['sync_schema'],
+                    sync_schema_dest     = d_sync['sync_schema_dest'],
                     sync_tables          = d_sync['sync_tables'],
                     sync_batch_size      = d_sync['sync_batch_size'],
                     sync_batch_size_incr = d_sync['sync_batch_size_incr'],
@@ -142,6 +144,7 @@ class syncedit_save(basehandler):
         d_sync['task_desc']       = self.get_argument("task_desc")
         d_sync['python3_home']    = self.get_argument("python3_home")
         d_sync['sync_schema']     = self.get_argument("sync_schema")
+        d_sync['sync_schema_dest'] = self.get_argument("sync_schema_dest")
         d_sync['sync_tables']     = self.get_argument("sync_tables")
         d_sync['sync_batch_size'] = self.get_argument("sync_batch_size")
         d_sync['sync_batch_size_incr'] = self.get_argument("sync_batch_size_incr")
@@ -181,6 +184,7 @@ class syncclone(basehandler):
                     task_desc            = d_sync['task_desc']+'_clone',
                     python3_home         = d_sync['python3_home'],
                     sync_schema          = d_sync['sync_schema'],
+                    sync_schema_dest     = d_sync['sync_schema_dest'],
                     sync_tables          = d_sync['sync_tables'],
                     sync_batch_size      = d_sync['sync_batch_size'],
                     sync_batch_size_incr = d_sync['sync_batch_size_incr'],
@@ -209,6 +213,7 @@ class syncclone_save(basehandler):
         d_sync['task_desc']       = self.get_argument("task_desc")
         d_sync['python3_home']    = self.get_argument("python3_home")
         d_sync['sync_schema']     = self.get_argument("sync_schema")
+        d_sync['sync_schema_dest'] = self.get_argument("sync_schema_dest")
         d_sync['sync_tables']     = self.get_argument("sync_tables")
         d_sync['sync_batch_size'] = self.get_argument("sync_batch_size")
         d_sync['sync_batch_size_incr'] = self.get_argument("sync_batch_size_incr")

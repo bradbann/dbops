@@ -251,7 +251,7 @@ def save_menu(p_menu):
         print("menu_id="+menu_id)
         sql="""insert into t_xtqx(id,name,url,status,parent_id,creation_date,creator,last_update_date,updator) 
                     values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}')
-            """.format(menu_id,name,url,status,parent_id,current_rq(),'DBA',current_rq(),'DBA');
+            """.format(menu_id,name,url,status,parent_id,current_rq(),'DBA',current_rq(),'DBA')
         cr.execute(sql)
         cr.close()
         db.commit()
@@ -573,6 +573,19 @@ def get_tab_keys(dbid,db_name,tab_name):
         result['code'] = '-1'
         result['message'] = '获取数据库列名失败！'
     return result
+
+
+def query_ds(dsid):
+    try:
+        result = {}
+        result['code'] = '0'
+        result['message'] = get_ds_by_dsid(dsid)
+    except Exception as e:
+        print('get_tab_keys.err:',str(e))
+        result['code'] = '-1'
+        result['message'] = '获取数据源信息失败！'
+    return result
+
 
 
 def get_tab_incr_col(dbid,db_name,tab_name):
