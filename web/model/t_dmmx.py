@@ -39,6 +39,16 @@ def get_users_from_proj(p_userid):
     cr.close()
     return v_list
 
+def get_sys_dmlx():
+    db = get_connection()
+    cr = db.cursor()
+    sql = "select dm,mc from t_dmlx where flag='1' order by dm"
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list
 
 def get_backup_server():
     db = get_connection()
@@ -240,7 +250,7 @@ def get_sync_db_server():
     cr = db.cursor()
     sql = """SELECT id,db_desc
               FROM t_db_source 
-            WHERE  db_type in(0,2,4,5,6) and db_env in(1,2,3,4) 
+            WHERE  db_type in(0,2,4,5,6) and db_env in(1,2,3,4,5,6) 
                 and STATUS=1 
                 -- and user!='puppet'
               ORDER BY db_desc,db_type"""

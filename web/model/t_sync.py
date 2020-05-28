@@ -86,7 +86,7 @@ def query_sync_log(sync_tag,market_id,sync_ywlx,begin_date,end_date):
             FROM  t_db_sync_config a,t_db_sync_tasks_log b,t_dmmx c
             WHERE a.sync_tag=b.sync_tag 
               and c.dm='05' 
-              and a.sync_col_val=c.dmm
+              and instr(a.sync_col_val,c.dmm)>0
               and a.status='1'
               {0}
             -- order by b.create_date desc,b.sync_tag 

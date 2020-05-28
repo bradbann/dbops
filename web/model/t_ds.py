@@ -515,12 +515,12 @@ def check_ds(p_ds,p_flag):
         result['message'] = '口令不能为空！'
         return result
 
-    if p_flag == 'add':
-        v = check_ds_repeat(p_ds)
-        if v['code']:
-            result['code'] = '-1'
-            result['message'] = v['message']
-            return result
+    # if p_flag == 'add':
+    #     v = check_ds_repeat(p_ds)
+    #     if v['code']:
+    #         result['code'] = '-1'
+    #         result['message'] = v['message']
+    #         return result
 
     result['code'] = '0'
     result['message'] = '验证通过'

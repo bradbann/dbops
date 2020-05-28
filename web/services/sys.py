@@ -15,6 +15,7 @@ import json
 import tornado.web
 from web.model.t_sys  import save_audit_rule,query_dm,query_rule,query_dm_detail,save_sys_code_type,upd_sys_code_type,del_sys_code
 from web.model.t_sys  import save_sys_code_detail,upd_sys_code_detail,del_sys_code_detail
+from web.model.t_dmmx import get_sys_dmlx
 from web.utils.basehandler import basehandler
 
 
@@ -113,7 +114,8 @@ class sys_code(basehandler):
    @tornado.web.authenticated
    def get(self):
        logon_name = str(self.get_secure_cookie("username"), encoding="utf-8")
-       self.render("./sys_code.html")
+       self.render("./sys_code.html",
+                   sys_code_type= get_sys_dmlx())
 
 class sys_code_type_query(basehandler):
     @tornado.web.authenticated
@@ -202,7 +204,7 @@ class sys_code_detail_del(basehandler):
         code    = self.get_argument("type_code")
         detail  = self.get_argument("detail_code")
         print('sys_code_detail_del=', code,detail)
-        result = del_sys_code_detail(code)
+        result = del_sys_code_detail(code,detail)
         self.write({"code": result['code'], "message": result['message']})
 
 

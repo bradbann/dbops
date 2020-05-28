@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>实例查询</title>
+    <title>实例管理</title>
     <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
@@ -32,8 +32,8 @@
       </div>
     </div>
 
-     <!--新增实例窗口 -->
-     <div id="con-modal-inst-add" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <!--新增实例窗口 -->
+    <div id="con-modal-inst-add" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
        <div class="modal-dialog modal-lg-order">
         <div class="modal-content">
             <div class="modal-header">
@@ -147,6 +147,236 @@
       </div>
      </div>
 
+    <!--实例详情窗口 -->
+    <div id="con-modal-inst-detail" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+       <div class="modal-dialog modal-lg-order">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">实例详情</h4>
+            </div>
+            <div class="modal-body">
+               <div class="panel panel-flat">
+                    <div class="panel-body">
+                      <form class="form-horizontal" role="form">
+                        <div class="form-group" >
+                            <div>
+                                <label class="col-md-3 control-label" >实例名称：</label>
+                            </div>
+                            <div class="col-md-9" >
+                                <input type="text" id="detail_inst_name"  readonly class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                            <div >
+                                <label class="col-md-3 control-label">实例地址：</label>
+                            </div>
+                            <div class="col-md-9">
+                               <input type="text" id="detail_inst_ip"  readonly class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                            <div >
+                                <label class="col-md-3 control-label">实例端口：</label>
+                            </div>
+                            <div class="col-md-9">
+                               <input type="text" id="detail_inst_port"  readonly class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                            <div >
+                                <label class="col-md-3 control-label">实例类型：</label>
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control select" disabled id="detail_inst_type">
+                                    <option value='' selected = "selected">...</option>
+                                     {% for var in dm_inst_type %}
+                                        <option value={{var[0]}}>{{var[1]}}</option>
+                                     {% end %}
+                                </select>
+                           </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label class="col-md-3 control-label" >管理员账号：</label>
+                            </div>
+                            <div class="col-md-9" >
+                                <input id='detail_mgr_user' type="text"   readonly class="form-control">
+                           </div>
+                       </div>
+                        <div class="form-group">
+                            <div>
+                                <label class="col-md-3 control-label" >管理员密码：</label>
+                            </div>
+                            <div class="col-md-9" >
+                                <input id='detail_mgr_pass' type="password" readonly class="form-control">
+                            </div>
+                       </div>
+                       <div class="form-group">
+                            <div>
+                                <label class="col-md-3 control-label" >启动脚本：</label>
+                            </div>
+                            <div class="col-md-9" >
+                                <input id='detail_start_script' readonly type="text" class="form-control">
+                           </div>
+                       </div>
+
+                       <div class="form-group">
+                            <div>
+                                <label class="col-md-3 control-label" >停止脚本：</label>
+                            </div>
+                            <div class="col-md-9" >
+                               <input id='detail_stop_script' readonly type="text" class="form-control">
+                           </div>
+                       </div>
+
+                      <div class="form-group">
+                        <div>
+                            <label class="col-md-3 control-label" >>重启脚本：</label>
+                        </div>
+                        <div class="col-md-9" >
+                            <input id='detail_restart_script' readonly type="text" class="form-control">
+                       </div>
+                     </div>
+
+                      <div class="form-group">
+                        <div>
+                            <label class="col-md-3 control-label" >自启脚本：</label>
+                        </div>
+                        <div class="col-md-9" >
+                            <input id='detail_auto_start_script' readonly type="text" class="form-control">
+                       </div>
+                     </div>
+
+                   </form>
+
+                </div>
+            </div>
+               <div class="modal-footer">
+                    <div class="col-sm-offset-3 col-sm-4">
+                       <button type="button" class="btn btn-custom waves-effect waves-light btn-md" data-dismiss="modal">关闭</button>
+                    </div>
+               </div>
+            </div>
+         </div>
+      </div>
+     </div>
+
+    <!--变更实例窗口 -->
+    <div id="con-modal-inst-upd" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+       <div class="modal-dialog modal-lg-order">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">实例变更</h4>
+            </div>
+            <div class="modal-body">
+               <div class="panel panel-flat">
+                    <div class="panel-body">
+                      <form class="form-horizontal" role="form">
+                        <div class="form-group" >
+                            <div>
+                                <label class="col-md-3 control-label" ><span id="s_upd_inst_name">*</span>实例名称：</label>
+                            </div>
+                            <div class="col-md-9" >
+                                <input type="hidden" id="upd_inst_id">
+                                <input type="text" id="upd_inst_name"  class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                            <div >
+                                <label class="col-md-3 control-label"><span id="s_upd_inst_ip">*</span>实例地址：</label>
+                            </div>
+                            <div class="col-md-9">
+                               <input type="text" id="upd_inst_ip"  class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                            <div >
+                                <label class="col-md-3 control-label"><span id="s_upd_inst_port">*</span>实例端口：</label>
+                            </div>
+                            <div class="col-md-9">
+                               <input type="text" id="upd_inst_port"  class="form-control">
+                           </div>
+                        </div>
+                        <div class="form-group">
+                            <div >
+                                <label class="col-md-3 control-label"><span id="s_upd_inst_type">*</span>实例类型：</label>
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control select" id="upd_inst_type">
+                                    <option value='' selected = "selected">...</option>
+                                     {% for var in dm_inst_type %}
+                                        <option value={{var[0]}}>{{var[1]}}</option>
+                                     {% end %}
+                                </select>
+                           </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                                <label class="col-md-3 control-label" ><span id="s_upd_mgr_user">*</span>管理员账号：</label>
+                            </div>
+                            <div class="col-md-9" >
+                                <input id='upd_mgr_user' type="text"   class="form-control">
+                           </div>
+                       </div>
+                        <div class="form-group">
+                            <div>
+                                <label class="col-md-3 control-label" ><span id="s_upd_mgr_pass">*</span>管理员密码：</label>
+                            </div>
+                            <div class="col-md-9" >
+                                <input id='upd_mgr_pass' type="password" class="form-control">
+                            </div>
+                       </div>
+                       <div class="form-group">
+                            <div>
+                                <label class="col-md-3 control-label" ><span id="s_upd_start_script">*</span>启动脚本：</label>
+                            </div>
+                            <div class="col-md-9" >
+                                <input id='upd_start_script' type="text" class="form-control">
+                           </div>
+                       </div>
+
+                       <div class="form-group">
+                            <div>
+                                <label class="col-md-3 control-label" ><span id="s_upd_stop_script">*</span>停止脚本：</label>
+                            </div>
+                            <div class="col-md-9" >
+                               <input id='upd_stop_script' type="text" class="form-control">
+                           </div>
+                       </div>
+
+                      <div class="form-group">
+                        <div>
+                            <label class="col-md-3 control-label" ><span id="s_upd_restart_script">*</span>重启脚本：</label>
+                        </div>
+                        <div class="col-md-9" >
+                            <input id='upd_restart_script' type="text" class="form-control">
+                       </div>
+                     </div>
+
+                      <div class="form-group">
+                        <div>
+                            <label class="col-md-3 control-label" ><span id="s_upd_auto_start_script">*</span>自启脚本：</label>
+                        </div>
+                        <div class="col-md-9" >
+                            <input id='upd_auto_start_script' type="text" class="form-control">
+                       </div>
+                     </div>
+
+                   </form>
+
+                </div>
+            </div>
+               <div class="modal-footer">
+                    <div class="col-sm-offset-3 col-sm-4">
+                       <button type="button" class="btn btn-custom waves-effect waves-light btn-md" id="inst_upd_btn">变更</button>
+                       <button type="button" class="btn btn-custom waves-effect waves-light btn-md" data-dismiss="modal">关闭</button>
+                    </div>
+               </div>
+            </div>
+         </div>
+      </div>
+     </div>
+
    <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
    <script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
    <script src="{{static_url('plugins/datatables/dataTables.buttons.min.js')}}"></script>
@@ -166,13 +396,24 @@
             document.all['s_add_stop_script'].style.color="#ff0000";
             document.all['s_add_restart_script'].style.color="#ff0000";
             document.all['s_add_auto_start_script'].style.color="#ff0000";
+
+            document.all['s_upd_inst_name'].style.color="#ff0000";
+            document.all['s_upd_inst_ip'].style.color="#ff0000";
+            document.all['s_upd_inst_port'].style.color="#ff0000";
+            document.all['s_upd_inst_type'].style.color="#ff0000";
+            document.all['s_upd_mgr_user'].style.color="#ff0000";
+            document.all['s_upd_mgr_pass'].style.color="#ff0000";
+            document.all['s_upd_start_script'].style.color="#ff0000";
+            document.all['s_upd_stop_script'].style.color="#ff0000";
+            document.all['s_upd_restart_script'].style.color="#ff0000";
+            document.all['s_upd_auto_start_script'].style.color="#ff0000";
         }
 
-        $(document).keydown(function(event){
+       $(document).keydown(function(event){
             if (event.keyCode == 13) { //判断为Enter键
                 $("#query_btn").click();
             }
-         });
+        });
 
         $("#inst_name").bind("input propertychange",function(){
            $("#query_btn").click();
@@ -211,22 +452,117 @@
             init_inst()
         })
 
-        $('#inst_save_btn').click(function(){
+        function showDetail_win(p_inst_id){
+            $.ajax({
+                  url: "/db/inst/query/id",
+                  type: "post",
+                  datatype: "json",
+                  data: {
+                      inst_id  :p_inst_id
+                  },
+                  success: function (instObj) {
+                        console.log('showDetail_win=>instObj=',instObj,instObj['id'],instObj['inst_name']);
+                        $('#detail_inst_name').val(instObj['inst_name'])
+                        $('#detail_inst_ip').val(instObj['inst_ip'])
+                        $('#detail_inst_port').val(instObj['inst_port'])
+                        $('#detail_inst_type').val(instObj['inst_type'])
+                        $('#detail_mgr_user').val(instObj['mgr_user'])
+                        $('#detail_mgr_pass').val(instObj['mgr_pass'])
+                        $('#detail_start_script').val(instObj['start_script'])
+                        $('#detail_stop_script').val(instObj['stop_script'])
+                        $('#detail_restart_script').val(instObj['restart_script'])
+                        $('#detail_auto_start_script').val(instObj['auto_start_script'])
+                        $('.modal').on('show.bs.modal', centerModals);
+                        $(window).on('resize', centerModals);
+                        $('#con-modal-inst-detail').modal({
+                              keyboard: false,
+                              backdrop:false
+                         });
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                        setTimeout(" window.location.href='/login'",3000);
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
+                    }
+                }
+
+             })
+       }
+
+        function showUpd_win(p_inst_id){
+            $.ajax({
+                  url: "/db/inst/query/id",
+                  type: "post",
+                  datatype: "json",
+                  data: {
+                      inst_id  :p_inst_id
+                  },
+                  success: function (instObj) {
+                        console.log('showUpd_win=>instObj=',instObj,instObj['id'],instObj['inst_name']);
+                        $('#upd_inst_id').val(instObj['id'])
+                        $('#upd_inst_name').val(instObj['inst_name'])
+                        $('#upd_inst_ip').val(instObj['inst_ip'])
+                        $('#upd_inst_port').val(instObj['inst_port'])
+                        $('#upd_inst_type').val(instObj['inst_type'])
+                        $('#upd_mgr_user').val(instObj['mgr_user'])
+                        $('#upd_mgr_pass').val(instObj['mgr_pass'])
+                        $('#upd_start_script').val(instObj['start_script'])
+                        $('#upd_stop_script').val(instObj['stop_script'])
+                        $('#upd_restart_script').val(instObj['restart_script'])
+                        $('#upd_auto_start_script').val(instObj['auto_start_script'])
+                        $('.modal').on('show.bs.modal', centerModals);
+                        $(window).on('resize', centerModals);
+                        $('#con-modal-inst-upd').modal({
+                               keyboard: false,
+                               backdrop:false
+                         });
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                        setTimeout(" window.location.href='/login'",3000);
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
+                    }
+                }
+             });
+       }
+
+
+       $('#inst_save_btn').click(function(){
            $.ajax({
                 url: "/db/inst/save",
                 type: "post",
                 datatype: "json",
                 data: {
-                     add_inst_name        :$('#add_inst_name').val(),
-                     add_inst_ip          :$('#add_inst_ip').val(),
-                     add_inst_port        :$('#add_inst_port').val(),
-                     add_inst_type        :$('#add_inst_type').val(),
-                     add_mgr_user         :$('#add_mgr_user').val(),
-                     add_mgr_pass         :$('#add_mgr_pass').val(),
-                     add_start_script     :$('#add_start_script').val(),
-                     add_stop_script      :$('#add_stop_script').val(),
-                     add_restart_script   :$('#add_restart_script').val(),
-                     add_auto_start_script:$('#add_auto_start_script').val()
+                     inst_name        :$('#add_inst_name').val(),
+                     inst_ip          :$('#add_inst_ip').val(),
+                     inst_port        :$('#add_inst_port').val(),
+                     inst_type        :$('#add_inst_type').val(),
+                     mgr_user         :$('#add_mgr_user').val(),
+                     mgr_pass         :$('#add_mgr_pass').val(),
+                     start_script     :$('#add_start_script').val(),
+                     stop_script      :$('#add_stop_script').val(),
+                     restart_script   :$('#add_restart_script').val(),
+                     auto_start_script:$('#add_auto_start_script').val()
                 },
                 success: function (dataSet) {
                     console.log(dataSet.code, dataSet.message);
@@ -239,6 +575,37 @@
                 }
             })
         })
+
+       $('#inst_upd_btn').click(function(){
+           $.ajax({
+                url: "/db/inst/update",
+                type: "post",
+                datatype: "json",
+                data: {
+                     inst_id          :$('#upd_inst_id').val(),
+                     inst_name        :$('#upd_inst_name').val(),
+                     inst_ip          :$('#upd_inst_ip').val(),
+                     inst_port        :$('#upd_inst_port').val(),
+                     inst_type        :$('#upd_inst_type').val(),
+                     mgr_user         :$('#upd_mgr_user').val(),
+                     mgr_pass         :$('#upd_mgr_pass').val(),
+                     start_script     :$('#upd_start_script').val(),
+                     stop_script      :$('#upd_stop_script').val(),
+                     restart_script   :$('#upd_restart_script').val(),
+                     auto_start_script:$('#upd_auto_start_script').val()
+                },
+                success: function (dataSet) {
+                    console.log(dataSet.code, dataSet.message);
+                    if (dataSet.code == 0) {
+                        swal("保存成功", "", "success")
+                        $("#query_btn").click()
+                    } else {
+                        swal(dataSet.message, "", "error")
+                    }
+                }
+            })
+        })
+
 
         $(document).ready(function() {
             set_selected()
@@ -278,8 +645,8 @@
                             targets: 7,
                             render: function(data, type, row, meta){
                                 var btn ='&nbsp;'+
-                                      '<input class="btn btn-xs btn-primary"  type="button"  value="详情" />' +'&nbsp;'+
-                                      '<input class="btn btn-xs btn-primary"  type="button"  value="变更" />' +'&nbsp;'+
+                                      '<input class="btn btn-xs btn-primary"  type="button"  value="详情" onclick="showDetail_win(\''+row[0]+'\');"/>' +'&nbsp;'+
+                                      '<input class="btn btn-xs btn-primary"  type="button"  value="变更" onclick="showUpd_win(\''+row[0]+'\');"/>' +'&nbsp;'+
                                       '<input class="btn btn-xs btn-primary"  type="button"  value="删除" />' +'&nbsp;'+
                                       '<input class="btn btn-xs btn-primary"  type="button"  value="启动" />' +'&nbsp;'+
                                       '<input class="btn btn-xs btn-primary"  type="button"  value="停止" />' +'&nbsp;'+

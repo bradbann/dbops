@@ -691,7 +691,8 @@ def upd_gather_task(p_task):
                        script_file='{}',
                        python3_home='{}',
                        api_server='{}',
-                       status='{}'
+                       status='{}',
+                       db_id ='{}'
                  where task_tag='{}'
              """.format(
                         p_task['upd_gather_task_run_time'],
@@ -700,6 +701,7 @@ def upd_gather_task(p_task):
                         p_task['upd_gather_task_python3_home'],
                         p_task['upd_gather_task_api_server'],
                         p_task['upd_gather_task_status'],
+                        p_task['upd_gather_task_db_server'],
                         p_task['upd_gather_task_tag']
                         )
         print(sql)

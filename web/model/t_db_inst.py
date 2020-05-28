@@ -5,8 +5,8 @@
 # @File    : t_user.py
 # @Software: PyCharm
 
-from web.utils.common import format_sql,aes_encrypt,aes_decrypt
-from web.utils.common import exception_info,get_connection
+from web.utils.common import aes_encrypt,aes_decrypt
+from web.utils.common import exception_info,get_connection,get_connection_dict
 from web.utils.common import current_rq
 import traceback
 import xlrd,xlwt
@@ -51,16 +51,42 @@ def query_inst(inst_name):
     db.commit()
     return v_list
 
+
+def query_inst_by_id(p_inst_id):
+    db  = get_connection_dict()
+    cr  = db.cursor()
+    sql = """SELECT id,
+                    inst_name,
+                    inst_ip,
+                    inst_port,
+                    inst_type,
+                    mgr_user,
+                    mgr_pass,
+                    start_script,
+                    stop_script,
+                    restart_script,
+                    auto_start_script,
+                    date_format(created_date,'%Y-%m-%d %H:%i:%s')  as created_date                    
+             FROM t_db_inst  WHERE id='{0}'""".format(p_inst_id)
+    print(sql)
+    cr.execute(sql)
+    rs=cr.fetchone()
+    rs['mgr_pass'] = aes_decrypt(rs['mgr_pass'],rs['mgr_user'])
+    print("rs->password=",rs['mgr_pass'])
+    cr.close()
+    db.commit()
+    return rs
+
+
 def save_db_inst(d_inst):
     result = {}
-    val=check_db_inst(d_inst)
+    val=check_db_inst(d_inst,'add')
     if val['code']=='-1':
         return val
     try:
-        db               = get_connection()
-        cr               = db.cursor()
-        result           = {}
-
+        db        = get_connection()
+        cr        = db.cursor()
+        result    = {}
         inst_pass = ''
         if d_inst['mgr_pass'] != '':
             inst_pass = aes_encrypt(d_inst['mgr_pass'], d_inst['mgr_user'])
@@ -90,19 +116,17 @@ def save_db_inst(d_inst):
 
 def upd_db_inst(d_inst):
     result={}
-    val = check_db_inst(d_inst)
+    val = check_db_inst(d_inst,'upd')
     if  val['code'] == '-1':
         return val
     try:
-        db   = get_connection()
-        cr   = db.cursor()
-
+        db        = get_connection()
+        cr        = db.cursor()
         inst_pass = ''
         if d_inst['mgr_pass'] != '':
             inst_pass = aes_encrypt(d_inst['mgr_pass'], d_inst['mgr_user'])
         else:
             inst_pass = d_inst['mgr_pass']
-
 
         sql  = """update t_db_inst
                   set  
@@ -119,7 +143,7 @@ def upd_db_inst(d_inst):
                       created_date =now()
                 where id={10}""".format(d_inst['inst_name'],d_inst['inst_ip'],d_inst['inst_port'],
                        d_inst['inst_type'],d_inst['mgr_user'],inst_pass,
-                       d_inst['start_script'],d_inst['stop_script'],d_inst['arestart_script'],
+                       d_inst['start_script'],d_inst['stop_script'],d_inst['restart_script'],
                        d_inst['auto_start_script'],d_inst['inst_id'])
         print(sql)
         cr.execute(sql)
@@ -165,7 +189,9 @@ def check_inst_rep(d_inst):
     db.commit()
     return rs[0]
 
-def check_db_inst(p_inst):
+
+
+def check_db_inst(p_inst,p_flag):
     result = {}
 
     if p_inst["inst_name"]=="":
@@ -187,11 +213,11 @@ def check_db_inst(p_inst):
         result['code']='-1'
         result['message']='实例类型不能为空!'
         return result
-
-    if check_inst_rep(p_inst)>0:
-        result['code'] = '-1'
-        result['message'] = '端口号重复!'
-        return result
+    if p_flag=='add':
+        if check_inst_rep(p_inst)>0:
+            result['code'] = '-1'
+            result['message'] = '端口号重复!'
+            return result
 
     result['code'] = '0'
     result['message'] = '验证通过'

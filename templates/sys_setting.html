@@ -65,7 +65,7 @@
                                        <label class="control-label text-left">邮件服务器地址</label>
                                     </div>
                                     <div class="col-md-9 text-left">
-                                        <input id='send_mail_server' class="form-control" type="text" value="">
+                                        <input id='send_mail_server' class="form-control" type="text" value="smtp.exmail.qq.com">
                                     </div>
                                  </div>
                             </div>
@@ -77,7 +77,7 @@
                                        <label class="control-label text-left">邮件服务器端口</label>
                                     </div>
                                     <div class="col-md-9 text-left">
-                                        <input id='send_mail_port' class="form-control" type="text" value="">
+                                        <input id='send_mail_port' class="form-control" type="text" value="465">
                                     </div>
                                  </div>
                             </div>
@@ -89,7 +89,7 @@
                                        <label class="control-label text-left">发件人邮箱名称</label>
                                     </div>
                                     <div class="col-md-9">
-                                         <input id='send_mail_user' class="form-control" type="text" value="">
+                                         <input id='send_mail_user' class="form-control" type="text" value="190343@lifeat.cn">
                                     </div>
                                  </div>
                             </div>
@@ -101,7 +101,7 @@
                                        <label class="control-label text-left">发件人邮箱密码</label>
                                     </div>
                                     <div class="col-md-9">
-                                         <input id='send_mail_pass' class="form-control" type="text" value="">
+                                         <input id='send_mail_pass' class="form-control" type="password" value="Hhc5HBtAuYTPGHQ8">
                                     </div>
                                  </div>
                             </div>
@@ -113,7 +113,7 @@
                                        <label class="control-label text-left">备份任务收件人</label>
                                     </div>
                                     <div class="col-md-9">
-                                         <input id='send_mail_bakcup' class="form-control" type="text" value="">
+                                         <input id='send_mail_bakcup' class="form-control" type="text" value="190343@lifeat.cn">
                                     </div>
                                  </div>
                             </div>
@@ -125,7 +125,7 @@
                                        <label class="control-label text-left">同步任务收件人</label>
                                     </div>
                                     <div class="col-md-9">
-                                         <input id='send_mail_sync' class="form-control" type="text" value="">
+                                         <input id='send_mail_sync' class="form-control" type="text" value="190343@lifeat.cn">
                                     </div>
                                  </div>
                             </div>
@@ -137,7 +137,7 @@
                                        <label class="control-label text-left">监控任务收件人</label>
                                     </div>
                                     <div class="col-md-9">
-                                        <input id='send_mail_monitor' class="form-control" type="text" value="">
+                                        <input id='send_mail_monitor' class="form-control" type="text" value="190343@lifeat.cn">
                                     </div>
                                  </div>
                             </div>
@@ -149,10 +149,10 @@
                             <div class="col-md-6">
                                  <div class="form-group">
                                     <div class="col-md-3 text-right">
-                                       <label class="control-label text-left">接口服务器地址</label>
+                                       <label class="control-label text-left">接口服务器地址[内网]</label>
                                     </div>
                                     <div class="col-md-9">
-                                         <input id='api_server' class="form-control" type="text" value="">
+                                         <input id='api_server' class="form-control" type="text" value="10.2.39.18">
                                     </div>
                                  </div>
                             </div>
@@ -161,10 +161,34 @@
                             <div class="col-md-6">
                                  <div class="form-group">
                                     <div class="col-md-3 text-right">
-                                       <label class="control-label text-left">接口服务器端口</label>
+                                       <label class="control-label text-left">接口服务器端口[内网]</label>
                                     </div>
                                     <div class="col-md-9">
-                                        <input id='api_port' class="form-control" type="text" value="">
+                                        <input id='api_port' class="form-control" type="text" value="80">
+                                    </div>
+                                 </div>
+                            </div>
+                       </div>
+                       <div class="row" >
+                            <div class="col-md-6">
+                                 <div class="form-group">
+                                    <div class="col-md-3 text-right">
+                                       <label class="control-label text-left">接口服务器地址[外网]</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                         <input id='api_server2' class="form-control" type="text" value="124.127.103.190">
+                                    </div>
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="row" >
+                            <div class="col-md-6">
+                                 <div class="form-group">
+                                    <div class="col-md-3 text-right">
+                                       <label class="control-label text-left">接口服务器端口[外网]</label>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <input id='api_port2' class="form-control" type="text" value="65480">
                                     </div>
                                  </div>
                             </div>
@@ -176,10 +200,10 @@
                             <div class="col-md-6">
                                  <div class="form-group">
                                     <div class="col-md-3 text-right">
-                                       <label class="control-label text-left">数据库地址</label>
+                                       <label class="control-label text-left">元数据库地址</label>
                                     </div>
                                     <div class="col-md-9">
-                                         <input id='db_ip' class="form-control" type="text" value="">
+                                         <input id='db_ip' class="form-control"  readonly type="text" value="10.2.39.18">
                                     </div>
                                  </div>
                             </div>
@@ -188,10 +212,10 @@
                             <div class="col-md-6">
                                  <div class="form-group">
                                     <div class="col-md-3 text-right">
-                                       <label class="control-label text-left">数据库端口</label>
+                                       <label class="control-label text-left">元数据库端口</label>
                                     </div>
                                     <div class="col-md-9">
-                                        <input id='db_port' class="form-control" type="text" value="">
+                                        <input id='db_port' class="form-control" readonly type="text" value="3306">
                                     </div>
                                  </div>
                             </div>
@@ -200,10 +224,10 @@
                             <div class="col-md-6">
                                  <div class="form-group">
                                     <div class="col-md-3 text-right">
-                                       <label class="control-label text-left">数据库名称</label>
+                                       <label class="control-label text-left">元数据库名称</label>
                                     </div>
                                     <div class="col-md-9">
-                                        <input id='db_name' class="form-control" type="text" value="">
+                                        <input id='db_name' class="form-control" readonly type="text" value="puppet">
                                     </div>
                                  </div>
                             </div>
@@ -212,10 +236,10 @@
                             <div class="col-md-6">
                                  <div class="form-group">
                                     <div class="col-md-3 text-right">
-                                       <label class="control-label text-left">数据库用户</label>
+                                       <label class="control-label text-left">元数据库用户</label>
                                     </div>
                                     <div class="col-md-9">
-                                        <input id='db_user' class="form-control" type="text" value="">
+                                        <input id='db_user' class="form-control" readonly type="text" value="puppet">
                                     </div>
                                  </div>
                             </div>
@@ -224,10 +248,10 @@
                             <div class="col-md-6">
                                  <div class="form-group">
                                     <div class="col-md-3 text-right">
-                                       <label class="control-label text-left">数据库密码</label>
+                                       <label class="control-label text-left">元数据库密码</label>
                                     </div>
                                     <div class="col-md-9">
-                                        <input id='db_pass' class="form-control" type="password" value="">
+                                        <input id='db_pass' class="form-control" readonly type="password" value="Puppet@123">
                                     </div>
                                  </div>
                             </div>
