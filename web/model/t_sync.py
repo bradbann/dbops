@@ -17,7 +17,7 @@ def query_sync(sync_tag,market_id,sync_ywlx,sync_type):
     cr = db.cursor()
     v_where=' and  1=1 '
     if sync_tag != '':
-        v_where = v_where + " and a.sync_tag='{0}'\n".format(sync_tag)
+        v_where = v_where + " and a.sync_tag like '%{0}%'\n".format(sync_tag)
 
     if market_id != '':
         v_where = v_where + " and instr(a.sync_col_val,'{0}')>0\n".format(market_id)

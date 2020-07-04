@@ -146,7 +146,7 @@ def get_db_backup_tags():
 def get_db_sync_tags():
     db = get_connection()
     cr = db.cursor()
-    sql = """SELECT sync_tag,comments FROM t_db_sync_config  WHERE STATUS=1  ORDER BY sync_col_val,comments 
+    sql = """SELECT sync_tag,comments FROM t_db_sync_config  WHERE STATUS=1  ORDER BY sync_ywlx,comments 
           """
     cr.execute(sql)
     v_list = []
