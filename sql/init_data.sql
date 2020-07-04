@@ -2,7 +2,8 @@
 SQLyog Ultimate v11.24 (64 bit)
 MySQL - 5.6.44-log : Database - puppet
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -12,8 +13,6 @@ MySQL - 5.6.44-log : Database - puppet
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 USE `puppet`;
-
-/*Data for the table `t_dmlx` */
 
 insert  into `t_dmlx`(`dm`,`mc`,`flag`,`create_time`,`update_time`) values ('01','部门','1','2020-05-11 09:14:29','2020-05-14 15:28:20');
 insert  into `t_dmlx`(`dm`,`mc`,`flag`,`create_time`,`update_time`) values ('02','数据源类型','1','2020-05-11 09:14:29','2020-05-11 09:14:29');
@@ -77,17 +76,21 @@ insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) valu
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','141','北京合生财富广场','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','145','广州珠江投资大厦','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','150','广州合生骏景广场','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
+insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','159','上海静安珠江创意中心','1','2020-06-15 14:37:18','2020-06-15 14:37:18');
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','164','北京合生广场','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','170','广州嘉和北项目','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
-insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','183','上海海云天合生财富广场',NULL,NULL,NULL);
+insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','183','上海海云天合生财富广场','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','188','广州越华珠江国际大厦','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','194','广州南方花园	','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','20229','广州珠江国际纺织城	','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
-insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','207','北京德胜财富广场',NULL,NULL,NULL);
+insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','203','杭州科华合生国贸中心','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
+insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','207','北京德胜财富广场','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','213','合生新天地','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','218','北京朝阳合生汇','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','234','上海青浦米格	','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','237','广州增城合生汇','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
+insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','249','上海茶岸园同步服务器','1','2020-06-01 16:19:40','2020-06-01 16:19:42');
+insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','666','商管项目',NULL,NULL,NULL);
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','777','集团项目','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','888','德利多富租赁系统','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
 insert  into `t_dmmx`(`dm`,`dmm`,`dmmc`,`flag`,`create_time`,`update_time`) values ('05','999','阿里云同步中转服务器','1','2020-05-11 09:15:35','2020-05-11 09:15:35');
@@ -339,11 +342,62 @@ insert  into `t_func`(`id`,`func_name`,`func_url`,`priv_id`,`status`,`creation_d
 insert  into `t_func`(`id`,`func_name`,`func_url`,`priv_id`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (166,'数据库管理-账号管理','/db/user/_query,/db/user/save','00602','1','2020-05-09','DBA','2020-05-09','DBA');
 insert  into `t_func`(`id`,`func_name`,`func_url`,`priv_id`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (167,'系统管理-主页面','/','06101','1','2020-05-15','DBA','2020-05-15','DBA');
 
+/*Data for the table `t_monitor_index` */
+
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (1,'cpu使用率','cpu_total_usage','1','','1','0.85','','','1',10,3);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (2,'内存使用率','mem_usage','1','','1','0.85','','','1',10,2);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (5,'mysql连接数','mysql_total_connect','2','0','1','300','','','1',10,3);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (26,'磁盘使用率','disk_usage','1','','1','0.8','','','1',10,1);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (28,'磁盘读','disk_read','1','','2','','7','3','1',10,3);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (29,'磁盘写','disk_write','1','','2','','7','3','1',10,3);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (31,'网络流出','net_out','1','','2','','7','3','1',9,3);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (32,'网络流入','net_in','1','','2','','7','3','1',10,3);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (33,'mysql服务是否可用','mysql_available','2','0','3','0','','','1',5,1);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (34,'mysql活动连接数','mysql_active_connect','2','0','3','100','','','1',9,3);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (37,'mssql服务是否可用','mssql_available','2','2','3','0','','','1',5,3);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (38,'CPU使用率[核]','cpu_core_usage','1','','1','0.86','','','1',10,3);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (39,'mssql连接数','mssql_total_connect','2','2','3','300','','','1',10,3);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (40,'mssql活动连接数','mssql_active_connect','2','2','3','30','','','1',10,3);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (41,'redis服务是否可用','redis_available','2','5','3','0','','','1',5,1);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (42,'mongo服务是否可用','mongo_available','2','6','3','0','','','1',5,1);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (43,'es服务是否可用','es_available','2','4','3','0','','','1',5,1);
+insert  into `t_monitor_index`(`id`,`index_name`,`index_code`,`index_type`,`index_db_type`,`index_threshold_type`,`index_threshold`,`index_threshold_day`,`index_threshold_times`,`status`,`trigger_time`,`trigger_times`) values (46,'服务器可用性','server_available','1','','3','0','','','0',3,1);
+
+
+/*Data for the table `t_monitor_templete` */
+
+insert  into `t_monitor_templete`(`id`,`name`,`code`,`type`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (1,'linux主机模板','linux_templete','1','1','2020-04-02','DBA','2020-04-20','DBA');
+insert  into `t_monitor_templete`(`id`,`name`,`code`,`type`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (2,'mysql数据库模板','mysql_templete','2','1','2020-04-02','DBA','2020-04-08','DBA');
+insert  into `t_monitor_templete`(`id`,`name`,`code`,`type`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (3,'sqlserver数据库模板','mssql_templete','2','1','2020-04-19','DBA','2020-04-19','DBA');
+insert  into `t_monitor_templete`(`id`,`name`,`code`,`type`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (4,'redis数据库模板','redis_templete','2','1','2020-04-28','DBA','2020-04-28','DBA');
+insert  into `t_monitor_templete`(`id`,`name`,`code`,`type`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (5,'mongo数据库模板','mongo_templete','2','1','2020-04-28','DBA','2020-04-28','DBA');
+insert  into `t_monitor_templete`(`id`,`name`,`code`,`type`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (6,'es数据库模板','es_templete','2','1','2020-04-28','DBA','2020-04-28','DBA');
+
+/*Data for the table `t_monitor_templete_index` */
+
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (2,'5','2020-04-08','DBA','2020-04-08','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (2,'33','2020-04-08','DBA','2020-04-08','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (2,'34','2020-04-08','DBA','2020-04-08','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (3,'37','2020-04-19','DBA','2020-04-19','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (3,'39','2020-04-19','DBA','2020-04-19','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (3,'40','2020-04-19','DBA','2020-04-19','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (1,'1','2020-04-20','DBA','2020-04-20','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (1,'2','2020-04-20','DBA','2020-04-20','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (1,'26','2020-04-20','DBA','2020-04-20','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (1,'28','2020-04-20','DBA','2020-04-20','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (1,'29','2020-04-20','DBA','2020-04-20','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (1,'31','2020-04-20','DBA','2020-04-20','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (1,'32','2020-04-20','DBA','2020-04-20','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (1,'38','2020-04-20','DBA','2020-04-20','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (4,'41','2020-04-28','DBA','2020-04-28','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (5,'42','2020-04-28','DBA','2020-04-28','DBA');
+insert  into `t_monitor_templete_index`(`templete_id`,`index_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (6,'43','2020-04-28','DBA','2020-04-28','DBA');
+
 /*Data for the table `t_role` */
 
 insert  into `t_role`(`id`,`name`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (4,'系统管理员','1','2018-06-30','DBA','2020-05-11','DBA');
 insert  into `t_role`(`id`,`name`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (6,'开发人员','1','2018-08-29','DBA','2020-04-10','DBA');
-insert  into `t_role`(`id`,`name`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'大数据开发','1','2020-02-28','DBA','2020-04-15','DBA');
+insert  into `t_role`(`id`,`name`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'大数据开发','1','2020-02-28','DBA','2020-06-30','DBA');
 insert  into `t_role`(`id`,`name`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (8,'测试人员','1','2020-02-29','DBA','2020-03-19','DBA');
 insert  into `t_role`(`id`,`name`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (9,'实施人员','1','2020-03-06','DBA','2020-03-19','DBA');
 insert  into `t_role`(`id`,`name`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`) values (10,'好房-开发人员','1','2020-03-13','DBA','2020-03-19','DBA');
@@ -606,40 +660,6 @@ insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creat
 insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (11859,'6','106','2020-04-10','DBA','2020-04-10','DBA');
 insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (11860,'6','105','2020-04-10','DBA','2020-04-10','DBA');
 insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (11861,'6','107','2020-04-10','DBA','2020-04-10','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12171,'7','1','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12172,'7','11','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12173,'7','17','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12174,'7','22','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12175,'7','30','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12176,'7','70','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12177,'7','71','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12178,'7','72','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12179,'7','73','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12180,'7','83','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12181,'7','84','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12182,'7','85','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12183,'7','86','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12184,'7','87','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12185,'7','88','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12186,'7','91','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12187,'7','92','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12188,'7','93','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12189,'7','94','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12190,'7','95','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12191,'7','97','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12192,'7','100','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12193,'7','101','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12194,'7','102','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12195,'7','104','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12196,'7','105','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12197,'7','107','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12198,'7','138','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12199,'7','136','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12200,'7','139','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12201,'7','140','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12202,'7','141','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12203,'7','89','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12204,'7','48','2020-04-15','DBA','2020-04-15','DBA');
 insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (14902,'4','1','2020-05-11','DBA','2020-05-11','DBA');
 insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (14903,'4','2','2020-05-11','DBA','2020-05-11','DBA');
 insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (14904,'4','3','2020-05-11','DBA','2020-05-11','DBA');
@@ -965,6 +985,45 @@ insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creat
 insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15387,'12','165','2020-05-15','DBA','2020-05-15','DBA');
 insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15388,'12','166','2020-05-15','DBA','2020-05-15','DBA');
 insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15389,'12','167','2020-05-15','DBA','2020-05-15','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15390,'7','1','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15391,'7','11','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15392,'7','17','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15393,'7','22','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15394,'7','30','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15395,'7','70','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15396,'7','71','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15397,'7','72','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15398,'7','73','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15399,'7','83','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15400,'7','84','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15401,'7','85','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15402,'7','86','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15403,'7','87','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15404,'7','88','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15405,'7','91','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15406,'7','92','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15407,'7','93','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15408,'7','94','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15409,'7','95','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15410,'7','97','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15411,'7','100','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15412,'7','101','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15413,'7','102','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15414,'7','104','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15415,'7','105','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15416,'7','107','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15417,'7','138','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15418,'7','136','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15419,'7','139','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15420,'7','140','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15421,'7','141','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15422,'7','89','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15423,'7','48','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15424,'7','43','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15425,'7','44','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15426,'7','45','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15427,'7','46','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_func_privs`(`id`,`role_id`,`func_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (15428,'7','42','2020-06-30','DBA','2020-06-30','DBA');
 
 /*Data for the table `t_role_privs` */
 
@@ -1008,17 +1067,6 @@ insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_
 insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (6,'01703','2020-04-10','DBA','2020-04-10','DBA');
 insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (6,'01704','2020-04-10','DBA','2020-04-10','DBA');
 insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (6,'01705','2020-04-10','DBA','2020-04-10','DBA');
-insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'00101','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'00201','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'00301','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'00401','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'00501','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'01103','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'01104','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'01502','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'01701','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'01702','2020-04-15','DBA','2020-04-15','DBA');
-insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'01102','2020-04-15','DBA','2020-04-15','DBA');
 insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (4,'00101','2020-05-11','DBA','2020-05-11','DBA');
 insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (4,'00102','2020-05-11','DBA','2020-05-11','DBA');
 insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (4,'00103','2020-05-11','DBA','2020-05-11','DBA');
@@ -1175,6 +1223,18 @@ insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_
 insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12,'06101','2020-05-15','DBA','2020-05-15','DBA');
 insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12,'06102','2020-05-15','DBA','2020-05-15','DBA');
 insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (12,'06103','2020-05-15','DBA','2020-05-15','DBA');
+insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'00101','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'00201','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'00301','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'00401','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'00501','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'01102','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'01103','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'01104','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'01502','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'01701','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'01702','2020-06-30','DBA','2020-06-30','DBA');
+insert  into `t_role_privs`(`role_id`,`priv_id`,`creation_date`,`creator`,`last_update_date`,`updator`) values (7,'01105','2020-06-30','DBA','2020-06-30','DBA');
 
 /*Data for the table `t_sql_audit_rule` */
 
@@ -1231,6 +1291,19 @@ insert  into `t_sql_audit_rule`(`id`,`rule_type`,`rule_code`,`rule_name`,`rule_v
 insert  into `t_sql_audit_rule`(`id`,`rule_type`,`rule_code`,`rule_name`,`rule_value`,`error`,`status`) values (81,'query','switch_timeout','查询超时时间','3','查询超过{0}秒，停止查询!',NULL);
 insert  into `t_sql_audit_rule`(`id`,`rule_type`,`rule_code`,`rule_name`,`rule_value`,`error`,`status`) values (82,'query','switch_sensitive_columns','查询敏感列设置','user_mobile,user_email,user_name','***敏感列***',NULL);
 
+/*Data for the table `t_sql_release` */
+
+insert  into `t_sql_release`(`id`,`dbid`,`sqltext`,`status`,`message`,`creation_date`,`creator`,`last_update_date`,`updator`,`audit_date`,`auditor`,`version`,`type`,`executor`,`exec_start`,`exec_end`,`error`) values (1,1,'CREATE TABLE `plusvip_receive_log`\r\n  (`id` int(11) NOT NULL AUTO_INCREMENT COMMENT \'自增主键\',\r\n  `plusviplog_id` int(6) NOT NULL default 0 COMMENT \'会员开通日志记录表中的主键ID\',\r\n  `mid` bigint(18) NOT NULL default 0 COMMENT \'会员ID \',\r\n  `couponsId` int(11) NOT NULL default 0  COMMENT \'卡券ID\',\r\n  `count` int(4) NOT NULL default 0 COMMENT \'已经领取数量\',\r\n  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT \'创建时间\',\r\n  update_time datetime not null DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT \'更新时间\',\r\n  PRIMARY KEY (`id`), KEY `idx_plusvip_log_n1` (`plusviplog_id`) USING BTREE) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT\r\nCHARSET=utf8mb4 COMMENT=\'超级会员卡券领取记录表\';','3','新建超级会员卡券领取记录表','2020-03-06 14:00:15','23','2020-03-24 15:54:56','23','2020-03-12 16:51:38','23','1','1','admin','2020-03-24 15:54:56','2020-03-24 15:54:56',' Table \'plusvip_receive_log\' already exists!');
+insert  into `t_sql_release`(`id`,`dbid`,`sqltext`,`status`,`message`,`creation_date`,`creator`,`last_update_date`,`updator`,`audit_date`,`auditor`,`version`,`type`,`executor`,`exec_start`,`exec_end`,`error`) values (2,1,'CREATE  FUNCTION  `func_bill_scan`()  RETURNS  INT  DETERMINISTIC\r\nBEGIN  \r\n  RETURN 1;\r\nEND','1','新建函数func_bill_scan','2020-03-09 16:51:14','23','2020-03-09 17:22:43','﻿wangbo','2020-03-09 17:01:02','23','1','4','23','2020-03-09 17:22:43','2020-03-09 17:22:43',' You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'BEGIN  \\r\\n  return 1;\\r\\nEND\' at line 2!');
+insert  into `t_sql_release`(`id`,`dbid`,`sqltext`,`status`,`message`,`creation_date`,`creator`,`last_update_date`,`updator`,`audit_date`,`auditor`,`version`,`type`,`executor`,`exec_start`,`exec_end`,`error`) values (3,1,'CREATE  PROCEDURE `proc_bill_scan`()\r\nBEGIN  \r\n  TRUNCATE TABLE bill_scan;  \r\nEND','1','新建过程proc_bill_scan','2020-03-09 16:51:25','23','2020-03-09 17:02:19','﻿wangbo','2020-03-09 17:00:59','23','1','4','23','2020-03-09 17:02:18','2020-03-09 17:02:19',NULL);
+insert  into `t_sql_release`(`id`,`dbid`,`sqltext`,`status`,`message`,`creation_date`,`creator`,`last_update_date`,`updator`,`audit_date`,`auditor`,`version`,`type`,`executor`,`exec_start`,`exec_end`,`error`) values (4,2,'CREATE TABLE `plusvip_receive_log`\n  (`id` int(11) NOT NULL AUTO_INCREMENT COMMENT \'自增主键\',\n  `plusviplog_id` int(6) NOT NULL DEFAULT 0 COMMENT \'会员开通日志记录表中的主键ID\',\n  `mid` bigint(18) NOT NULL DEFAULT 0 COMMENT \'会员ID \',\n  `couponsId` int(11) NOT NULL DEFAULT 0 COMMENT \'卡券ID\',\n  `count` int(4) NOT NULL DEFAULT 0 COMMENT \'已经领取数量\',\n  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT \'创建时间\',\n  update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT \'更新时间\',\n  PRIMARY KEY (`id`), KEY `idx_plusvip_log_n1` (`plusviplog_id`) USING BTREE) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT\nCHARSET=utf8mb4 COMMENT=\'超级会员卡券领取记录表\';','1','超级会员卡券领取记录表','2020-03-24 11:57:41','25','2020-03-24 11:57:49','25','2020-03-24 11:57:49','25','1','2',NULL,NULL,NULL,NULL);
+insert  into `t_sql_release`(`id`,`dbid`,`sqltext`,`status`,`message`,`creation_date`,`creator`,`last_update_date`,`updator`,`audit_date`,`auditor`,`version`,`type`,`executor`,`exec_start`,`exec_end`,`error`) values (5,2,'CREATE TABLE `plusvip_receive_log`\n  (`id` int(11) NOT NULL AUTO_INCREMENT COMMENT \'自增主键\',\n  `plusviplog_id` int(6) NOT NULL DEFAULT 0 COMMENT \'会员开通日志记录表中的主键ID\',\n  `mid` bigint(18) NOT NULL DEFAULT 0 COMMENT \'会员ID \',\n  `couponsId` int(11) NOT NULL DEFAULT 0 COMMENT \'卡券ID\',\n  `count` int(4) NOT NULL DEFAULT 0 COMMENT \'已经领取数量\',\n  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT \'创建时间\',\n  update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT \'更新时间\',\n  PRIMARY KEY (`id`), KEY `idx_plusvip_log_n1` (`plusviplog_id`) USING BTREE) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT\nCHARSET=utf8mb4 COMMENT=\'超级会员卡券领取记录表\';','0','超级会员卡券领取记录表','2020-03-24 12:15:13','25','2020-03-24 12:15:13','25',NULL,NULL,'1','2',NULL,NULL,NULL,NULL);
+insert  into `t_sql_release`(`id`,`dbid`,`sqltext`,`status`,`message`,`creation_date`,`creator`,`last_update_date`,`updator`,`audit_date`,`auditor`,`version`,`type`,`executor`,`exec_start`,`exec_end`,`error`) values (7,2,'CREATE TABLE `plusvip_receive_log`\n  (`id` int(11) NOT NULL AUTO_INCREMENT COMMENT \'自增主键\',\n  `plusviplog_id` int(6) NOT NULL DEFAULT 0 COMMENT \'会员开通日志记录表中的主键ID\',\n  `mid` bigint(18) NOT NULL DEFAULT 0 COMMENT \'会员ID \',\n  `couponsId` int(11) NOT NULL DEFAULT 0 COMMENT \'卡券ID\',\n  `count` int(4) NOT NULL DEFAULT 0 COMMENT \'已经领取数量\',\n  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT \'创建时间\',\n  update_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT \'更新时间\',\n  PRIMARY KEY (`id`), KEY `idx_plusvip_log_n1` (`plusviplog_id`) USING BTREE) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT\nCHARSET=utf8mb4 COMMENT=\'超级会员卡券领取记录表\';','0','超级会员卡券领取记录表','2020-03-24 14:28:17','25','2020-03-24 14:28:17','25',NULL,NULL,'1','1',NULL,NULL,NULL,NULL);
+
+/*Data for the table `t_sql_release_results` */
+
+/*Data for the table `t_sys_usage` */
+
 /*Data for the table `t_templete` */
 
 insert  into `t_templete`(`id`,`templete_id`,`contents`,`description`) values (1,1,'{\r\n  \"job\": {\r\n    \"setting\": {\r\n      \"speed\": {\r\n        \"channel\": 5\r\n      }\r\n    },\r\n    \"content\": [\r\n      {\r\n       \"reader\": {\r\n                    \"name\": \"mysqlreader\",\r\n                    \"parameter\": {\r\n                        \"username\": \"$$USERNAME$$\",\r\n                        \"password\": \"$$PASSWORD$$\",\r\n                        \"column\": [\r\n                            $$MYSQL_COLUMN_NAMES$$\r\n                        ],\r\n                        \"connection\": [\r\n                            {\r\n                                \"table\": [\r\n                                    \"$$MYSQL_TABLE_NAME$$\"\r\n                                ],\r\n                                \"jdbcUrl\":[\r\n                                  \"jdbc:mysql://$$MYSQL_URL$$?useUnicode=true&characterEncoding=UTF-8\"\r\n                                ]\r\n                            }\r\n                        ]\r\n                    }\r\n                },\r\n         \"writer\": {\r\n          \"name\": \"hbase11xwriter\",\r\n          \"parameter\": {\r\n            \"hbaseConfig\": {\r\n               \"hbase.zookeeper.quorum\": \"$$ZK_HOSTS\"\r\n            },\r\n            \"table\": \"$$HBASE_TABLE_NAME$$\",\r\n            \"mode\": \"normal\",\r\n            \"rowkeyColumn\": [\r\n                $$HBASE_ROWKEY$$\r\n            ],\r\n            \"column\": [\r\n              $$HBASE_COLUMN_NAMES$$\r\n            ],           \r\n            \"encoding\": \"utf-8\"\r\n          }\r\n        }\r\n      }\r\n    ]\r\n  }\r\n}','dataX全量同步模板');
@@ -1239,129 +1312,10 @@ insert  into `t_templete`(`id`,`templete_id`,`contents`,`description`) values (2
 /*Data for the table `t_user` */
 
 insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (23,'马飞','190343','1','190343@lifeat.cn','15810420106','1','06','2020-12-31','6E9D49D932D55C7B92D231985E327DAC','1','2018-07-03','DBA','2020-04-09','DBA','mafei','/static/assets/images/users','19b9cbe2-5b73-11ea-a37c-000c29aea998_mafei.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (25,'管理员','190343','1','190343@lifeat.cn','15801620810','1','03','2020-11-20','F07EC69BAB53200EDA2B672D4D2C9093','1','2018-08-27','DBA','2020-04-29','DBA','admin','/static/assets/images/users','93d64232-3a5f-11ea-bb2b-000c29cd7d70_admin.jpg');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (91,'王芳芳','190241','2','190241@lifeat.com','18310189890','1','01','2020-12-31','DD955894EEC804122C45E8782F51FF9C','1','2019-03-19','DBA','2020-04-09','DBA','wangfangfang','/static/assets/images/users','girl.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (92,'陆俊彪','609012','1','609012@hopson.com.cn','15652630399','1','01','2020-12-31','727267D7BA387691399B90520C47EC81','1','2019-03-19','DBA','2020-04-09','DBA','lujunbiao','/static/assets/images/users','b0579cfa-57d6-11ea-be1f-000c29cd7d70_lujunbiao.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (93,'路鑫','609717','1','609717@hopson.com.cn','18500407025','1','01','2020-12-31','9B0CD0AE729D08FD57E98F3D617BFC38','1','2019-03-19','DBA','2020-03-04','DBA','luxin','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (94,'梁超','190168','1','190168@lifeat.com','17600443930','1','01','2020-12-31','6F9FCDB5EA5865B56A8880D9DDB5005F','1','2019-03-19','DBA','2020-03-04','DBA','liangchao','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (95,'顾晓','608545','1','608545@hopson.com.cn','13699105067','1','01','2020-12-31','116C9E3012CCCD3732C5F356CBB19322','1','2019-03-19','DBA','2020-03-04','DBA','guxiao','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (96,'张世超','190320','1','190320@lifeat.cn','15510443664','1','01','2019-12-31','7C307431EF4397C21B89AA2767781771','1','2019-03-19','DBA','2020-03-03','DBA','zhangshichao','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (99,'冯甜甜','609701','2','609701@lifeat.cn','13031738066','1','01','2020-12-31','6CA0C9ABC031A37D7C6720BCB190E693','1','2019-03-19','DBA','2020-03-04','DBA','fengtiantian','/static/assets/images/users','girl.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (100,'刘希金','190160','1','190160@lifeat.com','13521332195','1','01','2020-12-31','39D37C64A2108B7BE896CFD22B0F7A4F','1','2019-03-19','DBA','2020-03-04','DBA','liuxijin','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (101,'申豹','190291','1','190291@lifeat.cn','13460690607','1','01','2020-12-31','496C6C4913A8BF11F4148FE2ADE988C9','1','2019-03-19','DBA','2020-03-06','DBA','shenbao','/static/assets/images/users','a063fb08-5f70-11ea-a95c-000c29aea998_shenbao.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (102,'王志鹏','608520','1','608520@hopson.com.cn','15011380929','1','01','2020-12-31','FDDBA867D66993270BDB7A3B9A95C275','1','2019-03-19','DBA','2020-03-05','DBA','wangzhipeng','/static/assets/images/users','4a3f14d6-5d47-11ea-95de-000c29aea998_wangzhipeng.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (103,'郭张书','190205','1','190205@lifeat.cn','18210171811','1','06','2020-12-31','CC80E937DE06C25E60E33D3DD346AED8','1','2019-03-19','DBA','2020-04-27','DBA','guozhangshu','/static/assets/images/users','68e6b07e-5d47-11ea-95de-000c29aea998_guozhangshu.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (104,'龚涛','609479','1','609479@hopson.com.cn','13811818420','1','01','2020-12-31','E8D8C75B8090A5CB80CFBC57A7BF7218','1','2019-03-20','DBA','2020-04-29','DBA','gongtao','/static/assets/images/users','33344b08-5d42-11ea-95de-000c29aea998_gongtao.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (105,'龚海鹏','300146','1','gonghaipeng@hopson.com.cn','18611116528','3','01','2020-12-31','1B1B3DC3C40A5C922E73FDCE000F5F77','1','2019-03-20','DBA','2020-05-15','DBA','gonghaipeng','/static/assets/images/users','81d5e708-5d47-11ea-95de-000c29aea998_gonghaipeng.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (110,'李锁臣','190379','1','190379@lifeat.cn','1234234343','1','06','2020-12-31','225B3CE8F94B9A51CB2C513DC1F213F0','1','2019-07-27','DBA','2020-04-27','DBA','lisuochen','/static/assets/images/users','83377926-5d48-11ea-8285-000c29cd7d70_lisuochen.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (111,'吕瑞超','190654','1','190654@lifeat.cn','17800166063','1','06','2020-12-31','86CBEDF6C6330911006564A8CDE73207','1','2020-02-28','DBA','2020-03-04','DBA','lvruichao','/static/assets/images/users','079d5efe-59fe-11ea-a98e-000c29cd7d70_lvruichao.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (112,'刘洪林','190386','1','190386@lifeat.cn','13699277961','1','06','2020-12-31','946D8B8DCB48B0A87E9ED490932928DD','','2020-03-04','DBA','2020-03-04','DBA','liuhonglin','/static/assets/images/users','6d000b50-5dde-11ea-b5bb-000c29cd7d70_liuhonglin.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (113,'李彬','190375','1','190375@lifeat.cn','18500048699','1','06','2020-12-31','6640FB3CC9094D61DE5E0AC71E77F113','1','2020-03-04','DBA','2020-03-04','DBA','libin','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (114,'李世林','190435','1','190435@lifeat.cn','17603437443','1','06','2020-12-31','2110435F38A220BF559D1B19BB6E6543','1','2020-03-04','DBA','2020-03-04','DBA','lishilin','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (115,'宋胜阳','190438','1','190438@lifeat.cn','18610931339','1','06','2020-12-31','75653369C3061A1FA12537174CFA2572','1','2020-03-04','DBA','2020-03-04','DBA','songshengyang','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (116,'刘旭','190453','1','190453@lifeat.cn','123123123123','1','06','2020-12-31','2195E71D3F77DA8FAA3A8C10F1D154FC','1','2020-03-04','DBA','2020-04-09','DBA','liuxu','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (117,'孙鹏','190656','1','190656@lifeat.cn','17853100297','1','06','2020-12-31','E77B892D6B0E105602483174B98AA7F8','1','2020-03-04','DBA','2020-03-04','DBA','sunpeng','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (118,'侯鑫','190655','1','190655@lifeat.cn','18035541232','1','06','2020-12-31','5681C9460803235FBBC9EE84F3094A61','1','2020-03-04','DBA','2020-03-04','DBA','houxin','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (119,'田杰','190487','1','190487@lifeat.cn','18811152389','1','06','2020-12-31','5A15CBE91C8DB9A466BE7113A9B95906','1','2020-03-04','DBA','2020-03-24','DBA','tianjie','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (120,'黄元涛','190491','1','190491@lifeat.cn','18345559046','1','06','2020-12-31','9C9CF494F92D6BD44C3C2548519377D8','1','2020-03-04','DBA','2020-04-09','DBA','huangyuantao','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (121,'索其涛','190573','1','190573@lifeat.cn','15701625037','1','06','2020-12-31','058D1F6721E33124D3CBBB75383F120D','1','2020-03-04','DBA','2020-03-24','DBA','suoqitao','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (122,'肖振男','190657','1','190657@lifeat.cn','17610613001','1','06','2020-12-31','8B87830A780E4205B38710F7C66FB655','1','2020-03-04','DBA','2020-03-04','DBA','xiaozhennan','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (123,'王华杰','190648','1','190648@lifeat.cn','18500193260','1','06','2020-12-31','478B53471FF51FA3D9DD14D04A5480B6','1','2020-03-04','DBA','2020-03-28','DBA','wanghuajie','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (124,'李鉴衡','190579','1','190579@lifeat.cn','15503355529','1','06','2020-12-31','103EB52811020E31EA05D5C089ABE15D','1','2020-03-04','DBA','2020-03-04','DBA','lijianheng','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (125,'刘影','609064','2','609064@hopson.com.cn','13524366252','1','02','2020-12-31','D60DC143A5CAB07855AB76B1B2586960','1','2020-03-04','DBA','2020-03-04','DBA','liuying','/static/assets/images/users','girl.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (126,'张辉','190158','1','190158@lifeat.cn','18610552165','1','02','2020-12-31','B6E0EB4768B87B31CBDB8720F91C6882','1','2020-03-04','DBA','2020-03-04','DBA','zhanghui','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (127,'冉爽','190423','1','190423@lifeat.cn','18600750013','1','02','2020-12-31','ECF4899ADC1CEF69AF400F9DBCF430EC','1','2020-03-04','DBA','2020-03-04','DBA','ranshuang','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (128,'荆晓晨','190196','2','190196@lifeat.cn','13911794919','1','02','2020-12-31','892D4B031271AB2C298663DB375BE93A','1','2020-03-04','DBA','2020-03-04','DBA','jingxiaochen','/static/assets/images/users','girl.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (129,'郑晶磊','190342','1','190342@lifeat.cn','15138977406','1','02','2020-12-31','0B4B357CE123F634B0A44A873EE1C3C1','1','2020-03-04','DBA','2020-03-04','DBA','zhengjinglei','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (130,'王保磊','190577','1','190577@lifeat.cn','18600347582','1','02','2020-12-31','5A0B8CE52D586081F5EE387801A79E33','1','2020-03-04','DBA','2020-03-04','DBA','wangbaolei','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (131,'姚计东','190653','1','190653@lifeat.cn','17191183007','1','02','2020-12-31','1BEA97B0CC4B22DE386FD6A4B5F404E8','1','2020-03-04','DBA','2020-03-04','DBA','yaojidong','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (132,'张美美','190333','2','190333@lifeat.cn','15321969286','1','02','2020-12-31','FE78A395037B46C486591074FA9A52F1','1','2020-03-04','DBA','2020-03-04','DBA','zhangmeimei','/static/assets/images/users','girl.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (133,'王博','190393','1','190393@lifeat.cn','﻿18813078624','1','01','2020-12-31','79E89A1CD02D37C2D1C92A6407AC024B','1','2020-03-04','DBA','2020-03-24','DBA','wangbo','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (134,'兰政','190362','1','190362@lifeat.cn.','13681289255','1','01','2020-12-31','075C44C29D44E8AEF696A005B595F0EE','1','2020-03-04','DBA','2020-03-04','DBA','lanzheng','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (135,'刘祖鹏','190459','1','190459@lifeat.cn','18500371823','1','01','2020-12-31','1BA9E8D27CD8BB0DAE65DFCF55D2591E','1','2020-03-04','DBA','2020-03-04','DBA','liuzupeng','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (136,'杨德欣','190376','1','190376@lifeat.cn','18600171529','1','01','2020-12-31','FC96C8ECB1DFA223B69F6F0972975CA9','1','2020-03-04','DBA','2020-03-04','DBA','yangdexin','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (137,'孙达康','190508','1','190508@lifeat.cn','13381235391','1','01','2020-12-31','A7EF72208942B07706CF0549F4E1D490','1','2020-03-04','DBA','2020-04-09','DBA','﻿sundakang','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (138,'张力永','190533','1','190533@lifeat.cn','17600299113','1','01','2020-12-31','4A17781B2EF159F1880435F9B43BB5FA','1','2020-03-04','DBA','2020-04-09','DBA','zhangliyong','/static/assets/images/users','boy.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (139,'王露','190593','2','190593@lifeat.cn','18845573941','1','01','2020-12-31','A1567BD2B8FD7F24FE717A4E8B85FE24','1','2020-03-04','DBA','2020-03-04','DBA','wanglu','/static/assets/images/users','girl.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (140,'赵松','190569','1','190569@lifeat.cn','18614087568','1','07','2020-04-01','79867A6B18E5BFD671D64EC4B523B866','0','2020-03-06','DBA','2020-04-09','DBA','zhaosong','/static/assets/images/users','05eb2afe-5f72-11ea-a63a-000c29aea998_zhaosong.png');
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (141,'吕长永','190369','1','190369@lifeat.cn','13681205206','2','01','2020-12-31','CF86142682E2D411093CAE621BE72732','1','2020-03-13','DBA','2020-03-13','DBA','lvchangyong','/static/assets/images/users','10f261d4-64f3-11ea-b5d9-000c29aea998_lvchangyong.png');
 
 /*Data for the table `t_user_role` */
-
-insert  into `t_user_role`(`user_id`,`role_id`) values (96,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (113,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (114,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (115,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (111,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (122,4);
-insert  into `t_user_role`(`user_id`,`role_id`) values (122,5);
-insert  into `t_user_role`(`user_id`,`role_id`) values (122,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (122,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (124,4);
-insert  into `t_user_role`(`user_id`,`role_id`) values (124,5);
-insert  into `t_user_role`(`user_id`,`role_id`) values (124,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (124,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (117,4);
-insert  into `t_user_role`(`user_id`,`role_id`) values (117,5);
-insert  into `t_user_role`(`user_id`,`role_id`) values (117,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (117,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (118,4);
-insert  into `t_user_role`(`user_id`,`role_id`) values (118,5);
-insert  into `t_user_role`(`user_id`,`role_id`) values (118,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (118,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (128,8);
-insert  into `t_user_role`(`user_id`,`role_id`) values (129,8);
-insert  into `t_user_role`(`user_id`,`role_id`) values (130,8);
-insert  into `t_user_role`(`user_id`,`role_id`) values (131,8);
-insert  into `t_user_role`(`user_id`,`role_id`) values (126,8);
-insert  into `t_user_role`(`user_id`,`role_id`) values (127,8);
-insert  into `t_user_role`(`user_id`,`role_id`) values (132,8);
-insert  into `t_user_role`(`user_id`,`role_id`) values (95,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (99,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (100,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (93,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (134,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (94,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (136,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (139,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (125,8);
-insert  into `t_user_role`(`user_id`,`role_id`) values (135,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (112,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (102,4);
-insert  into `t_user_role`(`user_id`,`role_id`) values (102,5);
-insert  into `t_user_role`(`user_id`,`role_id`) values (102,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (102,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (102,8);
-insert  into `t_user_role`(`user_id`,`role_id`) values (101,9);
-insert  into `t_user_role`(`user_id`,`role_id`) values (141,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (133,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (119,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (121,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (121,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (123,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (123,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (23,12);
-insert  into `t_user_role`(`user_id`,`role_id`) values (23,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (23,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (91,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (92,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (116,4);
-insert  into `t_user_role`(`user_id`,`role_id`) values (116,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (116,7);
-insert  into `t_user_role`(`user_id`,`role_id`) values (120,4);
-insert  into `t_user_role`(`user_id`,`role_id`) values (120,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (137,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (138,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (140,9);
-insert  into `t_user_role`(`user_id`,`role_id`) values (110,4);
-insert  into `t_user_role`(`user_id`,`role_id`) values (110,12);
-insert  into `t_user_role`(`user_id`,`role_id`) values (103,4);
-insert  into `t_user_role`(`user_id`,`role_id`) values (103,12);
 insert  into `t_user_role`(`user_id`,`role_id`) values (25,6);
 insert  into `t_user_role`(`user_id`,`role_id`) values (25,12);
-insert  into `t_user_role`(`user_id`,`role_id`) values (104,6);
-insert  into `t_user_role`(`user_id`,`role_id`) values (104,12);
-insert  into `t_user_role`(`user_id`,`role_id`) values (105,12);
 
 /*Data for the table `t_xtqx` */
 
@@ -1468,7 +1422,3 @@ insert  into `t_xtqx`(`id`,`name`,`parent_id`,`url`,`status`,`icon`,`creation_da
 insert  into `t_xtqx`(`id`,`name`,`parent_id`,`url`,`status`,`icon`,`creation_date`,`creator`,`last_update_date`,`updator`) values ('06102','代码管理','061','/sys/code','1','mdi mdi-code-brackets','2018-10-03','DBA','2018-10-03','DBA');
 insert  into `t_xtqx`(`id`,`name`,`parent_id`,`url`,`status`,`icon`,`creation_date`,`creator`,`last_update_date`,`updator`) values ('06103','审核规则','061','/sys/audit_rule','1','mdi mdi-crop','2018-10-15','DBA','2019-10-15','DBA');
 insert  into `t_xtqx`(`id`,`name`,`parent_id`,`url`,`status`,`icon`,`creation_date`,`creator`,`last_update_date`,`updator`) values ('06104','测试页面','061','/sys/test','0','','2018-10-03','DBA','2020-03-19','DBA');
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

@@ -65,7 +65,7 @@ CREATE TABLE `t_datax_sync_log` (
   KEY `idx_create_date_n1` (`create_date`),
   KEY `idx_create_date_u1` (`sync_tag`),
   KEY `idx_sync_tag_create_date` (`sync_tag`,`create_date`)
-) ENGINE=InnoDB AUTO_INCREMENT=58404 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7495 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_db_archive_config` */
 
@@ -135,7 +135,7 @@ CREATE TABLE `t_db_backup_detail` (
   `STATUS` varchar(1) DEFAULT NULL,
   `error` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=140257 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=185453 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_db_backup_total` */
 
@@ -154,7 +154,7 @@ CREATE TABLE `t_db_backup_total` (
   `STATUS` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_t_db_backup_total_n1` (`create_date`)
-) ENGINE=InnoDB AUTO_INCREMENT=6861 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8182 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_db_config` */
 
@@ -180,7 +180,7 @@ CREATE TABLE `t_db_config` (
   `task_status` varchar(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `idx_t_db_config_u1` (`db_tag`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_db_inst` */
 
@@ -256,7 +256,7 @@ CREATE TABLE `t_db_sync_config` (
   `status` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_t_db_config_u1` (`sync_tag`)
-) ENGINE=InnoDB AUTO_INCREMENT=300 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=360 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_db_sync_tasks_log` */
 
@@ -272,7 +272,7 @@ CREATE TABLE `t_db_sync_tasks_log` (
   KEY `idx_create_date_n1` (`create_date`),
   KEY `idx_create_date_u1` (`sync_tag`),
   KEY `idx_sync_tag_create_date` (`sync_tag`,`create_date`)
-) ENGINE=InnoDB AUTO_INCREMENT=2180920 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=243823 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_db_sync_tasks_log_detail` */
 
@@ -288,7 +288,7 @@ CREATE TABLE `t_db_sync_tasks_log_detail` (
   PRIMARY KEY (`id`),
   KEY `idx_create_date_n1` (`create_date`),
   KEY `idx_create_date_u1` (`sync_tag`)
-) ENGINE=InnoDB AUTO_INCREMENT=6793558 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1779223 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_db_transfer_config` */
 
@@ -314,7 +314,7 @@ CREATE TABLE `t_db_transfer_config` (
   `status` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_t_db_transfer_config_u1` (`transfer_tag`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_db_transfer_log` */
 
@@ -329,7 +329,7 @@ CREATE TABLE `t_db_transfer_log` (
   `amount` int(11) DEFAULT NULL,
   `percent` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_db_user` */
 
@@ -450,6 +450,24 @@ CREATE TABLE `t_monitor_index` (
   KEY `idx_t_monitor_index_u1` (`index_code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 
+/*Table structure for table `t_monitor_server_warn_log` */
+
+DROP TABLE IF EXISTS `t_monitor_server_warn_log`;
+
+CREATE TABLE `t_monitor_server_warn_log` (
+  `server_id` int(11) NOT NULL DEFAULT '0',
+  `server_desc` varchar(100) DEFAULT NULL,
+  `index_code` varchar(50) NOT NULL,
+  `index_name` varchar(100) DEFAULT NULL,
+  `index_value` varchar(100) DEFAULT NULL,
+  `fail_times` int(11) DEFAULT NULL,
+  `succ_times` int(11) DEFAULT NULL,
+  `is_send_rcv_mail` varchar(10) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`server_id`,`index_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*Table structure for table `t_monitor_service` */
 
 DROP TABLE IF EXISTS `t_monitor_service`;
@@ -468,7 +486,7 @@ CREATE TABLE `t_monitor_service` (
   `create_date` datetime DEFAULT NULL,
   `sxh` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2050248 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6108364 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_monitor_task` */
 
@@ -489,7 +507,7 @@ CREATE TABLE `t_monitor_task` (
   `status` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_t_monitor_task_u1` (`task_tag`)
-) ENGINE=InnoDB AUTO_INCREMENT=164 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=178 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_monitor_task_db_log` */
 
@@ -508,7 +526,7 @@ CREATE TABLE `t_monitor_task_db_log` (
   KEY `idx_t_monitor_task_db_log_n1` (`create_date`),
   KEY `idx_t_monitor_task_db_log_c1` (`db_id`,`create_date`),
   KEY `idx_t_monitor_task_db_log_n2` (`server_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53153 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=734220 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_monitor_task_server_log` */
 
@@ -529,8 +547,9 @@ CREATE TABLE `t_monitor_task_server_log` (
   `create_date` datetime DEFAULT NULL,
   `market_id` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `idx_t_monitor_task_server_log_n1` (`create_date`)
-) ENGINE=InnoDB AUTO_INCREMENT=27122 DEFAULT CHARSET=utf8;
+  KEY `idx_t_monitor_task_server_log_n1` (`create_date`),
+  KEY `idx_t_monitor_task_server_log_n2` (`server_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=375772 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_monitor_templete` */
 
@@ -561,6 +580,24 @@ CREATE TABLE `t_monitor_templete_index` (
   `creator` varchar(20) DEFAULT NULL,
   `last_update_date` date DEFAULT NULL,
   `updator` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Table structure for table `t_monitor_warn_log` */
+
+DROP TABLE IF EXISTS `t_monitor_warn_log`;
+
+CREATE TABLE `t_monitor_warn_log` (
+  `server_id` int(11) NOT NULL DEFAULT '0',
+  `server_desc` varchar(100) DEFAULT NULL,
+  `db_id` int(11) NOT NULL DEFAULT '0',
+  `db_desc` varchar(100) DEFAULT NULL,
+  `fail_times` int(11) DEFAULT NULL,
+  `succ_times` int(11) DEFAULT NULL,
+  `is_send_rcv_mail` varchar(10) DEFAULT NULL,
+  `warn_type` varchar(20) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`server_id`,`db_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_port` */
@@ -605,7 +642,7 @@ CREATE TABLE `t_role_func_privs` (
   `last_update_date` date DEFAULT NULL,
   `updator` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15390 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15429 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_role_privs` */
 
@@ -638,7 +675,7 @@ CREATE TABLE `t_server` (
   `server_mem` varchar(100) NOT NULL,
   `status` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `t_sql_audit_rule` */
 
@@ -858,8 +895,11 @@ DELIMITER $$
 
 /*!50003 CREATE DEFINER=`puppet`@`%` PROCEDURE `proc_clear_log`()
 BEGIN
-	tRUNCATE TABLE `t_monitor_task_db_log`;
-	TRUNCATE TABLE `t_monitor_task_server_log`;
+	#TRUNCATE TABLE `t_monitor_task_db_log`;
+	#TRUNCATE TABLE `t_monitor_task_server_log`;
+	#TRUNCATE TABLE `t_db_sync_tasks_log`;
+	#TRUNCATE TABLE `t_db_sync_tasks_log_detail`;
+	#TRUNCATE TABLE `t_datax_sync_log`;
 END */$$
 DELIMITER ;
 
@@ -1110,6 +1150,27 @@ BEGIN
   commit;
 END */$$
 DELIMITER ;
+
+/*Table structure for table `v_monitor_service` */
+
+DROP TABLE IF EXISTS `v_monitor_service`;
+
+/*!50001 DROP VIEW IF EXISTS `v_monitor_service` */;
+/*!50001 DROP TABLE IF EXISTS `v_monitor_service` */;
+
+/*!50001 CREATE TABLE  `v_monitor_service`(
+ `server_id` int(11) ,
+ `server_desc` text ,
+ `service_service` text ,
+ `flag` varchar(10) 
+)*/;
+
+/*View structure for view v_monitor_service */
+
+/*!50001 DROP TABLE IF EXISTS `v_monitor_service` */;
+/*!50001 DROP VIEW IF EXISTS `v_monitor_service` */;
+
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`puppet`@`%` SQL SECURITY DEFINER VIEW `v_monitor_service` AS select `t_monitor_service`.`server_id` AS `server_id`,`t_monitor_service`.`server_desc` AS `server_desc`,`t_monitor_service`.`mysql_proj` AS `service_service`,'mysql' AS `flag` from `t_monitor_service` where (`t_monitor_service`.`mysql_proj` <> '') union all select `t_monitor_service`.`server_id` AS `server_id`,`t_monitor_service`.`server_desc` AS `server_desc`,`t_monitor_service`.`mssql_park` AS `mssql_park`,'mssql_park' AS `flag` from `t_monitor_service` where (`t_monitor_service`.`mssql_park` <> '') union all select `t_monitor_service`.`server_id` AS `server_id`,`t_monitor_service`.`server_desc` AS `server_desc`,`t_monitor_service`.`mssql_flow` AS `mssql_flow`,'mssql_flow' AS `flag` from `t_monitor_service` where (`t_monitor_service`.`mssql_flow` <> '') union all select `t_monitor_service`.`server_id` AS `server_id`,`t_monitor_service`.`server_desc` AS `server_desc`,`t_monitor_service`.`mssql_car` AS `mssql_car`,'mssql_car' AS `flag` from `t_monitor_service` where (`t_monitor_service`.`mssql_car` <> '') union all select `t_monitor_service`.`server_id` AS `server_id`,`t_monitor_service`.`server_desc` AS `server_desc`,`t_monitor_service`.`redis` AS `redis`,'redis' AS `flag` from `t_monitor_service` where (`t_monitor_service`.`redis` <> '') union all select `t_monitor_service`.`server_id` AS `server_id`,`t_monitor_service`.`server_desc` AS `server_desc`,`t_monitor_service`.`mongo` AS `mongo`,'mongo' AS `flag` from `t_monitor_service` where (`t_monitor_service`.`mongo` <> '') union all select `t_monitor_service`.`server_id` AS `server_id`,`t_monitor_service`.`server_desc` AS `server_desc`,`t_monitor_service`.`es` AS `es`,'es' AS `flag` from `t_monitor_service` where (`t_monitor_service`.`es` <> '') order by `server_id` */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
