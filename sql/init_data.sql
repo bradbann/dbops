@@ -1311,7 +1311,7 @@ insert  into `t_templete`(`id`,`templete_id`,`contents`,`description`) values (2
 
 /*Data for the table `t_user` */
 
-insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (23,'马飞','190343','1','190343@lifeat.cn','15810420106','1','06','2020-12-31','6E9D49D932D55C7B92D231985E327DAC','1','2018-07-03','DBA','2020-04-09','DBA','mafei','/static/assets/images/users','19b9cbe2-5b73-11ea-a37c-000c29aea998_mafei.png');
+insert  into `t_user`(`id`,`name`,`wkno`,`gender`,`email`,`phone`,`project_group`,`dept`,`expire_date`,`password`,`status`,`creation_date`,`creator`,`last_update_date`,`updator`,`login_name`,`file_path`,`file_name`) values (25,'管理员','190343','1','190343@lifeat.cn','15810420106','1','06','2020-12-31','47508EE611CC14EFB8C805158601FE09','1','2018-07-03','DBA','2020-04-09','DBA','admin','/static/assets/images/users','19b9cbe2-5b73-11ea-a37c-000c29aea998_mafei.png');
 
 /*Data for the table `t_user_role` */
 insert  into `t_user_role`(`user_id`,`role_id`) values (25,6);

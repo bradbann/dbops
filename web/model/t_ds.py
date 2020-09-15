@@ -167,7 +167,7 @@ def get_ds_by_dsid(p_dsid):
     sql="""select cast(id as char) as id,db_type,db_desc,
                   ip,port,service,
                   user,password,status,creation_date,creator,last_update_date,updator ,
-                  db_env,inst_type,market_id
+                  db_env,inst_type,market_id,proxy_status,proxy_server
            from t_db_source where id={0}
         """.format(p_dsid)
     cr.execute(sql)
@@ -175,19 +175,21 @@ def get_ds_by_dsid(p_dsid):
     cr.close()
     db.commit()
     d_ds={}
-    d_ds['dsid']        = rs[0][0]
-    d_ds['db_type']     = rs[0][1]
-    d_ds['db_desc']     = rs[0][2]
-    d_ds['ip']          = rs[0][3]
-    d_ds['port']        = rs[0][4]
-    d_ds['service']     = rs[0][5]
-    d_ds['user']        = rs[0][6]
-    d_ds['password']    = aes_decrypt(rs[0][7],rs[0][6])
-    d_ds['status']      = rs[0][8]
-    d_ds['db_env']      = rs[0][13]
-    d_ds['inst_type']   = rs[0][14]
-    d_ds['market_id']   = rs[0][15]
-    d_ds['url']         = 'MySQL://{0}:{1}/{2}'.format(d_ds['ip'],d_ds['port'],d_ds['service'])
+    d_ds['dsid']         = rs[0][0]
+    d_ds['db_type']      = rs[0][1]
+    d_ds['db_desc']      = rs[0][2]
+    d_ds['ip']           = rs[0][3]
+    d_ds['port']         = rs[0][4]
+    d_ds['service']      = rs[0][5]
+    d_ds['user']         = rs[0][6]
+    d_ds['password']     = aes_decrypt(rs[0][7],rs[0][6])
+    d_ds['status']       = rs[0][8]
+    d_ds['db_env']       = rs[0][13]
+    d_ds['inst_type']    = rs[0][14]
+    d_ds['market_id']    = rs[0][15]
+    d_ds['proxy_status'] = rs[0][16]
+    d_ds['proxy_server'] = rs[0][17]
+    d_ds['url']          = 'MySQL://{0}:{1}/{2}'.format(d_ds['ip'],d_ds['port'],d_ds['service'])
     return d_ds
 
 def get_ds_by_dsid_by_cdb(p_dsid,p_cdb):
@@ -359,28 +361,33 @@ def save_ds(p_ds):
     if val['code']=='-1':
         return val
     try:
-        db             = get_connection()
-        cr             = db.cursor()
-        ds_id          = get_dsid()
-        ds_market_id   = p_ds['market_id']
-        ds_inst_type   = p_ds['inst_type']
-        ds_db_type     = p_ds['db_type']
-        ds_db_env      = p_ds['db_env']
-        ds_db_desc     = p_ds['db_desc']
-        ds_ip          = format_sql(p_ds['ip'])
-        ds_port        = p_ds['port']
-        ds_service     = p_ds['service']
-        ds_user        = p_ds['user']
+        db              = get_connection()
+        cr              = db.cursor()
+        ds_id           = get_dsid()
+        ds_market_id    = p_ds['market_id']
+        ds_inst_type    = p_ds['inst_type']
+        ds_db_type      = p_ds['db_type']
+        ds_db_env       = p_ds['db_env']
+        ds_db_desc      = p_ds['db_desc']
+        ds_ip           = format_sql(p_ds['ip'])
+        ds_port         = p_ds['port']
+        ds_service      = p_ds['service']
+        ds_user         = p_ds['user']
+        ds_proxy_status = p_ds['proxy_status']
+        ds_proxy_server = p_ds['proxy_server']
 
         if p_ds['pass'] != '':
             ds_pass    = aes_encrypt(p_ds['pass'], ds_user)
         else:
             ds_pass    = p_ds['pass']
-
         status         = p_ds['status']
-        sql="""insert into t_db_source(id,db_type,db_env,db_desc,ip,port,service,user,password,status,creation_date,creator,last_update_date,updator,market_id,inst_type) 
-                    values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}')
-            """.format(ds_id,ds_db_type,ds_db_env,ds_db_desc,ds_ip,ds_port,ds_service,ds_user,ds_pass,status,current_rq(),'DBA',current_rq(),'DBA',ds_market_id,ds_inst_type);
+
+        sql="""insert into t_db_source
+                (id,db_type,db_env,db_desc,ip,port,service,user,password,status,creation_date,creator,last_update_date,updator,market_id,inst_type,proxy_status,proxy_server) 
+               values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}','{15}','{16}','{17}')
+            """.format(ds_id,ds_db_type,ds_db_env,ds_db_desc,ds_ip,ds_port,ds_service,
+                       ds_user,ds_pass,status,current_rq(),'DBA',current_rq(),'DBA',ds_market_id,ds_inst_type,
+                       ds_proxy_status,ds_proxy_server)
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -405,41 +412,45 @@ def upd_ds(p_ds):
     try:
         db = get_connection()
         cr = db.cursor()
-        ds_id          = p_ds['dsid']
-        ds_market_id   = p_ds['market_id']
-        ds_inst_type   = p_ds['inst_type']
-        ds_db_type     = p_ds['db_type']
-        ds_db_env      = p_ds['db_env']
-        ds_db_desc     = p_ds['db_desc']
-        ds_ip          = format_sql(p_ds['ip'])
-        ds_port        = p_ds['port']
-        ds_service     = p_ds['service']
-        ds_user        = p_ds['user']
-
+        ds_id           = p_ds['dsid']
+        ds_market_id    = p_ds['market_id']
+        ds_inst_type    = p_ds['inst_type']
+        ds_db_type      = p_ds['db_type']
+        ds_db_env       = p_ds['db_env']
+        ds_db_desc      = p_ds['db_desc']
+        ds_ip           = format_sql(p_ds['ip'])
+        ds_port         = p_ds['port']
+        ds_service      = p_ds['service']
+        ds_user         = p_ds['user']
+        ds_proxy_status = p_ds['proxy_status']
+        ds_proxy_server = p_ds['proxy_server']
         print('upd_ds...p_ds=',p_ds)
 
         if p_ds['pass']!='':
            ds_pass     = aes_encrypt(p_ds['pass'],ds_user)
         else:
            ds_pass    = p_ds['pass']
-
         status         = p_ds['status']
+
         sql="""update t_db_source 
-                  set  db_type     ='{0}', 
-                       db_env      ='{1}',
-                       db_desc     ='{2}' ,                        
-                       ip          ='{3}',      
-                       port        ='{4}' ,           
-                       service     ='{5}' ,                           
-                       user        ='{6}' ,           
-                       password    ='{7}' , 
-                       status      ='{8}' ,
+                  set  db_type      ='{0}', 
+                       db_env       ='{1}',
+                       db_desc      ='{2}' ,                        
+                       ip           ='{3}',      
+                       port         ='{4}' ,           
+                       service      ='{5}' ,                           
+                       user         ='{6}' ,           
+                       password     ='{7}' , 
+                       status       ='{8}' ,
                        last_update_date ='{9}' ,
-                       updator='{10}',
-                       market_id='{11}',
-                       inst_type='{12}'
-                where id='{13}'""".format(ds_db_type,ds_db_env,ds_db_desc,ds_ip,ds_port,ds_service,
-                                          ds_user,ds_pass,status,current_rq(),'DBA',ds_market_id,ds_inst_type,ds_id)
+                       updator      ='{10}',
+                       market_id    ='{11}',
+                       inst_type    ='{12}',
+                       proxy_status ='{13}',
+                       proxy_server ='{14}'
+                where id='{15}'""".format(ds_db_type,ds_db_env,ds_db_desc,ds_ip,ds_port,ds_service,
+                                          ds_user,ds_pass,status,current_rq(),'DBA',ds_market_id,ds_inst_type,
+                                          ds_proxy_status,ds_proxy_server,ds_id)
         print(sql)
         cr.execute(sql)
         cr.close()

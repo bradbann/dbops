@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>数据库查询</title>
+    <title>实例管理</title>
 
     <!-- jquery treeview -->
     <link   rel="stylesheet"  href="{{static_url('assets/css/jquery.treeview.css') }}" />
@@ -46,6 +46,7 @@
 
 <body>
    <p></p>
+   <input  id="inst_type" type="hidden"  value={{inst_type}} >
    <div class="row">
         <form class="form-horizontal" role="form">
            <div class="col-md-3">
@@ -54,8 +55,7 @@
                         <label class="col-md-3 control-label">数据源：</label>
                     </div>
                     <div class="col-md-8">
-                        <select class="form-control select" id="db_source">
-                            <option value='' selected = "selected">...</option>
+                        <select readonly class="form-control select" id="db_source">
                             {% for var in dss %}
                               <option value={{var[0]}}>{{var[1]}}</option>
                             {% end %}
@@ -72,7 +72,7 @@
 
            <div  class="col-md-6">
                 <div class="form-group">
-                      <button type="button" id='query_btn'    class="btn btn-xs waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="查询"><i class="fa fa-search"></i></button>
+                      <button type="button" id='query_btn'  class="btn btn-xs waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="查询"><i class="fa fa-gear"></i></button>
                       <button type="button" id='beauty_btn'  class="btn btn-xs waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="美化"><i class="mdi mdi-yelp"></i></button>
                  </div>
            </div>
@@ -141,13 +141,16 @@
    <div class="contextMenu" id="myMenu1">
       <ul>
         <li id="tab_definition"><img  src="{{static_url('assets/images/add.png')}}" /> 表定义</li>
-        <li id="idx_definition"><img  src="{{static_url('assets/images/edit.gif')}}" /> 索引定义</li>
-        <li id="query_tab_100"> <i class="fa fa-search"></i>&nbsp;查询数据</li>
+        <li id="idx_definition"><img  src="{{static_url('assets/images/edit.gif')}}"/> 索引定义</li>
+        <li id="drop_table"><img  src="{{static_url('assets/images/delete.png')}}" /> 删除表</li>
+        <li id="query_tab_100"> <i class="fa fa-search"></i>&nbsp; 查询数据</li>
+        <li id="refresh"> <i class="fa fa-refresh"></i>  &nbsp;刷新</li>
       </ul>
    </div>
    <input type='hidden' id='h_tab_height'>
 
    <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+   <script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
 
    <!-- Toastr js -->
    <script src="{{static_url('plugins/toastr/toastr.min.js')}}"></script>
@@ -337,7 +340,7 @@
              {
                    console.log('1920*1080(100%) :'+n_height+'px')
                    //set div_tree style
-                   $("#div-tree-panal").css("height",n_height*0.77);
+                   $("#div-tree-panal").css("height",n_height*0.76);
                    $("#div-tree").css("height",$("#div-tree-panal").height()*0.93);
                    $("#div-tree").css("border",1);
                    $("#div-tree").css("overflow-x","auto");
@@ -351,7 +354,7 @@
                    $("#ace-editor").css("overflow-x","auto");
 
                    //set div_table style
-                   $("#div-table-panal").css("height",n_height*0.5);
+                   $("#div-table-panal").css("height",n_height*0.49);
                    $("#div-table").css("height",$("#div-table-panal").height()*1);
                    $("#div-table").css("width","100%");
                    $("#div-table").css("border",1);
@@ -478,28 +481,14 @@
                     toastr[flag]('', content)
               }
 
-              $("#db_source").bind("input propertychange",function(){
-                   var db_type=''
+              function get_tree(){
                    if ($('#db_source').val()!='') {
                        $.ajax({
-                           url     : "/ds/query/id",
-                           type    : "post",
-                           datatype: "json",
-                           async   :false,
-                           data    :{
-                              dsid : $('#db_source').val(),
-                           },
-                           success: function (ds) {
-                             db_type=ds['db_type']
-                           }
-                       });
-
-                       $.ajax({
-                            url     :"/get_tree",
+                            url     :"/get/inst/tree",
                             type    :"post",
                             datatype:"json",
                             data: {
-                                    dbid  :  $('#db_source').val()
+                                 inst_id  :  $('#db_source').val()
                             },
                             beforeSend: function () {
                                  $('.modal').on('show.bs.modal', centerModals);
@@ -519,10 +508,8 @@
                                 $("#browser").treeview({
                                     animated: "normal",
                                     collapsed: true,
-                                    //unique:true,
                                     toggle: function() {
                                         console.log("%s was toggled.", $(this).find(">span").text());
-                                        //$(this).find(">span").html('<b>'+$(this).find(">span").text()+'<b>')
                                         $('#curr_db').text($(this).find(">span").text())
                                     }
                                 });
@@ -539,7 +526,7 @@
                                         'tab_definition': function(t) {
                                             var txt = $(t).children('div').text();
                                             $.ajax({
-                                                url     : "/get_tab_ddl",
+                                                url     : "/get/inst/tab/ddl",
                                                 type    : "post",
                                                 datatype: "json",
                                                 data: {
@@ -562,7 +549,7 @@
                                         'idx_definition': function(t) {
                                             var txt = $(t).children('div').text();
                                             $.ajax({
-                                                url     : "/get_tab_idx",
+                                                url     : "/get/inst/idx/ddl",
                                                 type    : "post",
                                                 datatype: "json",
                                                 data: {
@@ -581,17 +568,71 @@
                                                  }
                                              });
                                          },
+                                        'drop_table'    : function(t) {
+                                            var txt = $(t).children('div').text();
+                                            swal({
+                                                    title: "确认要删除吗?",
+                                                    text: "表["+txt+"]将被删除！",
+                                                    type: "warning",
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: "#DD6B55",
+                                                    confirmButtonText: "是, 删除!",
+                                                    cancelButtonText:  "否, 取消!",
+                                                    closeOnConfirm: true,
+                                                    closeOnCancel: true
+                                                 }, function (isConfirm) {
+                                                    if (isConfirm) {
+                                                          $.ajax({
+                                                                url     : "/drop/inst/tab",
+                                                                type    : "post",
+                                                                datatype: "json",
+                                                                data: {
+                                                                    dbid  :  $('#db_source').val(),
+                                                                    cur_db:  $('#curr_db').text(),
+                                                                    tab   :  txt
+                                                                },
+                                                                success: function (dataSet) {
+                                                                    showtips('info',dataSet.message);
+                                                                    get_tree();
+                                                                },
+                                                                error: function (jqXHR, textStatus, errorThrown) {
+                                                                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                                                                    console.log('jqXHR.status=',jqXHR.status);
+                                                                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                                                                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                                                                    console.log('textStatus=',textStatus);
+                                                                    console.log('errorThrown=',errorThrown);
+                                                                    if (jqXHR.status==403){
+                                                                        swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                                                                        setTimeout(" window.location.href='/login'",3000);
+                                                                    } else if (jqXHR.status==502){
+                                                                        swal("用户无权访问权限此功能!", "", "error")
+                                                                    } else {
+                                                                        swal("系统不可用,请稍后重试!", "", "error")
+                                                                    }
+                                                                }
+                                                             });
+
+                                                    } else {
+                                                        swal("已取消", "表["+txt+"]未删除！", "error");
+                                                    }
+                                            });
+
+                                         },
+                                        'refresh'       : function(t) {
+                                            get_tree()
+                                         },
                                         'query_tab_100' : function(t) {
-                                            if (db_type == '2'){
+                                            var sql =''
+                                            if ($('#inst_type').val()=='2'){
                                                  sql = 'select top 100 * from '+$(t).children('div').text();
-                                            } else if (db_type == '0') {
+                                            } else if ($('#inst_type').val()=='0') {
                                                  sql = 'select * from '+$(t).children('div').text()+ ' limit 100';
                                             } else {
                                                  sql = 'select * from '+$(t).children('div').text()+ ' limit 100';
                                             }
                                             var editor = ace.edit("ace-editor");
                                             if (table!=undefined ){
-                                                   console.log("table is defined=",table);
                                                    table.destroy();
                                                    $('#example').empty();
                                             }
@@ -603,18 +644,22 @@
                                 });
                             }
                         });
+                   }
+              }
 
-                }});
+              $("#db_source").bind("input propertychange",function(){
+                   get_tree()
+              });
 
               function query_table(sql){
                 $.ajax({
-                    url     : "/sql/_query",
+                    url     : "/db/inst/sql/_query",
                     type    : "post",
                     datatype: "json",
                     data: {
-                        dbid  :  $('#db_source').val(),
-                        sql   :  sql,
-                        cur_db:  $('#curr_db').text()
+                        inst_id  :  $('#db_source').val(),
+                        sql      :  sql,
+                        cur_db   :  $('#curr_db').text()
                     },
                     beforeSend: function () {
                         $('.modal').on('show.bs.modal', centerModals);
@@ -666,8 +711,8 @@
                                }
                             });
                        }
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
+                     },
+                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log('jqXHR.responseText=',jqXHR.responseText);
                         console.log('jqXHR.status=',jqXHR.status);
                         console.log('jqXHR.readyState=',jqXHR.readyState);
@@ -683,6 +728,7 @@
                             swal("系统不可用,请稍后重试!", "", "error")
                         }
                     }
+
                  });
               }
 
@@ -707,8 +753,12 @@
 
               $("#query_btn").click(function()
               {
-                  //sql=editor.session.getTextRange(editor.getSelectionRange())
-                  v_sql=editor.session.getValue()
+                  var v_sql=editor.session.getTextRange(editor.getSelectionRange())
+                  if(v_sql=='') {
+                      v_sql=editor.session.getValue()
+                  }
+                  //v_sql=editor.session.getTextRange(editor.getSelectionRange())
+                  //v_sql=editor.session.getValue()
 
                   if($('#db_source').val()=='') {
                       showtips('info','请选择数据源!');
@@ -720,14 +770,14 @@
                       return false;
                   }
 
-                 $.ajax({
-                    url     : "/sql/_query",
+                  $.ajax({
+                    url     : "/db/inst/sql/_query",
                     type    : "post",
                     datatype: "json",
                     data: {
-                        dbid  :  $('#db_source').val(),
-                        sql   :  v_sql,//editor.session.getTextRange(editor.getSelectionRange()),
-                        cur_db:  $('#curr_db').text()
+                        inst_id  :  $('#db_source').val(),
+                        sql      :  v_sql, //editor.session.getTextRange(editor.getSelectionRange()),
+                        cur_db   :  $('#curr_db').text()
                     },
                     beforeSend: function () {
                          $('.modal').on('show.bs.modal', centerModals);
@@ -740,7 +790,9 @@
                     success: function (dataSet) {
                         console.log(dataSet);
                         if (dataSet.status=="1") {
-                            showtips('error',dataSet.msg);
+                            showtips('error', dataSet.msg);
+                        } else if (dataSet.status=="2") {
+                            showtips('info', dataSet.msg);
                         } else {
 
                             if (table!=undefined ){
@@ -759,6 +811,7 @@
                                     scrollY       : $("#h_tab_height").val(),
                                     scrollCollapse: true,
                                     paging        : false,
+                                    ordering      : false,
                                     "language"    : {
                                          "search"         : "在表格中搜索:",
                                          "sProcessing"    : "处理中...",
@@ -786,7 +839,23 @@
                                        }
                             });
                        }
-                     }
+                     },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log('jqXHR.responseText=',jqXHR.responseText);
+                        console.log('jqXHR.status=',jqXHR.status);
+                        console.log('jqXHR.readyState=',jqXHR.readyState);
+                        console.log('jqXHR.statusText=',jqXHR.statusText);
+                        console.log('textStatus=',textStatus);
+                        console.log('errorThrown=',errorThrown);
+                        if (jqXHR.status==403){
+                            swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                            setTimeout(" window.location.href='/login'",3000);
+                        } else if (jqXHR.status==502){
+                            swal("用户无权访问权限此功能!", "", "error")
+                        } else {
+                            swal("系统不可用,请稍后重试!", "", "error")
+                        }
+                    }
                  });
               });
 
@@ -794,7 +863,12 @@
               $(window).on('resize', centerModals);
               $('#con-close-modal2').modal({ keyboard: false,backdrop:false});
               setTimeout("set_styles()",1000);
+              get_tree()
+
+
         });
+
+
  </script>
 
 </body>

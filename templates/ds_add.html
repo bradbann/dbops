@@ -110,7 +110,6 @@
                     <input id="pass" name="pass" type="password" class="form-control" placeholder="请输入数据源口令">
                 </div>
            </div>
-
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_ds_status">*</span>数据源状态</label>
@@ -119,6 +118,30 @@
                     <select class="form-control select" id="status" name="status">
                         <option value="1">启用</option>
                         <option value="0">禁用</option>
+                    </select>
+               </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">是否启用代理</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="proxy_status" name="status">
+                        <option value="0">禁用</option>
+                        <option value="1">启用</option>
+                    </select>
+               </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label">代理服务器</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="proxy_server" >
+                        <option value='' selected = "selected">......</option>
+                        {% for var in dm_ds_proxy %}
+                          <option value={{var[0]}} >{{var[1]}}</option>
+                        {% end %}
                     </select>
                </div>
            </div>
@@ -169,6 +192,8 @@
                         user          :$('#user').val(),
                         pass          :$('#pass').val(),
                         status        :$('#status').val(),
+                        proxy_status  :$('#proxy_status').val(),
+                        proxy_server  :$('#proxy_server').val(),
                 },
                 success: function (dataSet) {
                     console.log(dataSet.code, dataSet.message);

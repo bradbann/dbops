@@ -20,11 +20,11 @@ from web.model.t_sql_release   import upd_sql,exe_sql,save_sql,query_audit,query
 from web.model.t_sql_release   import query_order_no,save_order,delete_order,query_wtd,query_wtd_detail,release_order,get_order_attachment_number,upd_order
 from web.model.t_ds            import get_dss_sql_query,get_dss_sql_run,get_dss_order,get_dss_sql_release,get_dss_sql_audit
 from web.model.t_user          import get_user_by_loginame,get_user_by_userid
-from web.model.t_xtqx          import get_tab_ddl_by_tname,get_tab_idx_by_tname,get_tree_by_dbid,alt_tab_desc
+from web.model.t_xtqx          import get_tab_ddl_by_tname,get_tab_idx_by_tname,get_tree_by_dbid,get_tree_by_dbid_mssql,alt_tab_desc
 from web.model.t_xtqx          import get_db_name,get_tab_name,get_tab_columns,get_tab_structure,get_tab_keys,get_tab_incr_col,query_ds
 from web.model.t_dmmx          import get_dmm_from_dm,get_users_from_proj
 from web.utils.basehandler     import basehandler
-
+from web.model.t_ds            import get_ds_by_dsid
 class sqlquery(basehandler):
    @tornado.web.authenticated
    def get(self):
@@ -184,9 +184,15 @@ class get_tree_by_sql(basehandler):
     @tornado.web.authenticated
     def post(self):
         dbid   = self.get_argument("dbid")
-        print('get_tree2=',dbid)
-        result = get_tree_by_dbid(dbid)
+        print('get_tree_by_sql=', dbid)
+        p_ds   = get_ds_by_dsid(dbid)
+        result = {}
+        if p_ds['db_type'] == '0':
+           result = get_tree_by_dbid(dbid)
+        elif p_ds['db_type'] == '2':
+           result = get_tree_by_dbid_mssql(dbid)
         self.write({"code": result['code'], "message": result['message'], "url": result['db_url'],"desc":result['desc']})
+
 
 class get_tab_ddl(basehandler):
     def post(self):

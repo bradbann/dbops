@@ -188,7 +188,6 @@
            </div>
        </div>
 
-
        <div class="row">
            <div class="col-md-6">
                <div class="form-group">
@@ -211,6 +210,55 @@
                </div>
             </div>
        </div>
+
+       <div class="row">
+           <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label">是否启用代理</label>
+                    </div>
+                   <div class="col-md-10">
+                        <select class="form-control select" id="proxy_status" name="status">
+                            {% if proxy_status=='1' %}
+                               <option value="1" selected = "selected">启用</option>
+                               <option value="0">禁用</option>
+                            {% end %}
+
+                            {% if proxy_status=='0' %}
+                                <option value='0' selected = "selected">禁用</option>
+                                <option value="1">启用</option>
+                            {% end %}
+                        </select>
+                   </div>
+               </div>
+            </div>
+       </div>
+
+       <div class="row">
+           <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label">代理服务器</label>
+                    </div>
+                    <div class="col-md-10">
+                        <select class="form-control select" id="proxy_server" >
+                           {% for var in dm_ds_proxy %}
+                               {% if var[0]==proxy_server %}
+                                  <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
+                               {% else %}
+                                   {% if proxy_status=='0' %}
+                                      <option value='' selected = "selected">......</option>
+                                   {% else %}
+                                      <option value={{var[0]}}>{{var[1]}}</option>
+                                   {% end %}
+                               {% end %}
+                           {% end %}
+                        </select>
+                   </div>
+               </div>
+            </div>
+       </div>
+
        <br>
        <div class="row">
            <div class="col-md-6">
@@ -255,18 +303,20 @@
             type: "post",
             datatype: "json",
             data: {
-                    market_id  :$('#market_id').val(),
-                    inst_type  :$('#inst_type').val(),
-                    dsid       :$('#dsid').val(),
-                    db_type    :$('#db_type').val(),
-                    db_env     :$('#db_env').val(),
-                    db_desc    :$('#db_desc').val(),
-                    ip         :$('#ip').val(),
-                    port       :$('#port').val(),
-                    service    :$('#service').val(),
-                    user       :$('#user').val(),
-                    pass       :$('#pass').val(),
-                    status     :$('#status').val(),
+                    market_id     :$('#market_id').val(),
+                    inst_type     :$('#inst_type').val(),
+                    dsid          :$('#dsid').val(),
+                    db_type       :$('#db_type').val(),
+                    db_env        :$('#db_env').val(),
+                    db_desc       :$('#db_desc').val(),
+                    ip            :$('#ip').val(),
+                    port          :$('#port').val(),
+                    service       :$('#service').val(),
+                    user          :$('#user').val(),
+                    pass          :$('#pass').val(),
+                    status        :$('#status').val(),
+                    proxy_status  :$('#proxy_status').val(),
+                    proxy_server  :$('#proxy_server').val(),
             },
             success: function (dataSet) {
                 console.log(dataSet.code, dataSet.message);

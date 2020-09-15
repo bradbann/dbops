@@ -5,7 +5,7 @@
 # @File    : t_user.py
 # @Software: PyCharm
 
-from web.utils.common     import exception_info
+from web.utils.common     import exception_info,format_sql
 from web.utils.common     import get_connection,get_connection_dict
 from web.utils.common     import current_rq
 import os,json
@@ -617,9 +617,9 @@ def save_gather_task(p_task):
                         p_task['add_gather_task_db_server'],
                         p_task['add_gather_task_templete_name'],
                         p_task['add_gather_task_run_time'],
-                        p_task['add_gather_task_script_base'],
-                        p_task['add_gather_task_script_name'],
-                        p_task['add_gather_task_python3_home'],
+                        format_sql(p_task['add_gather_task_script_base']),
+                        format_sql(p_task['add_gather_task_script_name']),
+                        format_sql(p_task['add_gather_task_python3_home']),
                         p_task['add_gather_task_api_server'],
                         p_task['add_gather_task_status']
                         )
@@ -654,9 +654,9 @@ def save_monitor_task(p_task):
                         p_task['add_monitor_task_desc'],
                         p_task['add_monitor_server'],
                         p_task['add_monitor_task_run_time'],
-                        p_task['add_monitor_task_script_base'],
-                        p_task['add_monitor_task_script_name'],
-                        p_task['add_monitor_task_python3_home'],
+                        format_sql(p_task['add_monitor_task_script_base']),
+                        format_sql(p_task['add_monitor_task_script_name']),
+                        format_sql(p_task['add_monitor_task_python3_home']),
                         p_task['add_monitor_task_api_server'],
                         p_task['add_monitor_task_status']
                         )
@@ -696,9 +696,9 @@ def upd_gather_task(p_task):
                  where task_tag='{}'
              """.format(
                         p_task['upd_gather_task_run_time'],
-                        p_task['upd_gather_task_script_base'],
-                        p_task['upd_gather_task_script_name'],
-                        p_task['upd_gather_task_python3_home'],
+                        format_sql(p_task['upd_gather_task_script_base']),
+                        format_sql(p_task['upd_gather_task_script_name']),
+                        format_sql(p_task['upd_gather_task_python3_home']),
                         p_task['upd_gather_task_api_server'],
                         p_task['upd_gather_task_status'],
                         p_task['upd_gather_task_db_server'],
@@ -783,6 +783,7 @@ def push_monitor_task(p_tag,p_api):
         v_cmd="curl -XPOST {0}/push_script_remote_monitor -d 'tag={1}'".format(p_api,p_tag)
         print('push_archive_task=',v_cmd)
         r=os.popen(v_cmd).read()
+        print(r)
         d=json.loads(r)
 
         if d['code']==200:
@@ -841,7 +842,7 @@ def stop_monitor_task(p_tag,p_api):
 
 
 def query_monitor_log_analyze(server_id,db_id,index_code,begin_date,end_date):
-    print('query_monitor_log_analyze=',server_id,db_id,index_code,begin_date,end_date)
+    print('query_monitor_log_analyze>>>>=',server_id,db_id,index_code,begin_date,end_date)
     db  = get_connection()
     cr  = db.cursor()
     v_where    = ' where 1=1 '
@@ -858,6 +859,7 @@ def query_monitor_log_analyze(server_id,db_id,index_code,begin_date,end_date):
     if end_date != '':
         v_where = v_where + " and a.create_date<='{0}'\n".format(end_date+' 23:59:59')
 
+    print('v_where=',v_where)
     if index_code=='cpu_total_usage':
        sql = """SELECT cast(a.create_date as char) as create_date,a.cpu_total_usage 
                  FROM t_monitor_task_server_log a {0} ORDER BY a.create_date
@@ -885,27 +887,39 @@ def query_monitor_log_analyze(server_id,db_id,index_code,begin_date,end_date):
     elif index_code == 'net_out':
         sql = """SELECT cast(a.create_date as char) as create_date,a.net_out 
                       FROM t_monitor_task_server_log a {0} ORDER BY a.create_date
-                """.format(v_where)
+              """.format(v_where)
     elif index_code == 'net_in':
         sql = """SELECT cast(a.create_date as char) as create_date,a.net_in
                       FROM t_monitor_task_server_log a {0} ORDER BY a.create_date
-                """.format(v_where)
-    elif index_code in('mysql_total_connect','mssql_total_connect'):
+              """.format(v_where)
+    elif index_code in('mysql_total_connect','mssql_total_connect','oracle_total_connect'):
         sql = """SELECT cast(a.create_date as char) as create_date,a.total_connect
                       FROM t_monitor_task_db_log a {0} ORDER BY a.create_date
-                """.format(v_where)
-    elif index_code in ('mysql_active_connect','mssql_active_connect') :
+              """.format(v_where)
+    elif index_code in('mysql_qps','mssql_qps','oracle_qps'):
+        sql = """SELECT cast(a.create_date as char) as create_date,a.db_qps
+                      FROM t_monitor_task_db_log a {0} and a.db_qps is not null and a.db_qps!='' ORDER BY a.create_date
+              """.format(v_where)
+    elif index_code in('mysql_tps','mssql_tps','oracle_tps'):
+        sql = """SELECT cast(a.create_date as char) as create_date,a.db_tps
+                      FROM t_monitor_task_db_log a {0} and a.db_tps is not null and a.db_tps!='' ORDER BY a.create_date
+              """.format(v_where)
+    elif index_code in ('mysql_active_connect','mssql_active_connect','oracle_active_connect') :
         sql = """SELECT cast(a.create_date as char) as create_date,a.active_connect
                          FROM t_monitor_task_db_log a {0} ORDER BY a.create_date
-                   """.format(v_where)
-    elif index_code in('mysql_available','mssql_available','es_available','redis_available','mongo_available'):
+              """.format(v_where)
+    elif index_code in('mysql_available','mssql_available','oracle_available','es_available','redis_available','mongo_available'):
         sql = """SELECT cast(a.create_date as char) as create_date,a.db_available
-                            FROM t_monitor_task_db_log a {0} ORDER BY a.create_date
-                      """.format(v_where)
+                            FROM t_monitor_task_db_log a {0} ORDER BY a.create_date 
+              """.format(v_where)
+    elif index_code == 'oracle_tablespace':
+        sql = """SELECT cast(a.create_date as char) as create_date,a.db_tbs_usage
+                              FROM t_monitor_task_db_log a {0}  and a.db_tbs_usage is not null and a.db_tbs_usage!='' ORDER BY a.create_date 
+              """.format(v_where)
     else:
         pass
 
-    print(sql)
+    print('query_monitor_log_analyze>>>',sql)
     cr.execute(sql)
     v_list1 = []
     for r in cr.fetchall():
@@ -924,10 +938,34 @@ def get_max_disk_usage(d_disk):
     return result
 
 
-def query_monitor_sys():
+def query_monitor_sys(env):
     result = {}
     db     = get_connection()
     cr     = db.cursor()
+    vw     = ''
+    if env == 'hst-dev':
+         vw = " and b.server_desc like '%合生通开发%'"
+    elif env == 'hst-test':
+         vw = " and b.server_desc like '%合生通测试%'"
+    elif env == 'hst-pre':
+         vw = " and b.server_desc like '%合生通预生产%'"
+    elif env == 'hst-prod':
+         vw = " and b.server_desc like '%合生通生产%'"
+    elif env == 'hst-proj':
+         vw = " and b.server_desc like '%同步服务器%'"
+    elif env == 'easylife-dev':
+        vw = " and b.server_desc like '%好房开发%'"
+    elif env == 'easylife-test':
+        vw = " and b.server_desc like '%好房测试%'"
+    elif env == 'easylife-gray':
+         vw = " and b.server_desc like '%好房灰度%'"
+    elif env == 'easylife-prod':
+         vw = " and b.server_desc like '%好房生产%'"
+    elif env == 'sg-prod':
+         vw = " and b.server_desc like '%商管%'"
+    else:
+         vw =''
+
     sql    = """SELECT b.server_desc,
                     concat(b.server_ip,':',b.server_port) as server,
                     concat(a.cpu_total_usage,'%') as cpu_total_usage,
@@ -938,14 +976,14 @@ def query_monitor_sys():
                     CONCAT(ROUND(a.net_in/1000,1),'kb/s')     AS net_in,
                     CONCAT(ROUND(a.net_out/1000,1),'kb/s')    AS net_out,
                     DATE_FORMAT(a.create_date,'%Y-%m-%d %H:%i:%s')     AS cjrq,
-                    CASE WHEN TIMESTAMPDIFF(MINUTE, a.create_date, NOW())>3 THEN '0' ELSE '100' END  AS STATUS
+                    CASE WHEN TIMESTAMPDIFF(MINUTE, a.create_date, NOW())>10 THEN '0' ELSE '100' END  AS STATUS
             FROM t_monitor_task_server_log a
-               LEFT JOIN t_server b ON a.server_id=b.id
+               LEFT JOIN t_server b ON a.server_id=b.id 
             WHERE (a.server_id,a.create_date) IN(
             SELECT server_id,MAX(create_date) FROM `t_monitor_task_server_log` GROUP BY server_id )
-            -- ORDER BY STATUS,a.cpu_total_usage+0 DESC,a.mem_usage+0, b.server_desc
+             {}
             ORDER BY STATUS, b.server_desc
-          """
+          """.format(vw)
     print(sql)
     cr.execute(sql)
     v_list = []
@@ -961,23 +999,52 @@ def query_monitor_sys():
     return result
 
 
-def query_monitor_svr():
+def query_monitor_svr(env):
     result = {}
     db  = get_connection()
     cr  = db.cursor()
+    vw = ''
+    if env == 'hst-dev':
+        vw = " and server_desc like '%合生通开发%'"
+    elif env == 'hst-test':
+        vw = " and server_desc like '%合生通测试%'"
+    elif env == 'hst-pre':
+        vw = " and server_desc like '%合生通预生产%'"
+    elif env == 'hst-prod':
+        vw = " and server_desc like '%合生通生产%'"
+    elif env == 'hst-proj':
+        vw = " and server_desc like '%同步服务器%'"
+    elif env == 'easylife-dev':
+        vw = " and server_desc like '%好房开发%'"
+    elif env == 'easylife-test':
+        vw = " and server_desc like '%好房测试%'"
+    elif env == 'easylife-gray':
+        vw = " and server_desc like '%好房灰度%'"
+    elif env == 'easylife-prod':
+        vw = " and server_desc like '%好房生产%'"
+    elif env == 'sg-prod':
+        vw = " and server_desc like '%商管%'"
+    else:
+        vw = ''
+
     sql = """SELECT 
                   server_desc,
                   mysql_proj,
                   mssql_park,
                   mssql_flow,
                   mssql_car,
+                  mssql_dldf,
+                  mssql_sg,
+                  oracle_sg,
                   redis,
                   mongo,
                   es
                 FROM t_monitor_service
-                WHERE (mysql_proj<>'' OR mssql_park<>''  OR mssql_flow<>''  OR mssql_car<>''  OR redis<>''  OR mongo<>''  OR es<>'') 
-                ORDER BY sxh,server_desc
-          """
+                WHERE (mysql_proj<>'' OR mssql_park<>''  OR mssql_flow<>''  OR mssql_car<>''  OR mssql_dldf<>'' 
+                        OR mssql_sg<>'' OR oracle_sg<>'' OR redis<>''  OR mongo<>''  OR es<>'') 
+                  {}      
+                ORDER BY server_desc,sxh
+          """.format(vw)
     print(sql)
     cr.execute(sql)
     v_list = []
@@ -995,12 +1062,17 @@ def query_monitor_svr():
                      mssql_park,
                      mssql_flow,
                      mssql_car,
+                     mssql_dldf,
+                     mssql_sg,
+                     oracle_sg,
                      redis,
                      mongo,
                      es
                    FROM t_monitor_service
                     where instr(mysql_proj,'0@')>0 or instr(mssql_park,'0@')>0   or instr(mssql_flow,'0@')>0 
-                     or instr(mssql_car,'0@')>0 or instr(redis,'0@')>0  or instr(mongo,'0@')>0 or instr(es,'0@')>0 ORDER BY sxh,server_desc
+                       or instr(mssql_car,'0@')>0   or instr(mssql_dldf,'0@')>0 or instr(mssql_sg,'0@')>0  
+                         or instr(oracle_sg,'0@')>0   or instr(redis,'0@')>0  or instr(mongo,'0@')>0 
+                          or instr(es,'0@')>0 ORDER BY server_desc,sxh
              """
     print(sql2)
     cr2.execute(sql2)

@@ -34,8 +34,8 @@ def get_server_port():
 
 def get_db_conf():
     d_db={}
-    d_db['ip']       = '10.2.39.18'
-    d_db['port']     =  3306
+    d_db['ip']       = '10.2.39.17'
+    d_db['port']     =  23306
     d_db['user']     = 'puppet'
     d_db['password'] = 'Puppet@123'
     d_db['db']       = 'puppet'
@@ -129,7 +129,7 @@ def get_connection_ds_sqlserver(p_ds):
     service  = p_ds['service']
     user     = p_ds['user']
     password = p_ds['password']
-    conn     = pymssql.connect(server=ip, port=int(port), user=user, password=password, database=service, charset='utf8')
+    conn     = pymssql.connect(server=ip, port=int(port), user=user, password=password, database=service, charset='utf8',timeout=3)
     return conn
 
 def get_connection_ds_uat_sqlserver(p_ds):

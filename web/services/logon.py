@@ -133,6 +133,16 @@ class logon_check(tornado.web.RequestHandler):
             self.set_secure_cookie("userid", d_user['userid'], expires=time.time() + 1800)
         self.write({"code": result['code'], "message": result['message'], "url": result['url']})
 
+
+class heartbeat(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        username  = self.get_argument("loginname")
+        userid    = self.get_argument("userid")
+        self.set_secure_cookie("username", username,expires=time.time() + 1800)
+        self.set_secure_cookie("userid", userid, expires=time.time() + 1800)
+        self.write({"code": 200, "message": 'success'})
+
 class forget_password_check(tornado.web.RequestHandler):
     def post(self):
         username    = self.get_argument("username")

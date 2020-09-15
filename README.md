@@ -45,6 +45,8 @@
     
     说明：以上二进制包已安装好依赖
     
+    yum -y install python3
+    
 
 2.2 安装python3及依赖  
 
@@ -89,6 +91,8 @@
     wget http://www.zhitbar.com/downloads/times/TIMES.zip  
     
     unzip TIMES.zip  
+    
+    mkdir -p /usr/share/fonts/times 
     
     mv TIMES/* /usr/share/fonts/times  
 
@@ -145,6 +149,11 @@
     nohup /usr/local/python3.6/bin/python3 -u /home/hopson/apps/usr/webserver/dbops/web/controller/server.py ${1:-8200} &  
 
 
+    cd /root/dbops
+    export "PYTHONUNBUFFERED"="1" 
+    export "PYTHONPATH"="/root/dbops"
+    python3 -u /root/dbops/web/controller/server.py 8000 
+
 3.2 重启服务  
 
     more restart.sh  
@@ -194,4 +203,4 @@
     
     http://localhost:81
     
-    登陆:admin/mf#1234@abcd
+    登陆:admin/admin

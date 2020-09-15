@@ -5,21 +5,27 @@
 # @File    : t_user.py
 # @Software: PyCharm
 from web.utils.common import format_sql,aes_encrypt,aes_decrypt
-from web.utils.common import exception_info,get_connection
-from web.utils.common import current_rq
-import traceback
-import xlrd,xlwt
-import os,zipfile
+from web.utils.common import exception_info,get_connection,get_connection_ds,get_connection_dict
+from web.model.t_db_inst import get_ds_by_instid
 
-def query_db_user(user_name):
+def query_db_user(p_user_name,p_inst_env,p_inst_id):
     db = get_connection()
     cr = db.cursor()
     v_where =''
-    if user_name != '':
-       v_where = "  and ( b.db_user like '%{0}%' or b.db_user like '%{1}%')".format(user_name,user_name)
+    if p_user_name != '':
+       v_where = "  and  b.db_user like '%{0}%'".format(p_user_name)
 
-    sql = """SELECT  a.inst_name,
+    if p_inst_env != '':
+       v_where = "  and  a.inst_env= '{0}'".format(p_inst_env)
+
+    if p_inst_id != '':
+       v_where = "  and  a.id= '{0}'".format(p_inst_id)
+
+    sql = """SELECT  a.id,
+                     a.inst_name,
                      (select dmmc from t_dmmx x where x.dm='02' and x.dmm=a.inst_type) as inst_type,
+                     (select dmmc from t_dmmx x where x.dm='03' and x.dmm=a.inst_env) as inst_env,
+                     b.id,
                      b.db_user,
                      (select dmmc from t_dmmx x where x.dm='25' and x.dmm=b.status) as STATUS,
                      b.description,
@@ -39,23 +45,23 @@ def query_db_user(user_name):
 
 def save_db_user(d_db_user):
     result = {}
-    val = check_db_user(d_db_user)
+    val = check_db_user(d_db_user,'I')
     if val['code']=='-1':
         return val
     try:
-        db     = get_connection()
-        cr     = db.cursor()
-        result = {}
-
+        db      = get_connection()
+        cr      = db.cursor()
+        result  = {}
         db_pass = ''
         if d_db_user['db_pass'] != '':
-            db_pass    = aes_encrypt(d_db_user['db_pass'], d_db_user['db_user'])
+            db_pass    = aes_encrypt(d_db_user['db_pass'], d_db_user['db_user'].replace("'","''"))
         else:
             db_pass    = d_db_user['db_pass']
-        sql="""insert into t_db_user(inst_id,db_user,db_pass,statement,status,description,created_date)
-                    values('{0}','{1}','{2}','{3}','{4}','{5}',now())
-            """.format(d_db_user['inst_id'],d_db_user['db_user'],db_pass,
-                       format_sql(d_db_user['statement']),d_db_user['status'],d_db_user['desc'])
+        sql="""insert into t_db_user(inst_id,db_user,db_pass,user_dbs,user_privs,statement,status,description,created_date)
+                    values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}',now())
+            """.format(d_db_user['inst_id'],d_db_user['db_user'].replace("'","''"),db_pass,
+                       d_db_user['user_dbs'],d_db_user['user_privs'],
+                       format_sql(d_db_user['statement']),d_db_user['status'],format_sql(d_db_user['desc']))
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -70,45 +76,148 @@ def save_db_user(d_db_user):
         result['message'] = '保存失败！'
     return result
 
-def upd_inst(d_db_user):
-    result={}
-    val = check_db_user(d_db_user)
-    if  val['code'] == '-1':
+
+def update_db_user(d_db_user):
+    result = {}
+    val = check_db_user(d_db_user,'U')
+    if val['code']=='-1':
         return val
     try:
-        db   = get_connection()
-        cr   = db.cursor()
-
+        db      = get_connection()
+        cr      = db.cursor()
+        result  = {}
         db_pass = ''
         if d_db_user['db_pass'] != '':
-            db_pass = aes_encrypt(d_db_user['db_pass'], d_db_user['db_user'])
+            db_pass    = aes_encrypt(d_db_user['db_pass'], d_db_user['db_user'].replace("'","''"))
         else:
-            db_pass = d_db_user['db_pass']
-
-        sql  = """update t_db_user
-                  set  
-                      inst_id         ='{0}',
-                      db_user         ='{1}', 
-                      db_pass         ='{2}', 
-                      statement       ='{3}', 
-                      status          ='{4}',
-                      description     ='{5}',
-                      created_date    = now()
-                where id={16}""".format(d_db_user['inst_id'], d_db_user['db_user'],db_pass,
-                                        d_db_user['statement'],d_db_user['status'],d_db_user['desc'],
-                                        d_db_user['db_user_id'])
+            db_pass    = d_db_user['db_pass']
+        sql="""update t_db_user
+                  set  inst_id='{}',
+                       db_user='{}',
+                       db_pass='{}',
+                       user_dbs='{}',
+                       user_privs='{}',
+                       statement='{}',
+                       status='{}',
+                       description='{}',
+                       last_update_date=now()
+                  where id={}
+                  """.format(d_db_user['inst_id'],
+                             d_db_user['db_user'].replace("'","''"),
+                             db_pass,
+                             d_db_user['user_dbs'],
+                             d_db_user['user_privs'],
+                             format_sql(d_db_user['statement']),
+                             d_db_user['status'],
+                             format_sql(d_db_user['desc']),
+                                        d_db_user['user_id'])
         print(sql)
         cr.execute(sql)
         cr.close()
         db.commit()
-        result={}
         result['code']='0'
         result['message']='更新成功！'
-    except :
-        print(traceback.format_exc())
+        return result
+    except:
+        e_str = exception_info()
+        print(e_str)
         result['code'] = '-1'
-        result['message'] = '更新失败！'
+        result['message'] = '保存失败！'
     return result
+
+def delete_db_user(p_db_user_id):
+    result = {}
+    try:
+        db      = get_connection()
+        cr      = db.cursor()
+        result  = {}
+        sql     = "delete from t_db_user where id='{}'".format(p_db_user_id)
+        print(sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result['code']='0'
+        result['message']='删除成功！'
+        return result
+    except:
+        e_str = exception_info()
+        print(e_str)
+        result['code'] = '-1'
+        result['message'] = '保存失败！'
+    return result
+
+def get_user_sql(p_db_user):
+    v_user = """create user {} identified by '***';""".format(p_db_user['mysql_db_user'])
+    v_priv = ''
+    if p_db_user['mysql_privs']=='':
+       return v_user
+    for db in p_db_user['mysql_dbs'].split(','):
+        v_priv=v_priv+'grant {} on `{}`.* to {};\n'.format(p_db_user['mysql_privs'],db,p_db_user['mysql_db_user'])
+    return v_user+'\n'+v_priv[0:-1]
+
+def get_db_name(p_instid):
+    try:
+        result = {}
+        p_ds   = get_ds_by_instid(p_instid)
+        db     = get_connection_ds(p_ds)
+        cr     = db.cursor()
+        sql    = """SELECT schema_name FROM information_schema.`SCHEMATA` 
+                       WHERE schema_name NOT IN('information_schema','mysql','performance_schema')
+                     ORDER BY schema_name"""
+        print('get_db_name=',sql)
+        cr.execute(sql)
+        rs=cr.fetchall()
+        v_list = []
+        for r in rs:
+            v_list.append(r[0])
+        cr.close()
+        result['code'] = '0'
+        result['message'] = v_list
+    except Exception as e:
+        print('get_db_name.ERROR:',str(e))
+        result['code'] = '-1'
+        result['message'] = '获取数据库名失败！'
+    return result
+
+# def upd_inst(d_db_user):
+#     result={}
+#     val = check_db_user(d_db_user)
+#     if  val['code'] == '-1':
+#         return val
+#     try:
+#         db   = get_connection()
+#         cr   = db.cursor()
+#
+#         db_pass = ''
+#         if d_db_user['db_pass'] != '':
+#             db_pass = aes_encrypt(d_db_user['db_pass'], d_db_user['db_user'])
+#         else:
+#             db_pass = d_db_user['db_pass']
+#
+#         sql  = """update t_db_user
+#                   set
+#                       inst_id         ='{0}',
+#                       db_user         ='{1}',
+#                       db_pass         ='{2}',
+#                       statement       ='{3}',
+#                       status          ='{4}',
+#                       description     ='{5}',
+#                       created_date    = now()
+#                 where id={16}""".format(d_db_user['inst_id'], d_db_user['db_user'],db_pass,
+#                                         d_db_user['statement'],d_db_user['status'],d_db_user['desc'],
+#                                         d_db_user['db_user_id'])
+#         print(sql)
+#         cr.execute(sql)
+#         cr.close()
+#         db.commit()
+#         result={}
+#         result['code']='0'
+#         result['message']='更新成功！'
+#     except :
+#         print(traceback.format_exc())
+#         result['code'] = '-1'
+#         result['message'] = '更新失败！'
+#     return result
 
 def del_db_user(p_db_userid):
     result={}
@@ -128,11 +237,10 @@ def del_db_user(p_db_userid):
         result['message'] = '删除失败！'
     return result
 
-
 def check_db_user_rep(p_db_user):
     db = get_connection()
     cr = db.cursor()
-    sql = "select count(0) from t_db_user  where  db_user='{0}'".format(p_db_user['db_user'])
+    sql = "select count(0) from t_db_user  where  concat(inst_id,db_user)='{0}{1}'".format(p_db_user["inst_id"],format_sql(p_db_user['db_user']))
     print(sql)
     cr.execute(sql)
     rs=cr.fetchone()
@@ -140,7 +248,7 @@ def check_db_user_rep(p_db_user):
     db.commit()
     return rs[0]
 
-def check_db_user(p_db_user):
+def check_db_user(p_db_user,p_flag='I'):
     result = {}
 
     if p_db_user["inst_id"]=="":
@@ -173,7 +281,7 @@ def check_db_user(p_db_user):
         result['message'] = '用户描述不能为空!'
         return result
 
-    if check_db_user_rep(p_db_user)>0:
+    if check_db_user_rep(p_db_user)>0 and p_flag=='I':
         result['code'] = '-1'
         result['message'] = '用户名重复!'
         return result
@@ -181,6 +289,43 @@ def check_db_user(p_db_user):
     result['code'] = '0'
     result['message'] = '验证通过'
     return result
+
+
+def get_user_privs_zh(p_user_privs):
+    db = get_connection_dict()
+    cr = db.cursor()
+    st = "SELECT dmmc FROM t_dmmx WHERE dm='31' and instr('{}',dmm)>0".format(p_user_privs)
+    cr.execute(st)
+    rs=cr.fetchall()
+    v =''
+    for p in rs:
+       v=v+p['dmmc']+','
+    cr.close()
+    return v[0:-1]
+
+def query_user_by_id(p_user_id):
+    db  = get_connection_dict()
+    cr  = db.cursor()
+    sql = """SELECT a.id,
+                    a.inst_id,
+                    a.description,
+                    a.db_user,
+                    a.db_pass,
+                    a.user_dbs,
+                    a.user_privs,
+                    a.statement,
+                    a.status,
+                    date_format(a.created_date,'%Y-%m-%d %H:%i:%s')  as created_date                    
+             FROM t_db_user a  WHERE  a.id='{0}'""".format(p_user_id)
+    print(sql)
+    cr.execute(sql)
+    rs=cr.fetchone()
+    rs['db_pass'] = aes_decrypt(rs['db_pass'],rs['db_user'].replace("'", "''"))
+    rs['user_privs_zh'] = get_user_privs_zh(rs['user_privs'])
+    print("rs->password=",rs['db_pass'])
+    cr.close()
+    db.commit()
+    return rs
 
 def get_port_by_portid(p_portid):
     db = get_connection()
@@ -201,134 +346,3 @@ def get_port_by_portid(p_portid):
     db.commit()
     print(d_port)
     return d_port
-
-def imp_port(p_file):
-    try:
-        result={}
-        file  = xlrd.open_workbook(p_file)
-        name  = file.sheet_names()[0]
-        sheet = file.sheet_by_name(name)
-        vals  = ''
-        for i in range(1, sheet.nrows):
-            val=''
-            for j in range(0, sheet.ncols):
-                val=val+"'"+str(sheet.cell(i, j).value)+"',"
-            vals =vals +'('+val[0:-1]+'),'
-
-        db = get_connection()
-        cr = db.cursor()
-        sql="insert into t_port(app_name,app_port,app_dev,app_desc,app_ext) values {0}".format(vals[0:-1])
-        print(sql)
-        cr.execute(sql)
-        cr.close()
-        db.commit()
-        result={}
-        result['code']='0'
-        result['message']='导入成功！'
-    except :
-        result['code'] = '-1'
-        result['message'] = '导入失败！'
-    return result
-
-def set_styles(fontsize):
-    cell_borders   = xlwt.Borders()
-    header_borders = xlwt.Borders()
-    header_styles  = xlwt.XFStyle()
-    cell_styles    = xlwt.XFStyle()
-    # add table header style
-    header_borders.left   = xlwt.Borders.THIN
-    header_borders.right  = xlwt.Borders.THIN
-    header_borders.top    = xlwt.Borders.THIN
-    header_borders.bottom = xlwt.Borders.THIN
-    header_styles.borders = header_borders
-    header_pattern = xlwt.Pattern()
-    header_pattern.pattern = xlwt.Pattern.SOLID_PATTERN
-    header_pattern.pattern_fore_colour = 22
-    # add font
-    font = xlwt.Font()
-    font.name = 'Times New Roman'
-    font.bold = True
-    font.size = fontsize
-    header_styles.font = font
-    #add alignment
-    header_alignment = xlwt.Alignment()
-    header_alignment.horz = xlwt.Alignment.HORZ_CENTER
-    header_alignment.vert = xlwt.Alignment.VERT_CENTER
-    header_styles.alignment = header_alignment
-    header_styles.borders = header_borders
-    header_styles.pattern = header_pattern
-    #add col style
-    cell_borders.left     = xlwt.Borders.THIN
-    cell_borders.right    = xlwt.Borders.THIN
-    cell_borders.top      = xlwt.Borders.THIN
-    cell_borders.bottom   = xlwt.Borders.THIN
-    # add alignment
-    cell_alignment        = xlwt.Alignment()
-    cell_alignment.horz   = xlwt.Alignment.HORZ_LEFT
-    cell_alignment.vert   = xlwt.Alignment.VERT_CENTER
-    cell_styles.alignment = cell_alignment
-    cell_styles.borders   = cell_borders
-    font2 = xlwt.Font()
-    font2.name = 'Times New Roman'
-    font2.size = fontsize
-    cell_styles.font = font2
-    return header_styles,cell_styles
-
-def exp_port(static_path):
-    db  = get_connection()
-    cr  = db.cursor()
-    row_data  = 0
-    workbook  = xlwt.Workbook(encoding='utf8')
-    worksheet = workbook.add_sheet('port')
-    header_styles, cell_styles = set_styles(15)
-    os.system('cd {0}'.format(static_path + '/downloads/port'))
-    file_name   = static_path + '/downloads/port/exp_port_{0}.xls'.format(current_rq())
-    file_name_s = 'exp_port_{0}.xls'.format(current_rq())
-
-
-    sql = "SELECT  a.app_name,a.app_port,a.app_dev,a.app_desc,a.app_ext FROM  t_port a  order by a.id"
-    print(sql)
-    cr.execute(sql)
-    rs=cr.fetchall()
-    desc = cr.description
-
-    #写表头
-    for k in range(len(desc)):
-        worksheet.write(row_data, k, desc[k][0], header_styles)
-        if k == len(desc) - 1:
-            worksheet.col(k).width = 8000
-        else:
-            worksheet.col(k).width = 4000
-
-    #写单元格
-    row_data = row_data + 1
-    for i in rs:
-        for j in range(len(i)):
-            if i[j] is None:
-                worksheet.write(row_data, j, '', cell_styles)
-            else:
-                worksheet.write(row_data, j, str(i[j]), cell_styles)
-        row_data = row_data + 1
-
-    workbook.save(file_name)
-    db.commit()
-    cr.close()
-
-    print("{0} export complete!".format(file_name))
-
-    #生成zip压缩文件
-    zip_file = static_path + '/downloads/port/exp_port_{0}.zip'.format(current_rq())
-    rzip_file = '/static/downloads/port/exp_port_{0}.zip'.format(current_rq())
-
-    #若文件存在则删除
-    if os.path.exists(zip_file):
-        os.system('rm -f {0}'.format(zip_file))
-
-    z = zipfile.ZipFile(zip_file, 'w', zipfile.ZIP_DEFLATED, allowZip64=True)
-    z.write(file_name, arcname=file_name_s)
-    z.close()
-    print('zip_file=', zip_file)
-
-    # 删除json文件
-    os.system('rm -f {0}'.format(file_name))
-    return rzip_file

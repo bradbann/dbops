@@ -1,6 +1,5 @@
  <head>
     <meta charset="utf-8">
-
     <link href="{{static_url('plugins/datatables/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/responsive.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
@@ -31,6 +30,7 @@
         }
          .color-success {
             color: #44d954;
+            /*color: #d6d90d;*/
             font-size: 30px;
         }
 
@@ -55,7 +55,6 @@
              font-size: 10.8px;
              line-height: 20px;
         }
-
     </style>
 
  </head>
@@ -73,6 +72,59 @@
             </ul>
             <div class="tab-content br-n pn">
                 <div id="sys-monitor" class="tab-pane active">
+                 <div class="row">
+                 </div>
+                 <div class="row">
+                        <div class="col-md-4">
+                            <span class="label text-primary">合生通&nbsp;</span>
+                            <div class="radio radio-info radio-inline">
+                                <input type="radio" id="inlineRadio1" value="hst-dev" name="radioInline_sys" >
+                                <label for="inlineRadio1">开发</label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <input type="radio" id="inlineRadio2" value="hst-test" name="radioInline_sys" >
+                                <label for="inlineRadio2">测试</label>
+                            </div>
+                           <div class="radio radio-info radio-inline">
+                                <input type="radio" id="inlineRadio3" value="hst-pre" name="radioInline_sys" >
+                                <label for="inlineRadio3">预发布</label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <input type="radio" id="inlineRadio4" value="hst-prod" name="radioInline_sys" checked>
+                                <label for="inlineRadio4">生产</label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <input type="radio" id="inlineRadio6" value="hst-proj" name="radioInline_sys" >
+                                <label for="inlineRadio6">项目</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                             <span class="label text-success">好房&nbsp;</span>
+                             <div class="radio radio-info radio-inline">
+                                <input type="radio" id="inlineRadio21" value="easylife-dev" name="radioInline_sys" >
+                                <label for="inlineRadio21">开发</label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <input type="radio" id="inlineRadio22" value="easylife-test" name="radioInline_sys" >
+                                <label for="inlineRadio22">测试</label>
+                            </div>
+                           <div class="radio radio-info radio-inline">
+                                <input type="radio" id="inlineRadio23" value="easylife-gray" name="radioInline_sys" >
+                                <label for="inlineRadio23">灰度</label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <input type="radio" id="inlineRadio24" value="easylife-prod" name="radioInline_sys" >
+                                <label for="inlineRadio24">生产</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                              <span class="label text-danger">商管&nbsp;</span>
+                              <div class="radio radio-inline">
+                                <input type="radio" id="inlineRadio31" value="sg-prod" name="radioInline_sys" checked>
+                                <label for="inlineRadio31">生产</label>
+                              </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div id='div-sys-monitor' class="col-md-12">
                            <table id="tab-sys-monitor" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
@@ -80,6 +132,59 @@
                     </div>
                 </div>
                 <div id="svr-monitor" class="tab-pane">
+                     <div class="row">
+                     </div>
+                     <div class="row">
+                          <div class="col-md-4">
+                                <span class="label text-primary">合生通&nbsp;</span>
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="inlineRadio41" value="hst-dev" name="radioInline_svr" >
+                                    <label for="inlineRadio41">开发</label>
+                                </div>
+                                <div class="radio radio-inline">
+                                    <input type="radio" id="inlineRadio42" value="hst-test" name="radioInline_svr" >
+                                    <label for="inlineRadio42">测试</label>
+                                </div>
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="inlineRadio43" value="hst-pre" name="radioInline_svr" >
+                                    <label for="inlineRadio43">预发布</label>
+                                </div>
+                                <div class="radio radio-inline">
+                                    <input type="radio" id="inlineRadio44" value="hst-prod" name="radioInline_svr" >
+                                    <label for="inlineRadio44">生产</label>
+                                </div>
+                                <div class="radio radio-inline">
+                                    <input type="radio" id="inlineRadio45" value="hst-proj" name="radioInline_svr" >
+                                    <label for="inlineRadio6">项目</label>
+                                </div>
+                          </div>
+                          <div class="col-md-3">
+                                <span class="label text-success">好房&nbsp;</span>
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="inlineRadio51" value="easylife-dev" name="radioInline_svr" >
+                                    <label for="inlineRadio51">开发</label>
+                                </div>
+                                <div class="radio radio-inline">
+                                    <input type="radio" id="inlineRadio52" value="easylife-test" name="radioInline_svr" >
+                                    <label for="inlineRadio52">测试</label>
+                                </div>
+                                <div class="radio radio-info radio-inline">
+                                    <input type="radio" id="inlineRadio53" value="easylife-grey" name="radioInline_svr" >
+                                    <label for="inlineRadio53">灰度</label>
+                                </div>
+                                <div class="radio radio-inline">
+                                    <input type="radio" id="inlineRadio54" value="easylife-prod" name="radioInline_svr">
+                                    <label for="inlineRadio54">生产</label>
+                                </div>
+                          </div>
+                          <div class="col-md-2">
+                                <span class="label text-danger">商管&nbsp;</span>
+                                <div class="radio radio-inline">
+                                    <input type="radio" id="inlineRadio61" value="sg-prod" name="radioInline_svr"  checked>
+                                    <label for="inlineRadio61">商管</label>
+                                </div>
+                          </div>
+                     </div>
                     <div class="row">
                         <div id='div-svr-monitor' class="col-md-12">
                             <table id="tab-svr-monitor" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
@@ -91,16 +196,7 @@
 
     </div>
     <input id='current_tab_hidden' type='hidden'>
-
-    <i id='query_password3' class="ion-help"></i>
-
     <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
-    <script src="{{static_url('plugins/datatables/dataTables.buttons.min.js')}}"></script>
-    <script src="{{static_url('plugins/datatables/buttons.bootstrap.min.js')}}"></script>
-    <script src="{{static_url('plugins/datatables/dataTables.responsive.min.js')}}"></script>
-    <script src="{{static_url('plugins/datatables/responsive.bootstrap.min.js')}}"></script>
-    <script src="{{static_url('plugins/datatables/dataTables.scroller.min.js')}}"></script>
 
     <!-- Toastr js -->
     <script src="{{static_url('plugins/toastr/toastr.min.js')}}"></script>
@@ -173,7 +269,6 @@
 
         }
 
-
           //警告提醒
           function showtips(flag,title,content){
                 toastr.options = {
@@ -194,7 +289,7 @@
                       "hideMethod": "fadeOut"
                     }
                     toastr[flag](content,title)
-        }
+          }
 
           //获取系统监控数据
           function get_sys_monitor(){
@@ -202,6 +297,9 @@
               url: "/monitor/view/sys",
               type: "post",
               datatype: "json",
+              data:{
+                      env: $("input[name='radioInline_sys']:checked").val()
+              },
               success: function (dataSet) {
                  $('#tab-sys-monitor').DataTable( {
                           "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
@@ -209,7 +307,8 @@
                           destroy    :true,
                           async      :true,
                           ordering   :false,
-                          scrollY    :"600px",
+                          //scrollY    :"600px",
+                          scrollY    :true,
                           scrollX    :false,
                           paging     : false,
                           data       : dataSet.data,
@@ -368,6 +467,9 @@
               $.ajax({
               url: "/monitor/view/svr",
               type: "post",
+              data:{
+                      env: $("input[name='radioInline_svr']:checked").val()
+              },
               datatype: "json",
               success: function (dataSet) {
                  $('#tab-svr-monitor').DataTable( {
@@ -376,7 +478,8 @@
                       destroy    :true,
                       async      :true,
                       ordering   :false,
-                      scrollY    :"600px",
+                      //scrollY    :"600px",
+                      scrollY    : true,
                       scrollX    : false,
                       paging     : false,
                       data       : dataSet.data,
@@ -397,13 +500,13 @@
                                    var  rqq    = row[1].split(',')[i].split('@')[2]
                                    var  rqz    = GetDate(2)
                                    if (status=='1') {
-                                       if (GetDateDiff(rqq, rqz, "minute")>5) {
-                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                       if (GetDateDiff(rqq, rqz, "minute")>10) {
+                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                        } else {
                                            tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-success"></i>'
                                        }
                                    } else if (status=='0') {
-                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                    } else {
                                       tmp=''
                                    }
@@ -424,13 +527,13 @@
                                    var  rqq    = row[2].split(',')[i].split('@')[2]
                                    var  rqz    = GetDate(2)
                                    if (status=='1') {
-                                       if (GetDateDiff(rqq, rqz, "minute")>5) {
-                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                       if (GetDateDiff(rqq, rqz, "minute")>10) {
+                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                        } else {
                                            tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-success"></i>'
                                        }
                                    } else if (status=='0') {
-                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                    } else {
                                       tmp=''
                                    }
@@ -451,13 +554,13 @@
                                    var  rqq    = row[3].split(',')[i].split('@')[2]
                                    var  rqz    = GetDate(2)
                                    if (status=='1') {
-                                       if (GetDateDiff(rqq, rqz, "minute")>5) {
-                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                       if (GetDateDiff(rqq, rqz, "minute")>10) {
+                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                        } else {
                                            tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-success"></i>'
                                        }
                                    } else if (status=='0') {
-                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                    } else {
                                       tmp=''
                                    }
@@ -478,13 +581,94 @@
                                    var  rqq    = row[4].split(',')[i].split('@')[2]
                                    var  rqz    = GetDate(2)
                                    if (status=='1') {
-                                       if (GetDateDiff(rqq, rqz, "minute")>5) {
-                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                       if (GetDateDiff(rqq, rqz, "minute")>10) {
+                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                        } else {
                                            tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-success"></i>'
                                        }
                                    } else if (status=='0') {
-                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
+                                   } else {
+                                      tmp=''
+                                   }
+                                   result=result+'&nbsp;&nbsp;'+tmp+'&nbsp;&nbsp;';
+                               }
+                               return result
+                            }
+                         },
+                         {
+                             "title":"MSSQL德利多富",
+                             "className" : 'table_td_center',
+                             "render": function(data,type,row,meta) {
+                               var  tmp='';
+                               var  result='';
+                               for (i=0;i<row[5].split(',').length;i++) {
+                                   var  status = row[5].split(',')[i].split('@')[0]
+                                   var  dbid   = row[5].split(',')[i].split('@')[1]
+                                   var  rqq    = row[5].split(',')[i].split('@')[2]
+                                   var  rqz    = GetDate(2)
+                                   if (status=='1') {
+                                       if (GetDateDiff(rqq, rqz, "minute")>10) {
+                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
+                                       } else {
+                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-success"></i>'
+                                       }
+                                   } else if (status=='0') {
+                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
+                                   } else {
+                                      tmp=''
+                                   }
+                                   result=result+'&nbsp;&nbsp;'+tmp+'&nbsp;&nbsp;';
+                               }
+                               return result
+                            }
+                         },
+                         {
+                             "title":"MSSQL商管",
+                             "className" : 'table_td_center',
+                             "render": function(data,type,row,meta) {
+                               var  tmp='';
+                               var  result='';
+                               for (i=0;i<row[6].split(',').length;i++) {
+                                   var  status = row[6].split(',')[i].split('@')[0]
+                                   var  dbid   = row[6].split(',')[i].split('@')[1]
+                                   var  rqq    = row[6].split(',')[i].split('@')[2]
+                                   var  rqz    = GetDate(2)
+                                   if (status=='1') {
+                                       if (GetDateDiff(rqq, rqz, "minute")>10) {
+                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
+                                       } else {
+                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-success"></i>'
+                                       }
+                                   } else if (status=='0') {
+                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
+                                   } else {
+                                      tmp=''
+                                   }
+                                   result=result+'&nbsp;&nbsp;'+tmp+'&nbsp;&nbsp;';
+                               }
+                               return result
+                            }
+                         },
+                         {
+                             "title":"Oracle商管",
+                             "className" : 'table_td_center',
+                             "render": function(data,type,row,meta) {
+                               var  tmp='';
+                               var  result='';
+                               for (i=0;i<row[7].split(',').length;i++) {
+                                   var  status = row[7].split(',')[i].split('@')[0]
+                                   var  dbid   = row[7].split(',')[i].split('@')[1]
+                                   var  rqq    = row[7].split(',')[i].split('@')[2]
+                                   var  rqz    = GetDate(2)
+                                   if (status=='1') {
+                                       if (GetDateDiff(rqq, rqz, "minute")>10) {
+                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
+                                       } else {
+                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-success"></i>'
+                                       }
+                                   } else if (status=='0') {
+                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                    } else {
                                       tmp=''
                                    }
@@ -499,19 +683,19 @@
                              "render": function(data,type,row,meta) {
                                var  tmp='';
                                var  result='';
-                               for (i=0;i<row[5].split(',').length;i++) {
-                                   var  status = row[5].split(',')[i].split('@')[0]
-                                   var  dbid   = row[5].split(',')[i].split('@')[1]
-                                   var  rqq    = row[5].split(',')[i].split('@')[2]
+                               for (i=0;i<row[8].split(',').length;i++) {
+                                   var  status = row[8].split(',')[i].split('@')[0]
+                                   var  dbid   = row[8].split(',')[i].split('@')[1]
+                                   var  rqq    = row[8].split(',')[i].split('@')[2]
                                    var  rqz    = GetDate(2)
                                    if (status=='1') {
-                                       if (GetDateDiff(rqq, rqz, "minute")>5) {
-                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                       if (GetDateDiff(rqq, rqz, "minute")>10) {
+                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                        } else {
                                            tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-success"></i>'
                                        }
                                    } else if (status=='0') {
-                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                    } else {
                                       tmp=''
                                    }
@@ -526,19 +710,19 @@
                              "render": function(data,type,row,meta) {
                                var  tmp='';
                                var  result='';
-                               for (i=0;i<row[6].split(',').length;i++) {
-                                   var  status = row[6].split(',')[i].split('@')[0]
-                                   var  dbid   = row[6].split(',')[i].split('@')[1]
-                                   var  rqq    = row[6].split(',')[i].split('@')[2]
+                               for (i=0;i<row[9].split(',').length;i++) {
+                                   var  status = row[9].split(',')[i].split('@')[0]
+                                   var  dbid   = row[9].split(',')[i].split('@')[1]
+                                   var  rqq    = row[9].split(',')[i].split('@')[2]
                                    var  rqz    = GetDate(2)
                                    if (status=='1') {
-                                       if (GetDateDiff(rqq, rqz, "minute")>5) {
-                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                       if (GetDateDiff(rqq, rqz, "minute")>10) {
+                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                        } else {
                                            tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-success"></i>'
                                        }
                                    } else if (status=='0') {
-                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                    } else {
                                       tmp=''
                                    }
@@ -553,19 +737,19 @@
                              "render": function(data,type,row,meta) {
                                var  tmp='';
                                var  result='';
-                               for (i=0;i<row[7].split(',').length;i++) {
-                                   var  status = row[7].split(',')[i].split('@')[0]
-                                   var  dbid   = row[7].split(',')[i].split('@')[1]
-                                   var  rqq    = row[7].split(',')[i].split('@')[2]
+                               for (i=0;i<row[10].split(',').length;i++) {
+                                   var  status = row[10].split(',')[i].split('@')[0]
+                                   var  dbid   = row[10].split(',')[i].split('@')[1]
+                                   var  rqq    = row[10].split(',')[i].split('@')[2]
                                    var  rqz    = GetDate(2)
                                    if (status=='1') {
-                                       if (GetDateDiff(rqq, rqz, "minute")>5) {
-                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                       if (GetDateDiff(rqq, rqz, "minute")>10) {
+                                           tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                        } else {
                                            tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-success"></i>'
                                        }
                                    } else if (status=='0') {
-                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-bell color-warning"></i>'
+                                      tmp='<i id="db@'+dbid+'@'+rqq+'" class="ion-ios7-lightbulb color-warning"></i>'
                                    } else {
                                       tmp=''
                                    }
@@ -602,7 +786,7 @@
                              }
                  });
 
-                 console.log('warning=',dataSet.warning,dataSet.warning.length)
+                 console.log('warning=>svr=',dataSet.warning,dataSet.warning.length)
                  if (dataSet.warning.length>0){
                      for (i=0;i<dataSet.warning.length;i++) {
 
@@ -663,7 +847,7 @@
           }
 
           $(document).ready(function() {
-               var timer = null;
+               var timer ;
 
                //首次加载系统监控
                get_sys_monitor()
@@ -672,12 +856,14 @@
                $('#current_tab_hidden').val('系统监控')
 
                //通每10秒刷新一次
-               setInterval("updateMonData()",100000);
+               //setInterval("updateMonData()",100000);
 
-               $('#query_password3').tooltipster({
-                 content: 'xxxxxxxxxxxxx',
-                 multiple: true,
-                 position: 'right'
+               $('input[type=radio][name=radioInline_sys]').change(function() {
+                    get_sys_monitor();
+               });
+
+               $('input[type=radio][name=radioInline_svr]').change(function() {
+                    get_svr_mon_data();
                });
 
           })
@@ -704,6 +890,7 @@
                                dataSet.message['db_desc']+'<br>'+
                                '地址：'+dataSet.message['ip']+'<br>'+
                                '端口：'+dataSet.message['port']+'<br>'+
+                               '数据库：'+dataSet.message['service']+'<br>'+
                                '时间：'+rq
                           );
                       }

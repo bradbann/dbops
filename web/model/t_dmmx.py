@@ -50,6 +50,17 @@ def get_sys_dmlx():
     cr.close()
     return v_list
 
+def get_sys_dmlx_from_dm(p_dm):
+    db = get_connection()
+    cr = db.cursor()
+    sql = "select dm,mc from t_dmlx where flag='1' and dm='{}' order by dm".format(p_dm)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list
+
 def get_backup_server():
     db = get_connection()
     cr = db.cursor()
@@ -105,6 +116,20 @@ def get_gather_tasks():
     cr.close()
     return v_list
 
+def get_inst_names(p_env):
+    db = get_connection()
+    cr = db.cursor()
+    if p_env == '':
+        sql = "select id,inst_name from t_db_inst  order by id"
+    else:
+        sql = "select id,inst_name from t_db_inst WHERE inst_env='{}' order by id".format(p_env)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list
+
 
 def get_db_server():
     db = get_connection()
@@ -121,7 +146,7 @@ def get_db_backup_server():
     db = get_connection()
     cr = db.cursor()
     sql = """SELECT id,db_desc FROM t_db_source 
-             WHERE  (db_type in(0)  and user in('puppet','easylife') or db_type not in (0,2))
+             WHERE  (db_type in(0)  and user in('puppet','easylife') or db_type not in (0))
                 and STATUS=1 ORDER BY db_desc,db_type
           """
     cr.execute(sql)
@@ -250,7 +275,7 @@ def get_sync_db_server():
     cr = db.cursor()
     sql = """SELECT id,db_desc
               FROM t_db_source 
-            WHERE  db_type in(0,2,4,5,6) and db_env in(1,2,3,4,5,6) 
+            WHERE  db_type in(0,1,2,4,5,6) and db_env in(1,2,3,4,5,6) 
                 and STATUS=1 
                 -- and user!='puppet'
               ORDER BY db_desc,db_type"""

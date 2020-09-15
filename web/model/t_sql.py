@@ -53,7 +53,8 @@ def check_sql(p_dbid,p_sql,curdb):
         return result
     return result
 
-def get_sqlserver_result(p_ds,p_sql):
+def get_sqlserver_result(p_ds,p_sql,curdb):
+    db      = ''
     result  = {}
     columns = []
     data    = []
@@ -64,8 +65,18 @@ def get_sqlserver_result(p_ds,p_sql):
         p_env='DEV'
 
     try:
-        db = get_connection_ds_sqlserver(p_ds)
+        if p_ds['proxy_status'] == '0':
+            db = get_connection_ds_sqlserver(p_ds)
+        else:
+            p_ds['ip'] = p_ds['proxy_server'].split(':')[0]
+            p_ds['port'] = p_ds['proxy_server'].split(':')[1]
+            db = get_connection_ds_sqlserver(p_ds)
+
+        print('get_sqlserver_result=>p_ds:', p_ds)
+        print('get_sqlserver_result=>p_sql:', p_sql)
+        print('get_sqlserver_result=>db:', db)
         cr = db.cursor()
+        cr.execute('use {}'.format(curdb))
         cr.execute(p_sql)
         rs = cr.fetchall()
         desc = cr.description
@@ -92,6 +103,7 @@ def get_sqlserver_result(p_ds,p_sql):
         return result
 
 def get_mysql_result(p_ds,p_sql,curdb):
+    db       = ''
     result   = {}
     columns  = []
     data     = []
@@ -108,13 +120,23 @@ def get_mysql_result(p_ds,p_sql,curdb):
     db=''
     cr=''
     rs=''
-    if p_sql.find('.') > 0:
-        db = get_connection_ds_read_limit(p_ds,read_timeout)
-        cr = db.cursor()
+    # if p_sql.find('.') > 0:
+    #     db = get_connection_ds_read_limit(p_ds,read_timeout)
+    #     cr = db.cursor()
+    # else:
+    #     p_ds['service'] = curdb
+    #     db = get_connection_ds_read_limit(p_ds,read_timeout)
+    #     cr = db.cursor()
+
+    p_ds['service'] = curdb
+    if p_ds['proxy_status'] == '0':
+        db = get_connection_ds_read_limit(p_ds, read_timeout)
     else:
-        p_ds['service'] = curdb
-        db = get_connection_ds_read_limit(p_ds,read_timeout)
-        cr = db.cursor()
+        p_ds['ip'] = p_ds['proxy_server'].split(':')[0]
+        p_ds['port'] = p_ds['proxy_server'].split(':')[1]
+        db = get_connection_ds_read_limit(p_ds, read_timeout)
+
+    cr = db.cursor()
 
     try:
         cr.execute(p_sql)
@@ -195,6 +217,7 @@ def exe_query(p_dbid,p_sql,curdb):
         return val
 
     p_ds  = get_ds_by_dsid(p_dbid)
+    print('exe_query=>p_ds:',p_ds)
 
     #查询MySQL数据源
     if p_ds['db_type']=='0':
@@ -202,6 +225,6 @@ def exe_query(p_dbid,p_sql,curdb):
 
     # 查询MSQLServer数据源
     if p_ds['db_type'] == '2':
-        result = get_sqlserver_result(p_ds,p_sql)
+        result = get_sqlserver_result(p_ds,p_sql,curdb)
 
     return result

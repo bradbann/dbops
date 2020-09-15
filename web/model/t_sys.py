@@ -5,7 +5,7 @@
 # @File : t_sys.py.py
 # @Software: PyCharm
 import traceback
-from web.utils.common import get_connection
+from web.utils.common import get_connection,format_sql
 
 def check_rule(rule):
     for key in rule:
@@ -71,7 +71,7 @@ def save_sys_code_type(code):
         db = get_connection()
         cr = db.cursor()
         sql= "insert into t_dmlx(dm,mc,flag,create_time,update_time) values('{}','{}','{}',now(),now())".\
-             format(code['type_name'],code['type_code'],code['type_status'])
+             format(code['type_code'],code['type_name'],code['type_status'])
         print('save_sys_code_type=',sql)
         cr.execute(sql)
         cr.close()
@@ -142,7 +142,7 @@ def save_sys_code_detail(code):
         db = get_connection()
         cr = db.cursor()
         sql= "insert into t_dmmx(dm,dmm,dmmc,flag,create_time,update_time) values('{}','{}','{}','{}',now(),now())".\
-             format(code['type_code'],code['detail_code'],code['detail_name'],code['detail_status'])
+             format(code['type_code'],format_sql(code['detail_code']),code['detail_name'],code['detail_status'])
         print('save_sys_code_detail=',sql)
         cr.execute(sql)
         cr.close()
@@ -161,8 +161,13 @@ def upd_sys_code_detail(code):
     try:
         db = get_connection()
         cr = db.cursor()
-        sql= """update t_dmmx set dmmc ='{}',flag = '{}',update_time=now() where   dm  = '{}' and dmm='{}'
-             """.format(code['detail_name'],code['detail_status'],code['type_code'],code['detail_code'])
+        sql= """update t_dmmx 
+                   set dmm ='{}',
+                       dmmc ='{}',
+                       flag = '{}',
+                       update_time=now()
+                where   dm  = '{}' and dmm='{}'
+             """.format(code['detail_code'],code['detail_name'],code['detail_status'],code['type_code'],format_sql(code['detail_code_old']))
         print('upd_sys_code_detail=',sql)
         cr.execute(sql)
         cr.close()

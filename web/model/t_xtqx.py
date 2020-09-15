@@ -6,10 +6,10 @@
 # @Software: PyCharm
 
 import traceback,sys
-from web.utils.common    import current_rq
+from web.utils.common    import current_rq,get_connection_ds_sqlserver
 from web.utils.common    import get_connection,get_connection_ds
 from web.utils.common    import get_url_root
-from web.model.t_user    import get_user_by_loginame
+from web.model.t_user    import get_user_by_loginame,get_user_by_userid
 from web.utils.common    import exception_info_mysql,format_mysql_error
 from web.model.t_ds      import get_ds_by_dsid
 
@@ -195,7 +195,11 @@ def get_url_by_userid(p_userid):
 
 def check_url(userid,uri):
     uuri = get_url_by_userid(userid)
-    print('check_url=',uuri)
+    print('check_url=',uuri,get_user_by_userid(userid)['loginname'])
+
+    if get_user_by_userid(userid)['loginname'] =='admin':
+       return True
+
     if uri not in uuri:
         return False
     else:
@@ -762,6 +766,59 @@ def get_tree_by_dbid(dbid):
         result['message'] = '加载失败！'
     return result
 
+
+def get_tree_by_dbid_mssql(dbid):
+    print('get_tree_by_dbid_mssql=',dbid)
+    try:
+        db     = ''
+        sql1   = ''
+        result = {}
+        v_html = ''
+        p_ds   = get_ds_by_dsid(dbid)
+        print('p_ds=',p_ds)
+
+        if p_ds['proxy_status'] == '0':
+           db     = get_connection_ds_sqlserver(p_ds)
+        else:
+           p_ds['ip']   = p_ds['proxy_server'].split(':')[0]
+           p_ds['port'] = p_ds['proxy_server'].split(':')[1]
+           db = get_connection_ds_sqlserver(p_ds)
+
+        print('db=',db)
+        cr = db.cursor()
+        if p_ds['service'] == '':
+           sql1 = """ SELECT name FROM Master..SysDatabases  ORDER BY Name"""
+        else:
+           sql1 = """ SELECT name FROM Master..SysDatabases where name= DB_NAME() ORDER BY Name"""
+
+        sql2 = """SELECT OBJECT_SCHEMA_NAME(id)+'.'+Name FROM SysObjects Where XType='U' ORDER BY Name
+               """
+        cr.execute(sql1)
+        rs1 = cr.fetchall()
+        for i in range(len(rs1)):
+            cr.execute('use {}'.format(rs1[i][0]))
+            cr.execute(sql2.format(rs1[i][0]))
+            rs2 = cr.fetchall()
+            v_node = """<li><span class="folder">{0}</span><ul>""".format(rs1[i][0])
+            v_html=v_html+v_node
+            for j in range(len(rs2)):
+                v_node = """<li><span class="file">{0}<div style="display:none">{1}</div></span></li>""".format(rs2[j][0],rs2[j][0])
+                v_html = v_html + "\n" + v_node;
+            v_html=v_html+"\n"+"</ul></li>"+"\n"
+
+        cr.close()
+        result['code'] = '0'
+        result['message'] = v_html
+        result['desc']    = p_ds['db_desc']
+        result['db_url']  = p_ds['db_desc']
+        #print(v_html)
+    except Exception as e:
+        print('get_tree_by_instid_mssql=>error:',str(e))
+        result['code'] = '-1'
+        result['message'] = '加载失败！'
+        result['desc'] = ''
+        result['db_url'] = ''
+    return result
 
 def query_menu(p_name):
     db = get_connection()

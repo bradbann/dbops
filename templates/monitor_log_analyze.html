@@ -244,7 +244,7 @@
                                              'a': cpu_usage_tmp[i]
                                          }
                                      } else if (count(dataSet['data1'][0][1],'{')>0){
-                                         var cpu_usage_tmp = JSON.parse(dataSet['data1'][0][1])
+                                         var cpu_usage_tmp = JSON.parse(dataSet['data1'][j][1])
                                          var keys=''
                                          var vals=''
                                          for (key in cpu_usage_tmp) {
@@ -262,13 +262,14 @@
                                          }
                                      } else {
                                          var cpu_usage_tmp = dataSet['data1'][j][1].replace('[', '').replace(']', '').split(',')
+                                         console.log('y=',dataSet['data1'][j][0])
                                          $barData_cpu_usage[j] = {
                                              'y': dataSet['data1'][j][0],
                                              'a': cpu_usage_tmp[i]
                                          }
                                     }
                                  }
-                                 createLineChart('div_cpu_usage_'+i, $barData_cpu_usage, 'y', ['a'], [value],['0.9'],['#ffffff'],['#992c51'], ['#ffbeba','#88A110']);
+                                 createLineChart('div_cpu_usage_'+i, $barData_cpu_usage, 'y', ['a'], [text],['0.9'],['#ffffff'],['#992c51'], ['#ffbeba','#88A110']);
                             }
                             $('#host-container').show()
 
@@ -378,7 +379,7 @@
                                          }
                                     }
                                  }
-                                 createLineChart('div_cpu_usage_'+i, $barData_cpu_usage, 'y', ['a'], [value],['0.9'],['#ffffff'],['#992c51'], ['#ffbeba','#88A110']);
+                                 createLineChart('div_cpu_usage_'+i, $barData_cpu_usage, 'y', ['a'], [text],['0.9'],['#ffffff'],['#992c51'], ['#ffbeba','#88A110']);
                             }
                             $('#host-container').show()
 
@@ -466,7 +467,8 @@
                                              'a': cpu_usage_tmp[i]
                                          }
                                      } else if (count(dataSet['data1'][0][1],'{')>0){
-                                         var cpu_usage_tmp = JSON.parse(dataSet['data1'][0][1])
+                                         var cpu_usage_tmp = JSON.parse(dataSet['data1'][j][1])
+                                         console.log('cpu_usage_tmp=',cpu_usage_tmp)
                                          var keys=''
                                          var vals=''
                                          for (key in cpu_usage_tmp) {

@@ -259,7 +259,8 @@
                                 <label class="col-md-3 control-label"><span id="s_upd_detail_code">*</span>小类代码：</label>
                             </div>
                             <div class="col-md-9">
-                               <input type="text" id="upd_detail_code"  readonly class="form-control">
+                               <input type="text" id="upd_detail_code"   class="form-control">
+                               <input type="hidden" id="upd_detail_code_old"   class="form-control">
                            </div>
                         </div>
                         <div class="form-group" >
@@ -518,6 +519,9 @@
             $('#upd_type_code_detail').val(obj.split(',')[0])
             $('#upd_detail_code').val(obj.split(',')[2])
             $('#upd_detail_name').val(obj.split(',')[3])
+            $("#upd_detail_code_old").val(obj.split(',')[2])
+
+
             if (obj.split(',')[4]=='启用') {
                   $('#upd_detail_status').val('1')
             } else {
@@ -801,6 +805,7 @@
                   type_code     : $("#upd_type_code_detail").val(),
                   detail_name   : $("#upd_detail_name").val(),
                   detail_code   : $("#upd_detail_code").val(),
+                  detail_code_old : $("#upd_detail_code_old").val(),
                   detail_status : $("#upd_detail_status").val(),
               },
               success: function (dataSet) {
@@ -841,8 +846,29 @@
              query_sys_code_type();
          } else  {
              query_sys_code_detail();
+             upd_code_type();
          }
      });
+
+     function upd_code_type(){
+        $.ajax({
+              url: "/sys/get/code/type",
+              type: "post",
+              datatype: "json",
+              async:false,
+              success: function (dataSet) {
+                 console.log(dataSet['message'])
+                 $("#add_type_code_detail").empty();
+                 $("#add_type_code_detail").append("<option value=''>......</option>");
+                 for(i=0;i<dataSet['message'].length;i++){
+                      console.log('i=',dataSet['message'][i])
+                      var val  = dataSet['message'][i][0];
+                      var text = dataSet['message'][i][0]+'('+dataSet['message'][i][1]+')';
+                      $("#add_type_code_detail").append("<option value='"+val+"'>"+text+"</option>");
+                 }
+              }
+        });
+     }
 
      $(document).ready(function() {
          set_selected()

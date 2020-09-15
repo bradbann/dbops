@@ -117,6 +117,12 @@ class sys_code(basehandler):
        self.render("./sys_code.html",
                    sys_code_type= get_sys_dmlx())
 
+class sys_code_type(basehandler):
+   @tornado.web.authenticated
+   def post(self):
+       self.write({ "message": get_sys_dmlx()})
+
+
 class sys_code_type_query(basehandler):
     @tornado.web.authenticated
     def post(self):
@@ -191,6 +197,7 @@ class sys_code_detail_upd_save(basehandler):
         code['type_code']      = self.get_argument("type_code")
         code['detail_name']    = self.get_argument("detail_name")
         code['detail_code']    = self.get_argument("detail_code")
+        code['detail_code_old'] = self.get_argument("detail_code_old")
         code['detail_status']  = self.get_argument("detail_status")
         print('sys_code_detail_upd_save=', code)
         result = upd_sys_code_detail(code)

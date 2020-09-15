@@ -366,7 +366,8 @@ class get_monitor_view_sys(basehandler):
     # @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        v_list = query_monitor_sys()
+        env    = self.get_argument("env")
+        v_list = query_monitor_sys(env)
         v_json = json.dumps(v_list)
         self.write(v_json)
 
@@ -374,7 +375,8 @@ class get_monitor_view_svr(basehandler):
     # @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        v_list = query_monitor_svr()
+        env    = self.get_argument("env")
+        v_list = query_monitor_svr(env)
         v_json = json.dumps(v_list)
         self.write(v_json)
 
