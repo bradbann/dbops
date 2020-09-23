@@ -263,6 +263,7 @@ def save_sync(p_backup):
         sync_col_name        = p_backup['sync_col_name']
         sync_col_val         = format_sql(p_backup['sync_col_val'])
         sync_time_type       = p_backup['sync_time_type']
+        sync_repair_day      = p_backup['sync_repair_day']
         api_server           = p_backup['api_server']
         status               = p_backup['status']
         sql                  = ''
@@ -274,19 +275,19 @@ def save_sync(p_backup):
                                   comments,run_time,sync_table,sync_schema,
                                   batch_size,batch_size_incr,sync_gap,
                                   script_path,script_file,python3_home,api_server,
-                                  sync_col_name,sync_col_val,sync_time_type,status,sync_schema_dest)
+                                  sync_col_name,sync_col_val,sync_time_type,status,sync_schema_dest,sync_repair_day)
                           values('{0}','{1}','{2}',
                                  '{3}','{4}','{5}',
                                  '{6}','{7}','{8}','{9}',
                                  '{10}','{11}','{12}',
                                  '{13}','{14}','{15}','{16}',
-                                 '{17}','{18}','{19}','{20}',null)
+                                 '{17}','{18}','{19}','{20}',null,'{21}')
                        """.format(sour_db_server, desc_db_server, sync_server,
                                   sync_tag, sync_ywlx, sync_type,
                                   task_desc, run_time, sync_tables, sync_schema,
                                   sync_batch_size, sync_batch_size_incr, sync_gap,
                                   script_base, script_name, python3_home, api_server,
-                                  sync_col_name, sync_col_val, sync_time_type, status)
+                                  sync_col_name, sync_col_val, sync_time_type, status,sync_repair_day)
 
         else:
             sql="""insert into t_db_sync_config(
@@ -295,19 +296,19 @@ def save_sync(p_backup):
                            comments,run_time,sync_table,sync_schema,
                            batch_size,batch_size_incr,sync_gap,
                            script_path,script_file,python3_home,api_server,
-                           sync_col_name,sync_col_val,sync_time_type,status,sync_schema_dest)
+                           sync_col_name,sync_col_val,sync_time_type,status,sync_schema_dest,sync_repair_day)
                    values('{0}','{1}','{2}',
                           '{3}','{4}','{5}',
                           '{6}','{7}','{8}','{9}',
                           '{10}','{11}','{12}',
                           '{13}','{14}','{15}','{16}',
-                          '{17}','{18}','{19}','{20}','{21}')
+                          '{17}','{18}','{19}','{20}','{21}','{22}')
                 """.format(sour_db_server,desc_db_server,sync_server,
                            sync_tag,sync_ywlx,sync_type,
                            task_desc,run_time,sync_tables,sync_schema,
                            sync_batch_size,sync_batch_size_incr,sync_gap,
                            script_base,script_name,python3_home,api_server,
-                           sync_col_name,sync_col_val,sync_time_type,status,sync_schema_dest)
+                           sync_col_name,sync_col_val,sync_time_type,status,sync_schema_dest,sync_repair_day)
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -350,6 +351,7 @@ def upd_sync(p_sync):
         sync_col_name   = p_sync['sync_col_name']
         sync_col_val    = format_sql(p_sync['sync_col_val'])
         sync_time_type  = p_sync['sync_time_type']
+        sync_repair_day = p_sync['sync_repair_day']
         api_server      = p_sync['api_server']
         status          = p_sync['status']
         sync_id         = p_sync['sync_id']
@@ -379,14 +381,15 @@ def upd_sync(p_sync):
                           sync_col_val      ='{18}',
                           sync_time_type    ='{19}',
                           status            ='{20}',
-                          sync_schema_dest  =null
-                    where id={21}""".format(sync_server,sour_db_server,desc_db_server,
+                          sync_schema_dest  = null,
+                          sync_repair_day   = '{21}'
+                    where id={22}""".format(sync_server,sour_db_server,desc_db_server,
                                             sync_tag,sync_ywlx,sync_type,
                                             task_desc,run_time,sync_tables,
                                             sync_schema,sync_batch_size,sync_batch_size_incr,
                                             sync_gap,script_base,script_name,
                                             python3_home,api_server,sync_col_name,
-                                            sync_col_val,sync_time_type,status,sync_id)
+                                            sync_col_val,sync_time_type,status,sync_repair_day,sync_id)
         else:
             sql = """update t_db_sync_config 
                                  set  
@@ -411,14 +414,16 @@ def upd_sync(p_sync):
                                      sync_col_val      ='{18}',
                                      sync_time_type    ='{19}',
                                      status            ='{20}',
-                                     sync_schema_dest  ='{21}'
-                               where id={22}""".format(sync_server, sour_db_server, desc_db_server,
+                                     sync_schema_dest  ='{21}',
+                                     sync_repair_day   ='{22}'
+                               where id={23}""".format(sync_server, sour_db_server, desc_db_server,
                                                        sync_tag, sync_ywlx, sync_type,
                                                        task_desc, run_time, sync_tables,
                                                        sync_schema, sync_batch_size, sync_batch_size_incr,
                                                        sync_gap, script_base, script_name,
                                                        python3_home, api_server, sync_col_name,
-                                                       sync_col_val, sync_time_type, status, sync_schema_dest,sync_id)
+                                                       sync_col_val, sync_time_type, status,
+                                                       sync_schema_dest,sync_repair_day,sync_id)
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -604,7 +609,8 @@ def get_sync_by_syncid(p_syncid):
                     comments,python3_home,sync_schema,
                     sync_table,batch_size,batch_size_incr,
                     sync_gap,sync_col_name,sync_col_val,
-                    sync_time_type,api_server,status,ifnull(sync_schema_dest,'')
+                    sync_time_type,api_server,status,ifnull(sync_schema_dest,''),
+                    sync_repair_day
              from t_db_sync_config where id={0}
           """.format(p_syncid)
     cr.execute(sql)
@@ -632,6 +638,7 @@ def get_sync_by_syncid(p_syncid):
     d_sync['api_server']     = rs[0][19]
     d_sync['status']         = rs[0][20]
     d_sync['sync_schema_dest'] = rs[0][21]
+    d_sync['sync_repair_day'] = rs[0][22]
     cr.close()
     db.commit()
     print(d_sync)

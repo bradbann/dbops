@@ -47,7 +47,7 @@ def query_server(p_name):
                     FROM t_server a,t_dmmx b,t_dmmx c
                     WHERE a.market_id=b.dmm AND b.dm='05'
                       and a.server_type=c.dmm and c.dm='06'
-                      and binary concat(a.market_id,'|',a.server_ip,'|',a.server_port)  like '%{0}%' 
+                      and binary concat(a.market_id,'|',a.server_ip,'|',a.server_port,'|',a.server_desc)  like '%{0}%' 
                     ORDER BY a.market_id,a.server_port""".format(p_name)
 
     print(sql)

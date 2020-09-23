@@ -236,6 +236,15 @@
                </div>
            </div>
 
+            <div class="form-group">
+               <div>
+                    <label class="col-md-2 control-label"><span id="s_sync_repair_day">*</span>同步修复天数</label>
+                </div>
+               <div class="col-md-10">
+                   <input id="sync_repair_day"  type="text" class="form-control" placeholder="请输入同步修复天数" value="{{sync_repair_day}}">
+               </div>
+           </div>
+
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_api_server">*</span>API服务器</label>
@@ -300,6 +309,7 @@
             document.all['s_sync_col_name'].style.color="#ff0000";
             document.all['s_sync_col_val'].style.color="#ff0000";
             document.all['s_sync_time_type'].style.color="#ff0000";
+            document.all['s_sync_repair_day'].style.color="#ff0000";
         }
 
         $(document).ready(function() {
@@ -341,6 +351,7 @@
                     sync_col_name        : $('#sync_col_name').val(),
                     sync_col_val         : $('#sync_col_val').val(),
                     sync_time_type       : $('#sync_time_type').val(),
+                    sync_repair_day      : $('#sync_repair_day').val(),
                     api_server           : $('#api_server').val(),
                     status               : $('#status').val()
             },

@@ -76,6 +76,7 @@ class syncadd_save(basehandler):
         d_sync['sync_col_name']        = self.get_argument("sync_col_name")
         d_sync['sync_col_val']         = self.get_argument("sync_col_val")
         d_sync['sync_time_type']       = self.get_argument("sync_time_type")
+        d_sync['sync_repair_day']      = self.get_argument("sync_repair_day")
         d_sync['api_server']           = self.get_argument("api_server")
         d_sync['status']               = self.get_argument("status")
         print('syncadd_save=',d_sync)
@@ -123,6 +124,7 @@ class syncedit(basehandler):
                     sync_col_name        = d_sync['sync_col_name'],
                     sync_col_val         = d_sync['sync_col_val'],
                     sync_time_type       = d_sync['sync_time_type'],
+                    sync_repair_day       = d_sync['sync_repair_day'],
                     api_server           = d_sync['api_server'],
                     status               = d_sync['status'],
                     )
@@ -152,6 +154,7 @@ class syncedit_save(basehandler):
         d_sync['sync_col_name']  = self.get_argument("sync_col_name")
         d_sync['sync_col_val']   = self.get_argument("sync_col_val")
         d_sync['sync_time_type'] = self.get_argument("sync_time_type")
+        d_sync['sync_repair_day']= self.get_argument("sync_repair_day")
         d_sync['api_server']     = self.get_argument("api_server")
         d_sync['status']         = self.get_argument("status")
         d_sync['sync_id']        = self.get_argument("sync_id")
@@ -192,6 +195,7 @@ class syncclone(basehandler):
                     sync_col_name        = d_sync['sync_col_name'],
                     sync_col_val         = d_sync['sync_col_val'],
                     sync_time_type       = d_sync['sync_time_type'],
+                    sync_repair_day      = d_sync['sync_repair_day'],
                     api_server           = d_sync['api_server'],
                     status               = d_sync['status'],
                     )
@@ -221,6 +225,7 @@ class syncclone_save(basehandler):
         d_sync['sync_col_name']  = self.get_argument("sync_col_name")
         d_sync['sync_col_val']   = self.get_argument("sync_col_val")
         d_sync['sync_time_type'] = self.get_argument("sync_time_type")
+        d_sync['sync_repair_day'] = self.get_argument("sync_repair_day")
         d_sync['api_server']     = self.get_argument("api_server")
         d_sync['status']         = self.get_argument("status")
         print(d_sync)

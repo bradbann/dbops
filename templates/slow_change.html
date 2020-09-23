@@ -85,6 +85,19 @@
                                       </select>
                                 </div>
                            </div>
+                           <div class="form-group">
+                                <div>
+                                    <label class="col-md-3 control-label">采集服务器</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <select class="form-control select" disabled id="detail_inst_server" >
+                                        <option value='' selected = "selected">......</option>
+                                        {% for var in dm_db_server %}
+                                         <option value={{var[0]}} >{{var[1]}}</option>
+                                        {% end %}
+                                    </select>
+                                </div>
+                           </div>
                             <div class="form-group">
                                 <div>
                                     <label class="col-md-3 control-label">慢查询时长</label>
@@ -109,6 +122,24 @@
                                     <input id="detail_python3_home"  type="text" readonly class="form-control" placeholder="PYTHON3主目录">
                                 </div>
                            </div>
+
+                           <div class="form-group">
+                                <div>
+                                    <label class="col-md-3 control-label">运行时间</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input id="detail_run_time"  type="text" class="form-control" placeholder="运行时间">
+                                </div>
+                           </div>
+                           <div class="form-group">
+                                <div>
+                                    <label class="col-md-3 control-label">执行时长</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input id="detail_exec_time"  type="text" class="form-control" placeholder="执行时长">
+                                </div>
+                           </div>
+
                            <div class="form-group">
                                 <div>
                                     <label class="col-md-3 control-label">脚本路径</label>
@@ -182,6 +213,19 @@
                                       </select>
                                 </div>
                            </div>
+                           <div class="form-group">
+                                <div>
+                                    <label class="col-md-3 control-label"><span id="s_upd_inst_server">*</span>采集服务器</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <select class="form-control select" id="upd_inst_server" >
+                                        <option value='' selected = "selected">......</option>
+                                        {% for var in dm_db_server %}
+                                         <option value={{var[0]}} >{{var[1]}}</option>
+                                        {% end %}
+                                    </select>
+                                </div>
+                           </div>
                             <div class="form-group">
                                 <div>
                                     <label class="col-md-3 control-label"><span id="s_upd_slow_time">*</span>慢查询时长</label>
@@ -204,6 +248,22 @@
                                 </div>
                                 <div class="col-md-9">
                                     <input id="upd_python3_home"  type="text" class="form-control" placeholder="PYTHON3主目录">
+                                </div>
+                           </div>
+                           <div class="form-group">
+                                <div>
+                                    <label class="col-md-3 control-label"><span id="s_upd_run_time">*</span>运行时间</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input id="upd_run_time"  type="text" class="form-control" placeholder="运行时间">
+                                </div>
+                           </div>
+                          <div class="form-group">
+                                <div>
+                                    <label class="col-md-3 control-label"><span id="s_upd_exec_time">*</span>执行时长</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input id="upd_exec_time"  type="text" class="form-control" placeholder="请输入执行时长[分]">
                                 </div>
                            </div>
                            <div class="form-group">
@@ -270,9 +330,12 @@
 
         function set_selected(){
             document.all['s_upd_inst_name'].style.color="#ff0000";
+            document.all['s_upd_inst_server'].style.color="#ff0000";
             document.all['s_upd_slow_time'].style.color="#ff0000";
             document.all['s_upd_slow_log_name'].style.color="#ff0000";
             document.all['s_upd_python3_home'].style.color="#ff0000";
+            document.all['s_upd_run_time'].style.color="#ff0000";
+            document.all['s_upd_exec_time'].style.color="#ff0000";
             document.all['s_upd_script_path'].style.color="#ff0000";
             document.all['s_upd_script_file'].style.color="#ff0000";
             document.all['s_upd_api_server'].style.color="#ff0000";
@@ -300,9 +363,12 @@
                   success: function (instObj) {
                         console.log('detail_slow=>instObj=',instObj);
                         $('#detail_inst_name').val(instObj['inst_id'])
+                        $('#detail_inst_server').val(instObj['server_id'])
                         $('#detail_slow_time').val(instObj['query_time'])
                         $('#detail_slow_log_name').val(instObj['log_file'])
                         $('#detail_python3_home').val(instObj['python3_home'])
+                        $('#detail_run_time').val(instObj['run_time'])
+                        $('#detail_exec_time').val(instObj['exec_time'])
                         $('#detail_script_path').val(instObj['script_path'])
                         $('#detail_script_file').val(instObj['script_file'])
                         $('#detail_api_server').val(instObj['api_server'])
@@ -332,7 +398,6 @@
                         swal("系统不可用,请稍后重试!", "", "error")
                     }
                 }
-
              })
         }
 
@@ -347,9 +412,12 @@
                   success: function (instObj) {
                         console.log('upd_slow=>instObj=',instObj);
                         $('#upd_inst_name').val(instObj['inst_id'])
+                        $('#upd_inst_server').val(instObj['server_id'])
                         $('#upd_slow_time').val(instObj['query_time'])
                         $('#upd_slow_log_name').val(instObj['log_file'])
                         $('#upd_python3_home').val(instObj['python3_home'])
+                        $('#upd_run_time').val(instObj['run_time'])
+                        $('#upd_exec_time').val(instObj['exec_time'])
                         $('#upd_script_path').val(instObj['script_path'])
                         $('#upd_script_file').val(instObj['script_file'])
                         $('#upd_api_server').val(instObj['api_server'])
@@ -391,9 +459,12 @@
                 data: {
                      slow_id       : $('#upd_slow_id').val(),
                      inst_id       : $('#upd_inst_name').val(),
+                     server_id     : $('#upd_inst_server').val(),
                      slow_time     : $('#upd_slow_time').val(),
                      slow_log_name : $('#upd_slow_log_name').val(),
                      python3_home  : $('#upd_python3_home').val(),
+                     run_time      : $('#upd_run_time').val(),
+                     exec_time     : $('#upd_exec_time').val(),
                      script_path   : $('#upd_script_path').val(),
                      script_file   : $('#upd_script_file').val(),
                      api_server    : $('#upd_api_server').val(),

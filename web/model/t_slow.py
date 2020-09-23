@@ -7,7 +7,7 @@
 
 import traceback
 from   web.utils.common import get_connection,get_connection_dict
-from   web.utils.common import format_sql,aes_encrypt,aes_decrypt
+from   web.model.t_db_inst import query_inst_by_id
 import os,json
 
 def query_slow(p_inst_id,p_inst_env):
@@ -100,29 +100,37 @@ def save_slow(p_slow):
         db            = get_connection()
         cr            = db.cursor()
         inst_id       = p_slow['inst_id']
+        server_id     = p_slow['server_id']
         slow_time     = p_slow['slow_time']
         slow_log_name = p_slow['slow_log_name']
         python3_home  = p_slow['python3_home']
+        run_time      = p_slow['run_time']
+        exec_time     = p_slow['exec_time']
         script_path   = p_slow['script_path']
         script_file   = p_slow['script_file']
         slow_status   = p_slow['slow_status']
         api_server    = p_slow['api_server']
+        d_inst        = query_inst_by_id(inst_id)
 
-        sql="""insert into t_slow_log(inst_id,log_file,query_time,python3_home,script_path,script_file,status,api_server,create_date) 
-                    values('{}','{}','{}','{}','{}','{}','{}','{}',now())
-            """.format(inst_id,slow_log_name,slow_time,python3_home,script_path,script_file,slow_status,api_server);
+
+        sql="""insert into t_slow_log(inst_id,server_id,log_file,query_time,python3_home,
+                                      run_time,exec_time,script_path,script_file,status,api_server,create_date) 
+                    values('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}',now())
+            """.format(inst_id,server_id,slow_log_name,slow_time,python3_home,
+                       run_time,exec_time,script_path,script_file,slow_status,api_server);
         print(sql)
         cr.execute(sql)
 
-        sql = """INSERT INTO t_db_inst_parameter(inst_id,NAME,VALUE,TYPE,STATUS,create_date) 
-                             VALUES({},'慢日志开关'  ,'{}','mysqld','1',NOW()),
-                                   ({},'慢日志文件名','{}','mysqld','1',NOW()),
-                                   ({},'慢日志时长'  ,'{}','mysqld','1',NOW()) 
-                      """.format(inst_id, 'slow_query_log={}'.format('ON' if slow_status == '1' else 'OFF'),
-                                 inst_id, 'slow_query_log_file=''{{}}/{}'''.format(slow_log_name),
-                                 inst_id,'long_query_time={}'.format(slow_time))
-        print(sql)
-        cr.execute(sql)
+        if d_inst.get('is_rds') == 'N':
+           sql = """INSERT INTO t_db_inst_parameter(inst_id,NAME,VALUE,TYPE,STATUS,create_date) 
+                                 VALUES({},'慢日志开关'  ,'{}','mysqld','1',NOW()),
+                                       ({},'慢日志文件名','{}','mysqld','1',NOW()),
+                                       ({},'慢日志时长'  ,'{}','mysqld','1',NOW()) 
+                """.format(inst_id, 'slow_query_log={}'.format('ON' if slow_status == '1' else 'OFF'),
+                           inst_id, 'slow_query_log_file=''{{}}/{}'''.format(slow_log_name),
+                           inst_id,'long_query_time={}'.format(slow_time))
+           print(sql)
+           cr.execute(sql)
 
         cr.close()
         db.commit()
@@ -143,9 +151,12 @@ def upd_slow(p_slow):
         cr             = db.cursor()
         slow_id        = p_slow['slow_id']
         inst_id        = p_slow['inst_id']
+        server_id      = p_slow['server_id']
         slow_time      = p_slow['slow_time']
         slow_log_name  = p_slow['slow_log_name']
         python3_home   = p_slow['python3_home']
+        run_time       = p_slow['run_time']
+        exec_time      = p_slow['exec_time']
         script_path    = p_slow['script_path']
         script_file    = p_slow['script_file']
         slow_status    = p_slow['slow_status']
@@ -153,16 +164,20 @@ def upd_slow(p_slow):
 
         sql="""update t_slow_log
                   set  inst_id        ='{}' ,
+                       server_id      ='{}' ,
                        query_time     ='{}' ,
                        log_file       ='{}' ,
                        python3_home   ='{}' ,
+                       run_time       ='{}' ,
+                       exec_time      ='{}' ,
                        script_path    ='{}' ,
                        script_file    ='{}' ,
                        api_server     ='{}' ,
                        status         ='{}' ,
                        last_update_date =now() 
                 where id='{}'
-            """.format(inst_id,slow_time,slow_log_name,python3_home,script_path,script_file,api_server,slow_status,slow_id)
+            """.format(inst_id,server_id,slow_time,slow_log_name,python3_home,
+                       run_time,exec_time,script_path,script_file,api_server,slow_status,slow_id)
         print(sql)
         cr.execute(sql)
 
@@ -259,9 +274,12 @@ def query_slow_by_id(p_slow_id):
     cr  = db.cursor()
     sql = """SELECT a.id,
                     a.inst_id,
+                    a.server_id,
                     a.query_time,
                     a.log_file,
                     a.python3_home,
+                    a.run_time,
+                    a.exec_time,
                     a.script_path,
                     a.script_file,
                     a.api_server,

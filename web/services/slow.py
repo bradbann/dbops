@@ -48,9 +48,12 @@ class slowadd_save(basehandler):
     def post(self):
         d_slow={}
         d_slow['inst_id']        = self.get_argument("inst_id")
+        d_slow['server_id']      = self.get_argument("server_id")
         d_slow['slow_time']      = self.get_argument("slow_time")
         d_slow['slow_log_name']  = self.get_argument("slow_log_name")
         d_slow['python3_home']   = self.get_argument("python3_home")
+        d_slow['run_time']       = self.get_argument("run_time")
+        d_slow['exec_time']      = self.get_argument("exec_time")
         d_slow['script_path']    = self.get_argument("script_path")
         d_slow['script_file']    = self.get_argument("script_file")
         d_slow['api_server']     = self.get_argument("api_server")
@@ -73,7 +76,9 @@ class slowchange(basehandler):
     def get(self):
         self.render("./slow_change.html",
                     dm_env_type  = get_dmm_from_dm('03'),
-                    dm_inst_names = get_inst_names(''),)
+                    dm_inst_names = get_inst_names(''),
+                    dm_db_server=get_gather_server(),
+                    )
 
 class slow_query_by_id(basehandler):
     @tornado.web.authenticated
@@ -92,9 +97,12 @@ class slowedit_save(basehandler):
         d_slow={}
         d_slow['slow_id']       = self.get_argument("slow_id")
         d_slow['inst_id']       = self.get_argument("inst_id")
+        d_slow['server_id']     = self.get_argument("server_id")
         d_slow['slow_time']     = self.get_argument("slow_time")
         d_slow['slow_log_name'] = self.get_argument("slow_log_name")
         d_slow['python3_home']  = self.get_argument("python3_home")
+        d_slow['run_time']      = self.get_argument("run_time")
+        d_slow['exec_time']     = self.get_argument("exec_time")
         d_slow['script_path']   = self.get_argument("script_path")
         d_slow['script_file']   = self.get_argument("script_file")
         d_slow['api_server']    = self.get_argument("api_server")

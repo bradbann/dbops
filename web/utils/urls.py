@@ -41,6 +41,7 @@ from web.services.db_inst      import dbinstparaquery,dbinstpara_query,dbinstpar
 from web.services.db_user      import dbuserquery,db_user_query,db_user_save,db_user_update,db_user_delete,db_user_sql,db_user_dbs,db_user_info,db_user_query_by_id
 from web.services.db_config    import dbinstcfgquery,db_inst_cfg_query,db_inst_cfg_update
 from web.services.slow         import slowquery,slowadd,slowadd_save,slow_query,slowchange,slowedit_save,slowedit_del,slow_query_by_id,slowedit_push
+from web.services.minio        import minioquery,minio_query,minioadd,minioadd_save,miniochange,minioedit,minioedit_save,minioedit_del,miniologquery,minioedit_push,minioclone
 
 
 urls = [
@@ -417,6 +418,18 @@ urls = [
         (r"/slow/edit/del",                  slowedit_del),
         (r"/slow/edit/push",                 slowedit_push),
         (r"/slow/query/id" ,                 slow_query_by_id),
+
+        # 功能：MinIO图片上传API
+        (r"/minio/query",                    minioquery),
+        (r"/minio/_query",                   minio_query),
+        (r"/minio/add",                      minioadd),
+        (r"/minio/add/save",                 minioadd_save),
+        (r"/minio/change",                   miniochange),
+        (r"/minio/edit",                     minioedit),
+        (r"/minio/edit/save",                minioedit_save),
+        (r"/minio/edit/del",                 minioedit_del),
+        (r"/minio/edit/push",                minioedit_push),
+        (r"/minio/clone",                    minioclone),
 
 
 ]
