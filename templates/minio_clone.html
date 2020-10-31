@@ -65,7 +65,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label"><span id="s_sync_dir">*</span>同步目录</label>
+                    <label class="col-md-2 control-label">同步目录</label>
                 </div>
                 <div class="col-md-10">
                     <input id="sync_dir" type="text" class="form-control" value="{{sync_dir}}" disabled placeholder="请输入同步目录">
@@ -73,7 +73,7 @@
            </div>
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label"><span id="s_sync_service">*</span>同步服务</label>
+                    <label class="col-md-2 control-label">同步服务</label>
                 </div>
                 <div class="col-md-10">
                     <input id="sync_service" type="text" class="form-control" value="{{sync_service}}" disabled placeholder="请输入同步服务">
@@ -97,10 +97,37 @@
            </div>
             <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label"><span id="s_minio_pass">*</span>MinIO用户名</label>
+                    <label class="col-md-2 control-label"><span id="s_minio_pass">*</span>MinIO密码</label>
                 </div>
                 <div class="col-md-10">
-                     <input id="minio_pass" name="pass" type="password" class="form-control" value="{{minio_pass}}" placeholder="请输入MinIO用户名">
+                     <input id="minio_pass" name="pass" type="password" class="form-control" value="{{minio_pass}}" placeholder="请输入MinIO密码">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_minio_bucket">*</span>bucket名称</label>
+                </div>
+                <div class="col-md-9">
+                    <input id="minio_bucket"  type="text" class="form-control" value="{{minio_bucket}}" placeholder="请输入bucket名称">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_minio_dpath">*</span>下载目录</label>
+                </div>
+                <div class="col-md-9">
+                    <input id="minio_dpath"  type="text" class="form-control" placeholder="请输入下载目录" value="{{minio_dpath}}">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_minio_incr">*</span>增量同步策略</label>
+                </div>
+                <div class="col-md-9">
+                  <input id="minio_incr"  type="text" class="form-control" placeholder="请输入增量同步策略" value="{{minio_incr}}">
+                </div>
+                <div class="col-md-1">
+                  <span>天</span>
                 </div>
            </div>
            <div class="form-group">
@@ -179,8 +206,6 @@
             document.all['s_task_desc'].style.color="#ff0000";
             document.all['s_sync_type'].style.color="#ff0000";
             document.all['s_sync_server'].style.color="#ff0000";
-            document.all['s_sync_dir'].style.color="#ff0000";
-            document.all['s_sync_service'].style.color="#ff0000";
             document.all['s_minio_server'].style.color="#ff0000";
             document.all['s_minio_user'].style.color="#ff0000";
             document.all['s_minio_pass'].style.color="#ff0000";
@@ -190,6 +215,9 @@
             document.all['s_run_time'].style.color="#ff0000";
             document.all['s_api_server'].style.color="#ff0000";
             document.all['s_status'].style.color="#ff0000";
+            document.all['s_minio_bucket'].style.color="#ff0000";
+            document.all['s_minio_dpath'].style.color="#ff0000";
+            document.all['s_minio_incr'].style.color="#ff0000";
         }
 
         $('#sync_server').change(function() {
@@ -247,7 +275,10 @@
                     script_name      : $('#script_name').val(),
                     run_time         : $('#run_time').val(),
                     api_server       : $('#api_server').val(),
-                    status           : $('#status').val()
+                    status           : $('#status').val(),
+                    minio_bucket     : $('#minio_bucket').val(),
+                    minio_dpath      : $('#minio_dpath').val(),
+                    minio_incr       : $('#minio_incr').val(),
                 },
                 success: function (dataSet) {
                     console.log(dataSet.code, dataSet.message);

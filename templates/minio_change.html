@@ -117,6 +117,8 @@
                                 "title":"选择",
                                 "width": "25px",
                                 "render": function(data,type,row){
+                                     var btn   = '<input class="btn btn-xs btn-primary"  type="button"  value="详情" onclick="show_detail(\''+row+'\');"/>' +'&nbsp;'
+
                                      return '<input type="radio" name="userid" onclick="isSelect();" >'; }
                             },
                           ],

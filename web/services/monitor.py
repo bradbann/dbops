@@ -367,7 +367,8 @@ class get_monitor_view_sys(basehandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         env    = self.get_argument("env")
-        v_list = query_monitor_sys(env)
+        search_text = self.get_argument("search_text")
+        v_list = query_monitor_sys(env,search_text)
         v_json = json.dumps(v_list)
         self.write(v_json)
 
@@ -376,7 +377,8 @@ class get_monitor_view_svr(basehandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         env    = self.get_argument("env")
-        v_list = query_monitor_svr(env)
+        search_text = self.get_argument("search_text")
+        v_list = query_monitor_svr(env,search_text)
         v_json = json.dumps(v_list)
         self.write(v_json)
 

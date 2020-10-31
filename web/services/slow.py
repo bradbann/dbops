@@ -12,17 +12,20 @@
 ######################################################################################
 import json
 import tornado.web
-from   web.model.t_slow      import save_slow,check_slow,query_slow,upd_slow,del_slow,query_slow_by_id,push_slow
+from   web.model.t_slow      import save_slow,check_slow,query_slow,upd_slow,del_slow,query_slow_by_id,analyze_slow_log,query_slow_log_plan
+from   web.model.t_slow      import push_slow,query_slow_log_by_id,query_slow_log,get_db_by_inst_id,get_user_by_inst_id,query_slow_log_detail
 from   web.utils.basehandler import basehandler
 from   web.model.t_dmmx      import get_dmm_from_dm,get_inst_names,get_gather_server
+from   web.utils.common      import current_rq2,current_rq3,current_rq4
 
 
 class slowquery(basehandler):
     @tornado.web.authenticated
     def get(self):
-        self.render("./slow_query.html",
-                    dm_env_type  = get_dmm_from_dm('03'),
-                    dm_inst_names = get_inst_names(''),
+        self.render("./slow_log_query.html",
+                     begin_date    = current_rq3(-1),
+                     end_date      =  current_rq2(),
+                     dm_inst_names = get_inst_names(''),
                     )
 
 class slow_query(basehandler):
@@ -128,4 +131,103 @@ class slowedit_push(basehandler):
         api_server = self.get_argument("api_server")
         result=push_slow(api_server,slow_id)
         self.write({"code": result['code'], "message": result['message']})
+
+
+class slowlogquery(basehandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("./slow_log_query.html",
+                     begin_date    = current_rq4(0,1),
+                     end_date      =  current_rq4(0,-1),
+                     dm_inst_names = get_inst_names(''),
+                    )
+
+class slowlog_query(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        inst_id    = self.get_argument("inst_id")
+        db_name    = self.get_argument("db_name")
+        db_user    = self.get_argument("db_user")
+        db_host    = self.get_argument("db_host")
+        begin_date = self.get_argument("begin_date")
+        end_date   = self.get_argument("end_date")
+        v_list     = query_slow_log(inst_id,db_name,db_user,db_host,begin_date,end_date)
+        v_json     = json.dumps(v_list)
+        self.write(v_json)
+
+class query_slowlog_by_id(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        sql_id   = self.get_argument("sql_id")
+        v_list   = query_slow_log_by_id(sql_id)
+        v_json   = json.dumps(v_list)
+        self.write(v_json)
+
+class query_slowlog_detail_by_id(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        sql_id = self.get_argument("sql_id")
+        v_list = query_slow_log_detail(sql_id)
+        v_json = json.dumps(v_list)
+        self.write(v_json)
+
+class query_slowlog_plan_by_id(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/text; charset=UTF-8")
+        sql_id = self.get_argument("sql_id")
+        v_plan = query_slow_log_plan(sql_id)
+        self.write(v_plan)
+
+class query_db_by_inst(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        inst_id  = self.get_argument("inst_id")
+        d_list  = {}
+        v_list  = get_db_by_inst_id(inst_id)
+        d_list['data'] = v_list
+        v_json  = json.dumps(d_list)
+        print('get_sync_tasks=', v_json)
+        self.write(v_json)
+
+class query_user_by_inst(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        inst_id = self.get_argument("inst_id")
+        d_list  = {}
+        v_list  = get_user_by_inst_id(inst_id)
+        d_list['data'] = v_list
+        v_json  = json.dumps(d_list)
+        print('get_sync_tasks=', v_json)
+        self.write(v_json)
+
+
+class slowloganalyze(basehandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.render("./slow_log_analyze.html",
+                     begin_date    = current_rq4(0,1),
+                     end_date      =  current_rq4(0,-1),
+                     dm_inst_names = get_inst_names(''),
+                    )
+
+class slowlog_analyze(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        inst_id    = self.get_argument("inst_id")
+        db_name    = self.get_argument("db_name")
+        db_user    = self.get_argument("db_user")
+        db_host    = self.get_argument("db_host")
+        begin_date = self.get_argument("begin_date")
+        end_date   = self.get_argument("end_date")
+        print('slowlog_analyze=',inst_id,begin_date,end_date)
+        v_list     = analyze_slow_log(inst_id,db_name,db_user,db_host,begin_date,end_date)
+        v_json     = json.dumps(v_list)
+        self.write(v_json)
 

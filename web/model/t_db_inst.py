@@ -58,6 +58,7 @@ def query_inst(inst_name):
                  DATE_FORMAT(a.created_date,'%Y-%m-%d %h:%i:%s')  AS created_date
             FROM  t_db_inst a
             {0}
+            order by a.inst_name
           """.format(v_where)
     print(sql)
     cr.execute(sql)

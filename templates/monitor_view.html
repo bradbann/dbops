@@ -124,6 +124,12 @@
                                 <label for="inlineRadio31">生产</label>
                               </div>
                         </div>
+                        <div class="col-md-2 input-group">
+                            <input type="text" id="search_text_sys" class="form-control">
+                            <span class="input-group-btn">
+                               <button type="button"  class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
                     </div>
                     <div class="row">
                         <div id='div-sys-monitor' class="col-md-12">
@@ -183,6 +189,12 @@
                                     <input type="radio" id="inlineRadio61" value="sg-prod" name="radioInline_svr"  checked>
                                     <label for="inlineRadio61">商管</label>
                                 </div>
+                          </div>
+                          <div class="col-md-2 input-group">
+                            <input type="text" id="search_text_svr" class="form-control">
+                            <span class="input-group-btn">
+                               <button type="button"  class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
+                            </span>
                           </div>
                      </div>
                     <div class="row">
@@ -298,7 +310,8 @@
               type: "post",
               datatype: "json",
               data:{
-                      env: $("input[name='radioInline_sys']:checked").val()
+                      env: $("input[name='radioInline_sys']:checked").val(),
+                      search_text:$('#search_text_sys').val()
               },
               success: function (dataSet) {
                  $('#tab-sys-monitor').DataTable( {
@@ -468,7 +481,8 @@
               url: "/monitor/view/svr",
               type: "post",
               data:{
-                      env: $("input[name='radioInline_svr']:checked").val()
+                      env: $("input[name='radioInline_svr']:checked").val(),
+                      search_text:$('#search_text_svr').val()
               },
               datatype: "json",
               success: function (dataSet) {
@@ -865,6 +879,22 @@
                $('input[type=radio][name=radioInline_svr]').change(function() {
                     get_svr_mon_data();
                });
+
+               $("#search_text_sys").bind("input propertychange",function(){
+                   get_sys_monitor();
+               });
+
+               $("#search_text_svr").bind("input propertychange",function(){
+                   get_svr_mon_data();
+               });
+
+               // $("#search_text_sys").change(function(){
+               //    get_sys_monitor();
+               // });
+               //
+               // $("#search_text_svr").change(function(){
+               //    get_svr_mon_data();
+               // });
 
           })
 

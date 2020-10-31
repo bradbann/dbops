@@ -938,7 +938,7 @@ def get_max_disk_usage(d_disk):
     return result
 
 
-def query_monitor_sys(env):
+def query_monitor_sys(env,search_text):
     result = {}
     db     = get_connection()
     cr     = db.cursor()
@@ -965,6 +965,9 @@ def query_monitor_sys(env):
          vw = " and b.server_desc like '%商管%'"
     else:
          vw =''
+
+    if search_text != '':
+        vw = vw + " and b.server_desc like '%{}%'".format(search_text)
 
     sql    = """SELECT b.server_desc,
                     concat(b.server_ip,':',b.server_port) as server,
@@ -999,7 +1002,7 @@ def query_monitor_sys(env):
     return result
 
 
-def query_monitor_svr(env):
+def query_monitor_svr(env,search_text):
     result = {}
     db  = get_connection()
     cr  = db.cursor()
@@ -1026,6 +1029,9 @@ def query_monitor_svr(env):
         vw = " and server_desc like '%商管%'"
     else:
         vw = ''
+
+    if search_text != '':
+        vw = vw + " and server_desc like '%{}%'".format(search_text)
 
     sql = """SELECT 
                   server_desc,

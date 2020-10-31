@@ -1013,38 +1013,87 @@
        }
 
        $('#inst_save_btn').click(function(){
-           $.ajax({
-                url: "/db/inst/save",
-                type: "post",
-                datatype: "json",
-                data: {
-                     inst_name         :$('#add_inst_name').val(),
-                     server_id         :$('#add_inst_server').val(),
-                     inst_ip           :$('#add_inst_ip').val(),
-                     inst_port         :$('#add_inst_port').val(),
-                     inst_ver          :$('#add_inst_ver').val(),
-                     templete_id       :$('#add_inst_cfg').val(),
-                     inst_type         :$('#add_inst_type').val(),
-                     inst_env          :$('#add_inst_env').val(),
-                     is_rds            :$('#add_rds').val(),
-                     mgr_user          :$('#add_mgr_user').val(),
-                     mgr_pass          :$('#add_mgr_pass').val(),
-                     api_server        :$('#add_inst_api_server').val(),
-                     python3_home      :$('#add_inst_python3_home').val(),
-                     script_path       :$('#add_inst_script_path').val(),
-                     script_file       :$('#add_inst_script_file').val(),
-                     inst_mapping_port :$('#add_inst_mapping_port').val(),
-                },
-                success: function (dataSet) {
-                    console.log(dataSet.code, dataSet.message);
-                    if (dataSet.code == 0) {
-                        swal("保存成功", "", "success")
-                        $("#query_btn").click()
-                    } else {
-                        swal(dataSet.message, "", "error")
-                    }
-                }
-            })
+
+             if ($('#add_inst_server').val() == '') {
+                     $.ajax({
+                            url: "/db/inst/save",
+                            type: "post",
+                            datatype: "json",
+                            data: {
+                                 inst_name         :$('#add_inst_name').val(),
+                                 server_id         :$('#add_inst_server').val(),
+                                 inst_ip           :$('#add_inst_ip').val(),
+                                 inst_port         :$('#add_inst_port').val(),
+                                 inst_ver          :$('#add_inst_ver').val(),
+                                 templete_id       :$('#add_inst_cfg').val(),
+                                 inst_type         :$('#add_inst_type').val(),
+                                 inst_env          :$('#add_inst_env').val(),
+                                 is_rds            :$('#add_rds').val(),
+                                 mgr_user          :$('#add_mgr_user').val(),
+                                 mgr_pass          :$('#add_mgr_pass').val(),
+                                 api_server        :$('#add_inst_api_server').val(),
+                                 python3_home      :$('#add_inst_python3_home').val(),
+                                 script_path       :$('#add_inst_script_path').val(),
+                                 script_file       :$('#add_inst_script_file').val(),
+                                 inst_mapping_port :$('#add_inst_mapping_port').val(),
+                            },
+                            success: function (dataSet) {
+                                console.log(dataSet.code, dataSet.message);
+                                if (dataSet.code == 0) {
+                                    swal("保存成功", "", "success")
+                                    $("#query_btn").click()
+                                } else {
+                                    swal(dataSet.message, "", "error")
+                                }
+                            }
+                        })
+
+             } else {
+                 $.ajax({
+                  url: "/get/server/id",
+                  type: "post",
+                  datatype: "json",
+                  data: {
+                      server_id  :$('#add_inst_server').val(),
+                  },
+                  success: function (svrObj) {
+                       console.log('svrObj=',svrObj)
+                       $.ajax({
+                            url: "/db/inst/save",
+                            type: "post",
+                            datatype: "json",
+                            data: {
+                                 inst_name         :$('#add_inst_name').val(),
+                                 server_id         :$('#add_inst_server').val(),
+                                 inst_ip           :svrObj['server_ip'],
+                                 inst_port         :$('#add_inst_port').val(),
+                                 inst_ver          :$('#add_inst_ver').val(),
+                                 templete_id       :$('#add_inst_cfg').val(),
+                                 inst_type         :$('#add_inst_type').val(),
+                                 inst_env          :$('#add_inst_env').val(),
+                                 is_rds            :$('#add_rds').val(),
+                                 mgr_user          :$('#add_mgr_user').val(),
+                                 mgr_pass          :$('#add_mgr_pass').val(),
+                                 api_server        :$('#add_inst_api_server').val(),
+                                 python3_home      :$('#add_inst_python3_home').val(),
+                                 script_path       :$('#add_inst_script_path').val(),
+                                 script_file       :$('#add_inst_script_file').val(),
+                                 inst_mapping_port :$('#add_inst_mapping_port').val(),
+                            },
+                            success: function (dataSet) {
+                                console.log(dataSet.code, dataSet.message);
+                                if (dataSet.code == 0) {
+                                    swal("保存成功", "", "success")
+                                    $("#query_btn").click()
+                                } else {
+                                    swal(dataSet.message, "", "error")
+                                }
+                            }
+                        })
+                  }
+             })
+             }
+
         })
 
        $('#inst_upd_btn').click(function(){
@@ -1140,7 +1189,8 @@
                       scrollY    :"600px",
                       scrollX    :true,
                       scrollCollapse: true,
-                      paging:     false,
+                      paging:     true,
+                      ordering   :false,
                       iDisplayLength: 16,
                       data: dataSet,
                       columns: [
@@ -1156,12 +1206,13 @@
                         { "title": "实例状态" },
                         { "title": "实例版本" },
                         { "title": "是否RDS","width":"5%"},
+                        { "title": "自启动标记","visible":false},
                         { "title": "创建时间" },
                         { "title": "操作"},
                       ],
                       columnDefs: [
                         {
-                            targets: 13,
+                            targets: 14,
                             render: function(data, type, row, meta){
 
                                 var inst_status= row[8]
@@ -1199,14 +1250,6 @@
                                 if (rds_flag =='是') {
                                     btn = '&nbsp;'+create_disable + destroy_disable + alter_disable + del_disable+inst_detail+inst_log
                                 }
-
-                                // var btn ='&nbsp;'+
-                                //       '<input class="btn btn-xs btn-primary"  type="button"  value="创建" onclick="create_inst(\''+row+'\');"/>' +'&nbsp;'+
-                                //       '<input class="btn btn-xs btn-primary"  type="button"  value="详情" onclick="showDetail_win(\''+row[0]+'\');"/>' +'&nbsp;'+
-                                //       '<input class="btn btn-xs btn-primary"  type="button"  value="变更" onclick="showUpd_win(\''+row[0]+'\');"/>' +'&nbsp;'+
-                                //       '<input class="btn btn-xs btn-primary"  type="button"  value="删除" onclick="del_inst(\''+row+'\');"/>' +'&nbsp;'+
-                                //       '<input class="btn btn-xs btn-primary"  type="button"  value="销毁" onclick="destroy_inst(\''+row+'\');"/>' +'&nbsp;'+
-                                //       '<input class="btn btn-xs btn-primary"  type="button"  value="日志" onclick="query_log_inst(\''+row[0]+'\');"/>' +'&nbsp;'
 
                                 return btn
                             }

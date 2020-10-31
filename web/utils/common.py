@@ -172,6 +172,15 @@ def current_rq3(n_days):
     day  =str(rq.day).rjust(2,'0')
     return year+'-'+month+'-'+day
 
+def current_rq4(n_days,n_hour):
+    rq= datetime.datetime.now() + datetime.timedelta(days=n_days)
+    year =str(rq.year)
+    month=str(rq.month).rjust(2,'0')
+    day  =str(rq.day).rjust(2,'0')
+    hour =str(rq.hour-n_hour).rjust(2,'0')
+    return year+'-'+month+'-'+day+' '+hour+':0:0'
+
+
 
 def now():
     year =str(datetime.datetime.now().year)

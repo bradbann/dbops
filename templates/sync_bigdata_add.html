@@ -160,7 +160,6 @@
                </div>
              </div>
            </div>
-
            <div class="row">
                <div class="col-md-6">
                    <div class="form-group">
@@ -174,6 +173,40 @@
                        </div>
                    </div>
                </div>
+           </div>
+           <div class="row">
+             <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_sync_data_type">*</span>同步数据类型</label>
+                    </div>
+                   <div class="col-md-10">
+                        <select class="form-control select" id="sync_data_type" >
+                            <option value='' selected = "selected">......</option>
+                            {% for var in dm_sync_data_type %}
+                              <option value={{var[0]}} >{{var[1]}}</option>
+                            {% end %}
+                        </select>
+                   </div>
+               </div>
+              </div>
+           </div>
+           <div class="row">
+             <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_sync_ywlx">*</span>同步业务类型</label>
+                    </div>
+                   <div class="col-md-10">
+                        <select class="form-control select" id="sync_ywlx" >
+                            <option value='' selected = "selected">......</option>
+                            {% for var in dm_sync_ywlx %}
+                              <option value={{var[0]}} >{{var[1]}}</option>
+                            {% end %}
+                        </select>
+                   </div>
+               </div>
+              </div>
            </div>
            <div class="row">
              <div class="col-md-6">
@@ -246,41 +279,43 @@
                </div>
               </div>
            </div>
+           <div class="row">
+             <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_es_service">*</span>ElasticSearch服务</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input id="es_service"  type="text" class="form-control">
+                    </div>
+               </div>
+              </div>
+           </div>
+           <div class="row">
+             <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_es_index_name">*</span>ElasticSearch索引</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input id="es_index_name"  type="text" class="form-control">
+                    </div>
+               </div>
+              </div>
+           </div>
+           <div class="row">
+             <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_es_type_name">*</span>ElasticSearch类型</label>
+                    </div>
+                    <div class="col-md-10">
+                        <input id="es_type_name"  type="text" class="form-control">
+                    </div>
+               </div>
+              </div>
+           </div>
 
-           <div class="row">
-             <div class="col-md-6">
-               <div class="form-group">
-                    <div>
-                        <label class="col-md-2 control-label"><span id="s_sync_ywlx">*</span>同步业务类型</label>
-                    </div>
-                   <div class="col-md-10">
-                        <select class="form-control select" id="sync_ywlx" >
-                            <option value='' selected = "selected">......</option>
-                            {% for var in dm_sync_ywlx %}
-                              <option value={{var[0]}} >{{var[1]}}</option>
-                            {% end %}
-                        </select>
-                   </div>
-               </div>
-              </div>
-           </div>
-           <div class="row">
-             <div class="col-md-6">
-               <div class="form-group">
-                    <div>
-                        <label class="col-md-2 control-label"><span id="s_sync_data_type">*</span>同步数据方向</label>
-                    </div>
-                   <div class="col-md-10">
-                        <select class="form-control select" id="sync_data_type" >
-                            <option value='' selected = "selected">......</option>
-                            {% for var in dm_sync_data_type %}
-                              <option value={{var[0]}} >{{var[1]}}</option>
-                            {% end %}
-                        </select>
-                   </div>
-               </div>
-              </div>
-           </div>
            <div class="row">
              <div class="col-md-6">
                <div class="form-group">
@@ -469,9 +504,11 @@
            document.all['s_hbase_table'].style.color="#ff0000";
            document.all['s_hbase_rowkey'].style.color="#ff0000";
            document.all['s_python3_home'].style.color="#ff0000";
+           document.all['s_es_service'].style.color="#ff0000";
+           document.all['s_es_index_name'].style.color="#ff0000";
+           document.all['s_es_type_name'].style.color="#ff0000";
            $('#sync_tag').attr("readonly","readonly");
            $('#task_desc').attr("readonly","readonly");
-
         }
 
         function get_selec_cols(){
@@ -580,6 +617,9 @@
                     sync_hbase_table     : $('#hbase_table').val(),
                     sync_hbase_rowkey    : $('#hbase_rowkey').val(),
                     sync_hbase_rowkey_separator : $('#hbase_rowkey_separator').val(),
+                    es_service           : $('#es_service').val(),
+                    es_index_name        : $('#es_index_name').val(),
+                    es_type_name         : $('#es_type_name').val(),
                     sync_ywlx            : $('#sync_ywlx').val(),
                     sync_data_type       : $('#sync_data_type').val(),
                     python3_home         : $('#python3_home').val(),
@@ -795,6 +835,38 @@
                 }
                 $('#sele_sour_tab_cols option:selected').remove();
                }
+        });
+
+        $('#sync_data_type').change(function() {
+
+            if ( $('#sync_data_type').val() =='6') {
+                $("#zk_hosts").empty();
+                $("#hbase_thrift").empty();
+                $("#hbase_table").val('');
+                $('#hbase_rowkey').val('');
+                $('#hbase_rowkey_separator').val('');
+                $('#zk_hosts').attr("disabled",true);
+                $('#hbase_thrift').attr("disabled",true);
+                $('#hbase_table').attr("readonly","readonly");
+                $('#hbase_rowkey').attr("readonly","readonly");
+                $('#hbase_rowkey_separator').attr("readonly","readonly");
+                $('#es_service').attr("readonly",false);
+                $('#es_index_name').attr("readonly",false);
+                $('#es_type_name').attr("readonly",false);
+            } else {
+                $('#zk_hosts').attr("disabled",false);
+                $('#hbase_thrift').attr("disabled",false);
+                $('#hbase_table').attr("readonly",false);
+                $('#hbase_rowkey').attr("readonly",false);
+                $('#hbase_rowkey_separator').attr("readonly",false);
+                $('#es_service').val('');
+                $('#es_service').attr("readonly",true);
+                $('#es_index_name').val('');
+                $('#es_index_name').attr("readonly",true);
+                $('#es_type_name').val('');
+                $('#es_type_name').attr("readonly",true);
+            }
+
         });
 
         function selectAll() {

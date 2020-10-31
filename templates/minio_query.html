@@ -83,7 +83,13 @@
                             { "title": "minIO服务" },
                             { "title": "运行时间" },
                             { "title": "接口服务器"},
-                            { "title": "任务状态"}
+                            { "title": "任务状态"},
+                            {
+                                "title":"功能",
+                                "width": "25px",
+                                "render": function(data,type,row){
+                                     return '<input type="radio" name="userid" onclick="isSelect();" >'; }
+                            },
                           ],
                           "language": {
                                  "search"       : "在表格中搜索:",

@@ -263,7 +263,8 @@ def get_dss_sql_query(logon_name):
                   -- concat(b.dmmc,':/',ip,':',port,'/',service) as name 
            from t_db_source a,t_dmmx b
            where a.db_type=b.dmm and b.dm='02' and a.status='1'
-               and (select proj_id from t_user_proj_privs where proj_id=a.id and user_id='{0}' and priv_id='1')
+               -- and (select proj_id from t_user_proj_privs where proj_id=a.id and user_id='{0}' and priv_id='1')
+               AND a.id IN(SELECT proj_id FROM t_user_proj_privs WHERE user_id='{0}' AND priv_id='1')
                order by a.db_desc
         """.format(d_user['userid'])
     print(sql)

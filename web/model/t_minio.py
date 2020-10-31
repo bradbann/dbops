@@ -97,39 +97,33 @@ def query_minio_case(p_db_env):
     db.commit()
     return result
 
-def query_minio_log(tagname,db_env,begin_date,end_date):
+def query_minio_log(tagname,begin_date,end_date):
     db = get_connection()
     cr = db.cursor()
-    print('query_backup_log=',tagname,db_env,begin_date,end_date)
+    print('query_minio_log=',tagname,begin_date,end_date)
     v_where = ' and 1=1 '
     if  tagname != '':
-        v_where = v_where+" and a.db_tag='{0}'\n".format(tagname)
-
-    if  db_env != '':
-        v_where = v_where+" and c.db_env='{0}'\n".format(db_env)
+        v_where = v_where+" and a.sync_tag='{0}'\n".format(tagname)
 
     if  begin_date != '':
-        v_where = v_where+" and b.create_date>='{0}'\n".format(begin_date)
+        v_where = v_where+" and b.create_date>='{0}'\n".format(begin_date+' 0:0:0')
 
     if  end_date != '':
-        v_where = v_where+" and b.create_date<='{0}'\n".format(end_date)
+        v_where = v_where+" and b.create_date<='{0}'\n".format(end_date+' 23:59:59')
 
-    sql = """SELECT b.id,
+    sql = """SELECT a.sync_tag,
                     a.comments,
-                    b.db_tag,
-                    cast(b.create_date as char),
-                    cast(b.start_time as char),
-                    cast(b.end_time as char),
-                    b.total_size,
-                    b.elaspsed_backup,
-                    b.elaspsed_gzip,
-                    CASE b.STATUS WHEN '1' THEN '<span style=''color: red''>失败</span>' WHEN '0' THEN '成功' END  STATUS
-            FROM  t_db_config a,t_db_backup_total b,t_db_source c
-            WHERE a.db_tag=b.db_tag
-             AND a.db_id=c.id
-             AND a.status='1'
-             {0}
-            order by b.create_date,b.db_tag """.format(v_where)
+                    b.sync_day,
+                    b.download_time,
+                    b.upload_time,
+                    b.total_time,
+                    b.transfer_file,
+                    DATE_FORMAT(b.create_date,'%Y-%m-%d %h:%i:%s')  AS create_date
+            FROM  t_minio_config a ,t_minio_log b
+            WHERE a.sync_tag=b.sync_tag
+              AND a.status='1'
+              {}
+            ORDER BY b.sync_tag,b.create_date """.format(v_where)
     print(sql)
     cr.execute(sql)
     v_list = []
@@ -139,51 +133,47 @@ def query_minio_log(tagname,db_env,begin_date,end_date):
     db.commit()
     return v_list
 
-def query_minio_log_analyze(db_env,db_type,tagname,begin_date,end_date):
+def query_minio_log_analyze(tagname,begin_date,end_date):
     db  = get_connection()
     cr  = db.cursor()
-    v_where = ' where a.db_tag=b.db_tag and b.db_id=c.id '
-
-    if db_env != '':
-        v_where = v_where + " and c.db_env='{0}'\n".format(db_env)
-
-    if db_type != '':
-        v_where = v_where + " and c.db_type='{0}'\n".format(db_type)
+    v_where = " where a.sync_tag=b.sync_tag and a.status='1'"
 
     if tagname != '':
-        v_where = v_where + " and a.db_tag='{0}'\n".format(tagname)
+        v_where = v_where + " and a.sync_tag='{0}'\n".format(tagname)
 
     if begin_date != '':
-        v_where = v_where + " and a.create_date>='{0}'\n".format(begin_date)
+        v_where = v_where + " and b.create_date>='{0}'\n".format(begin_date+' 0:0:0')
 
     if end_date != '':
-        v_where = v_where + " and a.create_date<='{0}'\n".format(end_date)
+        v_where = v_where + " and b.create_date<='{0}'\n".format(end_date+' 23:59:59')
 
     sql1 = """SELECT 
-                cast(a.create_date as char) as create_date,
-                CASE WHEN SUBSTR(a.total_size,-1,1)='G' THEN
-                       ROUND(SUBSTR(a.total_size,1,LENGTH(a.total_size)-1)*1024,2)
-                WHEN SUBSTR(a.total_size,-1,1)='M' THEN
-                   ROUND(SUBSTR(a.total_size,1,LENGTH(a.total_size)-1),2)
-                WHEN SUBSTR(a.total_size,-1,1)='K' THEN
-                   ROUND(SUBSTR(a.total_size,1,LENGTH(a.total_size)-1)/1024,2)         
-                END AS "size(MB)"
-            FROM t_db_backup_total a,t_db_config b,t_db_source c
-            {0}
-            ORDER BY a.start_time
-           """.format(v_where)
+                     cast(b.create_date as char) as create_date,
+                     b.download_time
+             FROM t_minio_config a,t_minio_log b
+             {0}
+             ORDER BY b.sync_tag,b.create_date
+          """.format(v_where)
 
     sql2 = """SELECT 
-                  cast(a.create_date as char) as create_date,
-                  a.elaspsed_backup,
-                  a.elaspsed_gzip
-              FROM t_db_backup_total a,t_db_config b,t_db_source c 
+                  cast(b.create_date as char) as create_date,
+                  b.upload_time
+             FROM t_minio_config a,t_minio_log b
               {0}
-              ORDER BY a.start_time
+             ORDER BY b.sync_tag,b.create_date
+           """.format(v_where)
+
+    sql3 = """SELECT 
+                  cast(b.create_date as char) as create_date,
+                  b.transfer_file
+             FROM t_minio_config a,t_minio_log b
+              {0}
+             ORDER BY b.sync_tag,b.create_date
            """.format(v_where)
 
     print(sql1)
     print(sql2)
+    print(sql3)
 
     cr.execute(sql1)
     v_list1 = []
@@ -195,9 +185,14 @@ def query_minio_log_analyze(db_env,db_type,tagname,begin_date,end_date):
     for r in cr.fetchall():
         v_list2.append(list(r))
 
+    cr.execute(sql3)
+    v_list3 = []
+    for r in cr.fetchall():
+        v_list3.append(list(r))
+
     cr.close()
     db.commit()
-    return v_list1,v_list2
+    return v_list1,v_list2,v_list3
 
 def query_minio_log_detail(tagname,backup_date):
     db = get_connection()
@@ -252,8 +247,10 @@ def save_minio(p_sync):
                            server_id,sync_path,sync_service,
                            minio_server, python3_home,script_path,
                            script_file,api_server,run_time,
-                           status,minio_user,minio_pass) 
+                           status,minio_user,minio_pass,
+                           minio_bucket,minio_dpath,minio_incr) 
                     values('{}','{}','{}',
+                           '{}','{}','{}',
                            '{}','{}','{}',
                            '{}','{}','{}',
                            '{}','{}','{}',
@@ -262,7 +259,8 @@ def save_minio(p_sync):
                               p_sync['server_id'],p_sync['sync_dir'],p_sync['sync_service'],
                               p_sync['minio_server'],p_sync['python3_home'],p_sync['script_base'],
                               p_sync['script_name'],p_sync['api_server'],p_sync['run_time'],
-                              p_sync['status'],p_sync['minio_user'],p_sync['minio_pass'] )
+                              p_sync['status'],p_sync['minio_user'],p_sync['minio_pass'],
+                              p_sync['minio_bucket'], p_sync['minio_dpath'], p_sync['minio_incr'])
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -299,12 +297,17 @@ def upd_minio(p_sync):
                        run_time          ='{}',
                        STATUS            ='{}',
                        minio_user        ='{}',
-                       minio_pass        ='{}'
+                       minio_pass        ='{}',
+                       minio_bucket      ='{}',
+                       minio_dpath       ='{}',
+                       minio_incr        ='{}'
                 where sync_tag='{}'""".format(p_sync['task_desc'],p_sync['sync_type'],p_sync['server_id'],
                                               p_sync['sync_dir'],p_sync['sync_service'],p_sync['minio_server'],
                                               p_sync['python3_home'],p_sync['script_base'], p_sync['script_name'],
                                               p_sync['api_server'],p_sync['run_time'],p_sync['status'],
-                                              p_sync['minio_user'],p_sync['minio_pass'],p_sync['sync_tag'])
+                                              p_sync['minio_user'],p_sync['minio_pass'],p_sync['minio_bucket'],
+                                              p_sync['minio_dpath'], p_sync['minio_incr'],p_sync['sync_tag']
+                                              )
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -397,6 +400,16 @@ def check_minio(p_sync,p_flag):
     if p_sync["minio_pass"] == "":
         result['code'] = '-1'
         result['message'] = 'MinIO服务口令不能为空！'
+        return result
+
+    if p_sync["minio_bucket"] == "":
+        result['code'] = '-1'
+        result['message'] = 'MinIO桶名不能为空！'
+        return result
+
+    if p_sync["minio_incr"] == "":
+        result['code'] = '-1'
+        result['message'] = '增量同步天数不能为空！'
         return result
 
     if p_sync["python3_home"] == "":

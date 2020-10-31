@@ -16,7 +16,7 @@ from   web.model.t_sync_datax import query_datax_sync,save_datax_sync,query_data
 from   web.model.t_sync_datax import query_datax_sync_detail,query_datax_sync_dataxTemplete,downloads_datax_sync_dataxTemplete,get_datax_sync_tags_by_env
 from   web.model.t_sync_datax import push_datax_sync_task,pushall_datax_sync_task,run_datax_sync_task,stop_datax_sync_task,update_datax_sync_status
 from   web.model.t_sync_datax import query_datax_sync_log_analyze,query_datax_sync_log_detail,query_sync_log_analyze
-from   web.model.t_dmmx       import get_dmm_from_dm,get_sync_server,get_datax_sync_db_server,get_db_sync_tags,get_db_sync_tags_by_market_id,get_db_sync_ywlx_by_market_id,get_datax_sync_tags
+from   web.model.t_dmmx       import get_dmm_from_dm,get_dmm_from_dm2,get_sync_server,get_datax_sync_db_server,get_db_sync_tags,get_db_sync_tags_by_market_id,get_db_sync_ywlx_by_market_id,get_datax_sync_tags
 from   web.utils.common       import current_rq2,get_day_nday_ago,now
 from   web.utils.basehandler  import basehandler
 
@@ -77,7 +77,7 @@ class syncadd_bigdata(basehandler):
                     db_server         = get_datax_sync_db_server(),
                     dm_db_type        = get_dmm_from_dm('02'),
                     dm_sync_ywlx      = get_dmm_from_dm('08'),
-                    dm_sync_data_type = get_dmm_from_dm('09'),
+                    dm_sync_data_type = get_dmm_from_dm2('09','5,6'),
                     dm_sync_time_type = get_dmm_from_dm('10'),
                     dm_sync_zk_host   = get_dmm_from_dm('15'),
                     dm_sync_hbase_thrift = get_dmm_from_dm('16')
@@ -99,6 +99,9 @@ class syncadd_bigdata_save(basehandler):
         d_sync['sync_hbase_table']     = self.get_argument("sync_hbase_table")
         d_sync['sync_hbase_rowkey']    = self.get_argument("sync_hbase_rowkey")
         d_sync['sync_hbase_rowkey_separator'] = self.get_argument("sync_hbase_rowkey_separator")
+        d_sync['es_service']           = self.get_argument("es_service")
+        d_sync['es_index_name']        = self.get_argument("es_index_name")
+        d_sync['es_type_name']         = self.get_argument("es_type_name")
         d_sync['sync_ywlx']            = self.get_argument("sync_ywlx")
         d_sync['sync_data_type']       = self.get_argument("sync_data_type")
         d_sync['python3_home']         = self.get_argument("python3_home")
@@ -148,6 +151,9 @@ class syncedit_bigdata(basehandler):
                     sync_incr_col        = d_sync['sync_incr_col'],
                     zk_hosts             = d_sync['zk_hosts'],
                     hbase_thrift         = d_sync['hbase_thrift'],
+                    es_service           = d_sync['es_service'],
+                    es_index_name        = d_sync['es_index_name'],
+                    es_type_name         = d_sync['es_type_name'],
                     sync_hbase_table     = d_sync['sync_hbase_table'],
                     sync_hbase_rowkey    = d_sync['sync_hbase_rowkey_sour'],
                     sync_hbase_rowkey_s  = d_sync['sync_hbase_rowkey_separator'],
@@ -182,6 +188,9 @@ class syncedit_save_bigdata(basehandler):
         d_sync['sync_hbase_table']     = self.get_argument("sync_hbase_table")
         d_sync['sync_hbase_rowkey']    = self.get_argument("sync_hbase_rowkey")
         d_sync['sync_hbase_rowkey_separator'] = self.get_argument("sync_hbase_rowkey_separator")
+        d_sync['es_service']           = self.get_argument("es_service")
+        d_sync['es_index_name']        = self.get_argument("es_index_name")
+        d_sync['es_type_name']         = self.get_argument("es_type_name")
         d_sync['sync_ywlx']            = self.get_argument("sync_ywlx")
         d_sync['sync_data_type']       = self.get_argument("sync_data_type")
         d_sync['script_base']          = self.get_argument("script_base")
@@ -225,6 +234,9 @@ class syncclone_bigdata(basehandler):
                     sync_hbase_table     = d_sync['sync_hbase_table'],
                     sync_hbase_rowkey    = d_sync['sync_hbase_rowkey_sour'],
                     sync_hbase_rowkey_s  = d_sync['sync_hbase_rowkey_separator'],
+                    es_service           = d_sync['es_service'],
+                    es_index_name        = d_sync['es_index_name'],
+                    es_type_name         = d_sync['es_type_name'],
                     sync_ywlx            = d_sync['sync_ywlx'],
                     sync_type            = d_sync['sync_type'],
                     script_path          = d_sync['script_path'],

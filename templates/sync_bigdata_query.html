@@ -209,6 +209,30 @@
                      <div class="col-md-12">
                        <div class="form-group">
                             <div>
+                                <label class="col-md-2 control-label">同步业务类型</label>
+                            </div>
+                           <div class="col-md-10">
+                                <input id="sync_ywlx2"  type="text" class="form-control"  >
+                           </div>
+                       </div>
+                      </div>
+                   </div>
+                   <div class="row">
+                     <div class="col-md-12">
+                       <div class="form-group">
+                            <div>
+                                <label class="col-md-2 control-label">同步数据方向</label>
+                            </div>
+                           <div class="col-md-10">
+                                <input id="sync_data_type"  type="text" class="form-control"  >
+                           </div>
+                       </div>
+                      </div>
+                   </div>
+                   <div class="row">
+                     <div class="col-md-12">
+                       <div class="form-group">
+                            <div>
                                 <label class="col-md-2 control-label">zookeeper地址</label>
                             </div>
                             <div class="col-md-10">
@@ -257,26 +281,15 @@
                      <div class="col-md-12">
                        <div class="form-group">
                             <div>
-                                <label class="col-md-2 control-label">同步业务类型</label>
+                                <label class="col-md-2 control-label">ElasticSearch服务</label>
                             </div>
-                           <div class="col-md-10">
-                                <input id="sync_ywlx2"  type="text" class="form-control"  >
-                           </div>
+                            <div class="col-md-10">
+                                <input id="es_service"  type="text" class="form-control">
+                            </div>
                        </div>
                       </div>
                    </div>
-                   <div class="row">
-                     <div class="col-md-12">
-                       <div class="form-group">
-                            <div>
-                                <label class="col-md-2 control-label">同步数据方向</label>
-                            </div>
-                           <div class="col-md-10">
-                                <input id="sync_data_type"  type="text" class="form-control"  >
-                           </div>
-                       </div>
-                      </div>
-                   </div>
+
                    <div class="row">
                      <div class="col-md-12">
                        <div class="form-group">
@@ -611,6 +624,7 @@
             $('#status').attr("readonly","readonly");
             $('#python3_home').attr("readonly","readonly");
             $('#hbase_thrift').attr("readonly","readonly");
+            $('#es_service').attr("readonly","readonly");
 
             $('#sync_tag').attr("value",obj[0]);
             $('#sync_server').attr("value",obj[1]);
@@ -641,6 +655,7 @@
             $('#hbase_rowkey').attr("value",obj[19]);
             $('#python3_home').attr("value",obj[20]);
             $('#hbase_thrift').attr("value",obj[21]);
+            $('#es_service').attr("value",obj[22]);
         }
 
         function showdetail(v) {

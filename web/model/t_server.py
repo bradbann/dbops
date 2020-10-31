@@ -69,6 +69,7 @@ def get_serverid():
     db.commit()
     return rs[0]
 
+
 def get_server_by_serverid(p_serverid):
     db = get_connection()
     cr = db.cursor()
@@ -77,6 +78,7 @@ def get_server_by_serverid(p_serverid):
                   server_os,server_cpu,server_mem,status,server_desc
            from t_server where id={0}
         """.format(p_serverid)
+    print('get_server_by_serverid=',sql)
     cr.execute(sql)
     rs = cr.fetchall()
     d_server={}

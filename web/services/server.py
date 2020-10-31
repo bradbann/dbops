@@ -122,3 +122,13 @@ class server_check_valid(basehandler):
        id = self.get_argument("id")
        result = check_server_valid(id)
        self.write({"code": result['code'], "message": result['message']})
+
+
+class server_by_serverid(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        id       = self.get_argument("server_id")
+        v_list   = get_server_by_serverid(id)
+        v_json   = json.dumps(v_list)
+        self.write(v_json)

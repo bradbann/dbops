@@ -18,6 +18,18 @@ def get_dmm_from_dm(p_dm):
     cr.close()
     return v_list
 
+def get_dmm_from_dm2(p_dm,p_dmm):
+    db = get_connection()
+    cr = db.cursor()
+    sql = "select dmm,dmmc from t_dmmx where dm='{0}' and instr('{1}',dmm)>0".format(p_dm,p_dmm)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list
+
+
 def get_dmmc_from_dm(p_dm,p_dmm):
     db = get_connection()
     cr = db.cursor()
@@ -120,9 +132,9 @@ def get_inst_names(p_env):
     db = get_connection()
     cr = db.cursor()
     if p_env == '':
-        sql = "select id,inst_name from t_db_inst  order by id"
+        sql = "select id,inst_name from t_db_inst where id in(select inst_id from t_slow_log where status='1') order by inst_name"
     else:
-        sql = "select id,inst_name from t_db_inst WHERE inst_env='{}' order by id".format(p_env)
+        sql = "select id,inst_name from t_db_inst WHERE id in(select inst_id from t_slow_log where status='1') and inst_env='{}' order by inst_name".format(p_env)
     cr.execute(sql)
     v_list = []
     for r in cr.fetchall():
@@ -160,6 +172,18 @@ def get_db_backup_tags():
     db = get_connection()
     cr = db.cursor()
     sql = """SELECT db_tag,comments FROM t_db_config  WHERE STATUS=1  ORDER BY db_type,db_id 
+          """
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    return v_list
+
+def get_minio_tags():
+    db = get_connection()
+    cr = db.cursor()
+    sql = """SELECT sync_tag,comments FROM t_minio_config  WHERE STATUS=1  ORDER BY sync_tag 
           """
     cr.execute(sql)
     v_list = []

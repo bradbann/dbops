@@ -54,6 +54,32 @@ def query_sync(sync_tag,market_id,sync_ywlx,sync_type):
     db.commit()
     return v_list
 
+def query_sync_tab(sync_tag):
+    db = get_connection()
+    cr = db.cursor()
+    sql = """SELECT  
+                    a.id,
+                    a.db_name,
+                    a.schema_name,
+                    a.tab_name,
+                    a.sync_cols,
+                    a.sync_incr_col,
+                    a.sync_time
+             FROM t_db_sync_tab_config a
+            WHERE a.sync_tag='{}' 
+            order by 1
+              """.format(sync_tag)
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    cr.close()
+    db.commit()
+    return v_list
+
+
+
 def query_sync_log(sync_tag,market_id,sync_ywlx,begin_date,end_date):
     db = get_connection()
     cr = db.cursor()
@@ -321,6 +347,85 @@ def save_sync(p_backup):
         print(e_str)
         result['code'] = '-1'
         result['message'] = '保存失败！'
+    return result
+
+
+def check_sync_tab(p_sync_tag):
+    db = get_connection()
+    cr = db.cursor()
+    st = "select count(0) from t_db_sync_tab_config where sync_tag='{}'".format(p_sync_tag)
+    cr.execute(st)
+    rs = cr.fetchone()
+    cr.close()
+    db.commit()
+    return rs[0]
+
+def save_sync_tab(p_sync):
+    result = {}
+    try:
+        db                   = get_connection()
+        cr                   = db.cursor()
+        result               = {}
+        sync_id              = p_sync['sync_id']
+        sync_tag             = p_sync['sync_tag']
+        db_name              = p_sync['db_name']
+        schema_name          = p_sync['schema_name']
+        tab_name             = p_sync['tab_name']
+        sync_cols            = p_sync['sync_cols']
+        sync_incr_col        = p_sync['sync_incr_col']
+        sync_time            = p_sync['sync_time']
+
+        if check_sync_tab(sync_tag) == 0:
+            sql = """insert into t_db_sync_tab_config(sync_tag,db_name,schema_name,tab_name, sync_cols, sync_incr_col,sync_time,status,create_date)
+                     values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}',now())
+                  """.format(sync_tag, db_name, schema_name,tab_name, sync_cols,sync_incr_col,sync_time,'0')
+            result['code'] = '0'
+            result['message'] = '保存成功！'
+        else:
+            sql = """update t_db_sync_tab_config 
+                       set sync_tag = '{}',
+                           db_name = '{}',
+                           schema_name ='{}',
+                           tab_name = '{}',
+                           sync_cols = '{}',
+                           sync_incr_col = '{}',
+                           sync_time = '{}',
+                           update_date = now()
+                     where id = '{}'
+                  """.format(sync_tag,db_name, schema_name, tab_name, sync_cols, sync_incr_col, sync_time,sync_id)
+            result['code'] = '0'
+            result['message'] = '更新成功！'
+        print(sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        return result
+    except:
+        e_str = exception_info()
+        print(e_str)
+        result['code'] = '-1'
+        result['message'] = '保存失败！'
+    return result
+
+def del_sync_tab(p_sync):
+    result = {}
+    try:
+        db                   = get_connection()
+        cr                   = db.cursor()
+        result               = {}
+        sql = "delete from t_db_sync_tab_config where id={}".format(p_sync['sync_id'])
+        print(sql)
+        cr.execute(sql)
+        cr.close()
+        db.commit()
+        result['code']='0'
+        result['message']='删除成功！'
+        return result
+    except:
+        e_str = exception_info()
+        print(e_str)
+        result['code'] = '-1'
+        result['message'] = '删除失败！'
     return result
 
 def upd_sync(p_sync):

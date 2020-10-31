@@ -11,10 +11,10 @@ from web.services.role         import rolequery,roleadd,roleadd_save,role_query,
 from web.services.menu         import menuquery,menu_query,menuadd,menuadd_save,menuchange,menuedit,menuedit_save,menuedit_del
 from web.services.func         import funcquery,func_query,funcadd,funcadd_save,funcchange,funcedit,funcedit_save,funcedit_del
 from web.services.ds           import dsquery,ds_query_id,ds_query,dsadd,dsadd_save,dschange,dsedit,dsedit_save,dsedit_del,dstest,ds_check_valid,dsclone,dsclone_save,get_db_by_type
-from web.services.server       import serverquery,server_query,serveradd,serveradd_save,serverchange,serveredit,serveredit_save,serveredit_del
+from web.services.server       import serverquery,server_query,serveradd,serveradd_save,serverchange,serveredit,serveredit_save,serveredit_del,server_by_serverid
 from web.services.backup       import backupquery,backup_query,backup_case,backupadd,backupadd_save,backupchange,backupedit,backupedit_save,backupedit_del,backuplogquery
 from web.services.backup       import backup_log_query,backup_log_query_detail,backupedit_push,backupedit_run,backupedit_stop,backupedit_status,backuploganalyze,backup_log_analyze,get_backup_tasks
-from web.services.sync         import syncadd,syncadd_save,syncquery,sync_query,syncchange,syncedit,syncedit_save,syncclone,syncclone_save,syncedit_del,synclogquery
+from web.services.sync         import syncadd,syncadd_save,syncadd_save_tab,syncadd_del_tab,syncquery,sync_query,sync_query_tab,syncchange,syncedit,syncedit_save,syncclone,syncclone_save,syncedit_del,synclogquery
 from web.services.sync         import sync_log_query,sync_log_query_detail,syncedit_push,syncedit_run,syncedit_stop,syncloganalyze,sync_log_analyze,get_sync_tasks
 from web.services.sync         import get_sync_park,get_sync_park_real_time,get_sync_flow,get_sync_flow_real_time,get_sync_flow_device,get_sync_park_charge,get_sync_bi
 from web.services.transfer     import transferadd,transferadd_save,transferchange,transferedit,transferedit_save,transferedit_del,transfer_query,transferedit_push,transferedit_run,transferedit_stop
@@ -40,9 +40,10 @@ from web.services.db_inst      import dbinstcrtquery,db_inst_crt_query,db_inst_c
 from web.services.db_inst      import dbinstparaquery,dbinstpara_query,dbinstparaadd_save,dbinstparaedit_save,dbinstparaedit_del,dbinstoptlogquery,dbinstoptlog_query
 from web.services.db_user      import dbuserquery,db_user_query,db_user_save,db_user_update,db_user_delete,db_user_sql,db_user_dbs,db_user_info,db_user_query_by_id
 from web.services.db_config    import dbinstcfgquery,db_inst_cfg_query,db_inst_cfg_update
-from web.services.slow         import slowquery,slowadd,slowadd_save,slow_query,slowchange,slowedit_save,slowedit_del,slow_query_by_id,slowedit_push
-from web.services.minio        import minioquery,minio_query,minioadd,minioadd_save,miniochange,minioedit,minioedit_save,minioedit_del,miniologquery,minioedit_push,minioclone
-
+from web.services.slow         import slowquery,slowadd,slowadd_save,slow_query,slowchange,slowedit_save,slowedit_del,slow_query_by_id,slowedit_push,query_slowlog_plan_by_id
+from web.services.slow         import slowlogquery,slowlog_query,query_slowlog_by_id,query_db_by_inst,query_user_by_inst,slowloganalyze,slowlog_analyze,query_slowlog_detail_by_id
+from web.services.minio        import minioquery,minio_query,minioadd,minioadd_save,miniochange,minioedit,minioedit_save,minioedit_del,minioedit_push,minioclone
+from web.services.minio        import miniologquery,minio_log_query,miniologanalyze,minio_log_analyze
 
 urls = [
         # 功能：主页面API
@@ -141,7 +142,6 @@ urls = [
         (r"/ds/check/valid",                 ds_check_valid),
         (r"/ds/get/db/type",                 get_db_by_type),
 
-
         # 功能：服务器管理API
         (r"/server/query",                   serverquery),
         (r"/server/_query",                  server_query),
@@ -151,6 +151,7 @@ urls = [
         (r"/server/edit",                    serveredit),
         (r"/server/edit/save",               serveredit_save),
         (r"/server/edit/del",                serveredit_del),
+        (r"/get/server/id",                  server_by_serverid),
 
         # 功能：数据库操作API
         (r"/sql/query",                      sqlquery),
@@ -212,6 +213,10 @@ urls = [
         (r"/sync/_query",                    sync_query),
         (r"/sync/add",                       syncadd),
         (r"/sync/add/save",                  syncadd_save),
+        (r"/sync/add/save/tab",              syncadd_save_tab),
+        (r"/sync/add/del/tab",               syncadd_del_tab),
+        (r"/sync/_query/tab",                sync_query_tab),
+
         (r"/sync/change"  ,                  syncchange),
         (r"/sync/edit"    ,                  syncedit),
         (r"/sync/edit/save",                 syncedit_save),
@@ -418,6 +423,15 @@ urls = [
         (r"/slow/edit/del",                  slowedit_del),
         (r"/slow/edit/push",                 slowedit_push),
         (r"/slow/query/id" ,                 slow_query_by_id),
+        (r"/slow/log/query",                 slowlogquery),
+        (r"/slow/log/_query",                slowlog_query),
+        (r"/slow/log/query/id",              query_slowlog_by_id),
+        (r"/slow/log/detail/id",             query_slowlog_detail_by_id),
+        (r"/slow/log/plan/id",               query_slowlog_plan_by_id),
+        (r"/get/inst/db",                    query_db_by_inst),
+        (r"/get/inst/user",                  query_user_by_inst),
+        (r"/slow/log/analyze",               slowloganalyze),
+        (r"/slow/log/_analyze",              slowlog_analyze),
 
         # 功能：MinIO图片上传API
         (r"/minio/query",                    minioquery),
@@ -430,6 +444,10 @@ urls = [
         (r"/minio/edit/del",                 minioedit_del),
         (r"/minio/edit/push",                minioedit_push),
         (r"/minio/clone",                    minioclone),
+        (r"/minio/log/query",                miniologquery),
+        (r"/minio/log/_query",               minio_log_query),
+        (r"/minio/log/analyze",              miniologanalyze),
+        (r"/minio/log/_analyze",             minio_log_analyze),
 
 
 ]

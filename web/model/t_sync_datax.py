@@ -68,7 +68,7 @@ def query_datax_sync_detail(sync_id):
                  a.sync_table,
                  a.sync_columns,
                  a.sync_incr_col,  
-                 f.dmmc AS zk_hosts, 
+                 (SELECT dmmc FROM t_dmmx  WHERE dm='15' AND dmm=a.zk_hosts ) AS zk_hosts, 
                  c.dmmc AS  sync_ywlx,
                  d.dmmc AS  sync_type,
                  a.script_path,
@@ -82,14 +82,14 @@ def query_datax_sync_detail(sync_id):
                  a.sync_hbase_table,
                  a.sync_hbase_rowkey_sour,
                  a.python3_home,
-                 a.hbase_thrift
-            FROM t_datax_sync_config a,t_server b ,t_dmmx c,t_dmmx d,t_db_source e,t_dmmx f
+                 a.hbase_thrift,
+                 a.es_service
+            FROM t_datax_sync_config a,t_server b ,t_dmmx c,t_dmmx d,t_db_source e
             WHERE a.server_id=b.id AND b.status='1' 
             AND a.sour_db_id=e.id
-            AND c.dm='08' AND d.dm='09' AND f.dm='15'
+            AND c.dm='08' AND d.dm='09' 
             AND a.sync_ywlx=c.dmm
             AND a.sync_type=d.dmm
-            AND a.zk_hosts=f.dmm
             AND a.id='{0}'
          """.format(sync_id)
     print(sql)
@@ -133,7 +133,10 @@ def query_datax_by_id(sync_id):
                  a.api_server,
                  a.status,
                  a.python3_home,
-                 a.hbase_thrift
+                 a.hbase_thrift,
+                 a.es_service,
+                 a.es_index_name,
+                 a.es_type_name
             FROM t_datax_sync_config a,t_server b ,t_dmmx c,t_dmmx d,t_db_source e
             WHERE a.server_id=b.id AND b.status='1' 
             AND a.sour_db_id=e.id
@@ -537,6 +540,9 @@ def save_datax_sync(p_sync):
         sync_hbase_rowkey    = get_hbase_rowkey(p_sync)
         sync_hbase_columns   = get_hbase_columns(p_sync)
         sync_hbase_rowkey_separator = p_sync['sync_hbase_rowkey_separator']
+        es_service           = p_sync['es_service']
+        es_index_name        = p_sync['es_index_name']
+        es_type_name         = p_sync['es_type_name']
         sync_incr_where      = get_sync_incr_where(p_sync)
 
         sql="""insert into t_datax_sync_config(
@@ -545,18 +551,18 @@ def save_datax_sync(p_sync):
                            script_path,run_time,comments,datax_home,sync_time_type,
                            sync_gap,api_server,status,sync_hbase_table,sync_hbase_rowkey,
                            sync_hbase_rowkey_separator,sync_hbase_columns,sync_hbase_rowkey_sour,
-                           sync_incr_where,python3_home,hbase_thrift)
+                           sync_incr_where,python3_home,hbase_thrift,es_service,es_index_name,es_type_name)
                    values('{0}','{1}','{2}','{3}','{4}',
                           '{5}','{6}','{7}','{8}','{9}',
                           '{10}','{11}','{12}','{13}','{14}',
                           '{15}','{16}','{17}','{18}','{19}',
-                          '{20}','{21}','{22}','{23}','{24}','{25}')
+                          '{20}','{21}','{22}','{23}','{24}','{25}','{26}')
             """.format(sync_tag,sync_server,sour_db_server,sour_db_name,sour_tab_name,
                        sour_tab_cols,sour_incr_col,zk_hosts,sync_ywlx,sync_data_type,
                        script_base,run_time,task_desc,datax_home,sync_time_type,
                        sync_gap,api_server,status,sync_hbase_table,sync_hbase_rowkey,
                        sync_hbase_rowkey_separator,sync_hbase_columns,sync_hbase_rowkey_sour,
-                       sync_incr_where,python3_home,hbase_thrift)
+                       sync_incr_where,python3_home,hbase_thrift,es_service,es_index_name,es_type_name)
 
         print(sql)
         cr.execute(sql)
@@ -607,6 +613,9 @@ def upd_datax_sync(p_sync):
         sync_hbase_rowkey_sour = p_sync['sync_hbase_rowkey']
         sync_incr_where        = get_sync_incr_where(p_sync)
         python3_home           = p_sync['python3_home']
+        es_service             = p_sync['es_service']
+        es_index_name          = p_sync['es_index_name']
+        es_type_name           = p_sync['es_type_name']
 
         sql="""update t_datax_sync_config 
                   set  
@@ -635,13 +644,17 @@ def upd_datax_sync(p_sync):
                       sync_hbase_rowkey_sour       ='{22}',
                       sync_incr_where              ='{23}',
                       python3_home                 ='{24}',
-                      hbase_thrift                 ='{25}'                      
-                where id={26}""".format(sync_tag,sync_server,sour_db_server,sour_db_name,sour_tab_name,
+                      hbase_thrift                 ='{25}',
+                      es_service                   ='{26}',
+                      es_index_name                ='{27}',
+                      es_type_name                 ='{28}'                                            
+                where id={29}""".format(sync_tag,sync_server,sour_db_server,sour_db_name,sour_tab_name,
                                         sour_tab_cols,sour_incr_col,zk_hosts,sync_ywlx,sync_data_type,
                                         script_base,run_time,task_desc,datax_home,sync_time_type,
                                         sync_gap,api_server,status,sync_hbase_table,sync_hbase_rowkey,
                                         sync_hbase_rowkey_sp,sync_hbase_columns,sync_hbase_rowkey_sour,
-                                        sync_incr_where,python3_home,hbase_thrift,sync_id)
+                                        sync_incr_where,python3_home,hbase_thrift,es_service,
+                                        es_index_name,es_type_name,sync_id)
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -706,21 +719,40 @@ def check_datax_sync(p_sync):
         result['message'] = '选择同步列名不能为空！'
         return result
 
-    if p_sync["zk_hosts"]=="":
+    if p_sync["zk_hosts"]=="" and p_sync['sync_data_type'] == 5:
         result['code']='-1'
         result['message']='zookeeper地址不能为空！'
         return result
 
-    if p_sync["sync_hbase_table"] == "":
+    if p_sync["hbase_thrift"]=="" and p_sync['sync_data_type'] == 5:
+        result['code']='-1'
+        result['message']='hbase_thrift地址不能为空！'
+        return result
+
+    if p_sync["sync_hbase_table"] == "" and p_sync['sync_data_type'] == 5:
         result['code'] = '-1'
         result['message'] = 'hbase表名不能为空！'
         return result
 
-    if p_sync["sync_hbase_rowkey"] == "":
+    if p_sync["sync_hbase_rowkey"] == "" and p_sync['sync_data_type'] == 5:
         result['code'] = '-1'
         result['message'] = 'hbase行键不能为空！'
         return result
 
+    if p_sync["es_service"]=="" and p_sync['sync_data_type'] == 6:
+        result['code']='-1'
+        result['message']='ElasticSearch服务不能为空！'
+        return result
+
+    if p_sync["es_index_name"] == "" and p_sync['sync_data_type'] == 6:
+        result['code'] = '-1'
+        result['message'] = 'ElasticSearch索引名不能为空！'
+        return result
+
+    if p_sync["es_type_name"] == "" and p_sync['sync_data_type'] == 6:
+        result['code'] = '-1'
+        result['message'] = 'ElasticSearch类型名不能为空！'
+        return result
 
     if p_sync["sync_ywlx"] == "":
         result['code'] = '-1'
