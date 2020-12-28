@@ -57,7 +57,6 @@ class monitorindexadd_save(basehandler):
         d_index['index_status']          = self.get_argument("index_status")
         d_index['index_trigger_time']    = self.get_argument("index_trigger_time")
         d_index['index_trigger_times']   = self.get_argument("index_trigger_times")
-        print('monitorindexadd_save=',d_index)
         result=save_index(d_index)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -79,7 +78,6 @@ class monitorindexedit_save(basehandler):
         d_index['index_status']          = self.get_argument("index_status")
         d_index['index_trigger_time']    = self.get_argument("index_trigger_time")
         d_index['index_trigger_times']   = self.get_argument("index_trigger_times")
-        print(d_index)
         result=upd_index(d_index)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -119,7 +117,6 @@ class monitortempleteadd_save(basehandler):
         d_templete['templete_type']    = self.get_argument("templete_type")
         d_templete['templete_indexes'] = self.get_argument("templete_indexes")
         d_templete['templete_status']  = self.get_argument("templete_status")
-        print('monitortempleteadd_save=',d_templete)
         result=save_templete(d_templete)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -133,7 +130,6 @@ class monitortempleteedit_save(basehandler):
         d_templete['templete_type'] = self.get_argument("templete_type")
         d_templete['templete_indexes'] = self.get_argument("templete_indexes")
         d_templete['templete_status']  = self.get_argument("templete_status")
-        print('monitortempleteedit_save=', d_templete)
         result=upd_templete(d_templete)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -199,7 +195,6 @@ class monitortaskadd_save_gather(basehandler):
         d_task['add_gather_task_script_name']   = self.get_argument("add_gather_task_script_name")
         d_task['add_gather_task_api_server']    = self.get_argument("add_gather_task_api_server")
         d_task['add_gather_task_status']        = self.get_argument("add_gather_task_status")
-        print('monitortaskadd_save_gather=',d_task)
         result=save_gather_task(d_task)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -216,7 +211,6 @@ class monitortaskadd_save_monitor(basehandler):
         d_task['add_monitor_task_script_name']   = self.get_argument("add_monitor_task_script_name")
         d_task['add_monitor_task_api_server']    = self.get_argument("add_monitor_task_api_server")
         d_task['add_monitor_task_status']        = self.get_argument("add_monitor_task_status")
-        print('monitortaskadd_save_monitor=', d_task)
         result = save_monitor_task(d_task)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -236,7 +230,6 @@ class monitortaskupd_save_gather(basehandler):
         d_task['upd_gather_task_script_name']   = self.get_argument("upd_gather_task_script_name")
         d_task['upd_gather_task_api_server']    = self.get_argument("upd_gather_task_api_server")
         d_task['upd_gather_task_status']        = self.get_argument("upd_gather_task_status")
-        print('monitortaskupd_save_gather=',d_task)
         result=upd_gather_task(d_task)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -253,7 +246,6 @@ class monitortaskupd_save_monitor(basehandler):
         d_task['upd_monitor_task_script_name']   = self.get_argument("upd_monitor_task_script_name")
         d_task['upd_monitor_task_api_server']    = self.get_argument("upd_monitor_task_api_server")
         d_task['upd_monitor_task_status']        = self.get_argument("upd_monitor_task_status")
-        print('monitortaskadd_save_monitor=', d_task)
         result = upd_monitor_task(d_task)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -263,7 +255,6 @@ class get_monitor_templete_type(basehandler):
     def post(self):
         templete_id = self.get_argument("templete_id")
         result      = query_monitor_templete_type(templete_id)
-        print('get_monitor_templete_type=', result)
         self.write({"message": result})
 
 
@@ -330,7 +321,6 @@ class monitorgraph_query(basehandler):
         v_list1          = query_monitor_log_analyze(server_id,db_id,index_code,begin_date, end_date)
         d_list['data1']  = v_list1
         v_json = json.dumps(d_list)
-        #print('monitorgraph_query=', v_json)
         self.write(v_json)
 
 class get_monitor_db(basehandler):
@@ -342,7 +332,6 @@ class get_monitor_db(basehandler):
         v_list  = get_dss(server_id)
         d_list['data'] = v_list
         v_json  = json.dumps(d_list)
-        print('get_sync_tasks=', v_json)
         self.write(v_json)
 
 class get_monitor_index(basehandler):
@@ -354,7 +343,6 @@ class get_monitor_index(basehandler):
         v_list = get_monitor_indexes_by_type(type,db_id)
         d_list['data'] = v_list
         v_json = json.dumps(d_list)
-        print('get_monitor_index=', v_json)
         self.write(v_json)
 
 class get_monitor_view(basehandler):
@@ -389,5 +377,4 @@ class get_monitor_task(basehandler):
         v_tag  = self.get_argument("task_tag")
         v_list = get_monitor_task_by_tag(v_tag)
         v_json = json.dumps(v_list)
-        print('get_monitor_task=', v_json)
         self.write(v_json)

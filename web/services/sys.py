@@ -149,7 +149,6 @@ class sys_code_type_add_save(basehandler):
         code['type_name']   = self.get_argument("type_name")
         code['type_code']   = self.get_argument("type_code")
         code['type_status'] = self.get_argument("type_status")
-        print('sys_code_type_add_save=', code)
         result = save_sys_code_type(code)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -161,7 +160,6 @@ class sys_code_type_upd_save(basehandler):
         code['type_name']   = self.get_argument("type_name")
         code['type_code']   = self.get_argument("type_code")
         code['type_status'] = self.get_argument("type_status")
-        print('sys_code_type_upd_save=', code)
         result = upd_sys_code_type(code)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -171,7 +169,6 @@ class sys_code_type_del(basehandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         code  = self.get_argument("type_code")
-        print('sys_code_type_del=', code)
         result = del_sys_code(code)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -185,7 +182,6 @@ class sys_code_detail_add_save(basehandler):
         code['detail_name']   = self.get_argument("detail_name")
         code['detail_code']   = self.get_argument("detail_code")
         code['detail_status'] = self.get_argument("detail_status")
-        print('sys_code_detail_add_save=', code)
         result = save_sys_code_detail(code)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -199,7 +195,6 @@ class sys_code_detail_upd_save(basehandler):
         code['detail_code']    = self.get_argument("detail_code")
         code['detail_code_old'] = self.get_argument("detail_code_old")
         code['detail_status']  = self.get_argument("detail_status")
-        print('sys_code_detail_upd_save=', code)
         result = upd_sys_code_detail(code)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -210,7 +205,6 @@ class sys_code_detail_del(basehandler):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         code    = self.get_argument("type_code")
         detail  = self.get_argument("detail_code")
-        print('sys_code_detail_del=', code,detail)
         result = del_sys_code_detail(code,detail)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -228,6 +222,5 @@ class sys_query_rule(basehandler):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         v_json    = query_rule()
         v_json    = json.dumps(v_json)
-        print('sys_query_rule=',v_json)
         self.write({"code": 0, "message": v_json})
 

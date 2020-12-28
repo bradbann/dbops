@@ -271,7 +271,7 @@
                         <select class="form-control select" id="dest_db_server" >
                             <option value='' selected = "selected">......</option>
                             {% for var in dm_archive_instance %}
-                               {%  if var[0]==dest_db_id %}
+                               {% if var[0]==dest_db_id %}
                                   <option value={{var[0]}} selected = "selected">{{var[1]}}</option>
                                {% else %}
                                    <option value={{var[0]}}>{{var[1]}}</option>
@@ -439,66 +439,66 @@
 
     <script>
 
-        function set_selected(){
-            document.all['s_archive_tag'].style.color="#ff0000";
-            document.all['s_task_desc'].style.color="#ff0000";
-            document.all['s_archive_server'].style.color="#ff0000";
-            document.all['s_archive_db_type'].style.color="#ff0000";
-            document.all['s_sour_db_server'].style.color="#ff0000";
-            document.all['s_sour_db_name'].style.color="#ff0000";
-            document.all['s_sour_tab_name'].style.color="#ff0000";
-            document.all['s_archive_time_col'].style.color="#ff0000";
-            document.all['s_archive_rentition'].style.color="#ff0000";
-            document.all['s_rentition_time'].style.color="#ff0000";
-            document.all['s_archive_time_type'].style.color="#ff0000";
-            document.all['s_if_cover'].style.color="#ff0000";
-            document.all['s_dest_db_server'].style.color="#ff0000";
-            document.all['s_dest_db_name'].style.color="#ff0000";
-            document.all['s_python3_home'].style.color="#ff0000";
-            document.all['s_script_base'].style.color="#ff0000";
-            document.all['s_script_name'].style.color="#ff0000";
-            document.all['s_run_time'].style.color="#ff0000";
-            document.all['s_batch_size'].style.color="#ff0000";
-            document.all['s_api_server'].style.color="#ff0000";
-            document.all['s_status'].style.color="#ff0000";
-        }
-
-        function set_archive_tag(){
-            var db_type =  $("#archive_db_type").find("option:selected").text()
-            var sour_db =  $("#sour_db_name").val()
-            var sour_tab = $("#sour_tab_name").val()
-            if (db_type == null) {
-                db_type=''
+           function set_selected(){
+                document.all['s_archive_tag'].style.color="#ff0000";
+                document.all['s_task_desc'].style.color="#ff0000";
+                document.all['s_archive_server'].style.color="#ff0000";
+                document.all['s_archive_db_type'].style.color="#ff0000";
+                document.all['s_sour_db_server'].style.color="#ff0000";
+                document.all['s_sour_db_name'].style.color="#ff0000";
+                document.all['s_sour_tab_name'].style.color="#ff0000";
+                document.all['s_archive_time_col'].style.color="#ff0000";
+                document.all['s_archive_rentition'].style.color="#ff0000";
+                document.all['s_rentition_time'].style.color="#ff0000";
+                document.all['s_archive_time_type'].style.color="#ff0000";
+                document.all['s_if_cover'].style.color="#ff0000";
+                document.all['s_dest_db_server'].style.color="#ff0000";
+                document.all['s_dest_db_name'].style.color="#ff0000";
+                document.all['s_python3_home'].style.color="#ff0000";
+                document.all['s_script_base'].style.color="#ff0000";
+                document.all['s_script_name'].style.color="#ff0000";
+                document.all['s_run_time'].style.color="#ff0000";
+                document.all['s_batch_size'].style.color="#ff0000";
+                document.all['s_api_server'].style.color="#ff0000";
+                document.all['s_status'].style.color="#ff0000";
             }
-             if (sour_db == null) {
-                sour_db=''
+
+           function set_archive_tag(){
+                var db_type =  $("#archive_db_type").find("option:selected").text()
+                var sour_db =  $("#sour_db_name").val()
+                var sour_tab = $("#sour_tab_name").val()
+                if (db_type == null) {
+                    db_type=''
+                }
+                 if (sour_db == null) {
+                    sour_db=''
+                }
+                 if (sour_tab == null) {
+                    sour_tab=''
+                }
+                $('#archive_tag').val('archive_'+db_type+'_'+sour_db+'_'+sour_tab)
+                $('#task_desc').val('归档任务['+db_type+'_'+sour_db+'_'+sour_tab+']')
             }
-             if (sour_tab == null) {
-                sour_tab=''
-            }
-            $('#archive_tag').val('archive_'+db_type+'_'+sour_db+'_'+sour_tab)
-            $('#task_desc').val('归档任务['+db_type+'_'+sour_db+'_'+sour_tab+']')
-        }
 
-        $("#sour_tab_name").bind("input propertychange",function(){
-           var s=$("#sour_tab_name").val()
-           if (s.indexOf(",") >=0 ) {
-                $("#sour_tab_where").val('')
-                $('#sour_tab_where').attr("readonly",true);
-           } else {
-               $('#sour_tab_where').attr("readonly",false);
-           }
-        });
+           $("#sour_tab_name").bind("input propertychange",function(){
+               var s=$("#sour_tab_name").val()
+               if (s.indexOf(",") >=0 ) {
+                    $("#sour_tab_where").val('')
+                    $('#sour_tab_where').attr("readonly",true);
+               } else {
+                   $('#sour_tab_where').attr("readonly",false);
+               }
+           });
 
-        $(document).ready(function() {
-            set_selected();
-        });
+          $(document).ready(function() {
+             set_selected();
+          });
 
-        $('#return').on('click', function() {
+          $('#return').on('click', function() {
            $('#main-container-div').load('/archive/change');
         });
 
-        $("#save").click(function () {
+          $("#save").click(function () {
           console.log(" status:",$('#status').val())
           $.ajax({
             url: "/archive/edit/save",
@@ -555,7 +555,7 @@
          });
       });
 
-     function showTabDetail(){
+         function showTabDetail(){
 
             if ($('#sour_db_name').val() =='') {
                 return false
@@ -633,192 +633,197 @@
             }
         }
 
-     $('#sour_tab_name').change(function() {
-            console.log('sour_tab_name=',$('#sour_tab_name').val());
-            set_archive_tag()
-            if ($('#sour_tab_name').val()!=''){
-                $.ajax({
-                      url: "/get_incr_col",
-                      type: "post",
-                      datatype: "json",
-                      async:false,
-                      data:{
-                          dbid     : $('#sour_db_server').val(),
-                          db_name  : $('#sour_db_name').val(),
-                          tab_name : $('#sour_tab_name').val()
-                      },
-                      success: function (dataSet) {
-                         console.log(dataSet)
-                         $("#archive_time_col").empty();
-                         $("#archive_time_col").append("<option value=''>......</option>");
-                         for(i=0;i<dataSet['message'].length;i++){
-                              var val  = dataSet['message'][i][0];
-                              var text = dataSet['message'][i][0]+'('+dataSet['message'][i][1]+')';
-                              $("#archive_time_col").append("<option value='"+val+"'>"+text+"</option>");
-                         }
-                      }
-                });
+         $('#sour_tab_name').change(function() {
+                console.log('sour_tab_name=',$('#sour_tab_name').val());
+                set_archive_tag()
+                if ($('#sour_tab_name').val()!=''){
+                    $.ajax({
+                          url: "/get_incr_col",
+                          type: "post",
+                          datatype: "json",
+                          async:false,
+                          data:{
+                              dbid     : $('#sour_db_server').val(),
+                              db_name  : $('#sour_db_name').val(),
+                              tab_name : $('#sour_tab_name').val()
+                          },
+                          success: function (dataSet) {
+                             console.log(dataSet)
+                             $("#archive_time_col").empty();
+                             $("#archive_time_col").append("<option value=''>......</option>");
+                             for(i=0;i<dataSet['message'].length;i++){
+                                  var val  = dataSet['message'][i][0];
+                                  var text = dataSet['message'][i][0]+'('+dataSet['message'][i][1]+')';
+                                  $("#archive_time_col").append("<option value='"+val+"'>"+text+"</option>");
+                             }
+                          }
+                    });
 
-            } else {
-                 $("#sour_incr_col").empty();
-                 $("#sour_incr_col").append("<option value=''>...</option>");
-            }
-        });
-
-     $('#archive_db_type').change(function() {
-             if ($('#sour_db_server').val()!='...') {
-                 $.ajax({
-                     url: "/ds/get/db/type",
-                     type: "post",
-                     datatype: "json",
-                     async: false,
-                     data: {
-                         db_type: $('#archive_db_type').val(),
-                     },
-                     success: function (dataSet) {
-                         set_archive_tag()
-                         $("#sour_db_server").empty();
-                         $("#dest_db_server").empty();
-                         $("#sour_db_name").empty();
-                         $("#sour_db_server").append("<option value=''>...</option>");
-                         $("#dest_db_server").append("<option value=''>...</option>");
-                         for (i = 0; i < dataSet['message'].length; i++) {
-                             var val = dataSet['message'][i][0];
-                             var text = dataSet['message'][i][1];
-                             $("#sour_db_server").append("<option value='" + val + "'>" + text + "</option>");
-                             $("#dest_db_server").append("<option value='" + val + "'>" + text + "</option>");
-                         }
-                     }
-                 })
-             } else {
-                 $("#sour_db_server").empty();
-                 $("#sour_db_name").empty();
-                 $("#dest_db_server").empty();
-                 $("#sour_db_server").append("<option value=''>...</option>");
-                 $("#sour_db_name").append("<option value=''>...</option>");
-                 $("#dest_db_server").append("<option value=''>...</option>");
-             }
-        });
-
-     $('#sour_db_server').change(function() {
-        console.log('sour_db_server=',$('#sour_db_server').val());
-        if ($('#sour_db_server').val()!=''){
-            $.ajax({
-                  url: "/get_database",
-                  type: "post",
-                  datatype: "json",
-                  async:false,
-                  data:{
-                      dbid : $('#sour_db_server').val(),
-                  },
-                  success: function (dataSet) {
-                     $("#sour_db_name").empty();
-                     $("#sour_db_name").append("<option value=''>...</option>");
-                     for(i=0;i<dataSet['message'].length;i++){
-                          var val  = dataSet['message'][i];
-                          var text = dataSet['message'][i];
-                          $("#sour_db_name").append("<option value='"+val+"'>"+text+"</option>");
-                     }
-                  }
-            })
-        } else {
-             $("#sour_db_name").empty();
-        }
-    });
-
-     $('#dest_db_server').change(function() {
-        console.log('dest_db_server=',$('#dest_db_server').val());
-        if ($('#dest_db_server').val()!=''){
-            $.ajax({
-                  url: "/get_database",
-                  type: "post",
-                  datatype: "json",
-                  async:false,
-                  data:{
-                      dbid : $('#dest_db_server').val(),
-                  },
-                  success: function (dataSet) {
-                     $("#dest_db_name").empty();
-                     $("#dest_db_name").append("<option value=''>...</option>");
-                     for(i=0;i<dataSet['message'].length;i++){
-                          var val  = dataSet['message'][i];
-                          var text = dataSet['message'][i];
-                          $("#dest_db_name").append("<option value='"+val+"'>"+text+"</option>");
-                     }
-                  }
-            })
-        } else {
-             $("#dest_db_name").empty();
-        }
-    });
-
-     $('#sour_db_name').change(function() {
-        console.log('sour_db_server=',$('#sour_db_server').val());
-        console.log('sour_db_name=',$('#sour_db_name').val());
-
-        $("#sour_tab_name").empty();
-        $("#sour_tab_cols").empty();
-        $("#sele_sour_tab_cols").empty();
-        $('#hbase_table').val('');
-        set_archive_tag()
-
-        if ($('#sour_db_name').val()!=''){
-            $.ajax({
-                  url: "/get_tables",
-                  type: "post",
-                  datatype: "json",
-                  async:false,
-                  data:{
-                      dbid    : $('#sour_db_server').val(),
-                      db_name : $('#sour_db_name').val(),
-                  },
-                  success: function (dataSet) {
-                     console.log(dataSet)
-                     $("#sour_tab_name").append("<option value=''>...</option>");
-                     for(i=0;i<dataSet['message'].length;i++){
-                          var val  = dataSet['message'][i];
-                          var text = dataSet['message'][i];
-                          $("#sour_tab_name").append("<option value='"+val+"'>"+text+"</option>");
-                     }
-                  }
+                } else {
+                     $("#sour_incr_col").empty();
+                     $("#sour_incr_col").append("<option value=''>...</option>");
+                }
             });
-        } else {
-            $("#sour_tab_name").append("<option value=''>......</option>");
-            $("#sour_incr_col").append("<option value=''>......</option>");
-        }
-    });
 
-     $('#sour_tab_name').change(function() {
-            console.log('sour_tab_name=',$('#sour_tab_name').val());
-            set_archive_tag()
-            if ($('#sour_tab_name').val()!=''){
+         $('#archive_db_type').change(function() {
+                 if ($('#sour_db_server').val()!='...') {
+                     $.ajax({
+                         url: "/ds/get/db/type",
+                         type: "post",
+                         datatype: "json",
+                         async: false,
+                         data: {
+                             db_type: $('#archive_db_type').val(),
+                         },
+                         success: function (dataSet) {
+                             set_archive_tag()
+                             $("#sour_db_server").empty();
+                             $("#dest_db_server").empty();
+                             $("#sour_db_name").empty();
+                             $("#sour_db_server").append("<option value=''>...</option>");
+                             $("#dest_db_server").append("<option value=''>...</option>");
+                             for (i = 0; i < dataSet['message'].length; i++) {
+                                 var val = dataSet['message'][i][0];
+                                 var text = dataSet['message'][i][1];
+                                 $("#sour_db_server").append("<option value='" + val + "'>" + text + "</option>");
+                                 $("#dest_db_server").append("<option value='" + val + "'>" + text + "</option>");
+                             }
+                         }
+                     })
+                 } else {
+                     $("#sour_db_server").empty();
+                     $("#sour_db_name").empty();
+                     $("#dest_db_server").empty();
+                     $("#sour_db_server").append("<option value=''>...</option>");
+                     $("#sour_db_name").append("<option value=''>...</option>");
+                     $("#dest_db_server").append("<option value=''>...</option>");
+                 }
+            });
+
+         $('#sour_db_server').change(function() {
+            console.log('sour_db_server=',$('#sour_db_server').val());
+            if ($('#sour_db_server').val()!=''){
                 $.ajax({
-                      url: "/get_incr_col",
+                      url: "/get_database",
                       type: "post",
                       datatype: "json",
                       async:false,
                       data:{
-                          dbid     : $('#sour_db_server').val(),
-                          db_name  : $('#sour_db_name').val(),
-                          tab_name : $('#sour_tab_name').val()
+                          dbid : $('#sour_db_server').val(),
+                      },
+                      success: function (dataSet) {
+                         $("#sour_db_name").empty();
+                         $("#sour_db_name").append("<option value=''>...</option>");
+                         for(i=0;i<dataSet['message'].length;i++){
+                              var val  = dataSet['message'][i];
+                              var text = dataSet['message'][i];
+                              $("#sour_db_name").append("<option value='"+val+"'>"+text+"</option>");
+                         }
+                      }
+                })
+            } else {
+                 $("#sour_db_name").empty();
+            }
+        });
+
+         $('#dest_db_server').change(function() {
+            console.log('dest_db_server=',$('#dest_db_server').val());
+            if ($('#dest_db_server').val()!=''){
+                $.ajax({
+                      url: "/get_database",
+                      type: "post",
+                      datatype: "json",
+                      async:false,
+                      data:{
+                          dbid : $('#dest_db_server').val(),
+                      },
+                      success: function (dataSet) {
+                         $("#dest_db_name").empty();
+                         $("#dest_db_name").append("<option value=''>...</option>");
+                         for(i=0;i<dataSet['message'].length;i++){
+                              var val  = dataSet['message'][i];
+                              var text = dataSet['message'][i];
+                              $("#dest_db_name").append("<option value='"+val+"'>"+text+"</option>");
+                         }
+                      }
+                })
+            } else {
+                 $("#dest_db_name").empty();
+            }
+        });
+
+         $('#sour_db_name').change(function() {
+            console.log('sour_db_server=',$('#sour_db_server').val());
+            console.log('sour_db_name=',$('#sour_db_name').val());
+
+            $("#sour_tab_name").empty();
+            $("#sour_tab_cols").empty();
+            $("#sele_sour_tab_cols").empty();
+            set_archive_tag()
+
+            if ($('#sour_db_name').val()!=''){
+                $.ajax({
+                      url: "/get_tables",
+                      type: "post",
+                      datatype: "json",
+                      async:false,
+                      data:{
+                          dbid    : $('#sour_db_server').val(),
+                          db_name : $('#sour_db_name').val(),
                       },
                       success: function (dataSet) {
                          console.log(dataSet)
-                         $("#archive_time_col").empty();
-                         $("#archive_time_col").append("<option value=''>......</option>");
+                         $("#sour_tab_name").append("<option value=''>...</option>");
                          for(i=0;i<dataSet['message'].length;i++){
-                              var val  = dataSet['message'][i][0];
-                              var text = dataSet['message'][i][0]+'('+dataSet['message'][i][1]+')';
-                              $("#archive_time_col").append("<option value='"+val+"'>"+text+"</option>");
+                              var val  = dataSet['message'][i];
+                              var text = dataSet['message'][i];
+                              $("#sour_tab_name").append("<option value='"+val+"'>"+text+"</option>");
                          }
                       }
                 });
-
             } else {
-                 $("#sour_incr_col").empty();
-                 $("#sour_incr_col").append("<option value=''>...</option>");
+                $("#sour_tab_name").append("<option value=''>......</option>");
+                $("#sour_incr_col").append("<option value=''>......</option>");
             }
         });
+
+         $('#sour_tab_name').change(function() {
+                console.log('sour_tab_name=',$('#sour_tab_name').val());
+                set_archive_tag()
+                if ($('#sour_tab_name').val()!=''){
+                    $.ajax({
+                          url: "/get_incr_col",
+                          type: "post",
+                          datatype: "json",
+                          async:false,
+                          data:{
+                              dbid     : $('#sour_db_server').val(),
+                              db_name  : $('#sour_db_name').val(),
+                              tab_name : $('#sour_tab_name').val()
+                          },
+                          success: function (dataSet) {
+                             console.log(dataSet)
+                             $("#archive_time_col").empty();
+                             $("#archive_time_col").append("<option value=''>......</option>");
+                             for(i=0;i<dataSet['message'].length;i++){
+                                  var val  = dataSet['message'][i][0];
+                                  var text = dataSet['message'][i][0]+'('+dataSet['message'][i][1]+')';
+                                  $("#archive_time_col").append("<option value='"+val+"'>"+text+"</option>");
+                             }
+                          }
+                    });
+
+                } else {
+                     $("#sour_incr_col").empty();
+                     $("#sour_incr_col").append("<option value=''>...</option>");
+                }
+            });
+
+        $('#archive_rentition').change(function() {
+            $("#dest_db_server").append("<option value=''>...</option>");
+            $("#dest_db_name").append("<option value=''>...</option>");
+        });
+
 
    </script>
 </body>

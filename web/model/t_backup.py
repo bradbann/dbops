@@ -10,6 +10,8 @@ from web.utils.common     import get_connection,get_connection_ds,get_connection
 from web.model.t_user     import get_user_by_loginame
 import re
 import os,json
+import requests
+import traceback
 
 def query_backup(tagname,db_env,db_type):
     db = get_connection()
@@ -54,9 +56,10 @@ def query_backup_case(p_db_env):
     db  = get_connection()
     cr  = db.cursor()
     sql = """SELECT 
+                   e.comments,
                    c.dmmc AS 'db_type',
-                   a.db_desc,
-                   date_format(d.start_time,'%Y-%m-%d %H:%i:%s') as create_date,                  
+                   date_format(d.start_time,'%Y-%m-%d %H:%i:%s') as create_date,
+                   date_format(d.end_time,'%Y-%m-%d %H:%i:%s') as end_time, 
                    CASE WHEN SUBSTR(d.total_size,-1)='M' THEN 
                       SUBSTR(d.total_size,1,LENGTH(total_size)-1)
                    WHEN SUBSTR(d.total_size,-1)='G' THEN 
@@ -65,14 +68,13 @@ def query_backup_case(p_db_env):
                    concat(d.elaspsed_backup+d.elaspsed_gzip,'') as backup_time,
                    CASE WHEN d.status='0' THEN '√' ELSE '×' END flag                   
              FROM t_db_source a,t_dmmx b,t_dmmx c,t_db_backup_total d,t_db_config e
-             WHERE a.market_id='000' 
-               AND a.db_env=b.dmm AND b.dm='03'
+             WHERE a.db_env=b.dmm AND b.dm='03'
                and a.db_env='{0}'
                AND a.db_type=c.dmm AND c.dm='02'
                AND d.db_tag=e.db_tag
                AND e.db_id=a.id
-               AND create_date=DATE_SUB(DATE(NOW()),INTERVAL 1 DAY)
-             ORDER BY a.db_env,a.db_type
+               AND create_date=(SELECT MAX(create_date) FROM t_db_backup_total X WHERE x.db_tag=d.db_tag) 
+             ORDER BY a.market_id,a.db_env,a.db_type
                 """.format(p_db_env)
     print(sql)
     cr.execute(sql)
@@ -480,26 +482,22 @@ def get_backup_by_backupid(p_backupid):
 
 
 def push_backup_task(p_tag,p_api):
-    try:
-        result = {}
-        result['code'] = '0'
-        result['message'] = '推送成功！'
-        v_cmd="curl -XPOST {0}/push_script_remote -d 'tag={1}'".format(p_api,p_tag)
-        r = os.popen(v_cmd).read()
-        d = json.loads(r)
-        print(v_cmd)
-
-        if d['code'] == 200:
-           return result
+    data = {
+        'tag': p_tag,
+    }
+    url = 'http://{}/push_script_remote'.format(p_api)
+    res = requests.post(url, data=data)
+    jres = res.json()
+    v = ''
+    for c in jres['msg']['crontab'].split('\n'):
+        if c.count(p_tag)>0:
+           v = v +"<span class='warning'>"+c +"</span>"
         else:
-           result['code'] = '-1'
-           result['message'] = '{0}!'.format(d['msg'])
-           return result
+           v = v + c
+        v  = v +'<br>'
+    jres['msg']['crontab'] = v
+    return jres
 
-    except Exception as e:
-        result['code'] = '-1'
-        result['message'] = '{0!'.format(str(e))
-        return result
 
 def run_backup_task(p_tag,p_api):
     try:

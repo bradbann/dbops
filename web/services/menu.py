@@ -13,7 +13,6 @@
 import json
 import tornado.web
 from web.model.t_xtqx  import init_menu,query_menu,get_parent_menus,save_menu,get_menu_by_menuid,upd_menu,del_menu,check_menu
-from web.utils.common  import get_url_root
 from web.utils.basehandler import basehandler
 
 class menuquery(basehandler):
@@ -63,7 +62,7 @@ class menuadd_save(basehandler):
 class menuchange(basehandler):
     @tornado.web.authenticated
     def get(self):
-        self.render("./menu_change.html", url = get_url_root())
+        self.render("./menu_change.html")
 
 class menuedit(basehandler):
     @tornado.web.authenticated
@@ -76,8 +75,7 @@ class menuedit(basehandler):
                      status    = d_menu['status'],
                      url       = d_menu['url'],
                      parent_id = d_menu['parent_id'],
-                     menus     = get_parent_menus(),
-                     url2=get_url_root()
+                     menus     = get_parent_menus()
                     )
 
 class menuedit_save(basehandler):

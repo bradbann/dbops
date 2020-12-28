@@ -22,9 +22,11 @@ from web.model.t_ds            import get_dss_sql_query,get_dss_sql_run,get_dss_
 from web.model.t_user          import get_user_by_loginame,get_user_by_userid
 from web.model.t_xtqx          import get_tab_ddl_by_tname,get_tab_idx_by_tname,get_tree_by_dbid,get_tree_by_dbid_mssql,alt_tab_desc
 from web.model.t_xtqx          import get_db_name,get_tab_name,get_tab_columns,get_tab_structure,get_tab_keys,get_tab_incr_col,query_ds
+from web.model.t_xtqx          import get_tree_by_dbid_proxy,get_tree_by_dbid_mssql_proxy,get_tree_by_dbid_layui
 from web.model.t_dmmx          import get_dmm_from_dm,get_users_from_proj
 from web.utils.basehandler     import basehandler
 from web.model.t_ds            import get_ds_by_dsid
+
 class sqlquery(basehandler):
    @tornado.web.authenticated
    def get(self):
@@ -38,7 +40,6 @@ class sql_query(basehandler):
        dbid   = self.get_argument("dbid")
        sql    = self.get_argument("sql")
        curdb  = self.get_argument("cur_db")
-       print('sql_query=',dbid,sql,'curdb=',curdb)
        result = exe_query(dbid,sql,curdb)
        v_dict = {"data": result['data'],"column":result['column'],"status":result['status'],"msg":result['msg']}
        v_json = json.dumps(v_dict)
@@ -141,7 +142,6 @@ class sql_run(basehandler):
        sql_id  = self.get_argument("sql_id")
        userid = str(self.get_secure_cookie("userid"), encoding="utf-8")
        d_user = get_user_by_userid(userid)
-       print('sql_run=',dbid,db_name,sql_id)
        result = exe_sql(dbid,db_name,sql_id,d_user)
        self.write({"code": result['code'], "message": result['message']})
 
@@ -184,13 +184,21 @@ class get_tree_by_sql(basehandler):
     @tornado.web.authenticated
     def post(self):
         dbid   = self.get_argument("dbid")
-        print('get_tree_by_sql=', dbid)
         p_ds   = get_ds_by_dsid(dbid)
         result = {}
         if p_ds['db_type'] == '0':
-           result = get_tree_by_dbid(dbid)
+            if p_ds['proxy_status'] == '1':
+                result = get_tree_by_dbid_proxy(dbid)
+            else:
+                result = get_tree_by_dbid(dbid)
+                #result = get_tree_by_dbid_layui(dbid)
+
         elif p_ds['db_type'] == '2':
-           result = get_tree_by_dbid_mssql(dbid)
+            if p_ds['proxy_status'] == '1':
+                result = get_tree_by_dbid_mssql_proxy(dbid)
+            else:
+                result = get_tree_by_dbid_mssql(dbid)
+
         self.write({"code": result['code'], "message": result['message'], "url": result['db_url'],"desc":result['desc']})
 
 
@@ -199,7 +207,6 @@ class get_tab_ddl(basehandler):
         dbid    = self.get_argument("dbid")
         cur_db  = self.get_argument("cur_db")
         tab     = self.get_argument("tab")
-        print('get_tab_ddl=',dbid,tab,cur_db)
         result = get_tab_ddl_by_tname(dbid,tab,cur_db)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -208,7 +215,6 @@ class get_tab_idx(basehandler):
         dbid   = self.get_argument("dbid")
         cur_db = self.get_argument("cur_db")
         tab    = self.get_argument("tab")
-        print('get_tab_idx=',dbid,tab,cur_db)
         result = get_tab_idx_by_tname(dbid,tab,cur_db)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -217,14 +223,12 @@ class alt_tab(basehandler):
         dbid   = self.get_argument("dbid")
         cur_db = self.get_argument("cur_db")
         tab    = self.get_argument("tab")
-        print('get_tab_ddl=',dbid,tab)
         result = alt_tab_desc(dbid,tab)
         self.write({"code": result['code'], "message": result['message']})
 
 class get_database(basehandler):
     def post(self):
         dbid  = self.get_argument("dbid")
-        print('get_database=',dbid)
         result = get_db_name(dbid)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -232,16 +236,23 @@ class get_tables(basehandler):
     def post(self):
         dbid   = self.get_argument("dbid")
         db_name = self.get_argument("db_name")
-        print('get_tables=',dbid,db_name)
         result = get_tab_name(dbid,db_name)
         self.write({"code": result['code'], "message": result['message']})
+
+class get_dmm_dm(basehandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        dm   = self.get_argument("dm")
+        v_list = get_dmm_from_dm(dm)
+        v_json = json.dumps(v_list)
+        self.write(v_json)
+
 
 class get_columns(basehandler):
     def post(self):
         dbid     = self.get_argument("dbid")
         db_name  = self.get_argument("db_name")
         tab_name = self.get_argument("tab_name")
-        print('get_columns=',dbid,db_name,tab_name)
         result = get_tab_columns(dbid,db_name,tab_name)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -249,7 +260,6 @@ class get_columns(basehandler):
 class get_ds(basehandler):
     def post(self):
         dsid   = self.get_argument("dsid")
-        print('get_ds=',dsid)
         result = query_ds(dsid)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -259,7 +269,6 @@ class get_keys(basehandler):
         dbid     = self.get_argument("dbid")
         db_name  = self.get_argument("db_name")
         tab_name = self.get_argument("tab_name")
-        print('get_keys=',dbid,db_name,tab_name)
         result = get_tab_keys(dbid,db_name,tab_name)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -268,7 +277,6 @@ class get_incr_col(basehandler):
         dbid     = self.get_argument("dbid")
         db_name  = self.get_argument("db_name")
         tab_name = self.get_argument("tab_name")
-        print('get_incr_col=',dbid,db_name,tab_name)
         result = get_tab_incr_col(dbid,db_name,tab_name)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -279,9 +287,7 @@ class get_tab_stru(basehandler):
         dbid     = self.get_argument("dbid")
         db_name  = self.get_argument("db_name")
         tab_name = self.get_argument("tab_name")
-        print('get_tab_stru=',dbid,db_name,tab_name)
         v_list = get_tab_structure(dbid,db_name,tab_name)
-        print('get_tab_stru=',v_list)
         v_json = json.dumps(v_list)
         self.write(v_json)
 
@@ -292,7 +298,6 @@ class orderquery(basehandler):
     def get(self):
         logon_name = str(self.get_secure_cookie("username"), encoding="utf-8")
         userid = str(self.get_secure_cookie("userid"), encoding="utf-8")
-        print('orderquery=',userid,get_users_from_proj(userid))
         self.render("./order_query.html",
                     order_dss=get_dss_order(logon_name),
                     vers=get_dmm_from_dm('12'),
@@ -318,10 +323,8 @@ class wtd_query(basehandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         userid = str(self.get_secure_cookie("userid"), encoding="utf-8")
-        print('wtd_query.userid=', userid)
         v_list = query_wtd(userid)
         v_json = json.dumps(v_list)
-        print('wtd_query.data=',v_json)
         self.write(v_json)
 
 class wtd_detail(basehandler):
@@ -347,7 +350,6 @@ class get_order_env(basehandler):
     def post(self):
         logon_name = str(self.get_secure_cookie("username"), encoding="utf-8")
         result = get_dss_order(logon_name)
-        print('get_order_env=',result)
         self.write({"message": result})
 
 
@@ -355,14 +357,12 @@ class get_order_type(basehandler):
     @tornado.web.authenticated
     def post(self):
         result = get_dmm_from_dm('17')
-        print('get_order_type=',result)
         self.write({"message": result})
 
 class get_order_status(basehandler):
     @tornado.web.authenticated
     def post(self):
         result = get_dmm_from_dm('19')
-        print('get_order_status=',result)
         self.write({"message": result})
 
 class get_order_handler(basehandler):
@@ -370,7 +370,6 @@ class get_order_handler(basehandler):
     def post(self):
         userid = str(self.get_secure_cookie("userid"), encoding="utf-8")
         result = get_users_from_proj(userid),
-        print('get_order_handler=',result)
         self.write({"message": result})
 
 class wtd_save(basehandler):
@@ -398,7 +397,6 @@ class wtd_save_uploadImage(basehandler):
         static_path  = self.get_template_path().replace("templates", "static")
         file_metas   = self.request.files["file"]
         order_number = self.get_argument("order_number")
-        print('order_number=',order_number)
         try:
             i_sxh = 1
             v_path = []
@@ -411,8 +409,6 @@ class wtd_save_uploadImage(basehandler):
                 v_path.append('/'+'/'.join(file_path.split('/')[11:]))
                 v_name.append(file_name)
                 i_sxh =i_sxh +1
-            print('attachment_path=', ','.join(v_path))
-            print('attachment_name=', ','.join(v_name))
             self.write({"code": 0, "file_path": ','.join(v_path),"file_name":','.join(v_name)})
         except Exception as e:
             print(e)
@@ -451,7 +447,6 @@ class wtd_delete(basehandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         wtd_no = self.get_argument("wtd_no")
-        print('wtd_delete=',wtd_no)
         v_list = delete_order(wtd_no)
         v_json = json.dumps(v_list)
         self.write(v_json)
@@ -464,11 +459,9 @@ class wtd_attachment(basehandler):
         userid = str(self.get_secure_cookie("userid"), encoding="utf-8")
         wtd_no = self.get_argument("wtd_no")
         v_list = query_wtd_detail(wtd_no, userid)
-        print('wtd_attachment=',v_list)
         v_attach = []
         for i in  range(len(v_list['attachment_path'].split(','))):
             v_attach.append([i+1,'http://10.2.39.17:8300'+v_list['attachment_path'].split(',')[i]+'/'+v_list['attachment_name'].split(',')[i]])
-        print('order_attachment=',v_attach)
         self.render("./order_attachment.html", order_attachments=v_attach)
 
 class wtd_attachment_number(basehandler):
@@ -476,7 +469,6 @@ class wtd_attachment_number(basehandler):
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         wtd_no = self.get_argument("wtd_no")
-        print('wtd_attachment_number=', wtd_no)
         v_list = get_order_attachment_number(wtd_no)
         v_json = json.dumps(v_list)
         self.write(v_json)

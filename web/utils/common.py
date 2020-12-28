@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/6/26 13:02
 # @Author  : 马飞
-# @File    : common.py.py
+# @File    : comm.py.py
 # @Software: PyCharm
 
 import pymysql
@@ -17,20 +17,19 @@ from   tornado.options import define, options
 import redis
 from elasticsearch import Elasticsearch,RequestsHttpConnection
 
-def get_url_main():
-    # return 'http://'+get_server_ip()+':'+get_server_port()+'/index'
-    return 'http://'+get_server_ip()+':'+get_server_port()
+# def get_url_main():
+#     return 'http://'+get_server_ip()+':'+get_server_port()
+#
 
-
-def get_url_root():
-    return 'http://'+get_server_ip()+':'+get_server_port()
-
-def get_server_ip():
-    return '10.2.39.17'
-
-def get_server_port():
-    #return '81'
-    return options.port
+# def get_url_root():
+#     return 'http://'+get_server_ip()+':'+get_server_port()
+#
+# def get_server_ip():
+#     return '10.2.39.21'
+#
+# def get_server_port():
+#     return '81'
+#     #return options.port
 
 def get_db_conf():
     d_db={}
@@ -68,6 +67,15 @@ def get_connection_ds(p_ds):
     user     = p_ds['user']
     password = p_ds['password']
     conn     = pymysql.connect(host=ip, port=int(port), user=user, passwd=password, db=service, charset='utf8',read_timeout=30000)
+    return conn
+
+def get_connection_ds_dict(p_ds):
+    ip       = p_ds['ip']
+    port     = p_ds['port']
+    service  = p_ds['service']
+    user     = p_ds['user']
+    password = p_ds['password']
+    conn     = pymysql.connect(host=ip, port=int(port), user=user, passwd=password, db=service, charset='utf8',read_timeout=30000,cursorclass = pymysql.cursors.DictCursor)
     return conn
 
 def get_connection_ds_read_limit(p_ds,p_timeout):

@@ -15,7 +15,7 @@ import tornado.web
 import random,os,json
 import time
 from web.model.t_user  import logon_user_check,check_forget_password,check_modify_password,save_forget_authention_string,check_auth_str_exist,get_userid_by_auth
-from web.model.t_user  import upd_password,get_user_by_userid,get_user_by_loginame,get_user_roles
+from web.model.t_user  import upd_password,get_user_by_userid,get_user_by_loginame,get_user_roles,check_authcode
 from web.model.t_xtqx  import get_tree_by_userid
 from web.model.t_dmmx  import get_dmm_from_dm
 from web.utils.common  import send_mail,get_rand_str,current_time,china_rq,china_week,welcome,china_time
@@ -67,7 +67,8 @@ class index(basehandler):
         else:
            self.render("page-404.html")
 
-class main(tornado.web.RequestHandler):
+class main(basehandler):
+    @tornado.web.authenticated
     def get(self):
         self.render("main.html")
 
@@ -80,22 +81,40 @@ class tree(tornado.web.RequestHandler):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         self.write({"code": result['code'], "message": result['message']})
 
-class lockscreen(tornado.web.RequestHandler):
-    def get(self):
-        #获取当前访问页面URL
-        #解锁后需要返回之前正在操作的页面
-        #解锁失败，提示错误 。
-        self.render("page-lock-screen.html")
-
-class unlock(tornado.web.RequestHandler):
+class unlock(basehandler):
     def post(self):
         unlock_password = self.get_argument("unlock_password")
         username = str(self.get_secure_cookie("username"), encoding="utf-8")
-        d_user = get_user_by_loginame(username)
+        d_user   = get_user_by_loginame(username)
         if d_user['password']==unlock_password:
+            self.set_secure_cookie("screen_lock_status", 'unlock')
+            self.set_secure_cookie("heartbeat", 'health', expires=time.time() + 300)
             self.write({"code":0})
         else:
             self.write({"code":-1})
+
+class lock(basehandler):
+    def post(self):
+        self.set_secure_cookie("screen_lock_status", 'locked')
+        self.write({"code":0})
+
+class heartbeat(tornado.web.RequestHandler):
+    def post(self):
+        status = self.get_secure_cookie("heartbeat")
+        print('heartbeat=',status)
+        if status is None:
+            self.write({"code": 'undefined'})
+        else:
+            self.write({"code": str(status, encoding="utf-8")})
+
+
+class lock_status(tornado.web.RequestHandler):
+  def post(self):
+      status = self.get_secure_cookie("screen_lock_status")
+      if status is None:
+         self.write({"code": 'undefined'})
+      else:
+         self.write({"code": str(status, encoding="utf-8")})
 
 
 class get_time(tornado.web.RequestHandler):
@@ -106,92 +125,87 @@ class logout(tornado.web.RequestHandler):
     def get(self):
         self.set_secure_cookie("username", '',expires_days=None)
         self.set_secure_cookie("userid", '', expires_days=None)
-        #self.redirect("/")
+        self.set_secure_cookie("screen_lock_status", 'unlock')
         self.render("page-logout.html")
 
 class error(tornado.web.RequestHandler):
     def get(self):
         self.render("page-500.html")
 
-
 class logon_welcome(tornado.web.RequestHandler):
     def get(self):
         self.render("./main/welcome.html")
 
-class logon_check(tornado.web.RequestHandler):
+class logon_check(basehandler):
     def post(self):
         username    = self.get_argument("username")
         password    = self.get_argument("password")
         verify_code = self.get_argument("verify_code")
         verify_img  = str(self.get_secure_cookie("verify_img"), encoding="utf-8")
-        print("verify_code=", verify_code, "verify_img=", verify_img)
         result = logon_user_check(username, password, verify_code, verify_img)
-        print('resul=',result)
         if result['code'] == '0':
             d_user=get_user_by_loginame(username)
             self.set_secure_cookie("username", username,expires=time.time() + 1800)
             self.set_secure_cookie("userid", d_user['userid'], expires=time.time() + 1800)
+            self.set_secure_cookie("screen_lock_status", 'unlock')
+            self.set_secure_cookie("heartbeat", 'health', expires=time.time() + 300)
         self.write({"code": result['code'], "message": result['message'], "url": result['url']})
 
+class forget_password(tornado.web.RequestHandler):
+    def get(self):
+        self.render("./user/forget_password.html")
 
-class heartbeat(basehandler):
-    @tornado.web.authenticated
+class forget_password_check_user(tornado.web.RequestHandler):
     def post(self):
-        username  = self.get_argument("loginname")
-        userid    = self.get_argument("userid")
-        self.set_secure_cookie("username", username,expires=time.time() + 1800)
-        self.set_secure_cookie("userid", userid, expires=time.time() + 1800)
-        self.write({"code": 200, "message": 'success'})
-
-class forget_password_check(tornado.web.RequestHandler):
-    def post(self):
-        username    = self.get_argument("username")
+        user        = self.get_argument("user")
         email       = self.get_argument("email")
-        result      = check_forget_password(username,email)
+        result      = check_forget_password(user,email)
+        print('forget_password_check_user=',user,email,result)
+
         if result['code']=='0':
-           #如果产生的激活串与表中重复则重新生成
            auth_string = get_rand_str(64)
            while check_auth_str_exist(auth_string):
                auth_string = get_rand_str(64)
+           ret = save_forget_authention_string(user,auth_string)
+           # if ret['code']=='-1':
+           #    self.write({"code": ret['code'], "message": result['message']})
 
-           save_forget_authention_string(username,auth_string)
-           v_url=result['url'].replace(':80','')
-           v_title='用户:{0}口令变更激活邮件.{1}'.format(username,current_time())
-           v_content="""
-                        <p>请在浏览器打开以下链接:</br><a href='{0}/modify_password?id={1}'>{2}/modify_password?id={3}</a>
-                        <p>有效时长：3分钟
-                     """.format(v_url,auth_string,v_url,auth_string)
-           #send_mail('dba_mafei@163.com', 'mf#1234@abcd', email,v_title,v_content)
-           send_mail('dba_mafei@163.com', 'mafeicnnui791005', email, v_title, v_content)
-           self.write({"code": '0', "message": '修改用户口令链接已发送至你的邮箱！'})
+           v_title='用户:{0} 口令变更激活邮件.{1}'.format(user,current_time())
+           v_content = """<p><h4>用户名：{}</h4><p><h4>授权码：{}</h4><p><h4>有效期：1分钟</h4>""".format(user,auth_string)
+           send_mail('190343@lifeat.cn', 'Hhc5HBtAuYTPGHQ8', email, v_title, v_content)
+
+           self.write({"code": '0', "message": '授权码已发送至邮箱!'})
         else:
-           self.write({"code": result['code'], "message": result['message'],"url": result['url']})
+           self.write({"code": result['code'], "message": result['message']})
 
 class modify_password(tornado.web.RequestHandler):
     def get(self):
         auth_str    = self.get_argument("id")
         print("auth_str=",auth_str)
-        self.render("./user/modify_password.html", auth_str=auth_str
-                    )
+        self.render("./user/modify_password.html", auth_str=auth_str)
 
-class modify_password_check(tornado.web.RequestHandler):
+class forget_password_check_auth(tornado.web.RequestHandler):
     def post(self):
+        user     = self.get_argument("user")
+        auth     = self.get_argument("auth")
+        result   = check_authcode(user,auth)
+        self.write({"code": result['code'], "message": result['message']})
+
+class forget_password_check_pass(tornado.web.RequestHandler):
+    def post(self):
+        user    = self.get_argument("user")
+        auth    = self.get_argument("auth")
         newpass = self.get_argument("newpass")
         reppass = self.get_argument("reppass")
-        auth_str= self.get_argument("auth_str")
-        result  = check_modify_password(newpass, reppass)
+        result  = check_modify_password(user, newpass, reppass, auth)
         if result['code'] == '-1':
-           self.write({"code": result['code'], "message":  result['message']})
+            self.write({"code": result['code'], "message": result['message']})
         else:
-            p_userid = get_userid_by_auth(auth_str)
-            p_user   = get_user_by_userid(p_userid)
-            print("auth_str=", auth_str)
-            print("user_id=", get_userid_by_auth(auth_str))
+            p_userid = get_userid_by_auth(auth)
+            p_user = get_user_by_userid(p_userid)
             p_user['password'] = newpass
-            result2=upd_password(p_user)
-            print("result2=",result2)
-            self.write({"code": result2['code'], "message":result2['message']})
-
+            result2 = upd_password(p_user)
+            self.write({"code": result2['code'], "message": result2['message']})
 
 class tree(tornado.web.RequestHandler):
     def get(self):
@@ -234,18 +248,15 @@ class get_verify(tornado.web.RequestHandler):
         # 把生成的图片保存为"pic.png"格式
         rand = random.randint(1000, 99999)
         file = static_path+'/assets/images/logon/verify' + str(rand) + '.png'
-        print("file=",file)
         with open(file, "wb") as f:
             img1.save(f, format="png")
         v_dict = {"image":file.split('/')[-1],"verify":verify_img}
         v_json = json.dumps(v_dict)
-        print(v_json)
         self.write(v_json)
 
-class forget_password(basehandler):
-    @tornado.web.authenticated
+class forget_password(tornado.web.RequestHandler):
     def get(self):
-        self.render("./user/forget_password.html",url=get_url_root())
+        self.render("./forget_password.html")
 
 class check(basehandler):
     @tornado.web.authenticated

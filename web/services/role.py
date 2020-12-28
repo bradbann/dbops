@@ -14,7 +14,6 @@ import json
 import tornado.web
 from   web.model.t_role   import save_role,check_role,query_role,upd_role,del_role,get_role_by_roleid
 from   web.model.t_xtqx   import get_privs,get_privs_role,get_privs_sys,get_func_privs,get_privs_func,get_privs_func_role
-from   web.utils.common   import get_url_root
 from   web.utils.basehandler import basehandler
 
 
@@ -62,7 +61,7 @@ class role_query(basehandler):
 class rolechange(basehandler):
     @tornado.web.authenticated
     def get(self):
-        self.render("./role_change.html", url=get_url_root())
+        self.render("./role_change.html")
 
 class roleedit(basehandler):
     @tornado.web.authenticated
@@ -77,7 +76,6 @@ class roleedit(basehandler):
                      priv_role = get_privs_role(roleid),
                      func_privs= get_privs_func(roleid),
                      func_privs_role  = get_privs_func_role(roleid),
-                     url=get_url_root()
                     )
 
 class roleedit_save(basehandler):
@@ -90,7 +88,6 @@ class roleedit_save(basehandler):
         d_role['status']   = self.get_argument("status")
         d_role['privs']    = self.get_argument("privs").split(",")
         d_role['func_privs'] = self.get_argument("func_privs").split(",")
-        print('roleedit_save=',roleedit_save)
         result=upd_role(d_role)
         self.write({"code": result['code'], "message": result['message']})
 

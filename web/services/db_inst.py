@@ -60,7 +60,6 @@ class db_inst_save(basehandler):
         d_inst['script_path']       = self.get_argument("script_path")
         d_inst['script_file']       = self.get_argument("script_file")
         d_inst['inst_mapping_port'] = self.get_argument("inst_mapping_port")
-        print('inst_add_save=',d_inst)
         result = save_db_inst(d_inst)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -86,7 +85,6 @@ class db_inst_update(basehandler):
         d_inst['script_path']       = self.get_argument("script_path")
         d_inst['script_file']       = self.get_argument("script_file")
         d_inst['inst_mapping_port'] = self.get_argument("inst_mapping_port")
-        print('db_inst_update=',d_inst)
         result = upd_db_inst(d_inst)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -104,7 +102,6 @@ class db_inst_create(basehandler):
     def post(self):
         inst_id = self.get_argument("inst_id")
         api_server = self.get_argument("api_server")
-        print('db_inst_create=', inst_id,api_server)
         result = create_db_inst(api_server,inst_id)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -113,7 +110,6 @@ class db_inst_destroy(basehandler):
     def post(self):
         inst_id = self.get_argument("inst_id")
         api_server = self.get_argument("api_server")
-        print('db_inst_destroy=', inst_id,api_server)
         result = destroy_db_inst(api_server,inst_id)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -123,7 +119,6 @@ class db_inst_manager(basehandler):
         inst_id    = self.get_argument("inst_id")
         api_server = self.get_argument("api_server")
         op_type    = self.get_argument("op_type")
-        print('db_inst_manager=', inst_id,api_server,op_type)
         result = manager_db_inst(api_server,inst_id,op_type)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -132,7 +127,6 @@ class db_inst_log(basehandler):
     @tornado.web.authenticated
     def post(self):
         inst_id = self.get_argument("inst_id")
-        print('db_inst_log=', inst_id)
         result = log_db_inst(inst_id)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -165,7 +159,6 @@ class get_inst_tab_ddl(basehandler):
         dbid    = self.get_argument("dbid")
         cur_db  = self.get_argument("cur_db")
         tab     = self.get_argument("tab")
-        print('get_inst_tab_ddl=',dbid,tab,cur_db)
         result = get_tab_ddl_by_instid(dbid,tab,cur_db)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -174,7 +167,6 @@ class get_inst_idx_ddl(basehandler):
         dbid   = self.get_argument("dbid")
         cur_db = self.get_argument("cur_db")
         tab    = self.get_argument("tab")
-        print('get_inst_idx_ddl=',dbid,tab,cur_db)
         result = get_idx_ddl_by_instid(dbid,tab,cur_db)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -185,7 +177,6 @@ class drop_inst_tab(basehandler):
         dbid    = self.get_argument("dbid")
         cur_db  = self.get_argument("cur_db")
         tab     = self.get_argument("tab")
-        print('drop_inst_tab=',dbid,tab,cur_db)
         result = drop_tab_by_instid(dbid,tab,cur_db)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -198,7 +189,6 @@ class db_inst_sql_query(basehandler):
        inst_id= self.get_argument("inst_id")
        sql    = self.get_argument("sql")
        curdb  = self.get_argument("cur_db")
-       print('sql_query_inst=',inst_id,sql,'curdb=',curdb)
        result = exe_query(userid,inst_id,sql,curdb)
        v_dict = {"data": result['data'],"column":result['column'],"status":result['status'],"msg":result['msg']}
        v_json = json.dumps(v_dict)
@@ -254,7 +244,6 @@ class dbinstparaadd_save(basehandler):
         d_para['para_value']          = self.get_argument("para_value")
         d_para['para_desc']           = self.get_argument("para_desc")
         d_para['para_status']         = self.get_argument("para_status")
-        print('dbinstparaadd_save=',d_para)
         result = save_db_inst_para(d_para)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -269,8 +258,6 @@ class dbinstparaedit_save(basehandler):
         d_para['para_value']          = self.get_argument("para_value")
         d_para['para_desc']           = self.get_argument("para_desc")
         d_para['para_status']         = self.get_argument("para_status")
-
-        print(d_para)
         result=upd_db_inst_para(d_para)
         self.write({"code": result['code'], "message": result['message']})
 

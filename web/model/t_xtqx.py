@@ -5,13 +5,13 @@
 # @File    : t_xtqx.py
 # @Software: PyCharm
 
-import traceback,sys
+import traceback
+import json
 from web.utils.common    import current_rq,get_connection_ds_sqlserver
-from web.utils.common    import get_connection,get_connection_ds
-from web.utils.common    import get_url_root
+from web.utils.common    import get_connection,get_connection_ds,get_connection_ds_dict
 from web.model.t_user    import get_user_by_loginame,get_user_by_userid
-from web.utils.common    import exception_info_mysql,format_mysql_error
 from web.model.t_ds      import get_ds_by_dsid
+from web.model.t_sql     import get_mysql_proxy_result,get_sqlserver_proxy_result
 
 def upd_menu(p_menu):
     result={}
@@ -766,6 +766,46 @@ def get_tree_by_dbid(dbid):
         result['message'] = '加载失败！'
     return result
 
+def get_tree_by_dbid_layui(dbid):
+    try:
+        result = {}
+        p_ds   = get_ds_by_dsid(dbid)
+        db     = get_connection_ds_dict(p_ds)
+        cr1    = db.cursor()
+        cr2    = db.cursor()
+        sql1   = """SELECT schema_name FROM information_schema.SCHEMATA order by 1"""
+        sql2   = """SELECT table_name  FROM information_schema.tables WHERE table_schema='{0}' order by 1"""
+        cr1.execute(sql1)
+        rs1   = cr1.fetchall()
+        v_list = []
+        for r in rs1:
+            v_db = {}
+            v_db['title'] = r['schema_name']
+            #print('sql2=', sql2.format(r['schema_name']))
+            cr2.execute(sql2.format(r['schema_name']))
+            rs2 = cr2.fetchall()
+            #print('rs2=', rs2)
+            v_children = []
+            for c in rs2:
+                v_children.append({"title": c['table_name']})
+            v_db['children'] = v_children
+            #print('v_children=', v_children)
+            #print('v_db=', v_db)
+            v_list.append(v_db)
+            #print('v_list=', v_list)
+        cr1.close()
+        cr2.close()
+        db.commit()
+        result['code'] = '0'
+        result['message'] = json.dumps(v_list)
+        # result['desc']    = p_ds['db_desc']
+        # result['db_url']  = p_ds['db_desc']
+
+    except Exception as e:
+        print('get_tree_by_dbid.ERROR:',str(e))
+        result['code'] = '-1'
+        result['message'] = '加载失败！'
+    return result
 
 def get_tree_by_dbid_mssql(dbid):
     print('get_tree_by_dbid_mssql=',dbid)
@@ -778,7 +818,7 @@ def get_tree_by_dbid_mssql(dbid):
         print('p_ds=',p_ds)
 
         if p_ds['proxy_status'] == '0':
-           db     = get_connection_ds_sqlserver(p_ds)
+           db  = get_connection_ds_sqlserver(p_ds)
         else:
            p_ds['ip']   = p_ds['proxy_server'].split(':')[0]
            p_ds['port'] = p_ds['proxy_server'].split(':')[1]
@@ -818,6 +858,106 @@ def get_tree_by_dbid_mssql(dbid):
         result['message'] = '加载失败！'
         result['desc'] = ''
         result['db_url'] = ''
+    return result
+
+def get_tree_by_dbid_proxy(dbid):
+    try:
+        result = {}
+        v_html = ''
+        p_ds   = get_ds_by_dsid(dbid)
+        sql1   = "SELECT schema_name FROM information_schema.SCHEMATA order by 1"
+        sql2   = "SELECT table_name  FROM information_schema.tables WHERE table_schema='{0}' order by 1"
+        ret1   = get_mysql_proxy_result(p_ds,sql1,p_ds['service'])
+        print('ret1=', ret1)
+        if ret1['status'] == '1':
+            result['code'] = '-1'
+            result['message'] = '加载失败！'
+            result['desc'] = ''
+            result['db_url'] = ''
+            return result
+        rs1 = ret1['data']
+        print('rs1=',rs1,type(rs1))
+        for i in range(len(rs1)):
+            print('i=',i)
+            ret2 = get_mysql_proxy_result(p_ds, sql2.format(rs1[i][0]),p_ds['service'])
+            print('ret2=', ret2)
+            if ret1['status'] == '1':
+                result['code'] = '-1'
+                result['message'] = '加载失败！'
+                result['desc'] = ''
+                result['db_url'] = ''
+                return result
+            rs2 = ret2['data']
+
+            v_node = """<li><span class="folder">{0}</span><ul>""".format(rs1[i][0])
+            v_html=v_html+v_node
+            for j in range(len(rs2)):
+                v_node = """<li><span class="file">{0}<div style="display:none">{1}</div></span></li>
+                         """.format(rs2[j][0],rs2[j][0])
+                v_html = v_html + "\n" + v_node;
+            v_html=v_html+"\n"+"</ul></li>"+"\n"
+        result['code'] = '0'
+        result['message'] = v_html
+        result['desc']    = p_ds['db_desc']
+        result['db_url']  = p_ds['db_desc']
+        print(v_html)
+    except Exception as e:
+        print('get_tree_by_dbid_proxy.ERROR:',str(e))
+        result['code'] = '-1'
+        result['message'] = '加载失败！'
+    return result
+
+def get_tree_by_dbid_mssql_proxy(dbid):
+    try:
+        result = {}
+        v_html = ''
+        p_ds = get_ds_by_dsid(dbid)
+
+        if p_ds['service'] == '':
+            sql1 = """ SELECT name FROM Master..SysDatabases  ORDER BY Name"""
+        else:
+            sql1 = """ SELECT name FROM Master..SysDatabases where name= DB_NAME() ORDER BY Name"""
+
+        sql2 = """use {};SELECT OBJECT_SCHEMA_NAME(id)+'.'+Name FROM SysObjects Where XType='U' order by name"""
+
+        ret1 = get_sqlserver_proxy_result(p_ds, sql1, p_ds['service'])
+
+        if ret1['status'] == '1':
+            result['code'] = '-1'
+            result['message'] = '加载失败！'
+            result['desc'] = ''
+            result['db_url'] = ''
+            return  result
+        rs1 = ret1['data']
+
+        for i in range(len(rs1)):
+            ret2 = get_sqlserver_proxy_result(p_ds, sql2.format(rs1[i][0]),p_ds['service'])
+
+            if ret1['status'] == '1':
+                result['code'] = '-1'
+                result['message'] = '加载失败！'
+                result['desc'] = ''
+                result['db_url'] = ''
+                return result
+            rs2 = ret2['data']
+            v_node = """<li><span class="folder">{0}</span><ul>""".format(rs1[i][0])
+            v_html = v_html + v_node
+            for j in range(len(rs2)):
+                v_node = """<li><span class="file">{0}<div style="display:none">{1}</div></span></li>
+                         """.format(rs2[j][0],rs2[j][0])
+                v_html = v_html + "\n" + v_node;
+            v_html = v_html + "\n" + "</ul></li>" + "\n"
+
+        result['code']    = '0'
+        result['message'] = v_html
+        result['desc']    = p_ds['db_desc']
+        result['db_url']  = p_ds['db_desc']
+    except Exception as e:
+        print('get_tree_by_dbid_mssql_proxy=>error:', str(e))
+        result['code']    = '-1'
+        result['message'] = '加载失败！'
+        result['desc']    = ''
+        result['db_url']  = ''
     return result
 
 def query_menu(p_name):
@@ -884,7 +1024,6 @@ def query_func(p_name):
     cr.close()
     db.commit()
     return v_list
-
 
 def if_exists_menu(p_name):
     db = get_connection()

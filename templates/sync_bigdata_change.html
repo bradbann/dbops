@@ -41,6 +41,16 @@
             max-height: 290px;
         }
 
+        #ace-editor {
+            color: #59aed5;
+            overflow:auto;
+            height: 400px;
+        }
+
+        .warning {
+            color: #d54c15;
+        }
+
     </style>
 </head>
 <body>
@@ -109,7 +119,7 @@
                    <input  id='dsupd' type='button' class="btn waves-effect waves-light btn-primary" value="变更"/>
                    <input  id='dsdel' type='button' class="btn waves-effect waves-light btn-primary" value="删除"/>
                    <input  id='push' type='button' class="btn waves-effect waves-light btn-primary"  value="推送"/>
-                   <input  id='pushAll' type='button' class="btn waves-effect waves-light btn-primary"  value="推送全部"/>
+                   <!--<input  id='pushAll' type='button' class="btn waves-effect waves-light btn-primary"  value="推送全部"/>-->
                    <input  id='run' type='button' class="btn waves-effect waves-light btn-primary"   value="启动"/>
                    <input  id='stop' type='button' class="btn waves-effect waves-light btn-primary"   value="停止"/>
                    <input  id='clone' type='button' class="btn waves-effect waves-light btn-primary"  value="克隆"/>
@@ -120,7 +130,27 @@
          </div>
     </div>
 
-    </div>
+    <!--远程任务详情 -->
+    <div id="con-close-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+      <div class="modal-dialog modal-lg-detail">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">任务详情</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                  <div id='ace-editor' class="col-md-12"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-sm-offset-2 col-sm-4">
+                   <button type="button" class="btn btn-custom waves-effect waves-light btn-md" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div><!-- /.modal -->
+
     <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
     <script src="{{static_url('plugins/datatables/dataTables.bootstrap.js')}}"></script>
     <script src="{{static_url('plugins/datatables/dataTables.buttons.min.js')}}"></script>
@@ -138,6 +168,16 @@
                 $("#query_btn").click();
             }
          });
+
+        function centerModals() {
+              $('.modal').each(function(i) {
+                var $clone = $(this).clone().css('display', 'block').appendTo('body');
+                var top = Math.round(($clone.height() - $clone.find('.modal-content').height()) / 2);
+                top = top > 50 ? top : 0;
+                $clone.remove();
+                $(this).find('.modal-content').css("margin-top", top - 50);
+              });
+        }
 
         $("#tagname").bind("input propertychange",function(){
            $('#dsupd').attr("disabled",true);
@@ -180,7 +220,7 @@
               $('#dsupd').attr("disabled",false);
               $('#dsdel').attr("disabled",false);
               $('#push').attr("disabled",false);
-              $('#pushAll').attr("disabled",false);
+              // $('#pushAll').attr("disabled",false);
               $('#run').attr("disabled",false);
               $('#stop').attr("disabled",false);
               $('#clone').attr("disabled",false);
@@ -188,7 +228,7 @@
               $('#dsupd').attr("disabled",true);
               $('#dsdel').attr("disabled",true);
               $('#push').attr("disabled",true);
-              $('#pushAll').attr("disabled",true);
+              // $('#pushAll').attr("disabled",true);
               $('#run').attr("disabled",true);
               $('#stop').attr("disabled",true);
               $('#clone').attr("disabled",true);
@@ -266,7 +306,7 @@
                       $('#dsupd').attr("disabled",true);
                       $('#dsdel').attr("disabled",true);
                       $('#push').attr("disabled",true);
-                      $('#pushAll').attr("disabled",true);
+                      // $('#pushAll').attr("disabled",true);
                       $('#run').attr("disabled",true);
                       $('#stop').attr("disabled",true);
                       $('#clone').attr("disabled",true);
@@ -316,13 +356,17 @@
                                });
                           },
                           success: function (dataSet) {
-                              console.log(dataSet.code, dataSet.message);
-                              if (dataSet.code=='0') {
+                              if (dataSet['code']== 200) {
                                      swal("推送成功!", "任务["+v_desc+"]已推送成功!", "success");
+                                     $('#ace-editor').html(dataSet['msg']['crontab'])
+                                     $('.modal').on('show.bs.modal', centerModals);
+                                     $(window).on('resize', centerModals);
+                                     $('#con-close-modal').modal({ keyboard: false,backdrop:false});
                                      $("#query_btn").click();
                               } else {
-                                     swal("推送失败!", "任务["+v_desc+"]"+dataSet.message+"!", "error");
+                                  swal("推送失败!", "任务["+v_desc+"]推送失败!", "error");
                               }
+
                               $('#dsupd').attr("disabled",true);
                               $('#dsdel').attr("disabled",true);
                               $('#push').attr("disabled",true);
@@ -348,66 +392,6 @@
               });
 
         })
-
-        $("#pushAll").click(function() {
-              var v_tag='';
-              var v_desc='';
-              var v_tags=''
-              $("#example tbody tr td input").each( function() {
-                  var row=$(($(this).parent().parent().html()));
-                  v_desc=row[2].innerHTML.replace(/&gt;/g,'>');
-                  v_tag=$('#sync_tag_tmp').val()
-                  v_api=row[6].innerHTML;
-                  v_tags=v_tags+v_tag+'$$'+v_api+','
-              });
-              console.log("v_tags=",v_tags)
-
-              $.ajax({
-                      url: "/bigdata/edit/pushall",
-                      type: "post",
-                      datatype: "json",
-                      data:{
-                          tags: v_tags
-                      },
-                      beforeSend: function () {
-                          swal({
-                                title: "正在批量推送中...",
-                                text:  "请稍候...",
-                                type:  "info",
-                                showConfirmButton: false
-                           });
-                      },
-                      success: function (dataSet) {
-                          console.log(dataSet.code, dataSet.message);
-                          if (dataSet.code=='0') {
-                                 swal("推送成功!", "任务批量推送成功!", "success");
-                                 $("#query_btn").click();
-                          } else {
-                                 swal("推送失败!", "任务批量推送失败["+v_desc+"]"+dataSet.message+"!", "error");
-                          }
-                          $('#dsupd').attr("disabled",true);
-                          $('#dsdel').attr("disabled",true);
-                          $('#push').attr("disabled",true);
-                          $('#run').attr("disabled",true);
-                      },
-                      error: function (jqXHR, textStatus, errorThrown) {
-                            console.log('jqXHR.responseText=',jqXHR.responseText);
-                            console.log('jqXHR.status=',jqXHR.status);
-                            console.log('jqXHR.readyState=',jqXHR.readyState);
-                            console.log('jqXHR.statusText=',jqXHR.statusText);
-                            console.log('textStatus=',textStatus);
-                            console.log('errorThrown=',errorThrown);
-                            if (jqXHR.status==403){
-                                swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
-                                setTimeout(" window.location.href='/login'",3000);
-                            } else if (jqXHR.status==502){
-                                swal("用户无权访问权限此功能!", "", "error")
-                            } else {
-                                swal("系统不可用,请稍后重试!", "", "error")
-                            }
-                      }
-                  });
-        });
 
         $("#run").click(function() {
               var v_tag='';

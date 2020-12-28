@@ -204,3 +204,28 @@
     http://localhost:81
     
     登陆:admin/admin
+
+-----------------------------------2020.12.02------------------------------------    
+
+# 安装 python3.6
+sudo yum -y install epel-release
+sudo yum repolist
+sudo yum -y install python36
+
+# 安装依赖
+sudo yum install python3-devel
+sudo pip3 install -r requirements.txt -i https://pypi.douban.com/simple
+    
+# 导出依赖
+pip3 freeze > requirements.txt
+    
+#安装验证码
+sudo yum install zlib zlib-devel libjpeg libjpeg-devel freetype freetype-devel -y 
+wget http://www.zhitbar.com/downloads/times/TIMES.zip
+unzip TIMES.zip
+sudo mkdir -p /usr/share/fonts/times
+sudo mv TIMES/* /usr/share/fonts/times
+sudo mkfontscale
+sudo mkfontdir
+sudo fc-cache -fv
+sudo fc-list :lang=zh  

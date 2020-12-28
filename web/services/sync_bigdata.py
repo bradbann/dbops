@@ -16,6 +16,7 @@ from   web.model.t_sync_datax import query_datax_sync,save_datax_sync,query_data
 from   web.model.t_sync_datax import query_datax_sync_detail,query_datax_sync_dataxTemplete,downloads_datax_sync_dataxTemplete,get_datax_sync_tags_by_env
 from   web.model.t_sync_datax import push_datax_sync_task,pushall_datax_sync_task,run_datax_sync_task,stop_datax_sync_task,update_datax_sync_status
 from   web.model.t_sync_datax import query_datax_sync_log_analyze,query_datax_sync_log_detail,query_sync_log_analyze
+from   web.model.t_sync_datax import query_datax_sync_es_dataxTemplete
 from   web.model.t_dmmx       import get_dmm_from_dm,get_dmm_from_dm2,get_sync_server,get_datax_sync_db_server,get_db_sync_tags,get_db_sync_tags_by_market_id,get_db_sync_ywlx_by_market_id,get_datax_sync_tags
 from   web.utils.common       import current_rq2,get_day_nday_ago,now
 from   web.utils.basehandler  import basehandler
@@ -47,7 +48,6 @@ class sync_bigdata_query_detail(basehandler):
         sync_id   = self.get_argument("sync_id")
         v_list    = query_datax_sync_detail(sync_id)
         v_json    = json.dumps(v_list)
-        print('sync_bigdata_query_detail=',v_json)
         self.write({"code": 0, "message": v_json})
 
 class sync_bigdata_query_dataxTemplete(basehandler):
@@ -56,7 +56,6 @@ class sync_bigdata_query_dataxTemplete(basehandler):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         sync_id  = self.get_argument("sync_id")
         templete = query_datax_sync_dataxTemplete(sync_id)
-        print('sync_bigdata_query_dataxTemplete=',templete)
         self.write({"code": 0, "message": templete})
 
 class sync_bigdata_downloads_dataxTemplete(basehandler):
@@ -66,7 +65,24 @@ class sync_bigdata_downloads_dataxTemplete(basehandler):
         sync_id     = self.get_argument("sync_id")
         static_path = self.get_template_path().replace("templates", "static")
         zipfile     = downloads_datax_sync_dataxTemplete(sync_id,static_path)
-        print('sync_bigdata_downloads_dataxTemplete=',zipfile)
+        self.write({"code": 0, "message": zipfile})
+
+
+class sync_bigdata_query_es_dataxTemplete(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        sync_id  = self.get_argument("sync_id")
+        templete = query_datax_sync_es_dataxTemplete(sync_id)
+        self.write({"code": 0, "message": templete})
+
+class sync_bigdata_downloads_es_dataxTemplete(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        sync_id     = self.get_argument("sync_id")
+        static_path = self.get_template_path().replace("templates", "static")
+        zipfile     = downloads_datax_sync_dataxTemplete(sync_id,static_path)
         self.write({"code": 0, "message": zipfile})
 
 class syncadd_bigdata(basehandler):
@@ -113,7 +129,6 @@ class syncadd_bigdata_save(basehandler):
         d_sync['sync_gap']             = self.get_argument("sync_gap")
         d_sync['api_server']           = self.get_argument("api_server")
         d_sync['status']               = self.get_argument("status")
-        print('syncadd_bigdata_save=',d_sync)
         result=save_datax_sync(d_sync)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -203,7 +218,6 @@ class syncedit_save_bigdata(basehandler):
         d_sync['status']               = self.get_argument("status")
         d_sync['sync_id']              = self.get_argument("sync_id")
         d_sync['python3_home']         = self.get_argument("python3_home")
-        print(d_sync)
         result=upd_datax_sync(d_sync)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -280,7 +294,6 @@ class syncclone_save_bigdata(basehandler):
         d_sync['status']               = self.get_argument("status")
         d_sync['sync_id']              = self.get_argument("sync_id")
         d_sync['python3_home']         = self.get_argument("python3_home")
-        print(d_sync)
         result=save_datax_sync(d_sync)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -324,14 +337,12 @@ class sync_log_query_detail(basehandler):
         sync_rqq = self.get_argument("sync_rqq")
         sync_rqz = self.get_argument("sync_rqz")
         v_list=query_datax_sync_log_detail(sync_tag,sync_rqq,sync_rqz)
-        print('sync_log_query_detail=>result=',v_list)
         v_json = json.dumps(v_list)
         self.write(v_json)
 
 class syncloganalyze(basehandler):
     @tornado.web.authenticated
     def get(self):
-        print('begin_date=',get_day_nday_ago(now(),15),get_day_nday_ago(now(),0))
         self.render("./sync_log_analyze.html",
                       dm_proj_type = get_dmm_from_dm('05'),
                       db_sync_tags = get_db_sync_tags(),
@@ -352,33 +363,7 @@ class sync_log_analyze(basehandler):
         d_list['data1'] = v_list1
         d_list['data2'] = v_list2
         v_json = json.dumps(d_list)
-        print('backup_log_analyze=',v_json)
         self.write(v_json)
-
-# class syncloganalyze2(basehandler):
-#     def get(self):
-#         print('begin_date=',get_day_nday_ago(now(),15),get_day_nday_ago(now(),0))
-#         self.render("./sync_log_analyze2.html",
-#                       dm_proj_type = get_dmm_from_dm('05'),
-#                       db_sync_ywlx = get_db_sync_ywlx(),
-#                       begin_date   = get_day_nday_ago(now(),0),
-#                       end_date     = get_day_nday_ago(now(),0)
-#                     )
-#
-# class sync_log_analyze2(basehandler):
-#     def post(self):
-#         self.set_header("Content-Type", "application/json; charset=UTF-8")
-#         market_id  = self.get_argument("market_id")
-#         sync_type  = self.get_argument("sync_type")
-#         begin_date = self.get_argument("begin_date")
-#         end_date   = self.get_argument("end_date")
-#         d_list     = {}
-#         v_list1,v_list2 = query_datax_sync_log_analyze2(market_id,sync_type,begin_date,end_date)
-#         d_list['data1'] = v_list1
-#         d_list['data2'] = v_list2
-#         v_json = json.dumps(d_list)
-#         print('backup_log_analyze=',v_json)
-#         self.write(v_json)
 
 class get_sync_tasks(basehandler):
     @tornado.web.authenticated
@@ -389,7 +374,6 @@ class get_sync_tasks(basehandler):
         v_list  = get_db_sync_tags_by_market_id(market_id)
         d_list['data'] = v_list
         v_json  = json.dumps(d_list)
-        print('get_sync_tasks=', v_json)
         self.write(v_json)
 
 class get_sync_ywlx(basehandler):
@@ -401,7 +385,6 @@ class get_sync_ywlx(basehandler):
         v_list  = get_db_sync_ywlx_by_market_id(market_id)
         d_list['data'] = v_list
         v_json  = json.dumps(d_list)
-        print('get_sync_tasks=', v_json)
         self.write(v_json)
 
 class syncedit_push_bigdata(basehandler):
@@ -450,13 +433,11 @@ class syncedit_status(basehandler):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         v_list = update_datax_sync_status()
         v_json = json.dumps(v_list)
-        print('backupedit_status=',v_json)
         self.write(v_json)
 
 class syncloganalyze_bigdata(basehandler):
     @tornado.web.authenticated
     def get(self):
-        print('begin_date=',get_day_nday_ago(now(),15),get_day_nday_ago(now(),0))
         self.render("./sync_bigdata_log_analyze.html",
                       db_sync_tags = get_datax_sync_tags(),
                       begin_date=get_day_nday_ago(now(),0),
@@ -476,7 +457,6 @@ class sync_log_analyze_bigdata(basehandler):
         d_list['data1'] = v_list1
         d_list['data2'] = v_list2
         v_json = json.dumps(d_list)
-        print('backup_log_analyze=',v_json)
         self.write(v_json)
 
 class get_bigdata_sync_tasks(basehandler):
@@ -488,5 +468,4 @@ class get_bigdata_sync_tasks(basehandler):
         v_list  = get_datax_sync_tags_by_env(sync_env)
         d_list['data'] = v_list
         v_json  = json.dumps(d_list)
-        print('get_bigdata_sync_tasks=', v_json)
         self.write(v_json)

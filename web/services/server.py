@@ -12,9 +12,8 @@
 
 import json
 import tornado.web
-from   web.model.t_server import get_server_by_serverid,query_server,save_server,upd_server,del_server,check_server_valid
-from   web.model.t_dmmx   import get_dmm_from_dm
-from   web.utils.common   import get_url_root
+from   web.model.t_server    import get_server_by_serverid,query_server,save_server,upd_server,del_server,check_server_valid
+from   web.model.t_dmmx      import get_dmm_from_dm
 from   web.utils.basehandler import basehandler
 
 
@@ -61,7 +60,7 @@ class serveradd_save(basehandler):
 class serverchange(basehandler):
     @tornado.web.authenticated
     def get(self):
-        self.render("./server_change.html", url = get_url_root())
+        self.render("./server_change.html")
 
 class serveredit(basehandler):
     @tornado.web.authenticated

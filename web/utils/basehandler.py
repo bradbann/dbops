@@ -32,6 +32,7 @@ class basehandler(tornado.web.RequestHandler):
            if check_url(userid,self.request.uri.split('?')[0]):
                self.set_secure_cookie("username", username, expires=time.time() + 1800)
                self.set_secure_cookie("userid", userid, expires=time.time() + 1800)
+               self.set_secure_cookie("heartbeat", 'health', expires=time.time() + 300)
                return self.get_secure_cookie("userid")
            else:
                print('uri,uri.split[0]',self.request.uri,self.request.uri.split('?')[0])

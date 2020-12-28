@@ -10,6 +10,7 @@ from web.utils.common     import get_connection,get_connection_dict
 from web.utils.common     import current_rq
 import os,json
 import traceback
+import requests
 
 def query_monitor_index(index_code):
     db = get_connection()
@@ -776,27 +777,19 @@ def query_monitor_templete_type(p_templete_id):
 
 
 def push_monitor_task(p_tag,p_api):
-    try:
-        result = {}
-        result['code'] = '0'
-        result['message'] = '推送成功！'
-        v_cmd="curl -XPOST {0}/push_script_remote_monitor -d 'tag={1}'".format(p_api,p_tag)
-        print('push_archive_task=',v_cmd)
-        r=os.popen(v_cmd).read()
-        print(r)
-        d=json.loads(r)
-
-        if d['code']==200:
-           return result
+    url = 'http://{}/push_script_remote_monitor'.format(p_api)
+    res = requests.post(url, data={'tag': p_tag})
+    jres = res.json()
+    v = ''
+    for c in jres['msg']['crontab'].split('\n'):
+        if c.count(p_tag) > 0:
+            v = v + "<span class='warning'>" + c + "</span>"
         else:
-           result['code'] = '-1'
-           result['message'] = '{0}!'.format(d['msg'])
-           return result
-    except Exception as e:
-        print('push_script_remote_monitor.error:',traceback.format_exc())
-        result['code'] = '-1'
-        result['message'] = '{0!'.format(traceback.format_exc())
-        return result
+            v = v + c
+        v = v + '<br>'
+    jres['msg']['crontab'] = v
+    return jres
+
 
 def run_monitor_task(p_tag,p_api):
     try:
@@ -963,6 +956,8 @@ def query_monitor_sys(env,search_text):
          vw = " and b.server_desc like '%好房生产%'"
     elif env == 'sg-prod':
          vw = " and b.server_desc like '%商管%'"
+    elif env == 'platform-prod':
+         vw = " and b.server_desc like '%平台组生产%'"
     else:
          vw =''
 
@@ -1027,6 +1022,8 @@ def query_monitor_svr(env,search_text):
         vw = " and server_desc like '%好房生产%'"
     elif env == 'sg-prod':
         vw = " and server_desc like '%商管%'"
+    elif env == 'platform-prod':
+         vw = " and server_desc like '%平台组生产%'"
     else:
         vw = ''
 

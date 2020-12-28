@@ -26,25 +26,38 @@
 </head>
 <body>
      <p></p>
-     <div class="col-md-12">
-       <div class="col-md-3 input-group">
-            <span class="input-group-addon"><i class="mdi mdi-server"></i></span>
-            <input type="text" id="appname" class="form-control" placeholder="请输入应用名、开发者">
-            <span class="input-group-btn">
-               <button type="button"  id='query_btn' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
-            </span>
-       </div>
-       <p></p>
-       <div id="div-tab">
-           <table id="example" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
-       </div>
-       <div class="col-md-offset-4 col-lg-offset-4 col-xl-offset-4">
-           <input  id='portupd' type='button' class="btn waves-effect waves-light btn-primary" value="变更"/>
-           <input  id='portdel' type='button' class="btn waves-effect waves-light btn-primary" value="删除"/>
-           <input  id='portimp' type='button' class="btn waves-effect waves-light btn-primary" value="导入"/>
-           <input  id='portexp' type='button' class="btn waves-effect waves-light btn-primary" value="导出"/>
-       </div>
+     <div class="row">
+         <div class="col-md-12">
+               <div class="col-md-3 input-group">
+                    <span class="input-group-addon"><i class="mdi mdi-server"></i></span>
+                    <div class="form-group">
+                       <div class="col-md-11">
+                            <select class="form-control select" id="market_id" >
+                                <option value='' selected = "selected">......</option>
+                                 {% for var in dm_proj_type %}
+                                   <option value={{var[0]}} >{{var[1]}}</option>
+                                 {% end %}
+                            </select>
+                       </div>
+                       <div class="col-md-1">
+                             <span class="input-group-btn">
+                               <button type="button"  id='query_btn' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                   </div>
+                </div>
+          </div>
       </div>
+      <p></p>
+     <div class="row">
+          <div id="div-tab">
+            <table id="example" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%"  height="100%" ></table>
+          </div>
+          <div class="col-md-offset-5 col-lg-offset-5 col-xl-offset-5">
+            <input  id='portimp' type='button' class="btn waves-effect waves-light btn-primary" value="导入"/>
+            <input  id='portexp' type='button' class="btn waves-effect waves-light btn-primary" value="导出"/>
+          </div>
+     </div>
 
     <!--导入窗口 -->
     <div id="con-close-modal-imp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -107,7 +120,7 @@
                   type: "post",
                   datatype: "json",
                   data:{
-                      app_name: $('#appname').val()
+                      market_id: $('#market_id').val()
                   },
                   success: function (dataSet) {
                     $('#example').DataTable( {
@@ -118,21 +131,28 @@
                       scrollY    :"600px",
                       scrollX    :true,
                       scrollCollapse: true,
-                      paging:     false,
+                      paging     :true,
+                      ordering   :false,
                       iDisplayLength: 14,
                       data: dataSet,
                       columns: [
-                        { "title": "标识符" ,"visible":true},
-                        { "title": "应用名" },
-                        { "title": "端口号" },
-                        { "title": "开发者" },
-                        { "title": "应用描述" },
-                        { "title": "附加信息" },
+                        { "title": "ID" ,"visible":false},
+                        { "title": "项目名" },
+                        { "title": "项目描述" },
+                        { "title": "本地IP" },
+                        { "title": "本地PORT" },
+                        { "title": "映射PORT" },
+                        { "title": "映射域名" },
+                        { "title": "录入人" },
+                        { "title": "录入日期" },
                         {
                             "title":"选择",
                             "width": "25px",
-                            "render": function(data,type,row){
-                                 return '<input type="radio" name="userid" >'; }
+                            "render": function(data,type,row) {
+                                var alter = '<input class="btn btn-xs btn-primary"  type="button"  value="变更" onclick="updPort(\'' + row[0] + '\');"/>' + '&nbsp;'
+                                var del = '<input class="btn btn-xs btn-primary"  type="button"  value="删除" onclick="delPort(\'' + row[0]+','+row[2]+'\');"/>' + '&nbsp;'
+                                return alter + del;
+                            }
                         },
                       ],
                       "language": {
@@ -163,12 +183,6 @@
                      });
                   },
                   error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('jqXHR.responseText=',jqXHR.responseText);
-                    console.log('jqXHR.status=',jqXHR.status);
-                    console.log('jqXHR.readyState=',jqXHR.readyState);
-                    console.log('jqXHR.statusText=',jqXHR.statusText);
-                    console.log('textStatus=',textStatus);
-                    console.log('errorThrown=',errorThrown);
                     if (jqXHR.status==403){
                         swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
                         setTimeout(" window.location.href='/login'",3000);
@@ -181,31 +195,19 @@
              });
             });
 
-        $('#portupd').on('click', function() {
-             var portid='';
-             $("#example tbody tr td input:checked").each( function() {
-                  var row=$(($(this).parent().parent().html()));
-                  portid=row[0].innerHTML;
-                  console.log("portid=",portid)
-             });
-
+       function updPort (p_id) {
+             console.log('updPort=',p_id);
              $.ajax({
                 url: "/port/edit",
                 type: "get",
                 datatype: "html",
                 data: {
-                    port_id:portid
+                    port_id:p_id
                 },
                 success: function () {
-                   $('#main-container-div').load("/port/edit?port_id="+portid);
+                   $('#main-container-div').load("/port/edit?port_id="+p_id);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('jqXHR.responseText=',jqXHR.responseText);
-                    console.log('jqXHR.status=',jqXHR.status);
-                    console.log('jqXHR.readyState=',jqXHR.readyState);
-                    console.log('jqXHR.statusText=',jqXHR.statusText);
-                    console.log('textStatus=',textStatus);
-                    console.log('errorThrown=',errorThrown);
                     if (jqXHR.status==403){
                         swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
                         setTimeout(" window.location.href='/login'",3000);
@@ -216,20 +218,16 @@
                     }
                 }
              })
-        });
+        };
 
-        $('#portdel').on('click', function() {
-             var portid='';
-             var portidame='';
-             $("#example tbody tr td input:checked").each( function() {
-                  var row = $(($(this).parent().parent().html()));
-                  portid  = row[0].innerHTML;
-                  portidame=row[2].innerHTML;
-                  console.log("portid=",portid,"portidame=",portidame)
-             });
+       function delPort (p_id) {
+             console.log('delPort=',p_id);
+             var portid=p_id.split(',')[0];
+             var portdesc=p_id.split(',')[1];
+
             swal({
                 title: "确认要删除吗?",
-                text: "端口["+portidame+"]不能使用了！",
+                text: "["+portdesc+"]不能使用了！",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -244,21 +242,14 @@
                             type: "post",
                             datatype: "json",
                             success: function (dataSet) {
-                                //console.log(dataSet.code, dataSet.message);
                                 if (dataSet.code=='0') {
-                                    swal("已删除!", "端口["+portidame+"]已删除!", "success");
+                                    swal("已删除!", "配置["+portdesc+"]已删除!", "success");
                                     $("#query_btn").click();
                                 } else {
-                                    swal("删除失败!", "端口["+portidame+"]"+dataSet.message+"!", "error");
+                                    swal("删除失败!", "配置["+portdesc+"]"+dataSet.message+"!", "error");
                                 }
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
-                                console.log('jqXHR.responseText=',jqXHR.responseText);
-                                console.log('jqXHR.status=',jqXHR.status);
-                                console.log('jqXHR.readyState=',jqXHR.readyState);
-                                console.log('jqXHR.statusText=',jqXHR.statusText);
-                                console.log('textStatus=',textStatus);
-                                console.log('errorThrown=',errorThrown);
                                 if (jqXHR.status==403){
                                     swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
                                     setTimeout(" window.location.href='/login'",3000);
@@ -271,10 +262,10 @@
                        });
 
                 } else {
-                    swal("已取消", "服务器["+portidame+"]未删除！", "error");
+                    swal("已取消", "服务器["+portdesc+"]未删除！", "error");
                 }
             });
-        });
+        };
 
         $('#portimp').on('click',function () {
             $('#filer_imp').val('')
@@ -322,7 +313,6 @@
         $("#start_imp").click(function () {
 
             if ($('#filer_imp').val() == '' ) {
-
                 swal("文件名不能为空!", "", "error")
                 return false
             }
@@ -342,6 +332,7 @@
                    console.log(dataSet.message);
                    if (dataSet.code =='0') {
                        swal("导入成功", "", "success")
+                       $("#query_btn").click();
                    } else {
                        swal("导入失败", "", "error")
                    }
@@ -382,6 +373,10 @@
                 showThumbs: true,
                 addMore: true
          });
+
+        $("#market_id").bind("input propertychange",function(){
+           $("#query_btn").click();
+        });
 
         $(document).ready(function() {
 

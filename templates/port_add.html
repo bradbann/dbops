@@ -21,59 +21,69 @@
        <form class="form-horizontal" role="form">
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label"><span id="s_app_name">*</span>应用名</label>
+                    <label class="col-md-2 control-label"><span id="s_ds_market_id">*</span>项目名</label>
                 </div>
-                <div class="col-md-10">
-                    <input id="app_name"  type="text" class="form-control" placeholder="请输入应用名">
-                </div>
-           </div>
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_app_port">*</span>端口号</label>
-                </div>
-                <div class="col-md-10">
-                    <input id="app_port"  type="text" class="form-control" placeholder="请输端口号">
-                </div>
-           </div>
-
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label">程序员</label>
-                </div>
-                <div class="col-md-10">
-                    <select multiple="multiple" class="form-control" id="develper" >
-                         {% for var in developer %}
-                          <option value={{var[0]}} >{{var[1]}}</option>
+               <div class="col-md-10">
+                    <select class="form-control select" id="market_id" >
+                        <option value='' selected = "selected">......</option>
+                         {% for var in dm_proj_type %}
+                           <option value={{var[0]}} >{{var[1]}}</option>
                          {% end %}
                     </select>
-                </div>
+               </div>
            </div>
-
            <div class="form-group">
                 <div>
-                    <label class="col-md-2 control-label"><span id="s_app_dev">*</span>开发者</label>
+                    <label class="col-md-2 control-label"><span id="s_app_desc">*</span>项目描述</label>
                 </div>
                 <div class="col-md-10">
-                    <select multiple="multiple" class="form-control" id="app_dev" >
+                    <input id="app_desc"  type="text" class="form-control" placeholder="请输入项目描述" >
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_local_ip">*</span>本地IP</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="local_ip"  type="text" class="form-control" placeholder="请输入本地IP">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_local_port">*</span>本地PORT</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="local_port"  type="text" class="form-control" placeholder="请输入本地PORT">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_mapping_port">*</span>映射PORT</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="mapping_port"  type="text" class="form-control" placeholder="请输映射PORT">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_mapping_domain">*</span>映射域名</label>
+                </div>
+                <div class="col-md-10">
+                    <input id="mapping_domain"  type="text" class="form-control" placeholder="请输入映射域名">
+                </div>
+           </div>
+           <div class="form-group">
+                <div>
+                    <label class="col-md-2 control-label"><span id="s_mapping_type">*</span>映射类型</label>
+                </div>
+               <div class="col-md-10">
+                    <select class="form-control select" id="mapping_type" >
+                        <option value='' selected = "selected">......</option>
+                         {% for var in dm_mapping_type %}
+                           <option value={{var[0]}} >{{var[1]}}</option>
+                         {% end %}
                     </select>
-                </div>
-           </div>
-
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_app_desc">*</span>应用描述</label>
-                </div>
-                <div class="col-md-10">
-                    <input id="app_desc"  type="text" class="form-control" placeholder="请输入应用描述" >
-                </div>
-           </div>
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label">附加信息</label>
-                </div>
-                <div class="col-md-10">
-                    <input id="app_ext"  type="text" class="form-control" placeholder="请输入附加信息" >
-                </div>
+               </div>
            </div>
            <br>
            <div class="form-group m-b-0">
@@ -88,46 +98,13 @@
     <script src="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.min.js')}}"></script>
 
     <script>
-
-          $("#develper").click(function () {
-               options=$('#develper option:selected');
-               if(options.length>0){
-                for (var i=0;i<options.length;i++){
-                      value=$(options[i]).val();
-                      text =$(options[i]).text();
-                      $('#app_dev').append("<option value='"+value+"'>"+text+"</option>");
-                }
-                $('#develper option:selected').remove();
-               }
-          });
-
-          $("#app_dev").click(function () {
-               options=$('#app_dev option:selected');
-               if(options.length>0){
-                for (var i=0;i<options.length;i++){
-                      value=$(options[i]).val();
-                      text =$(options[i]).text();
-                      $('#develper').append("<option value='"+value+"'>"+text+"</option>");
-                }
-                $('#app_dev option:selected').remove();
-               }
-          });
-
-          function get_developers(){
-             var tmp='';
-             var val='';
-             $('#app_dev option').each(function(){
-               val=$(this).val();
-               tmp=tmp+','+val;
-             });
-             return tmp.substr(1);
-          };
-
         function set_selected(){
-            document.all['s_app_name'].style.color="#ff0000";
-            document.all['s_app_port'].style.color="#ff0000";
-            document.all['s_app_dev'].style.color="#ff0000";
+            document.all['s_ds_market_id'].style.color="#ff0000";
             document.all['s_app_desc'].style.color="#ff0000";
+            document.all['s_local_ip'].style.color="#ff0000";
+            document.all['s_local_port'].style.color="#ff0000";
+            document.all['s_mapping_port'].style.color="#ff0000";
+            //document.all['s_mapping_type'].style.color="#ff0000";
         }
 
         $(document).ready(function() {
@@ -140,11 +117,14 @@
                 type: "post",
                 datatype: "json",
                 data: {
-                    app_name   : $('#app_name').val(),
-                    app_port   : $('#app_port').val(),
-                    app_dev    : get_developers(),
-                    app_desc   : $('#app_desc').val(),
-                    app_ext    : $('#app_ext').val()
+                    market_id      : $('#market_id').val(),
+                    market_name    : $("#market_id").find("option:selected").text(),
+                    app_desc       : $('#app_desc').val(),
+                    local_ip       : $('#local_ip').val(),
+                    local_port     : $('#local_port').val(),
+                    mapping_port   : $('#mapping_port').val(),
+                    mapping_domain : $('#mapping_domain').val(),
+                    mapping_type   : $('#mapping_type').val(),
                 },
                 success: function (dataSet) {
                     console.log(dataSet.code, dataSet.message);
@@ -155,12 +135,6 @@
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('jqXHR.responseText=',jqXHR.responseText);
-                    console.log('jqXHR.status=',jqXHR.status);
-                    console.log('jqXHR.readyState=',jqXHR.readyState);
-                    console.log('jqXHR.statusText=',jqXHR.statusText);
-                    console.log('textStatus=',textStatus);
-                    console.log('errorThrown=',errorThrown);
                     if (jqXHR.status==403){
                         swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
                         setTimeout(" window.location.href='/login'",3000);
@@ -173,6 +147,36 @@
              });
           });
 
+        });
+
+        $("#local_ip").bind("input propertychange",function(){
+            $("#mapping_domain").val($("#local_ip").val())
+        });
+
+        $("#local_port").bind("input propertychange",function(){
+           $("#mapping_port").val($("#local_port").val())
+        });
+
+        $("#market_id").bind("input propertychange",function(){
+            if ($("#market_id").val()!='') {
+                if ($("#mapping_type").val()!='') {
+                    $("#app_desc").val($("#market_id").find("option:selected").text()+'代理服务')
+                } else {
+                     $("#app_desc").val($("#market_id").find("option:selected").text())
+                }
+           }  else {
+                $("#app_desc").val('')
+           }
+        });
+
+        $("#mapping_type").bind("input propertychange",function(){
+           if ($("#mapping_type").val()!='') {
+                 $("#app_desc").val($("#market_id").find("option:selected").text()+'代理服务')
+                 $("#app_desc").attr("disabled",true);
+           }  else {
+                $("#app_desc").val($("#market_id").find("option:selected").text())
+                $("#app_desc").attr("disabled",false);
+           }
         });
 
    </script>

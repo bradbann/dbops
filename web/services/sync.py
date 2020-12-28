@@ -12,10 +12,11 @@
 
 import json
 import tornado.web
-from   web.model.t_sync import query_sync,query_sync_tab,save_sync,save_sync_tab,del_sync_tab,get_sync_by_syncid,upd_sync,del_sync,query_sync_log,query_sync_log_detail
-from   web.model.t_sync import push_sync_task,run_sync_task,stop_sync_task,update_sync_status,query_sync_log_analyze,query_sync_log_analyze2
-from   web.model.t_sync import query_sync_park,query_sync_park_real_time,query_sync_flow,query_sync_flow_real_time,query_sync_flow_device,query_sync_park_charge,query_sync_bi
+from   web.model.t_sync import query_sync,query_sync_tab,query_sync_tab_cfg,save_sync,save_sync_tab,del_sync_tab,get_sync_by_syncid,upd_sync,del_sync,query_sync_log,query_sync_log_detail
+from   web.model.t_sync import push_sync_task,run_sync_task,stop_sync_task,update_sync_status,query_sync_log_analyze,query_sync_log_analyze2,query_sync_case,query_sync_case_log
+from   web.model.t_sync import query_sync_park,query_sync_park_real_time,query_sync_flow,query_sync_flow_real_time,query_sync_flow_device,query_sync_park_charge,query_sync_bi,get_sync_by_sync_tag
 from   web.model.t_dmmx import get_dmm_from_dm,get_dmm_from_dm2,get_sync_server,get_sync_db_server,get_db_sync_tags,get_db_sync_tags_by_market_id,get_db_sync_ywlx,get_db_sync_ywlx_by_market_id
+from   web.model.t_sync import query_db_active_num,query_db_slow_num
 from   web.utils.common import current_rq2,get_day_nday_ago,now
 from   web.utils.basehandler import basehandler
 
@@ -36,7 +37,8 @@ class sync_query(basehandler):
         market_id  = self.get_argument("market_id")
         sync_ywlx  = self.get_argument("sync_ywlx")
         sync_type  = self.get_argument("sync_type")
-        v_list   = query_sync(sync_tag,market_id,sync_ywlx,sync_type)
+        task_status = self.get_argument("task_status")
+        v_list   = query_sync(sync_tag,market_id,sync_ywlx,sync_type,task_status)
         v_json   = json.dumps(v_list)
         self.write(v_json)
 
@@ -44,10 +46,20 @@ class sync_query_tab(basehandler):
     @tornado.web.authenticated
     def post(self):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
-        sync_tag   = self.get_argument("sync_tag")
-        v_list   = query_sync_tab(sync_tag)
+        sync_tag = self.get_argument("sync_tag")
+        sync_tab = self.get_argument("sync_tab")
+        v_list   = query_sync_tab(sync_tag,sync_tab)
         v_json   = json.dumps(v_list)
         self.write(v_json)
+
+
+class sync_query_sync_tabs(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "html/text; charset=UTF-8")
+        sync_tag = self.get_argument("sync_tag")
+        v_result = query_sync_tab_cfg(sync_tag)
+        self.write(v_result)
 
 
 class syncadd(basehandler):
@@ -89,7 +101,6 @@ class syncadd_save(basehandler):
         d_sync['sync_repair_day']      = self.get_argument("sync_repair_day")
         d_sync['api_server']           = self.get_argument("api_server")
         d_sync['status']               = self.get_argument("status")
-        print('syncadd_save=',d_sync)
         result=save_sync(d_sync)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -106,7 +117,6 @@ class syncadd_save_tab(basehandler):
         d_sync['sync_cols']         = self.get_argument("sync_cols")
         d_sync['sync_incr_col']     = self.get_argument("sync_incr_col")
         d_sync['sync_time']         = self.get_argument("sync_time")
-        print('syncadd_save_tab=',d_sync)
         result = save_sync_tab(d_sync)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -193,7 +203,6 @@ class syncedit_save(basehandler):
         d_sync['api_server']     = self.get_argument("api_server")
         d_sync['status']         = self.get_argument("status")
         d_sync['sync_id']        = self.get_argument("sync_id")
-        print(d_sync)
         result=upd_sync(d_sync)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -263,7 +272,6 @@ class syncclone_save(basehandler):
         d_sync['sync_repair_day'] = self.get_argument("sync_repair_day")
         d_sync['api_server']     = self.get_argument("api_server")
         d_sync['status']         = self.get_argument("status")
-        print(d_sync)
         result=save_sync(d_sync)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -308,7 +316,6 @@ class sync_log_query_detail(basehandler):
         sync_rqq = self.get_argument("sync_rqq")
         sync_rqz = self.get_argument("sync_rqz")
         v_list=query_sync_log_detail(sync_tag,sync_rqq,sync_rqz)
-        print('sync_log_query_detail=>result=',v_list)
         v_json = json.dumps(v_list)
         self.write(v_json)
 
@@ -316,7 +323,6 @@ class sync_log_query_detail(basehandler):
 class syncloganalyze(basehandler):
     @tornado.web.authenticated
     def get(self):
-        print('begin_date=',get_day_nday_ago(now(),15),get_day_nday_ago(now(),0))
         self.render("./sync_log_analyze.html",
                       dm_proj_type = get_dmm_from_dm('05'),
                       db_sync_tags = get_db_sync_tags(),
@@ -337,13 +343,11 @@ class sync_log_analyze(basehandler):
         d_list['data1'] = v_list1
         d_list['data2'] = v_list2
         v_json = json.dumps(d_list)
-        print('backup_log_analyze=',v_json)
         self.write(v_json)
 
 class syncloganalyze2(basehandler):
     @tornado.web.authenticated
     def get(self):
-        print('begin_date=',get_day_nday_ago(now(),15),get_day_nday_ago(now(),0))
         self.render("./sync_log_analyze2.html",
                       dm_proj_type = get_dmm_from_dm('05'),
                       db_sync_ywlx = get_db_sync_ywlx(),
@@ -364,7 +368,6 @@ class sync_log_analyze2(basehandler):
         d_list['data1'] = v_list1
         d_list['data2'] = v_list2
         v_json = json.dumps(d_list)
-        print('backup_log_analyze=',v_json)
         self.write(v_json)
 
 class get_sync_tasks(basehandler):
@@ -376,7 +379,15 @@ class get_sync_tasks(basehandler):
         v_list  = get_db_sync_tags_by_market_id(market_id)
         d_list['data'] = v_list
         v_json  = json.dumps(d_list)
-        print('get_sync_tasks=', v_json)
+        self.write(v_json)
+
+class get_sync(basehandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        sync_tag = self.get_argument("sync_tag")
+        v_list  = get_sync_by_sync_tag(sync_tag)
+        v_json  = json.dumps(v_list)
         self.write(v_json)
 
 
@@ -416,7 +427,6 @@ class syncedit_status(basehandler):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         v_list = update_sync_status()
         v_json = json.dumps(v_list)
-        print('backupedit_status=',v_json)
         self.write(v_json)
 
 
@@ -467,4 +477,39 @@ class get_sync_bi(basehandler):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         v_list     = query_sync_bi()
         v_json     = json.dumps(v_list)
+        self.write(v_json)
+
+class sync_case(basehandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        v_list      = query_sync_case()
+        v_json      = json.dumps(v_list)
+        self.write(v_json)
+
+class sync_case_log(basehandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        sync_tag = self.get_argument("sync_tag")
+        v_list      = query_sync_case_log(sync_tag)
+        v_json      = json.dumps(v_list)
+        self.write(v_json)
+
+class db_active_num(basehandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        db_id       = self.get_argument("db_id")
+        begin_date  = self.get_argument("begin_date")
+        end_date    = self.get_argument("end_date")
+        v_list      = query_db_active_num(db_id,begin_date,end_date)
+        v_json      = json.dumps(v_list)
+        self.write(v_json)
+
+class db_slow_num(basehandler):
+    def post(self):
+        self.set_header("Content-Type", "application/json; charset=UTF-8")
+        inst_id     = self.get_argument("inst_id")
+        begin_date  = self.get_argument("begin_date")
+        end_date    = self.get_argument("end_date")
+        v_list      = query_db_slow_num(inst_id,begin_date,end_date)
+        v_json      = json.dumps(v_list)
         self.write(v_json)

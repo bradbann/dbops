@@ -46,32 +46,33 @@ class minioadd(basehandler):
     def get(self):
         self.render("./minio_add.html",
                     dm_sync_server=get_sync_server(),
-                    dm_sync_type=get_dmm_from_dm('34')
+                    dm_sync_type=get_dmm_from_dm('34'),
+                    dm_sync_time_type=get_dmm_from_dm('10')
                     )
 
 class minioadd_save(basehandler):
     @tornado.web.authenticated
     def post(self):
         d_sync = {}
-        d_sync['sync_tag']     = self.get_argument("sync_tag")
-        d_sync['task_desc']    = self.get_argument("task_desc")
-        d_sync['server_id']    = self.get_argument("sync_server")
-        d_sync['sync_type']    = self.get_argument("sync_type")
-        d_sync['sync_dir']     = self.get_argument("sync_dir")
-        d_sync['sync_service'] = self.get_argument("sync_service")
-        d_sync['minio_server'] = self.get_argument("minio_server")
-        d_sync['minio_user']   = self.get_argument("minio_user")
-        d_sync['minio_pass']   = self.get_argument("minio_pass")
-        d_sync['python3_home'] = self.get_argument("python3_home")
-        d_sync['script_base']  = self.get_argument("script_base")
-        d_sync['script_name']  = self.get_argument("script_name")
-        d_sync['run_time']     = self.get_argument("run_time")
-        d_sync['api_server']   = self.get_argument("api_server")
-        d_sync['status']       = self.get_argument("status")
-        d_sync['minio_bucket'] = self.get_argument("minio_bucket")
-        d_sync['minio_dpath']  = self.get_argument("minio_dpath")
-        d_sync['minio_incr']   = self.get_argument("minio_incr")
-        print(d_sync)
+        d_sync['sync_tag']        = self.get_argument("sync_tag")
+        d_sync['task_desc']       = self.get_argument("task_desc")
+        d_sync['server_id']       = self.get_argument("sync_server")
+        d_sync['sync_type']       = self.get_argument("sync_type")
+        d_sync['sync_dir']        = self.get_argument("sync_dir")
+        d_sync['sync_service']    = self.get_argument("sync_service")
+        d_sync['minio_server']    = self.get_argument("minio_server")
+        d_sync['minio_user']      = self.get_argument("minio_user")
+        d_sync['minio_pass']      = self.get_argument("minio_pass")
+        d_sync['python3_home']    = self.get_argument("python3_home")
+        d_sync['script_base']     = self.get_argument("script_base")
+        d_sync['script_name']     = self.get_argument("script_name")
+        d_sync['run_time']        = self.get_argument("run_time")
+        d_sync['api_server']      = self.get_argument("api_server")
+        d_sync['status']          = self.get_argument("status")
+        d_sync['minio_bucket']    = self.get_argument("minio_bucket")
+        d_sync['minio_dpath']     = self.get_argument("minio_dpath")
+        d_sync['minio_incr']      = self.get_argument("minio_incr")
+        d_sync['minio_incr_type'] = self.get_argument("minio_incr_type")
         result=save_minio(d_sync)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -105,8 +106,10 @@ class minioedit(basehandler):
                     minio_bucket   = d_sync['minio_bucket'],
                     minio_dpath    = d_sync['minio_dpath'],
                     minio_incr     = d_sync['minio_incr'],
+                    minio_incr_type= d_sync['minio_incr_type'],
                     dm_sync_server = get_sync_server(),
-                    dm_sync_type   = get_dmm_from_dm('34')
+                    dm_sync_type   = get_dmm_from_dm('34'),
+                    dm_sync_time_type=get_dmm_from_dm('10')
                     )
 
 class minioclone(basehandler):
@@ -133,8 +136,10 @@ class minioclone(basehandler):
                     minio_bucket     = d_sync['minio_bucket'],
                     minio_dpath      = d_sync['minio_dpath'],
                     minio_incr       = d_sync['minio_incr'],
+                    minio_incr_type  = d_sync['minio_incr_type'],
                     dm_sync_server   = get_sync_server(),
-                    dm_sync_type     = get_dmm_from_dm('34')
+                    dm_sync_type     = get_dmm_from_dm('34'),
+                    dm_sync_time_type= get_dmm_from_dm('10')
                     )
 
 
@@ -161,7 +166,7 @@ class minioedit_save(basehandler):
         d_sync['minio_bucket']  = self.get_argument("minio_bucket")
         d_sync['minio_dpath']   = self.get_argument("minio_dpath")
         d_sync['minio_incr']    = self.get_argument("minio_incr")
-        print(d_sync)
+        d_sync['minio_incr_type'] = self.get_argument("minio_incr_type")
         result=upd_minio(d_sync)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -195,7 +200,6 @@ class minio_log_query(basehandler):
 class miniologanalyze(basehandler):
     @tornado.web.authenticated
     def get(self):
-        print('begin_date=',get_day_nday_ago(now(),15),get_day_nday_ago(now(),0))
         self.render("./minio_log_analyze.html",
                       minio_tags     = get_minio_tags(),
                       begin_date     = get_day_nday_ago(now(),15),
@@ -215,7 +219,6 @@ class minio_log_analyze(basehandler):
         d_list['data2'] = v_list2
         d_list['data3'] = v_list3
         v_json = json.dumps(d_list)
-        print('minio_log_analyze=',v_json)
         self.write(v_json)
 
 

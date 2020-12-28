@@ -20,10 +20,23 @@
     <div class="col-md-12">
        <div class="col-md-3 input-group">
             <span class="input-group-addon"><i class="mdi mdi-server"></i></span>
-            <input type="text" id="appname" class="form-control" placeholder="请输入应用名、开发者">
-            <span class="input-group-btn">
-               <button type="button"  id='query_btn' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
-            </span>
+            <div class="form-group">
+               <div class="col-md-11">
+                    <select class="form-control select" id="market_id" >
+                        <option value='' selected = "selected">......</option>
+                         {% for var in dm_proj_type %}
+                           <option value={{var[0]}} >{{var[1]}}</option>
+                         {% end %}
+                    </select>
+               </div>
+               <div class="col-md-1">
+                     <span class="input-group-btn">
+                       <button type="button"  id='query_btn' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+           </div>
+
+        </div>
       </div>
       <p></p>
       <div id="div-tab">
@@ -56,7 +69,7 @@
                   type: "post",
                   datatype: "json",
                   data:{
-                      app_name: $('#appname').val()
+                      market_id: $('#market_id').val()
                   },
                   success: function (dataSet) {
                       $('#example').DataTable( {
@@ -68,15 +81,19 @@
                       scrollX    :true,
                       scrollCollapse: true,
                       paging:     false,
+                      ordering   :false,
                       iDisplayLength: 16,
                       data: dataSet,
                       columns: [
-                        { "title": "标识符" ,"visible":true},
-                        { "title": "应用名" },
-                        { "title": "端口号" },
-                        { "title": "开发者" },
-                        { "title": "应用描述" },
-                        { "title": "附加信息" }
+                        { "title": "ID" ,"visible":false},
+                        { "title": "项目名" },
+                        { "title": "项目描述" },
+                        { "title": "本地IP" },
+                        { "title": "本地PORT" },
+                        { "title": "映射PORT" },
+                        { "title": "映射域名" },
+                        { "title": "录入人" },
+                        { "title": "录入日期" },
                       ],
                       "language": {
                              "search"       : "在表格中搜索:",
@@ -126,6 +143,10 @@
 
             $("#query_btn").click();
 
+        });
+
+        $("#market_id").bind("input propertychange",function(){
+           $("#query_btn").click();
         });
 
    </script>

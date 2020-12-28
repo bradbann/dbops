@@ -13,7 +13,6 @@
 import json
 import tornado.web
 from web.model.t_xtqx  import init_menu,query_func,get_privs,save_func,get_func_by_funcid,upd_func,del_func
-from web.utils.common  import get_url_root
 from web.utils.basehandler import basehandler
 
 class funcquery(basehandler):
@@ -60,7 +59,7 @@ class funcadd_save(basehandler):
 class funcchange(basehandler):
     @tornado.web.authenticated
     def get(self):
-        self.render("./func_change.html", url = get_url_root())
+        self.render("./func_change.html")
 
 class funcedit(basehandler):
     @tornado.web.authenticated

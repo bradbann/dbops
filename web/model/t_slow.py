@@ -10,6 +10,7 @@ from   web.utils.common import get_connection,get_connection_dict,get_connection
 from   web.model.t_db_inst import query_inst_by_id,get_ds_by_instid
 import os,json
 from   web.model.t_sql_release import  format_sql
+import requests
 
 def query_slow(p_inst_id,p_inst_env):
     db  = get_connection()
@@ -403,25 +404,18 @@ def query_slow_log_plan(p_sqlid):
     return ''.join(plan)
 
 def push_slow(p_api,p_slowid):
-    try:
-        result = {}
-        result['code'] = '0'
-        result['message'] = '慢日志配置正在更新中...'
-        v_cmd="curl -XPOST {0}/push_slow_remote -d 'slow_id={1}'".format(p_api,p_slowid)
-        print('push_slow=',v_cmd)
-        r=os.popen(v_cmd).read()
-        d=json.loads(r)
-        if d['code']==200:
-              return result
+    url = 'http://{}/push_slow_remote'.format(p_api)
+    res = requests.post(url, data={'slow_id': p_slowid})
+    jres = res.json()
+    v = ''
+    for c in jres['msg']['crontab'].split('\n'):
+        if c.count(p_slowid) > 0:
+            v = v + "<span class='warning'>" + c + "</span>"
         else:
-           result['code'] = '-1'
-           result['message'] = '{0}!'.format(d['msg'])
-           return result
-    except Exception as e:
-        print(traceback.print_exc())
-        result['code'] = '-1'
-        result['message'] = '慢日志配置更新失败!'
-        return result
+            v = v + c
+        v = v + '<br>'
+    jres['msg']['crontab'] = v
+    return jres
 
 def get_db_by_inst_id(p_inst_id):
     p_ds = get_ds_by_instid(p_inst_id)

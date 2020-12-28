@@ -132,7 +132,7 @@ def get_inst_names(p_env):
     db = get_connection()
     cr = db.cursor()
     if p_env == '':
-        sql = "select id,inst_name from t_db_inst where id in(select inst_id from t_slow_log where status='1') order by inst_name"
+        sql = "select id,inst_name from t_db_inst  order by inst_name"
     else:
         sql = "select id,inst_name from t_db_inst WHERE id in(select inst_id from t_slow_log where status='1') and inst_env='{}' order by inst_name".format(p_env)
     cr.execute(sql)
@@ -315,7 +315,7 @@ def get_sync_db_server_by_type(p_type):
         result = {}
         db  = get_connection()
         cr  = db.cursor()
-        sql = """SELECT id,db_desc
+        sql = """SELECT cast(id as char) id,db_desc
                       FROM t_db_source 
                     WHERE  db_type ='{0}' and db_env in(1,2,3,4) 
                         and STATUS=1 
@@ -330,7 +330,7 @@ def get_sync_db_server_by_type(p_type):
         result['code'] = '0'
         result['message'] = v_list
     except Exception as e:
-        print('get_sync_db_server_by_type.ERROR:',str(e))
+        print('get_sync_db_server_by_type:',str(e))
         result['code'] = '-1'
         result['message'] = '获取数据库名失败！'
     return result

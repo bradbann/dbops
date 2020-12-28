@@ -11,6 +11,8 @@ from web.utils.common import exception_info_mysql,exception_info_sqlserver,forma
 from web.model.t_sql_check import get_audit_rule
 import traceback
 import pymysql
+import requests
+import json
 
 def check_sql(p_dbid,p_sql,curdb):
     result = {}
@@ -72,9 +74,6 @@ def get_sqlserver_result(p_ds,p_sql,curdb):
             p_ds['port'] = p_ds['proxy_server'].split(':')[1]
             db = get_connection_ds_sqlserver(p_ds)
 
-        print('get_sqlserver_result=>p_ds:', p_ds)
-        print('get_sqlserver_result=>p_sql:', p_sql)
-        print('get_sqlserver_result=>db:', db)
         cr = db.cursor()
         cr.execute('use {}'.format(curdb))
         cr.execute(p_sql)
@@ -208,6 +207,62 @@ def get_mysql_result(p_ds,p_sql,curdb):
         result['column'] = ''
         return result
 
+def get_mysql_proxy_result(p_ds,p_sql,curdb):
+    result = {}
+    p_ds['service'] = curdb
+    url  = "http://{0}/get_mysql_query".format(p_ds['proxy_server'])
+    data = {
+            'db_ip'  :p_ds['ip'],
+            'db_port':p_ds['port'],
+            'db_service': p_ds['service'],
+            'db_user': p_ds['user'],
+            'db_pass': p_ds['password'],
+            'db_sql' : p_sql
+    }
+
+    r = requests.post(url,data)
+    r = json.loads(r.text)
+
+    if r['code'] == 200:
+        result['status'] = '0'
+        result['msg']    = ''
+        result['data']   = r['data']
+        result['column'] = r['column']
+    else:
+        result['status'] = '0'
+        result['msg']    = r['msg']
+        result['data']   = ''
+        result['column'] = ''
+    return result
+
+def get_sqlserver_proxy_result(p_ds,p_sql,curdb):
+    result = {}
+    p_ds['service'] = curdb
+    url  = "http://{0}/get_mssql_query".format(p_ds['proxy_server'])
+    data = {
+            'db_ip'  :p_ds['ip'],
+            'db_port':p_ds['port'],
+            'db_service': p_ds['service'],
+            'db_user': p_ds['user'],
+            'db_pass': p_ds['password'],
+            'db_sql' : p_sql
+    }
+
+    r = requests.post(url,data)
+    r = json.loads(r.text)
+
+    if r['code'] == 200:
+        result['status'] = '0'
+        result['msg']    = ''
+        result['data']   = r['data']
+        result['column'] = r['column']
+    else:
+        result['status'] = '0'
+        result['msg']    = r['msg']
+        result['data']   = ''
+        result['column'] = ''
+    return result
+
 def exe_query(p_dbid,p_sql,curdb):
     result = {}
 
@@ -221,10 +276,17 @@ def exe_query(p_dbid,p_sql,curdb):
 
     #查询MySQL数据源
     if p_ds['db_type']=='0':
-        result=get_mysql_result(p_ds,p_sql,curdb)
+        if p_ds['proxy_status'] == '1':
+           result = get_mysql_proxy_result(p_ds,p_sql,curdb)
+        else:
+           result = get_mysql_result(p_ds,p_sql,curdb)
 
     # 查询MSQLServer数据源
     if p_ds['db_type'] == '2':
-        result = get_sqlserver_result(p_ds,p_sql,curdb)
+        if p_ds['proxy_status'] == '1':
+            result = get_sqlserver_proxy_result(p_ds, p_sql, curdb)
+        else:
+            result = get_sqlserver_result(p_ds, p_sql, curdb)
+
 
     return result

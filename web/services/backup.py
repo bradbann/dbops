@@ -45,6 +45,7 @@ class backup_case(basehandler):
         v_json      = json.dumps(v_list)
         self.write(v_json)
 
+
 class backupadd(basehandler):
     @tornado.web.authenticated
     def get(self):
@@ -183,7 +184,6 @@ class backup_log_query_detail(basehandler):
 class backuploganalyze(basehandler):
     @tornado.web.authenticated
     def get(self):
-        print('begin_date=',get_day_nday_ago(now(),15),get_day_nday_ago(now(),0))
         self.render("./backup_log_analyze.html",
                       dm_env_type    = get_dmm_from_dm('03'),
                       dm_db_type     = get_dmm_from_dm('02'),
@@ -207,7 +207,6 @@ class backup_log_analyze(basehandler):
         d_list['data1'] = v_list1
         d_list['data2'] = v_list2
         v_json = json.dumps(d_list)
-        print('backup_log_analyze=',v_json)
         self.write(v_json)
 
 
@@ -242,7 +241,7 @@ class backupedit_run(basehandler):
         api    = self.get_argument("api")
         v_list = run_backup_task(tag,api)
         v_json = json.dumps(v_list)
-        self.write(v_json)
+        self.write(json.loads(v_json))
 
 class backupedit_stop(basehandler):
     @tornado.web.authenticated
@@ -252,13 +251,4 @@ class backupedit_stop(basehandler):
         api    = self.get_argument("api")
         v_list = stop_backup_task(tag,api)
         v_json = json.dumps(v_list)
-        self.write(v_json)
-
-class backupedit_status(basehandler):
-    @tornado.web.authenticated
-    def post(self):
-        self.set_header("Content-Type", "application/json; charset=UTF-8")
-        v_list = update_backup_status()
-        v_json = json.dumps(v_list)
-        print('backupedit_status=',v_json)
         self.write(v_json)

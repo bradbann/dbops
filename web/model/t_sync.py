@@ -5,14 +5,12 @@
 # @File    : t_user.py
 # @Software: PyCharm
 
-from web.utils.common     import exception_info,current_rq,aes_encrypt,aes_decrypt,format_sql
-from web.utils.common     import get_connection,get_connection_ds,get_connection_ds_sqlserver,get_connection_ds_oracle,get_connection_ds_pg
-from web.model.t_ds       import get_ds_by_dsid
-from web.model.t_user     import get_user_by_loginame
-import re
+from web.utils.common     import exception_info,format_sql
+from web.utils.common     import get_connection,get_connection_dict
 import os,json
+import requests
 
-def query_sync(sync_tag,market_id,sync_ywlx,sync_type):
+def query_sync(sync_tag,market_id,sync_ywlx,sync_type,task_status):
     db = get_connection()
     cr = db.cursor()
     v_where=' and  1=1 '
@@ -28,15 +26,21 @@ def query_sync(sync_tag,market_id,sync_ywlx,sync_type):
     if sync_type != '':
         v_where = v_where + " and a.sync_type='{0}'\n".format(sync_type)
 
+    if task_status != '':
+        v_where = v_where + " and a.status='{0}'\n".format(task_status)
+
     sql = """SELECT  a.id,
                      concat(substr(a.sync_tag,1,40),'...') as sync_tag_,             
                      a.sync_tag,
                      concat(substr(a.comments,1,30),'...') as comments,
                      CONCAT(b.server_ip,':',b.server_port) AS sync_server,
                      c.dmmc AS  sync_ywlx,
-                    --  d.dmmc AS  sync_type,
                      a.run_time,
-                     a.api_server,
+                     CASE WHEN INSTR(api_server,',')>0 THEN 
+                        SUBSTR(a.api_server,1,INSTR(a.api_server,',')-1)
+                     ELSE                         
+                        a.api_server
+                     END AS api_server ,
                      CASE a.STATUS WHEN '1' THEN '启用' WHEN '0' THEN '禁用' END  STATUS
              FROM t_db_sync_config a,t_server b ,t_dmmx c,t_dmmx d
             WHERE a.server_id=b.id AND b.status='1' 
@@ -54,7 +58,7 @@ def query_sync(sync_tag,market_id,sync_ywlx,sync_type):
     db.commit()
     return v_list
 
-def query_sync_tab(sync_tag):
+def query_sync_tab(sync_tag,sync_tab):
     db = get_connection()
     cr = db.cursor()
     sql = """SELECT  
@@ -67,8 +71,9 @@ def query_sync_tab(sync_tag):
                     a.sync_time
              FROM t_db_sync_tab_config a
             WHERE a.sync_tag='{}' 
+             and  instr(a.tab_name,'{}')>0
             order by 1
-              """.format(sync_tag)
+              """.format(sync_tag,sync_tab)
     print(sql)
     cr.execute(sql)
     v_list = []
@@ -78,7 +83,30 @@ def query_sync_tab(sync_tag):
     db.commit()
     return v_list
 
-
+def query_sync_tab_cfg(sync_tag):
+    db = get_connection()
+    cr = db.cursor()
+    sql = """SELECT  
+                GROUP_CONCAT(
+                    CONCAT(    
+                       IF (a.schema_name='',a.tab_name,CONCAT(a.schema_name,'.',a.tab_name)),   
+                       ':',
+                       a.sync_incr_col,
+                       ':',
+                       a.sync_time)) AS sync_tab
+             FROM t_db_sync_tab_config a
+            WHERE a.sync_tag='{}' 
+            order by 1
+          """.format(sync_tag)
+    print(sql)
+    cr.execute(sql)
+    rs = cr.fetchone()
+    cr.close()
+    db.commit()
+    if rs[0] is None :
+       return 'None'
+    else:
+       return rs[0]
 
 def query_sync_log(sync_tag,market_id,sync_ywlx,begin_date,end_date):
     db = get_connection()
@@ -174,7 +202,6 @@ def query_sync_log_analyze(market_id,tagname,begin_date,end_date):
     db.commit()
     return v_list1,v_list2
 
-
 def query_sync_log_analyze2(market_id,sync_type,begin_date,end_date):
     db  = get_connection()
     cr  = db.cursor()
@@ -222,7 +249,6 @@ def query_sync_log_analyze2(market_id,sync_type,begin_date,end_date):
     cr.close()
     db.commit()
     return v_list1,v_list2
-
 
 def query_sync_log_detail(p_tag,p_sync_rqq,p_sync_rqz):
     db = get_connection()
@@ -349,11 +375,11 @@ def save_sync(p_backup):
         result['message'] = '保存失败！'
     return result
 
-
-def check_sync_tab(p_sync_tag):
+def check_sync_tab(p_sync_id):
     db = get_connection()
     cr = db.cursor()
-    st = "select count(0) from t_db_sync_tab_config where sync_tag='{}'".format(p_sync_tag)
+    st = "select count(0) from t_db_sync_tab_config where id={}".format(p_sync_id)
+    print('check_sync_tab=',st)
     cr.execute(st)
     rs = cr.fetchone()
     cr.close()
@@ -375,10 +401,10 @@ def save_sync_tab(p_sync):
         sync_incr_col        = p_sync['sync_incr_col']
         sync_time            = p_sync['sync_time']
 
-        if check_sync_tab(sync_tag) == 0:
+        if check_sync_tab(sync_id) == 0:
             sql = """insert into t_db_sync_tab_config(sync_tag,db_name,schema_name,tab_name, sync_cols, sync_incr_col,sync_time,status,create_date)
                      values('{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}',now())
-                  """.format(sync_tag, db_name, schema_name,tab_name, sync_cols,sync_incr_col,sync_time,'0')
+                  """.format(sync_tag, db_name, schema_name,tab_name, sync_cols,sync_incr_col,sync_time,'1')
             result['code'] = '0'
             result['message'] = '保存成功！'
         else:
@@ -397,6 +423,9 @@ def save_sync_tab(p_sync):
             result['message'] = '更新成功！'
         print(sql)
         cr.execute(sql)
+
+        # 更新同步任务sync_tables值
+        cr.execute("update t_db_sync_config set sync_table='{}' where sync_tag='{}'".format(sync_tag,query_sync_tab_cfg(sync_tag)))
         cr.close()
         db.commit()
         return result
@@ -558,7 +587,6 @@ def del_sync(p_syncid):
         result['code'] = '-1'
         result['message'] = '删除失败！'
     return result
-
 
 def check_sync_repeat(p_sync):
     result = {}
@@ -749,25 +777,34 @@ def get_sync_by_syncid(p_syncid):
     print(d_sync)
     return d_sync
 
-def push_sync_task(p_tag,p_api):
-    try:
-        result = {}
-        result['code'] = '0'
-        result['message'] = '推送成功！'
-        v_cmd="curl -XPOST {0}/push_script_remote_sync -d 'tag={1}'".format(p_api,p_tag)
-        r=os.popen(v_cmd).read()
-        d=json.loads(r)
+def get_sync_by_sync_tag(p_sync_tag):
+    db = get_connection_dict()
+    cr = db.cursor()
+    sql = "select * from t_db_sync_config where sync_tag='{0}'".format(p_sync_tag)
+    print('get_sync_by_sync_tag=',sql)
+    cr.execute(sql)
+    rs = cr.fetchone()
+    cr.close()
+    db.commit()
+    print('rs=',rs)
+    return rs
 
-        if d['code']==200:
-           return result
+def push_sync_task(p_tag,p_api):
+    data = {
+        'tag': p_tag,
+    }
+    url = 'http://{}/push_script_remote_sync'.format(p_api)
+    res = requests.post(url, data=data)
+    jres = res.json()
+    v = ''
+    for c in jres['msg']['crontab'].split('\n'):
+        if c.count(p_tag) > 0:
+            v = v + "<span class='warning'>" + c + "</span>"
         else:
-           result['code'] = '-1'
-           result['message'] = '{0}!'.format(d['msg'])
-           return result
-    except Exception as e:
-        result['code'] = '-1'
-        result['message'] = '{0!'.format(str(e))
-        return result
+            v = v + c
+        v = v + '<br>'
+    jres['msg']['crontab'] = v
+    return jres
 
 def run_sync_task(p_tag,p_api):
     try:
@@ -867,7 +904,6 @@ def query_sync_park():
     db.commit()
     return v_list
 
-
 def query_sync_park_real_time():
     # ds  = get_ds_by_dsid()
     # db  = get_connection_ds(ds)
@@ -933,7 +969,6 @@ def query_sync_flow():
     cr.close()
     db.commit()
     return v_list
-
 
 def query_sync_flow_real_time():
     # ds  = get_ds_by_dsid()
@@ -1066,3 +1101,170 @@ def query_sync_bi():
     cr.close()
     db.commit()
     return v_list
+
+def query_sync_case():
+    result = {}
+    db  = get_connection()
+    cr  = db.cursor()
+    sql = """ SELECT 
+                  market_id,
+                  market_name,
+                  flow_flag,
+                  flow_real_flag,
+                  flow_device_flag,
+                  park_flag,
+                  park_real_flag,
+                  sales_dldf_flag,
+                  date_format(create_date,'%Y-%m-%d %H:%i') as create_date
+                FROM t_db_sync_monitor
+                  ORDER BY CASE WHEN market_name LIKE '%北京%' THEN 1 
+                               WHEN market_name LIKE '%上海%' THEN 2 
+                               WHEN market_name LIKE '%成都%' THEN 3
+                               WHEN market_name LIKE '%广州%' THEN 4
+                               ELSE 5 END
+           """
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    for r in cr.fetchall():
+        v_list.append(list(r))
+    result['data']=v_list
+    cr.close()
+    db.commit()
+    return result
+
+
+def query_sync_case_log(p_tag):
+    result = {}
+    db  = get_connection()
+    cr  = db.cursor()
+    sql = """ SELECT 
+                date_format(create_date,'%H:%i') as create_date,
+                amount
+              FROM `t_db_sync_tasks_log` 
+              WHERE create_date>=DATE_ADD(NOW(),INTERVAL -3 HOUR)
+               AND sync_tag='{}'
+              ORDER BY create_date
+           """.format(p_tag.split(',')[0])
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    x = []
+    y = []
+    result['amount'] = {}
+    for r in cr.fetchall():
+        v_list.append(list(r))
+        x.append(r[0])
+        y.append(r[1])
+    result['amount']['x'] = x
+    result['amount']['y'] = y
+    result['amount']['t'] = p_tag
+    print('query_sync_case_log=',result)
+    cr.close()
+    db.commit()
+    return result
+
+def query_db_active_num(p_db_id,p_begin_date,p_end_date):
+    result = {}
+    db  = get_connection()
+    cr  = db.cursor()
+    if p_begin_date !='' or p_end_date!='':
+        sql = """SELECT 
+                       DATE_FORMAT(create_date,'%Y-%m-%d %H') AS rq,
+                       ROUND(AVG(active_connect),2) AS val_active,
+                       ROUND(AVG(db_qps),2) AS val_qps,
+                       ROUND(AVG(db_tps),2) AS val_tps
+                   FROM `t_monitor_task_db_log`
+                   WHERE db_id={}
+                     AND create_date >= ifnull('{}',CONCAT(DATE_FORMAT(NOW(),'%Y-%m-%d'),' 0:0:0'))
+                     AND create_date <= ifnull('{}',CONCAT(DATE_FORMAT(NOW(),'%Y-%m-%d'),' 23:59:59'))
+                     group by DATE_FORMAT(create_date,'%H')
+                   ORDER BY 1
+                  """.format(p_db_id, p_begin_date, p_end_date)
+    else:
+        sql = """SELECT 
+                    DATE_FORMAT(create_date,'%H') AS rq,
+                    ROUND(AVG(active_connect),2) AS val_active,
+                    ROUND(AVG(db_qps),2) AS val_qps,
+                    ROUND(AVG(db_tps),2) AS val_tps
+                FROM `t_monitor_task_db_log`
+                WHERE db_id={}
+                  AND create_date >= ifnull('{}',CONCAT(DATE_FORMAT(NOW(),'%Y-%m-%d'),' 0:0:0'))
+                  AND create_date <= ifnull('{}',CONCAT(DATE_FORMAT(NOW(),'%Y-%m-%d'),' 23:59:59'))
+                  group by DATE_FORMAT(create_date,'%H')
+                ORDER BY 1
+               """.format(p_db_id,p_begin_date,p_end_date)
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    x = []
+    y = []
+    x_qps = []
+    y_qps = []
+    x_tps = []
+    y_tps = []
+    result['amount'] = {}
+    for r in cr.fetchall():
+        v_list.append(list(r))
+        x.append(r[0])
+        y.append(r[1])
+        x_qps.append(r[0])
+        y_qps.append(r[2])
+        x_tps.append(r[0])
+        y_tps.append(r[3])
+
+    result['amount']['x'] = x
+    result['amount']['y'] = y
+
+    result['amount']['x_qps'] = x_qps
+    result['amount']['y_qps'] = y_qps
+    result['amount']['x_tps'] = x_tps
+    result['amount']['y_tps'] = y_tps
+
+    print('query_db_active_num=',result)
+    cr.close()
+    db.commit()
+    return result
+
+def query_db_slow_num(p_inst_id,p_begin_date,p_end_date):
+    result = {}
+    db  = get_connection()
+    cr  = db.cursor()
+    if p_begin_date != '' or p_end_date != '':
+        sql = """SELECT DATE_FORMAT(finish_time,'%Y-%m-%d %H') AS rq,
+                           COUNT(0) as val
+                    FROM t_slow_detail 
+                     WHERE inst_id={} 
+                       AND finish_time >= ifnull('{}',CONCAT(DATE_FORMAT(NOW(),'%Y-%m-%d'),' 0:0:0')) 
+                       AND finish_time <= ifnull('{}',CONCAT(DATE_FORMAT(NOW(),'%Y-%m-%d'),' 23:59:59'))
+                       AND query_time>3
+                       GROUP BY DATE_FORMAT(finish_time,'%H')
+                ORDER BY 1
+               """.format(p_inst_id,p_begin_date,p_end_date)
+    else:
+        sql = """SELECT DATE_FORMAT(finish_time,'%H') AS rq,
+                              COUNT(0) as val
+                       FROM t_slow_detail 
+                        WHERE inst_id={} 
+                          AND finish_time >= ifnull('{}',CONCAT(DATE_FORMAT(NOW(),'%Y-%m-%d'),' 0:0:0')) 
+                          AND finish_time <= ifnull('{}',CONCAT(DATE_FORMAT(NOW(),'%Y-%m-%d'),' 23:59:59'))
+                          AND query_time>3
+                          GROUP BY DATE_FORMAT(finish_time,'%H')
+                   ORDER BY 1
+                  """.format(p_inst_id, p_begin_date, p_end_date)
+    print(sql)
+    cr.execute(sql)
+    v_list = []
+    x = []
+    y = []
+    result['amount'] = {}
+    for r in cr.fetchall():
+        v_list.append(list(r))
+        x.append(r[0])
+        y.append(r[1])
+    result['amount']['x'] = x
+    result['amount']['y'] = y
+    print('query_db_slow_num=',result)
+    cr.close()
+    db.commit()
+    return result

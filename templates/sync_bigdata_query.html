@@ -294,6 +294,32 @@
                      <div class="col-md-12">
                        <div class="form-group">
                             <div>
+                                <label class="col-md-2 control-label">ElasticSearch索引</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input id="es_index_name"  type="text" class="form-control">
+                            </div>
+                       </div>
+                      </div>
+                   </div>
+
+                  <div class="row">
+                     <div class="col-md-12">
+                       <div class="form-group">
+                            <div>
+                                <label class="col-md-2 control-label">ElasticSearch类型</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input id="es_type_name"  type="text" class="form-control">
+                            </div>
+                       </div>
+                      </div>
+                   </div>
+
+                   <div class="row">
+                     <div class="col-md-12">
+                       <div class="form-group">
+                            <div>
                                 <label class="col-md-2 control-label">python3主目录</label>
                             </div>
                             <div class="col-md-10">
@@ -625,6 +651,9 @@
             $('#python3_home').attr("readonly","readonly");
             $('#hbase_thrift').attr("readonly","readonly");
             $('#es_service').attr("readonly","readonly");
+            $('#es_index_name').attr("readonly","readonly");
+            $('#es_type_name').attr("readonly","readonly");
+
 
             $('#sync_tag').attr("value",obj[0]);
             $('#sync_server').attr("value",obj[1]);
@@ -656,6 +685,8 @@
             $('#python3_home').attr("value",obj[20]);
             $('#hbase_thrift').attr("value",obj[21]);
             $('#es_service').attr("value",obj[22]);
+            $('#es_index_name').attr("value",obj[23]);
+            $('#es_type_name').attr("value",obj[24]);
         }
 
         function showdetail(v) {
@@ -697,61 +728,138 @@
         }
 
         function showTemplete(v) {
+            var res ;
             console.log('showTemplete=',v);
             $.ajax({
-                  url: "/bigdata/_query/templete",
+                  url: "/bigdata/_query/detail",
                   type: "post",
                   datatype: "json",
+                  async: false,
                   data:{
                       sync_id: v
                   },
                   success: function (dataSet) {
                       console.log('message=',dataSet.message,'code=',dataSet.code);
-                      console.log('incr_col=',dataSet.message['incr_col']);
-                      var editor_full = ace.edit("ace-editor-full");
-                      var position = editor_full.getCursorPosition()
-                      editor_full.setValue('')
-                      editor_full.insert(dataSet.message['full']);
-                      editor_full.setReadOnly(true);
-                      editor_full.moveCursorToPosition(position);
-
-                      if (dataSet.message['incr_col']!='') {
-                          var editor_incr = ace.edit("ace-editor-incr");
-                          var position = editor_incr.getCursorPosition()
-                          editor_incr.setValue('')
-                          editor_incr.insert(dataSet.message['incr']);
-                          editor_incr.setReadOnly(true);
-                          editor_incr.moveCursorToPosition(position);
-                          $('#incr_li').show()
-                          $('#ncr-templete').show()
-                      } else {
-                          $('#incr_li').hide()
-                          $('#ncr-templete').hide()
-                      }
-
-                      $('#con-close-modal-templete').modal({
-                           keyboard: false,
-                           backdrop:false
-                      });
-
-                  },
-                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('jqXHR.responseText=',jqXHR.responseText);
-                    console.log('jqXHR.status=',jqXHR.status);
-                    console.log('jqXHR.readyState=',jqXHR.readyState);
-                    console.log('jqXHR.statusText=',jqXHR.statusText);
-                    console.log('textStatus=',textStatus);
-                    console.log('errorThrown=',errorThrown);
-                    if (jqXHR.status==403){
-                        swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
-                        setTimeout(" window.location.href='/login'",3000);
-                    } else if (jqXHR.status==502){
-                        swal("用户无权访问权限此功能!", "", "error")
-                    } else {
-                        swal("系统不可用,请稍后重试!", "", "error")
-                    }
-                }
+                      res = dataSet.message
+                  }
              });
+
+            console.log('res=',res);
+            var  obj = JSON.parse(res);
+            if (obj[25] == '5') {
+                console.log('hbase_templete');
+                $.ajax({
+                      url: "/bigdata/_query/templete",
+                      type: "post",
+                      datatype: "json",
+                      data:{
+                          sync_id: v
+                      },
+                      success: function (dataSet) {
+                          console.log('message=',dataSet.message,'code=',dataSet.code);
+                          console.log('incr_col=',dataSet.message['incr_col']);
+                          var editor_full = ace.edit("ace-editor-full");
+                          var position = editor_full.getCursorPosition()
+                          editor_full.setValue('')
+                          editor_full.insert(dataSet.message['full']);
+                          editor_full.setReadOnly(true);
+                          editor_full.moveCursorToPosition(position);
+
+                          if (dataSet.message['incr_col']!='') {
+                              var editor_incr = ace.edit("ace-editor-incr");
+                              var position = editor_incr.getCursorPosition()
+                              editor_incr.setValue('')
+                              editor_incr.insert(dataSet.message['incr']);
+                              editor_incr.setReadOnly(true);
+                              editor_incr.moveCursorToPosition(position);
+                              $('#incr_li').show()
+                              $('#ncr-templete').show()
+                          } else {
+                              $('#incr_li').hide()
+                              $('#ncr-templete').hide()
+                          }
+
+                          $('#con-close-modal-templete').modal({
+                               keyboard: false,
+                               backdrop:false
+                          });
+
+                      },
+                      error: function (jqXHR, textStatus, errorThrown) {
+                        console.log('jqXHR.responseText=',jqXHR.responseText);
+                        console.log('jqXHR.status=',jqXHR.status);
+                        console.log('jqXHR.readyState=',jqXHR.readyState);
+                        console.log('jqXHR.statusText=',jqXHR.statusText);
+                        console.log('textStatus=',textStatus);
+                        console.log('errorThrown=',errorThrown);
+                        if (jqXHR.status==403){
+                            swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                            setTimeout(" window.location.href='/login'",3000);
+                        } else if (jqXHR.status==502){
+                            swal("用户无权访问权限此功能!", "", "error")
+                        } else {
+                            swal("系统不可用,请稍后重试!", "", "error")
+                        }
+                    }
+                });
+
+            } else {
+                console.log('es_templete');
+                $.ajax({
+                      url: "/bigdata/_query/es_templete",
+                      type: "post",
+                      datatype: "json",
+                      data:{
+                          sync_id: v
+                      },
+                      success: function (dataSet) {
+                          console.log('message=',dataSet.message,'code=',dataSet.code);
+                          console.log('incr_col=',dataSet.message['incr_col']);
+                          var editor_full = ace.edit("ace-editor-full");
+                          var position = editor_full.getCursorPosition()
+                          editor_full.setValue('')
+                          editor_full.insert(dataSet.message['full']);
+                          editor_full.setReadOnly(true);
+                          editor_full.moveCursorToPosition(position);
+
+                          if (dataSet.message['incr_col']!='') {
+                              var editor_incr = ace.edit("ace-editor-incr");
+                              var position = editor_incr.getCursorPosition()
+                              editor_incr.setValue('')
+                              editor_incr.insert(dataSet.message['incr']);
+                              editor_incr.setReadOnly(true);
+                              editor_incr.moveCursorToPosition(position);
+                              $('#incr_li').show()
+                              $('#ncr-templete').show()
+                          } else {
+                              $('#incr_li').hide()
+                              $('#ncr-templete').hide()
+                          }
+
+                          $('#con-close-modal-templete').modal({
+                               keyboard: false,
+                               backdrop:false
+                          });
+
+                      },
+                      error: function (jqXHR, textStatus, errorThrown) {
+                        console.log('jqXHR.responseText=',jqXHR.responseText);
+                        console.log('jqXHR.status=',jqXHR.status);
+                        console.log('jqXHR.readyState=',jqXHR.readyState);
+                        console.log('jqXHR.statusText=',jqXHR.statusText);
+                        console.log('textStatus=',textStatus);
+                        console.log('errorThrown=',errorThrown);
+                        if (jqXHR.status==403){
+                            swal({title:"您的登陆信息已过期，自动重新登陆!",timer: 3000,showConfirmButton: false});
+                            setTimeout(" window.location.href='/login'",3000);
+                        } else if (jqXHR.status==502){
+                            swal("用户无权访问权限此功能!", "", "error")
+                        } else {
+                            swal("系统不可用,请稍后重试!", "", "error")
+                        }
+                    }
+                });
+            }
         }
 
         function downloads(v){

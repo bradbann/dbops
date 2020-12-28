@@ -42,7 +42,6 @@ class transfer_query_detail(basehandler):
         print('transfer_id=',transfer_id)
         v_list    = query_transfer_detail(transfer_id)
         v_json    = json.dumps(v_list)
-        print('transfer_query_detail=',v_json)
         self.write({"code": 0, "message": v_json})
 
 
@@ -75,7 +74,6 @@ class transferadd_save(basehandler):
         d_transfer['batch_size']           = self.get_argument("batch_size")
         d_transfer['api_server']           = self.get_argument("api_server")
         d_transfer['status']               = self.get_argument("status")
-        print('transferadd_save=',d_transfer)
         result=save_transfer(d_transfer)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -134,7 +132,6 @@ class transferedit_save(basehandler):
         d_transfer['batch_size']      = self.get_argument("batch_size")
         d_transfer['api_server']      = self.get_argument("api_server")
         d_transfer['status']          = self.get_argument("status")
-        print(d_transfer)
         result=upd_transfer(d_transfer)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -249,7 +246,6 @@ class transferclone_save(basehandler):
         d_transfer['batch_size']      = self.get_argument("batch_size")
         d_transfer['api_server']      = self.get_argument("api_server")
         d_transfer['status']          = self.get_argument("status")
-        print('transferclone_save=', d_transfer)
         result = save_transfer(d_transfer)
         self.write({"code": result['code'], "message": result['message']})
 

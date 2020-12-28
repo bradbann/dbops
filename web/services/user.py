@@ -18,7 +18,6 @@ from web.model.t_role  import get_roles
 from web.model.t_user  import save_user,get_user_by_userid,upd_user,del_user,query_user,get_sys_roles,get_user_roles,save_user_proj_privs
 from web.model.t_dmmx  import get_dmm_from_dm
 from web.model.t_ds    import query_project
-from web.utils.common  import get_url_root
 from web.utils.basehandler import basehandler
 
 class userquery(basehandler):
@@ -57,7 +56,6 @@ class useradd_save(basehandler):
         d_user['privs']        = self.get_argument("privs").split(",")
         d_user['file_path']    = self.get_argument("file_path")
         d_user['file_name']    = self.get_argument("file_name")
-        print('d_user=',d_user)
         result=save_user(d_user)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -68,13 +66,10 @@ class useradd_save_uploadImage(basehandler):
         static_path = self.get_template_path().replace("templates", "static")
         file_metas  = self.request.files["file"]
         username = self.get_argument("username")
-        print('username=',username)
         try:
             for meta in file_metas:
                 file_path = static_path+'/'+'assets/images/users'
                 file_name=str(uuid.uuid1())+'_'+username+'.'+meta['filename'].split('.')[-1]
-                print('file_path=',file_path)
-                print('file_name=', file_name)
                 with open(file_path+'/'+file_name, 'wb') as up:
                     up.write(meta['body'])
             self.write({"code": 0, "file_path": '/static/assets/images/users',"file_name":file_name})
@@ -86,7 +81,7 @@ class useradd_save_uploadImage(basehandler):
 class userchange(basehandler):
     @tornado.web.authenticated
     def get(self):
-        self.render("./user_change.html",url=get_url_root())
+        self.render("./user_change.html")
 
 class useredit(basehandler):
     @tornado.web.authenticated
@@ -96,8 +91,6 @@ class useredit(basehandler):
         genders = get_dmm_from_dm('04')
         depts   = get_dmm_from_dm('01')
         proj_groups = get_dmm_from_dm('18')
-        print('sys_roles=',get_sys_roles(userid))
-        print('user_roles=', get_user_roles(userid))
         self.render("./user_edit.html",
                      userid      = d_user['userid'],
                      loginname   = d_user['loginname'],
@@ -116,7 +109,6 @@ class useredit(basehandler):
                      user_image  = d_user['image_path']+'/'+d_user['image_name'],
                      sys_roles   = get_sys_roles(userid),
                      user_roles  = get_user_roles(userid),
-                     url         = get_url_root(),
                      genders     = genders,
                      depts       = depts,
                      proj_groups = proj_groups
@@ -163,7 +155,6 @@ class user_query(basehandler):
         qname = self.get_argument("qname")
         v_list = query_user(qname)
         v_json = json.dumps(v_list)
-        print(v_json)
         self.write(v_json)
 
 class projectquery(basehandler):
@@ -178,7 +169,6 @@ class project_query(basehandler):
         qname     = self.get_argument("qname")
         userid    = self.get_argument("userid")
         is_grants = self.get_argument("is_grants")
-        print('project_privs_query=', qname, userid, is_grants,type(is_grants))
         v_list = query_project(qname,userid,is_grants)
         v_json = json.dumps(v_list)
         self.write(v_json)
@@ -195,7 +185,6 @@ class projectprivs_save(basehandler):
         d_proj['priv_audit']    = self.get_argument("priv_audit")
         d_proj['priv_execute']  = self.get_argument("priv_execute")
         d_proj['priv_order']    = self.get_argument("priv_order")
-        print('d_proj=',d_proj)
         result=save_user_proj_privs(d_proj)
         self.write({"code": result['code'], "message": result['message']})
 

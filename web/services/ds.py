@@ -14,7 +14,6 @@ import json
 import tornado.web
 from   web.model.t_ds    import get_ds_by_dsid,query_ds,save_ds,upd_ds,del_ds,check_ds_valid
 from   web.model.t_dmmx  import get_dmm_from_dm,get_sync_db_server_by_type
-from   web.utils.common  import get_url_root
 from   web.utils.basehandler import basehandler
 
 class dsquery(basehandler):
@@ -75,7 +74,6 @@ class dsadd_save(basehandler):
         d_ds['status']       = self.get_argument("status")
         d_ds['proxy_status'] = self.get_argument("proxy_status")
         d_ds['proxy_server'] = self.get_argument("proxy_server")
-        print(d_ds)
         result=save_ds(d_ds)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -89,8 +87,8 @@ class dschange(basehandler):
 class dsedit(basehandler):
     @tornado.web.authenticated
     def get(self):
-        dsid=self.get_argument("dsid")
-        d_ds      =get_ds_by_dsid(dsid)
+        dsid   = self.get_argument("dsid")
+        d_ds   = get_ds_by_dsid(dsid)
         self.render("./ds_edit.html",
                      dsid         = d_ds['dsid'],
                      market_id    = d_ds['market_id'],
@@ -111,7 +109,6 @@ class dsedit(basehandler):
                      status       = d_ds['status'],
                      proxy_status = d_ds['proxy_status'],
                      proxy_server = d_ds['proxy_server'],
-                     url=get_url_root()
                     )
 
 class dsedit_save(basehandler):
@@ -161,7 +158,6 @@ class dsclone(basehandler):
                      status       = d_ds['status'],
                      proxy_status = d_ds['proxy_status'],
                      proxy_server = d_ds['proxy_server'],
-                     url          = get_url_root()
                     )
 
 class dsclone_save(basehandler):
@@ -214,7 +210,5 @@ class get_db_by_type(basehandler):
     @tornado.web.authenticated
     def post(self):
         db_type  = self.get_argument("db_type")
-        print('get_db_by_type=',db_type)
         result = get_sync_db_server_by_type(db_type)
-        print('get_db_by_type=',result)
         self.write({"code": result['code'], "message": result['message']})

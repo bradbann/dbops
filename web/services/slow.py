@@ -61,7 +61,6 @@ class slowadd_save(basehandler):
         d_slow['script_file']    = self.get_argument("script_file")
         d_slow['api_server']     = self.get_argument("api_server")
         d_slow['slow_status']    = self.get_argument("slow_status")
-        print('slowadd_save=',d_slow)
         result = save_slow(d_slow)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -69,7 +68,7 @@ class slow_check(basehandler):
     @tornado.web.authenticated
     def post(self):
         d_slow = {}
-        d_slow['inst_id']      = self.get_argument("inst_id")
+        d_slow['inst_id']     = self.get_argument("inst_id")
         d_slow['slow_status'] = self.get_argument("slow_status")
         result = check_slow(d_slow)
         self.write({"code": result['code'], "message": result['message']})
@@ -110,7 +109,6 @@ class slowedit_save(basehandler):
         d_slow['script_file']   = self.get_argument("script_file")
         d_slow['api_server']    = self.get_argument("api_server")
         d_slow['slow_status']   = self.get_argument("slow_status")
-        print('slowedit_save=',slowedit_save)
         result=upd_slow(d_slow)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -129,8 +127,10 @@ class slowedit_push(basehandler):
         self.set_header("Content-Type", "application/json; charset=UTF-8")
         slow_id    = self.get_argument("slow_id")
         api_server = self.get_argument("api_server")
-        result=push_slow(api_server,slow_id)
-        self.write({"code": result['code'], "message": result['message']})
+        v_list=push_slow(api_server,slow_id)
+        v_json = json.dumps(v_list)
+        self.write(v_json)
+
 
 
 class slowlogquery(basehandler):
@@ -191,7 +191,6 @@ class query_db_by_inst(basehandler):
         v_list  = get_db_by_inst_id(inst_id)
         d_list['data'] = v_list
         v_json  = json.dumps(d_list)
-        print('get_sync_tasks=', v_json)
         self.write(v_json)
 
 class query_user_by_inst(basehandler):
@@ -203,7 +202,6 @@ class query_user_by_inst(basehandler):
         v_list  = get_user_by_inst_id(inst_id)
         d_list['data'] = v_list
         v_json  = json.dumps(d_list)
-        print('get_sync_tasks=', v_json)
         self.write(v_json)
 
 
@@ -226,7 +224,6 @@ class slowlog_analyze(basehandler):
         db_host    = self.get_argument("db_host")
         begin_date = self.get_argument("begin_date")
         end_date   = self.get_argument("end_date")
-        print('slowlog_analyze=',inst_id,begin_date,end_date)
         v_list     = analyze_slow_log(inst_id,db_name,db_user,db_host,begin_date,end_date)
         v_json     = json.dumps(v_list)
         self.write(v_json)

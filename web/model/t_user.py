@@ -5,10 +5,14 @@
 # @File    : t_user.py
 # @Software: PyCharm
 
+import traceback
+import datetime
+
 from web.utils.common      import get_connection,current_rq,aes_encrypt,aes_decrypt
 from web.model.t_user_role import del_user_roles,save_user_role,upd_user_role
-from web.utils.common      import get_url_main,now,get_url_root,exception_info
+from web.utils.common      import now,exception_info
 from web.model.t_dmmx      import get_dmmc_from_dm
+
 
 def logon_user_check(login_name,password,verify_code,verify_img):
     result={}
@@ -56,7 +60,6 @@ def logon_user_check(login_name,password,verify_code,verify_img):
 
     result['code'] = '0'
     result['message'] ='验证成功！'
-    result['url']=get_url_main()
     return result
 
 def check_forget_password(login_name,email):
@@ -79,7 +82,7 @@ def check_forget_password(login_name,email):
 
     if check_email_exist(login_name,email) == 0:
         result['code'] = '-1'
-        result['message'] = '邮箱不正确！'
+        result['message'] = '非注册邮箱！'
         return result
 
     if get_user_by_loginame(login_name)['status']=='0':
@@ -94,25 +97,59 @@ def check_forget_password(login_name,email):
 
     result['code'] = '0'
     result['message'] ='验证成功！'
-    result['url']=get_url_root()
     return result
 
-def check_modify_password(newpass,reppass):
+def check_modify_password(user,newpass,reppass,auth_str):
     result={}
     result['code']='0'
     if newpass == "":
         result['code'] = '-1'
         result['message'] = '新口令不能为空！'
         return result
+
     if reppass == "":
         result['code'] = '-1'
         result['message'] = '重复口令不能为空！'
         return result
+
     if  not (newpass == reppass) :
         result['code'] = '-1'
         result['message'] = '口令输入不一致！'
         return result
+
     return result
+
+def dif_time(p_tm):
+    now_time = datetime.datetime.now()
+    now_time = now_time.strftime('%Y%m%d%H%M%S')
+    d1       = datetime.datetime.strptime(p_tm, '%Y%m%d%H%M%S')
+    d2       = datetime.datetime.strptime(now_time,'%Y%m%d%H%M%S')
+    sec      = (d2 - d1).seconds
+    return sec
+
+def check_authcode(user,auth_str):
+    result = {}
+    result['code']='0'
+    result['message'] = '认证成功!'
+
+    if auth_str == '' or auth_str is None:
+        result['code'] = '-1'
+        result['message'] = '授权码不能为空！'
+        return result
+
+    if not check_auth_str_exist(auth_str):
+       result['code'] = '-1'
+       result['message'] = '授权码不正确!'
+       return result
+
+    v_max_rq = get_create_date_by_auth(get_user_by_loginame(user)['userid'],auth_str)
+    if dif_time(v_max_rq)>60:
+       result['code'] = '-1'
+       result['message'] = '授权码已过期!'
+       return result
+
+    return result
+
 
 def save_forget_authention_string(p_username,p_auth_string):
     result = {}
@@ -121,9 +158,9 @@ def save_forget_authention_string(p_username,p_auth_string):
         cr = db.cursor()
         d_user=get_user_by_loginame(p_username)
         userid = d_user['userid']
-        sql = """insert into t_forget_password(user_id,authentication_string,flag,creation_date,creator) 
-                       values('{0}','{1}','{2}',{3},'DBA')
-               """.format(userid, p_auth_string, 'valid',current_rq());
+        sql = """insert into t_forget_password(user_id,authentication_string,creation_date,creator) 
+                       values('{0}','{1}',now(),'{2}')
+               """.format(userid, p_auth_string,p_username);
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -133,8 +170,10 @@ def save_forget_authention_string(p_username,p_auth_string):
         result['message'] = '保存成功！'
         return result
     except:
+        traceback.format_exc()
         result['code'] = '-1'
-        result['message'] = '保存失败！'
+        result['message'] = '写入授权码异常!'
+
     return result
 
 def query_user(p_name):
@@ -226,6 +265,16 @@ def get_userid_by_auth(v_str):
     db = get_connection()
     cr = db.cursor()
     sql="select max(user_id) from t_forget_password where authentication_string='{0}'".format(v_str)
+    cr.execute(sql)
+    rs = cr.fetchone()
+    cr.close()
+    db.commit()
+    return rs[0]
+
+def get_create_date_by_auth(v_userid,v_str):
+    db = get_connection()
+    cr = db.cursor()
+    sql="select date_format(creation_date,'%Y%m%d%H%i%s')  from t_forget_password where user_id='{}' and authentication_string='{}'".format(v_userid,v_str)
     cr.execute(sql)
     rs = cr.fetchone()
     cr.close()
@@ -676,11 +725,11 @@ def upd_password(p_user):
         db.commit()
         result={}
         result['code']='0'
-        result['message']='更新成功！'
+        result['message']='修改成功！'
     except :
         exception_info()
         result['code'] = '-1'
-        result['message'] = '更新失败！'
+        result['message'] = '修改失败！'
     return result
 
 def del_user(p_user):

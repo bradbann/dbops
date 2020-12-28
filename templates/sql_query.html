@@ -480,16 +480,18 @@
 
               $("#db_source").bind("input propertychange",function(){
                    var db_type=''
+                   var db_source = ''
                    if ($('#db_source').val()!='') {
                        $.ajax({
                            url     : "/ds/query/id",
                            type    : "post",
                            datatype: "json",
-                           async   :false,
+                           async   : false,
                            data    :{
                               dsid : $('#db_source').val(),
                            },
                            success: function (ds) {
+                             db_source = ds
                              db_type=ds['db_type']
                            }
                        });
@@ -511,7 +513,6 @@
                             },
                             success: function (dataSet) {
                                 console.log('input propertychange=',dataSet)
-                                //$('#curr_db_desc').text(dataSet.desc)
                                 $('#db_menu_title').html(dataSet.url)
                                 $('#browser').empty()
                                 $('#browser').append(dataSet.message);

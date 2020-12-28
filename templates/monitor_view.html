@@ -5,7 +5,7 @@
     <link href="{{static_url('plugins/datatables/scroller.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
 
-      <!-- Notification css (Toastr) -->
+    <!-- Notification css (Toastr) -->
     <link href="{{static_url('plugins/toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{static_url('assets/css/components.css')}}" rel="stylesheet" type="text/css" />
 
@@ -117,6 +117,13 @@
                                 <label for="inlineRadio24">生产</label>
                             </div>
                         </div>
+                        <div class="col-md-1">
+                              <span class="label text-danger">平台组&nbsp;</span>
+                              <div class="radio radio-inline">
+                                <input type="radio" id="inlineRadio25" value="platform-prod" name="radioInline_sys" checked>
+                                <label for="inlineRadio31">生产</label>
+                              </div>
+                        </div>
                         <div class="col-md-2">
                               <span class="label text-danger">商管&nbsp;</span>
                               <div class="radio radio-inline">
@@ -182,6 +189,13 @@
                                     <input type="radio" id="inlineRadio54" value="easylife-prod" name="radioInline_svr">
                                     <label for="inlineRadio54">生产</label>
                                 </div>
+                          </div>
+                          <div class="col-md-1">
+                              <span class="label text-danger">平台组&nbsp;</span>
+                              <div class="radio radio-inline">
+                                <input type="radio" id="inlineRadio55" value="platform-prod" name="radioInline_svr" checked>
+                                <label for="inlineRadio31">生产</label>
+                              </div>
                           </div>
                           <div class="col-md-2">
                                 <span class="label text-danger">商管&nbsp;</span>
@@ -319,7 +333,7 @@
                           "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
                           destroy    :true,
                           async      :true,
-                          ordering   :false,
+                          ordering   :true,
                           //scrollY    :"600px",
                           scrollY    :true,
                           scrollX    :false,
@@ -491,7 +505,7 @@
                       "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
                       destroy    :true,
                       async      :true,
-                      ordering   :false,
+                      ordering   :true,
                       //scrollY    :"600px",
                       scrollY    : true,
                       scrollX    : false,
@@ -861,7 +875,7 @@
           }
 
           $(document).ready(function() {
-               var timer ;
+               // var timer ;
 
                //首次加载系统监控
                get_sys_monitor()
@@ -869,8 +883,8 @@
                //当前当活页设置为系统监控
                $('#current_tab_hidden').val('系统监控')
 
-               //通每10秒刷新一次
-               //setInterval("updateMonData()",100000);
+               //通每3秒刷新一次
+               timer = setInterval("updateMonData()",60000);
 
                $('input[type=radio][name=radioInline_sys]').change(function() {
                     get_sys_monitor();

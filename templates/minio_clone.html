@@ -9,8 +9,9 @@
 </head>
 <body>
    <p></p>
-   <div class="col-md-6">
-       <form class="form-horizontal" role="form">
+   <form class="form-horizontal" role="form">
+     <div class="row">
+        <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_sync_tag">*</span>同步标识号</label>
@@ -19,6 +20,10 @@
                     <input id="sync_tag"  type="text" class="form-control" value="{{sync_tag}}"  placeholder="请输入同步标识号">
                 </div>
            </div>
+        </div>
+     </div>
+     <div class="row">
+       <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_task_desc">*</span>任务描述</label>
@@ -27,10 +32,14 @@
                     <input id="task_desc"  type="text" class="form-control" value="{{task_desc}}"  placeholder="请输入任务描述">
                 </div>
            </div>
+        </div>
+     </div>
+     <div class="row">
+       <div class="col-md-6">
            <div class="form-group">
-                <div>
+               <div>
                     <label class="col-md-2 control-label"><span id="s_sync_server">*</span>同步服务器</label>
-                </div>
+               </div>
                <div class="col-md-10">
                     <select class="form-control select" id="sync_server" >
                         <option value='' selected = "selected">......</option>
@@ -46,6 +55,10 @@
                     </select>
                </div>
            </div>
+         </div>
+       </div>
+     <div class="row">
+       <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_sync_type">*</span>同步类型</label>
@@ -62,7 +75,11 @@
                            {% end %}
                     </select>
                </div>
-           </div>
+            </div>
+         </div>
+       </div>
+     <div class="row">
+        <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label">同步目录</label>
@@ -71,6 +88,10 @@
                     <input id="sync_dir" type="text" class="form-control" value="{{sync_dir}}" disabled placeholder="请输入同步目录">
                 </div>
            </div>
+         </div>
+       </div>
+     <div class="row">
+        <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label">同步服务</label>
@@ -79,6 +100,10 @@
                     <input id="sync_service" type="text" class="form-control" value="{{sync_service}}" disabled placeholder="请输入同步服务">
                 </div>
            </div>
+         </div>
+       </div>
+     <div class="row">
+        <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_minio_server">*</span>MinIO服务器</label>
@@ -87,6 +112,10 @@
                     <input id="minio_server"  type="text" class="form-control" value="{{minio_server}}" placeholder="请输入MinIO服务器">
                 </div>
            </div>
+         </div>
+       </div>
+     <div class="row">
+         <div class="col-md-6">
             <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_minio_user">*</span>MinIO用户名</label>
@@ -95,6 +124,10 @@
                     <input id="minio_user"  type="text" class="form-control" value="{{minio_user}}" placeholder="请输入MinIO用户">
                 </div>
            </div>
+          </div>
+       </div>
+     <div class="row">
+         <div class="col-md-6">
             <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_minio_pass">*</span>MinIO密码</label>
@@ -103,33 +136,59 @@
                      <input id="minio_pass" name="pass" type="password" class="form-control" value="{{minio_pass}}" placeholder="请输入MinIO密码">
                 </div>
            </div>
+          </div>
+      </div>
+     <div class="row">
+         <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_minio_bucket">*</span>bucket名称</label>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-10">
                     <input id="minio_bucket"  type="text" class="form-control" value="{{minio_bucket}}" placeholder="请输入bucket名称">
                 </div>
            </div>
+          </div>
+      </div>
+     <div class="row">
+         <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_minio_dpath">*</span>下载目录</label>
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-10">
                     <input id="minio_dpath"  type="text" class="form-control" placeholder="请输入下载目录" value="{{minio_dpath}}">
                 </div>
            </div>
-           <div class="form-group">
-                <div>
-                    <label class="col-md-2 control-label"><span id="s_minio_incr">*</span>增量同步策略</label>
-                </div>
-                <div class="col-md-9">
-                  <input id="minio_incr"  type="text" class="form-control" placeholder="请输入增量同步策略" value="{{minio_incr}}">
-                </div>
-                <div class="col-md-1">
-                  <span>天</span>
-                </div>
+          </div>
+      </div>
+      <div class="row">
+           <div class="col-md-6">
+               <div class="form-group">
+                    <div>
+                        <label class="col-md-2 control-label"><span id="s_minio_incr">*</span>增量同步策略</label>
+                    </div>
+                    <div class="col-md-10">
+                      <input id="minio_incr"  type="text" class="form-control" placeholder="请输入增量同步策略" value="1">
+                    </div>
+               </div>
            </div>
+           <div class="col-md-1">
+               <div class="form-group">
+                   <select class="form-control select" id="minio_incr_type" >
+                        {% for var in dm_sync_time_type %}
+                          {% if var[0]=='day' %}
+                            <option value={{var[0]}} selected = "selected" >{{var[1]}}</option>
+                          {% else %}
+                            <option value={{var[0]}} >{{var[1]}}</option>
+                          {% end %}
+                        {% end %}
+                   </select>
+               </div>
+           </div>
+     </div>
+     <div class="row">
+         <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_python3_home">*</span>PYTHON3主目录</label>
@@ -138,6 +197,10 @@
                     <input id="python3_home"  type="text" class="form-control" value="{{python3_home}}" placeholder="请输入PYTHON3主目录">
                 </div>
            </div>
+          </div>
+       </div>
+     <div class="row">
+         <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_script_base">*</span>脚本主目录</label>
@@ -146,6 +209,10 @@
                     <input id="script_base"  type="text" class="form-control" value="{{script_base}}" placeholder="请输入脚本主目录">
                 </div>
            </div>
+         </div>
+     </div>
+     <div class="row">
+         <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_script_name">*</span>备份脚本名</label>
@@ -154,6 +221,10 @@
                     <input id="script_name"  type="text" class="form-control" value="{{script_name}}" placeholder="请输入备份脚本名">
                 </div>
            </div>
+         </div>
+     </div>
+     <div class="row">
+         <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_run_time">*</span>运行时间</label>
@@ -162,6 +233,10 @@
                     <input id="run_time"  type="text" class="form-control" value="{{run_time}}" placeholder="请输入备份运行时间">
                 </div>
            </div>
+         </div>
+      </div>
+     <div class="row">
+         <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_api_server">*</span>API服务器</label>
@@ -170,6 +245,10 @@
                     <input id="api_server"  type="text" class="form-control" value="{{api_server}}" placeholder="请输入API服务器">
                 </div>
            </div>
+         </div>
+      </div>
+     <div class="row">
+         <div class="col-md-6">
            <div class="form-group">
                 <div>
                     <label class="col-md-2 control-label"><span id="s_status">*</span>任务状态</label>
@@ -181,15 +260,16 @@
                     </select>
                 </div>
             </div>
+         </div>
+      </div>
+      <br>
+      <div class="form-group m-b-0">
+            <div class="col-sm-offset-3 col-sm-3">
+              <button id="clone" type="button" class="btn btn-custom waves-effect waves-light btn-md">克隆</button>
+            </div>
+      </div>
+   </form>
 
-           <br>
-           <div class="form-group m-b-0">
-                <div class="col-sm-offset-6 col-sm-9">
-                  <button id="clone" type="button" class="btn btn-custom waves-effect waves-light btn-md">克隆</button>
-                </div>
-           </div>
-       </form>
-    </div>
 
     <!-- Counter js  -->
     <script src="{{static_url('plugins/counterup/jquery.counterup.min.js')}}"></script>
@@ -279,6 +359,7 @@
                     minio_bucket     : $('#minio_bucket').val(),
                     minio_dpath      : $('#minio_dpath').val(),
                     minio_incr       : $('#minio_incr').val(),
+                    minio_incr_type  : $('#minio_incr_type').val(),
                 },
                 success: function (dataSet) {
                     console.log(dataSet.code, dataSet.message);

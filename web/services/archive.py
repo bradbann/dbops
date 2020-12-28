@@ -40,7 +40,6 @@ class archive_query_detail(basehandler):
         archive_id  = self.get_argument("archive_id")
         v_list      = query_archive_detail(archive_id)
         v_json      = json.dumps(v_list)
-        print('archive_query_detail=',v_json)
         self.write({"code": 0, "message": v_json})
 
 class archiveadd(basehandler):
@@ -79,7 +78,6 @@ class archiveadd_save(basehandler):
         d_archive['batch_size']           = self.get_argument("batch_size")
         d_archive['api_server']           = self.get_argument("api_server")
         d_archive['status']               = self.get_argument("status")
-        print('archiveadd_save=',d_archive)
         result=save_archive(d_archive)
         self.write({"code": result['code'], "message": result['message']})
 
@@ -93,6 +91,10 @@ class archiveedit(basehandler):
     def get(self):
         archive_id   = self.get_argument("archiveid")
         d_archive    = get_archive_by_archiveid(archive_id)
+        print('xxxxx=',get_sync_db_server_by_type(d_archive['archive_db_type'])['message'])
+        print('yyyyy=', d_archive['dest_db_id'])
+        print('zzzzz=', d_archive['sour_db_id'])
+
         self.render("./archive_edit.html",
                     dm_db_type           = get_dmm_from_dm('02'),
                     dm_archive_server    = get_sync_server(),
@@ -278,7 +280,6 @@ class archiveclone_save(basehandler):
         d_archive['batch_size']          = self.get_argument("batch_size")
         d_archive['api_server']          = self.get_argument("api_server")
         d_archive['status']              = self.get_argument("status")
-        print('archiveclone_save=', d_archive)
         result = save_archive(d_archive)
         self.write({"code": result['code'], "message": result['message']})
 

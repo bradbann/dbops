@@ -16,7 +16,7 @@ def query_ds(dsname,market_id,db_env,ds_type):
     v_where=' and 1=1 '
 
     if dsname != '':
-        v_where = v_where + " and binary concat(b.dmmc,':/',ip,':',port,'/',service)  like '%{0}%'\n".format(dsname)
+        v_where = v_where + " and binary concat(a.db_desc,b.dmmc,':/',ip,':',port,'/',service)  like '%{0}%'\n".format(dsname)
 
     if market_id != '':
         v_where = v_where + " and a.market_id='{0}'\n".format(market_id)

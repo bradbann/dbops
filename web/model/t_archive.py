@@ -269,15 +269,21 @@ def check_archive(p_archive):
         result['message'] = '源数据库表名不能为空！'
         return result
 
-    if p_archive["dest_db_server"]=="":
-        result['code']='-1'
-        result['message']='目标数据库实例不能为空！'
-        return result
+    if p_archive['archive_rentition'] == '2':
+        if p_archive["dest_db_server"]=="":
+            result['code']='-1'
+            result['message']='目标数据库实例不能为空！'
+            return result
 
-    if p_archive["dest_db_name"] == "":
-        result['code'] = '-1'
-        result['message'] = '目标数据库名称不能为空！'
-        return result
+        if p_archive["dest_db_name"] == "":
+            result['code'] = '-1'
+            result['message'] = '目标数据库名称不能为空！'
+            return result
+
+        if p_archive["batch_size"] == "":
+            result['code'] = '-1'
+            result['message'] = '批大小不能为空！'
+            return result
 
     if p_archive["python3_home"] == "":
         result['code'] = '-1'
@@ -286,17 +292,12 @@ def check_archive(p_archive):
 
     if p_archive["script_base"] == "":
         result['code'] = '-1'
-        result['message'] = '传输主目录录不能为空！'
+        result['message'] = '归档主目录不能为空！'
         return result
 
     if p_archive["script_name"] == "":
         result['code'] = '-1'
-        result['message'] = '传输脚本名不能为空！'
-        return result
-
-    if p_archive["batch_size"] == "":
-        result['code'] = '-1'
-        result['message'] = '批大小不能为空！'
+        result['message'] = '归档脚本名不能为空！'
         return result
 
     if p_archive["api_server"] == "":

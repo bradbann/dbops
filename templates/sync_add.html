@@ -2,9 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="shortcut icon" href="{{ static_url('assets/images/favicon.ico')}}">
     <title>新建同步</title>
-    <script src="{{static_url('assets/js/modernizr.min.js')}}"></script>    <!-- Sweet Alert -->
     <link href="{{static_url('plugins/bootstrap-sweetalert/sweet-alert.css')}}" rel="stylesheet" type="text/css">
     <link href="{{static_url('plugins/datatables/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
     <style>
@@ -218,7 +216,7 @@
                                 <label class="col-md-2 control-label"><span id="s_sync_tables">*</span>同步表列表</label>
                             </div>
                             <div class="col-md-10">
-                                <input id="sync_tables"  type="text" class="form-control" placeholder="请输入同步表">
+                                <input id="sync_tables"  type="text" class="form-control" readonly placeholder="请输入同步表">
                             </div>
                        </div>
                     </div>
@@ -371,9 +369,9 @@
                          <div class="input-group">
                             <input  id="ds_user_id" type="hidden"  >
                             <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                            <input type="text" id="ds_name"   class="form-control" placeholder="请输入表名">
+                            <input type="text" id="query_sync_tab_name"   class="form-control" placeholder="请输入表名">
                              <span class="input-group-btn">
-                               <button type="button"  id='query_btn_ds' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
+                               <button type="button"  id='query_btn_sync_tab' class="btn waves-effect waves-light btn-primary"><i class="fa fa-search"></i></button>
                             </span>
                          </div>
                      </div>
@@ -398,12 +396,19 @@
                                    <input type="hidden"  id="sync_tab_id" />
                                    <div class="form-group">
                                         <div>
-                                            <label class="col-md-3 control-label"><span id="s_sync_tab_name">*</span>表名称</label>
+                                            <label class="col-md-2 control-label"><span id="s_sync_tab_name">*</span>表名称</label>
                                         </div>
                                         <div class="col-md-9">
                                             <select class="form-control select" id="sync_tab_name" >
                                                 <option value='' selected = "selected">......</option>
                                             </select>
+                                       </div>
+                                       <div class="col-md-1">
+                                           <div class="form-group">
+                                                <div>
+                                                    <button type="button" id='btn-sync-tab-add' class="btn btn-xs waves-effect waves-light"   onclick=syn_tab_add()><i class="ion-android-add"></i></button>
+                                                </div>
+                                           </div>
                                        </div>
                                    </div>
                                 </div>
@@ -411,7 +416,18 @@
                                 <div class="row">
                                    <div class="form-group">
                                         <div>
-                                            <label class="col-md-3 control-label">增量列</label>
+                                            <label class="col-md-2 control-label"><span id="s_sync_tab_time">*</span>同时长</label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input type="text"  class="form-control" id="sync_tab_time" value="1"/>
+                                       </div>
+                                   </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                   <div class="form-group">
+                                        <div>
+                                            <label class="col-md-2 control-label"><span>&nbsp;</span>增量列</label>
                                         </div>
                                         <div class="col-md-9">
                                             <select  class="form-control select" id="sync_tab_incr_col" >
@@ -424,18 +440,7 @@
                                 <div class="row">
                                    <div class="form-group">
                                         <div>
-                                            <label class="col-md-3 control-label"><span id="s_sync_tab_time">*</span>同步时长</label>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <input type="text"  class="form-control" id="sync_tab_time" />
-                                       </div>
-                                   </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                   <div class="form-group">
-                                        <div>
-                                            <label class="col-md-3 control-label"><span id="s_sync_tab_col">*</span>同步列</label>
+                                            <label class="col-md-2 control-label"><span id="s_sync_tab_col">*</span>同步列</label>
                                         </div>
                                         <div class="col-md-4">
                                             <select multiple="multiple" class="form-control select" id="sync_tab_col" >
@@ -455,7 +460,6 @@
                                 <br>
                                 <div class="col-sm-offset-5 col-sm-5">
                                      <input  id='save_sync_tab_config' class="btn btn-custom waves-effect waves-light btn-md" type='button' value="保存"/>
-                                     <input  id='add_sync_tab_config' class="btn btn-custom waves-effect waves-light btn-md" type='button' value="新增"/>
                                 </div>
                             </div>
                         </div>
@@ -474,6 +478,19 @@
     <script src="{{static_url('plugins/datatables/jquery.dataTables.min.js')}}"></script>
 
     <script>
+
+        var sour_ds='';
+
+        String.prototype.format = function () {
+            var values = arguments;
+            return this.replace(/\{(\d+)\}/g, function (match, index) {
+                if (values.length > index) {
+                    return values[index];
+                } else {
+                    return "";
+                }
+            });
+        };
 
         function set_selected(){
             document.all['s_sync_server'].style.color="#ff0000";
@@ -500,7 +517,7 @@
             document.all['s_sync_repair_day'].style.color="#ff0000";
 
             document.all['s_sync_tab_name'].style.color="#ff0000";
-            document.all['s_sync_tab_time'].style.color="#ff0000";
+            // document.all['s_sync_tab_time'].style.color="#ff0000";
             document.all['s_sync_tab_col'].style.color="#ff0000";
 
         }
@@ -521,13 +538,99 @@
              $("#sync_sele_col").empty();
              $("#sync_tab_incr_col").empty();
              $("#sync_tab_time").val('');
+
+             //设置显示项为只读
+             $('#sync_tab_name').attr("disabled","disabled");
+             $('#sync_tab_incr_col').attr("disabled","disabled");
+             $('#sync_tab_time').attr("readonly","readonly");
+             $('#sync_sele_col').attr("disabled","disabled");
+             $('#sync_tab_col').attr("disabled","disabled");
+             $('#ion-arrow-down').attr("disabled","disabled");
+             $('#ion-arrow-up').attr("disabled","disabled");
+
         }
 
-        $('#sync_tab_name').change(function() {
-            $.ajax({
-                  url: "http://10.16.34.14:8888/get_mssql_columns",
+        function get_ds() {
+           console.log('get_ds====>',$('#sour_db_server').val())
+           $.ajax({
+                  url: "/ds/query/id",
                   type: "post",
                   datatype: "json",
+                  async   :false,
+                  data:{
+                      dsid  :$('#sour_db_server').val(),
+                  },
+                  success: function (dataSet) {
+                      sour_ds = dataSet;
+                      console.log('sour_ds=',sour_ds);
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status==403){
+                            swal("登陆信息已过期，请重新登陆!", "", "error")
+                            window.location.href='/login'
+                        } else if (jqXHR.status==502){
+                            swal("用户无权访问权限此功能!", "", "error")
+                        } else {
+                            swal("系统不可用,请稍后重试!", "", "error")
+                        }
+
+                }
+             });
+
+            if (sour_ds['proxy_status'] == '0') {
+                swal("数据库代理未启用!", "", "error")
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        function set_sync_tabs() {
+           $.ajax({
+                  url: "http://{0}/get_mssql_tables".format(sour_ds['proxy_server']),
+                  type: "post",
+                  datatype: "json",
+                  data:{
+                      db_ip     : sour_ds['ip'],
+                      db_port   : sour_ds['port'],
+                      db_service: sour_ds['service'],
+                      db_user   : sour_ds['user'],
+                      db_pass   : sour_ds['password'],
+                  },
+                  success: function (dataSet) {
+                     $("#sync_tab_name").empty();
+                     $("#sync_tab_name").append("<option value=''>...</option>");
+                     for(i=0;i<dataSet['msg'].length;i++){
+                          var val  = dataSet['msg'][i][0]+'.'+dataSet['msg'][i][1]+'.'+dataSet['msg'][i][2];
+                          var text = dataSet['msg'][i][1]+'.'+dataSet['msg'][i][2];
+                          $("#sync_tab_name").append("<option value='"+val+"'>"+text+"</option>");
+                     }
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal("登陆信息已过期，请重新登陆!", "", "error")
+                        window.location.href='/login'
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("数据库代理服务异常!", "", "error")
+                    }
+                }
+             })
+        }
+
+        function set_sync_tab_cols() {
+             $.ajax({
+                  url: "http://{0}/get_mssql_columns".format(sour_ds['proxy_server']),
+                  type: "post",
+                  datatype: "json",
+                  async   :false,
                   data:{
                       db_ip:'192.168.10.200',
                       db_port:'1433',
@@ -537,13 +640,10 @@
                       db_tab :$('#sync_tab_name').val(),
                   },
                   success: function (dataSet) {
-                         console.log('dataSet=',dataSet['msg'])
                          $("#sync_tab_col").empty();
                          $("#sync_sele_col").empty();
                          $("#sync_tab_incr_col").empty();
-                         $("#sync_tab_time").val('');
                          for(i=0;i<dataSet['msg'].length;i++){
-                             console.log('dataSet'+i+'=',dataSet['msg'][i])
                               var val  = dataSet['msg'][i][0];
                               var text = dataSet['msg'][i][0];
                               $("#sync_tab_col").append("<option value='"+val+"'>"+text+"</option>");
@@ -563,29 +663,30 @@
                     } else if (jqXHR.status==502){
                         swal("用户无权访问权限此功能!", "", "error")
                     } else {
-                        swal("系统不可用,请稍后重试!", "", "error")
+                        swal("数据库代理服务异常!", "", "error")
                     }
                 }
              });
+        }
 
+        function set_sync_tab_incr_col() {
              $.ajax({
-                  url: "http://10.16.34.14:8888/get_mssql_incr_columns",
+                  url: "http://{0}/get_mssql_incr_columns".format(sour_ds['proxy_server']),
                   type: "post",
                   datatype: "json",
+                  async   :false,
                   data:{
-                      db_ip:'192.168.10.200',
-                      db_port:'1433',
-                      db_service:'tingcheeasydb',
-                      db_user:'sa',
-                      db_pass:'Tingche.easy',
+                      db_ip     : sour_ds['ip'],
+                      db_port   : sour_ds['port'],
+                      db_service: sour_ds['service'],
+                      db_user   : sour_ds['user'],
+                      db_pass   : sour_ds['password'],
                       db_tab :$('#sync_tab_name').val(),
                   },
                   success: function (dataSet) {
-                         console.log('dataSet=',dataSet['msg'])
                          $("#sync_tab_incr_col").empty();
                          $("#sync_tab_incr_col").append("<option value=''>...</option>");
                          for(i=0;i<dataSet['msg'].length;i++){
-                             console.log('dataSet'+i+'=',dataSet['msg'][i])
                               var val  = dataSet['msg'][i][0];
                               var text = dataSet['msg'][i][0];
                               $("#sync_tab_incr_col").append("<option value='"+val+"'>"+text+"</option>");
@@ -605,82 +706,11 @@
                     } else if (jqXHR.status==502){
                         swal("用户无权访问权限此功能!", "", "error")
                     } else {
-                        swal("系统不可用,请稍后重试!", "", "error")
+                        swal("数据库代理服务异常!", "", "error")
                     }
                 }
              });
-
-        });
-
-        $('#save_sync_tab_config').click(function(){
-
-                if ($('#sync_tab_name').val()=='') {
-                      swal("同步表名不能为空!", "", "error")
-                      return;
-                }
-
-                if ($('#sync_sele_col').val()=='') {
-                      swal("同步列名不能为空!", "", "error")
-                      return;
-                }
-
-                if ($('#sync_tab_time').val()=='') {
-                      swal("同步时长不能为空!", "", "error")
-                      return;
-                }
-
-                console.log('a=',$('#sync_tag').val());
-                console.log('b=',$('#sync_tab_name').val().split('.')[0]);
-                console.log('c=',$('#sync_tab_name').val().split('.')[1]);
-                console.log('d=',$('#sync_tab_name').val().split('.')[2]);
-                console.log('e=',get_tab_cols());
-                console.log('f=',$('#sync_tab_incr_col').val());
-                console.log('g=',$('#sync_tab_time').val());
-
-                $.ajax({
-                      url: "/sync/add/save/tab",
-                      type: "post",
-                      datatype: "json",
-                      data:{
-                          'sync_id'      :$('#sync_tab_id').val(),
-                          'sync_tag'     : $('#sync_tag').val(),
-                          'db_name'      : $('#sync_tab_name').val().split('.')[0],
-                          'schema_name'  : $('#sync_tab_name').val().split('.')[1],
-                          'tab_name'     : $('#sync_tab_name').val().split('.')[2],
-                          'sync_cols'    : get_tab_cols(),
-                          'sync_incr_col': $('#sync_tab_incr_col').val(),
-                          'sync_time'    : $('#sync_tab_time').val(),
-                  },
-                  success: function (dataSet) {
-                    console.log(dataSet.code, dataSet.message);
-                    if (dataSet.code==0) {
-                       swal("保存成功", "", "success")
-                       init_tab_config();
-                       query_tab_sync();
-                    } else {
-                       swal(dataSet.message, "", "error")
-                    }
-
-                  },
-                  error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('jqXHR.responseText=',jqXHR.responseText);
-                    console.log('jqXHR.status=',jqXHR.status);
-                    console.log('jqXHR.readyState=',jqXHR.readyState);
-                    console.log('jqXHR.statusText=',jqXHR.statusText);
-                    console.log('textStatus=',textStatus);
-                    console.log('errorThrown=',errorThrown);
-                    if (jqXHR.status==403){
-                        swal("登陆信息已过期，请重新登陆!", "", "error")
-                        window.location.href='/login'
-                    } else if (jqXHR.status==502){
-                        swal("用户无权访问权限此功能!", "", "error")
-                    } else {
-                        swal("系统不可用,请稍后重试!", "", "error")
-                    }
-                }
-             })
-
-        });
+        }
 
         function syn_tab_query(row){
            v =unescape(row).split(',')
@@ -705,7 +735,6 @@
 
            //按钮设置为不可用
            $('#save_sync_tab_config').attr("disabled","disabled");
-           $('#add_sync_tab_config').attr("disabled","disabled");
 
         }
 
@@ -725,14 +754,32 @@
            //显示项赋值
            $('#sync_tab_id').val(v[0]);
            $('#sync_tab_name').val(v[1]+'.'+v[2]+'.'+v[3]);
-           $('#sync_tab_incr_col').empty();
-           $('#sync_tab_incr_col').append("<option value='"+v[5]+"'>"+v[5]+"</option>");
+           set_sync_tab_incr_col();
+           $('#sync_tab_incr_col').val(v[5]);
            $('#sync_tab_time').val(v[6]);
            set_tab_cols(v[4]);
+           //按钮设置为可用
+           $('#save_sync_tab_config').attr("disabled",false);
+        }
+
+        function syn_tab_add(){
+           //设置显示项为只读
+           $('#sync_tab_name').attr("disabled",false);
+           $('#sync_tab_incr_col').attr("disabled",false);
+           $('#sync_tab_time').attr("readonly",false);
+           $('#sync_sele_col').attr("disabled",false);
+           $('#sync_tab_col').attr("disabled",false);
+           $('#ion-arrow-down').attr("disabled",false);
+           $('#ion-arrow-up').attr("disabled",false);
+
+           //显示项赋值
+           $('#sync_tab_id').val('-1');
+           set_sync_tabs();
+           set_sync_tab_incr_col();
+           $('#sync_tab_time').val('1');
 
            //按钮设置为可用
            $('#save_sync_tab_config').attr("disabled",false);
-           $('#add_sync_tab_config').attr("disabled",false);
         }
 
         function syn_tab_del(row){
@@ -759,7 +806,6 @@
                               'sync_id' : v[0],
                           },
                           success: function (dataSet) {
-                                console.log(dataSet.code, dataSet.message);
                                 if (dataSet.code==0) {
                                    swal("删除成功", "", "success")
                                    init_tab_config();
@@ -793,15 +839,16 @@
         }
 
         function query_tab_sync(){
-              $.ajax({
+            $.ajax({
                   url: "/sync/_query/tab",
                   type: "post",
+                  async   :false,
                   datatype: "json",
                   data:{
                       'sync_tag' : $('#sync_tag').val(),
+                      'sync_tab' : $('#query_sync_tab_name').val()
                   },
                   success: function (dataSet) {
-                         console.log('query_tab_sync=',dataSet)
                          $('#example').DataTable( {
                               "stripeClasses": [ 'cell-border', 'cell-border', 'cell-border' ],
                               "dom"      : '<"top"<"clear">>rt<"bottom"ip<"clear">>',
@@ -878,8 +925,6 @@
                     }
                 }
              })
-
-
         }
 
         function showTabDetail() {
@@ -889,88 +934,23 @@
                   $('#sync_tag').focus();
                   return;
              }
+             if (!get_ds()) {
+                 return;
+             }
 
-             $.ajax({
-                  url: "http://10.16.34.14:8888/get_mssql_tables",
-                  type: "post",
-                  datatype: "json",
-                  data:{
-                      db_ip  :'192.168.10.200',
-                      db_port:'1433',
-                      db_service:'tingcheeasydb',
-                      db_user:'sa',
-                      db_pass:'Tingche.easy',
-                  },
-                  success: function (dataSet) {
-                     query_tab_sync();
-                     $("#sync_tab_col").empty();
-                     $("#sync_sele_col").empty();
-                     $("#sync_tab_incr_col").empty();
-                     $("#sync_tab_time").val('');
-                     $("#sync_tab_name").empty();
-                     $("#sync_tab_name").append("<option value=''>...</option>");
-                     for(i=0;i<dataSet['msg'].length;i++){
-                          var val  = dataSet['msg'][i][0]+'.'+dataSet['msg'][i][1]+'.'+dataSet['msg'][i][2];
-                          var text = dataSet['msg'][i][1]+'.'+dataSet['msg'][i][2];
-                          $("#sync_tab_name").append("<option value='"+val+"'>"+text+"</option>");
-                     }
-
-                     $('.modal').on('show.bs.modal', centerModals);
-                     $(window).on('resize', centerModals);
-                     $('#con-close-modal').modal({
-                         keyboard: false,
-                         backdrop:false
-                     });
-                  },
-                  error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('jqXHR.responseText=',jqXHR.responseText);
-                    console.log('jqXHR.status=',jqXHR.status);
-                    console.log('jqXHR.readyState=',jqXHR.readyState);
-                    console.log('jqXHR.statusText=',jqXHR.statusText);
-                    console.log('textStatus=',textStatus);
-                    console.log('errorThrown=',errorThrown);
-                    if (jqXHR.status==403){
-                        swal("登陆信息已过期，请重新登陆!", "", "error")
-                        window.location.href='/login'
-                    } else if (jqXHR.status==502){
-                        swal("用户无权访问权限此功能!", "", "error")
-                    } else {
-                        swal("系统不可用,请稍后重试!", "", "error")
-                    }
-                }
-             })
+             $('.modal').on('show.bs.modal', centerModals);
+             $(window).on('resize', centerModals);
+             $('#con-close-modal').modal({
+                 keyboard: false,
+                 backdrop:false
+             });
+             set_sync_tabs();
+             query_tab_sync();
+             init_tab_config();
 
         }
 
-         $('#sour_db_server').change(function() {
-              $('#mdi-view-list').attr('disabled',false);
-         });
-
-         $("#sync_tab_col").click(function () {
-               options=$('#sync_tab_col option:selected');
-               if(options.length>0){
-                for (var i=0;i<options.length;i++){
-                      value=$(options[i]).val();
-                      text =$(options[i]).text();
-                      $('#sync_sele_col').append("<option value='"+value+"'>"+text+"</option>");
-                }
-                $('#sync_tab_col option:selected').remove();
-               }
-          });
-
-         $("#sync_sele_col").click(function () {
-               options=$('#sync_sele_col option:selected');
-               if(options.length>0){
-                for (var i=0;i<options.length;i++){
-                      value=$(options[i]).val();
-                      text =$(options[i]).text();
-                      $('#sync_tab_col').append("<option value='"+value+"'>"+text+"</option>");
-                }
-                $('#sync_sele_col option:selected').remove();
-               }
-          });
-
-         function selectSysAll() {
+        function selectSysAll() {
             try {
                options=$('#sync_tab_col option');
                if(options.length>0){
@@ -988,7 +968,7 @@
             }
          }
 
-         function isInArray(arr,value){
+        function isInArray(arr,value){
             for(var i = 0; i < arr.length; i++){
                 if(value === arr[i]){
                     return true;
@@ -997,27 +977,25 @@
             return false;
           }
 
-         function set_tab_cols(p_cols){
+        function set_tab_cols(p_cols){
                console.log('set_tab_cols=',p_cols)
                v_col_list = p_cols.split('#');
                $.ajax({
-                  url: "http://10.16.34.14:8888/get_mssql_columns",
+                  url : "http://{0}/get_mssql_columns".format(sour_ds['proxy_server']),
                   type: "post",
                   datatype: "json",
                   data:{
-                      db_ip:'192.168.10.200',
-                      db_port:'1433',
-                      db_service:'tingcheeasydb',
-                      db_user:'sa',
-                      db_pass:'Tingche.easy',
-                      db_tab :$('#sync_tab_name').val(),
+                      db_ip     : sour_ds['ip'],
+                      db_port   : sour_ds['port'],
+                      db_service: sour_ds['service'],
+                      db_user   : sour_ds['user'],
+                      db_pass   : sour_ds['password'],
+                      db_tab    :$('#sync_tab_name').val(),
                   },
                   success: function (dataSet) {
-                      console.log('dataSet=',dataSet['msg'])
                       //设置未同步列选择框
                       $("#sync_tab_col").empty();
                       for(i=0;i<dataSet['msg'].length;i++){
-                         console.log('dataSet'+i+'=',dataSet['msg'][i])
                           var val  = dataSet['msg'][i][0];
                           var text = dataSet['msg'][i][0];
                           if (!isInArray(v_col_list,val)) {
@@ -1045,13 +1023,13 @@
                     } else if (jqXHR.status==502){
                         swal("用户无权访问权限此功能!", "", "error")
                     } else {
-                        swal("系统不可用,请稍后重试!", "", "error")
+                        swal("数据库代理服务异常!", "", "error")
                     }
                 }
              });
          }
 
-         function cancelSysAll() {
+        function cancelSysAll() {
                options=$('#sync_sele_col option');
                if(options.length>0){
                     for (var i=0;i<options.length;i++){
@@ -1063,7 +1041,7 @@
                }
         }
 
-         function get_tab_cols(){
+        function get_tab_cols(){
              var tmp='';
              var val='';
              $('#sync_sele_col option').each(function(){
@@ -1073,7 +1051,158 @@
              return tmp.substr(1);
          }
 
-         $(document).ready(function() {
+        $('#sync_tab_name').change(function() {
+            set_sync_tab_cols();
+            set_sync_tab_incr_col();
+        });
+
+        $('#save_sync_tab_config').click(function(){
+
+                if ($('#sync_tab_name').val()=='') {
+                      swal("同步表名不能为空!", "", "error")
+                      return;
+                }
+
+                if ($('#sync_sele_col').val()=='') {
+                      swal("同步列名不能为空!", "", "error")
+                      return;
+                }
+
+                if ($('#sync_tab_incr_col').val()!='') {
+                    if ($('#sync_tab_time').val()=='') {
+                          swal("同步时长不能为空!", "", "error")
+                          return;
+                    }
+                }
+
+                console.log('a=',$('#sync_tag').val());
+                console.log('b=',$('#sync_tab_name').val().split('.')[0]);
+                console.log('c=',$('#sync_tab_name').val().split('.')[1]);
+                console.log('d=',$('#sync_tab_name').val().split('.')[2]);
+                console.log('e=',get_tab_cols());
+                console.log('f=',$('#sync_tab_incr_col').val());
+                console.log('g=',$('#sync_tab_time').val());
+
+                $.ajax({
+                      url: "/sync/add/save/tab",
+                      type: "post",
+                      datatype: "json",
+                      data:{
+                          'sync_id'      :$('#sync_tab_id').val(),
+                          'sync_tag'     : $('#sync_tag').val(),
+                          'db_name'      : $('#sync_tab_name').val().split('.')[0],
+                          'schema_name'  : $('#sync_tab_name').val().split('.')[1],
+                          'tab_name'     : $('#sync_tab_name').val().split('.')[2],
+                          'sync_cols'    : get_tab_cols(),
+                          'sync_incr_col': $('#sync_tab_incr_col').val(),
+                          'sync_time'    : $('#sync_tab_time').val(),
+                  },
+                  success: function (dataSet) {
+                    if (dataSet.code==0) {
+                       swal("保存成功", "", "success")
+                       init_tab_config();
+                       query_tab_sync();
+                    } else {
+                       swal(dataSet.message, "", "error")
+                    }
+
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('jqXHR.responseText=',jqXHR.responseText);
+                    console.log('jqXHR.status=',jqXHR.status);
+                    console.log('jqXHR.readyState=',jqXHR.readyState);
+                    console.log('jqXHR.statusText=',jqXHR.statusText);
+                    console.log('textStatus=',textStatus);
+                    console.log('errorThrown=',errorThrown);
+                    if (jqXHR.status==403){
+                        swal("登陆信息已过期，请重新登陆!", "", "error")
+                        window.location.href='/login'
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
+                    }
+                }
+             })
+
+        });
+
+        $('#query_btn_sync_tab').click(function(){
+            query_tab_sync();
+        });
+
+        $("#query_sync_tab_name").bind("input propertychange",function(){
+           query_tab_sync();
+        });
+
+        $('#sour_db_server').change(function() {
+              $('#mdi-view-list').attr('disabled',false);
+         });
+
+        $('#sync_tab_incr_col').change(function(){
+             if ($('#sync_tab_incr_col').val()!='') {
+                document.all['s_sync_tab_time'].style.color="#ff0000";
+             } else {
+                document.all['s_sync_tab_time'].style.color="#000000";
+             }
+         });
+
+        $("#sync_tab_col").click(function () {
+               options=$('#sync_tab_col option:selected');
+               if(options.length>0){
+                for (var i=0;i<options.length;i++){
+                      value=$(options[i]).val();
+                      text =$(options[i]).text();
+                      $('#sync_sele_col').append("<option value='"+value+"'>"+text+"</option>");
+                }
+                $('#sync_tab_col option:selected').remove();
+               }
+          });
+
+        $("#sync_sele_col").click(function () {
+               options=$('#sync_sele_col option:selected');
+               if(options.length>0){
+                for (var i=0;i<options.length;i++){
+                      value=$(options[i]).val();
+                      text =$(options[i]).text();
+                      $('#sync_tab_col').append("<option value='"+value+"'>"+text+"</option>");
+                }
+                $('#sync_sele_col option:selected').remove();
+               }
+          });
+
+         $('.modal').on('hidden.bs.modal', function () {
+              $.ajax({
+                  url: "/sync/_query/sync/tabs",
+                  type: "post",
+                  datatype: "json",
+                  async   :false,
+                  data:{
+                      sync_tag  : $('#sync_tag').val()
+                  },
+                  success: function (dataSet) {
+                      console.log('/sync/_query/sync/tabs=',dataSet)
+                      if (dataSet=='None') {
+                          $('#sync_tables').val('')
+                      } else {
+                          $('#sync_tables').val(dataSet)
+                      }
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.status==403){
+                        swal("登陆信息已过期，请重新登陆!", "", "error")
+                        window.location.href='/login'
+                    } else if (jqXHR.status==502){
+                        swal("用户无权访问权限此功能!", "", "error")
+                    } else {
+                        swal("系统不可用,请稍后重试!", "", "error")
+                    }
+                }
+             });
+
+        });
+
+        $(document).ready(function() {
            set_selected();
            $("#div-add-panal").css("height",$("#div-tab-panal").height());
            $("#add").click(function () {
@@ -1107,7 +1236,6 @@
                     status               : $('#status').val()
                 },
                 success: function (dataSet) {
-                    console.log(dataSet.code, dataSet.message);
                     if (dataSet.code==0) {
                        swal("保存成功", "", "success")
                     } else {

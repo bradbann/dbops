@@ -12,7 +12,7 @@ import tornado.options
 import tornado.httpserver
 import tornado.locale
 import os.path
-from tornado.options  import define, options
+from tornado.options  import define
 from web.utils.urls   import urls
 
 

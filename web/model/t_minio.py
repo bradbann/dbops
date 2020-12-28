@@ -11,6 +11,7 @@ from web.model.t_user     import get_user_by_loginame
 import re
 import os,json
 import traceback
+import requests
 
 def query_minio(tagname):
     db = get_connection()
@@ -248,19 +249,19 @@ def save_minio(p_sync):
                            minio_server, python3_home,script_path,
                            script_file,api_server,run_time,
                            status,minio_user,minio_pass,
-                           minio_bucket,minio_dpath,minio_incr) 
+                           minio_bucket,minio_dpath,minio_incr,minio_incr_type) 
                     values('{}','{}','{}',
                            '{}','{}','{}',
                            '{}','{}','{}',
                            '{}','{}','{}',
                            '{}','{}','{}',
-                           '{}','{}','{}')
+                           '{}','{}','{}','{}')
                    """.format(p_sync['sync_tag'],p_sync['task_desc'],p_sync['sync_type'],
                               p_sync['server_id'],p_sync['sync_dir'],p_sync['sync_service'],
                               p_sync['minio_server'],p_sync['python3_home'],p_sync['script_base'],
                               p_sync['script_name'],p_sync['api_server'],p_sync['run_time'],
                               p_sync['status'],p_sync['minio_user'],p_sync['minio_pass'],
-                              p_sync['minio_bucket'], p_sync['minio_dpath'], p_sync['minio_incr'])
+                              p_sync['minio_bucket'], p_sync['minio_dpath'], p_sync['minio_incr'],p_sync['minio_incr_type'])
         print(sql)
         cr.execute(sql)
         cr.close()
@@ -300,13 +301,15 @@ def upd_minio(p_sync):
                        minio_pass        ='{}',
                        minio_bucket      ='{}',
                        minio_dpath       ='{}',
-                       minio_incr        ='{}'
+                       minio_incr        ='{}',
+                       minio_incr_type   ='{}'
                 where sync_tag='{}'""".format(p_sync['task_desc'],p_sync['sync_type'],p_sync['server_id'],
                                               p_sync['sync_dir'],p_sync['sync_service'],p_sync['minio_server'],
                                               p_sync['python3_home'],p_sync['script_base'], p_sync['script_name'],
                                               p_sync['api_server'],p_sync['run_time'],p_sync['status'],
                                               p_sync['minio_user'],p_sync['minio_pass'],p_sync['minio_bucket'],
-                                              p_sync['minio_dpath'], p_sync['minio_incr'],p_sync['sync_tag']
+                                              p_sync['minio_dpath'], p_sync['minio_incr'],p_sync['minio_incr_type'],
+                                              p_sync['sync_tag']
                                               )
         print(sql)
         cr.execute(sql)
@@ -458,26 +461,19 @@ def get_minio_by_minioid(p_sync_tag):
     return rs
 
 def push_minio_task(p_tag,p_api):
-    try:
-        result = {}
-        result['code'] = '0'
-        result['message'] = '推送成功！'
-        v_cmd="curl -XPOST {0}/push_minio_remote -d 'tag={1}'".format(p_api,p_tag)
-        print(v_cmd)
-        r = os.popen(v_cmd).read()
-        d = json.loads(r)
-        if d['code'] == 200:
-           return result
+    url = 'http://{}/push_minio_remote'.format(p_api)
+    res = requests.post(url, data={'tag': p_tag})
+    jres = res.json()
+    v = ''
+    for c in jres['msg']['crontab'].split('\n'):
+        if c.count(p_tag) > 0:
+            v = v + "<span class='warning'>" + c + "</span>"
         else:
-           result['code'] = '-1'
-           result['message'] = '{0}!'.format(d['msg'])
-           return result
+            v = v + c
+        v = v + '<br>'
+    jres['msg']['crontab'] = v
+    return jres
 
-    except Exception as e:
-        print(traceback.print_exc())
-        result['code'] = '-1'
-        result['message'] = '{0!'.format(str(e))
-        return result
 
 def run_minio_task(p_tag,p_api):
     try:
